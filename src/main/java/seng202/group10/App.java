@@ -10,13 +10,13 @@ public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello SENG202 Team 10asdasd" );
+        System.out.println( "Hello SENG202 Team 10" );
 
         MyObject myObject = new MyObject("chair", 3);
         Gson gson = new Gson();
         String jsonString = gson.toJson(myObject);
 
         System.out.println("myObject = " + myObject);
-        System.out.println("myObject stringfyied = " + jsonString);
+        System.out.println("myObject stringfield = " + jsonString);
     }
 }
