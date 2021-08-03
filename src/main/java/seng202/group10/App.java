@@ -21,6 +21,3 @@ public class App
     }
 }
 
-/**
- * Jonathan test edit 2, 3
- */
