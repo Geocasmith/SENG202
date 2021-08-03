@@ -20,3 +20,7 @@ public class App
         System.out.println("myObject stringfield = " + jsonString);
     }
 }
+
+/**
+ * Jonathan test edit
+ */
