@@ -37,7 +37,12 @@ public class AppTest
         assertTrue( true );
     }
     @org.junit.Test
-     public void GeorgeTestApp()
+    public void GeorgeTestApp()
+    {
+        assertTrue( true );
+    }
+    @org.junit.Test
+    public void JonathanTestApp()
     {
         assertTrue( true );
     }
