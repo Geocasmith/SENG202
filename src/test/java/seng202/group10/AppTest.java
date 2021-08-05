@@ -31,7 +31,13 @@ public class AppTest
     /**
      * Rigourous Test :-)
      */
-    public void testApp()
+    @org.junit.Test
+     public void testApp()
+    {
+        assertTrue( true );
+    }
+    @org.junit.Test
+     public void GeorgeTestApp()
     {
         assertTrue( true );
     }
