@@ -49,6 +49,6 @@ public class AppTest
     @org.junit.Test
     public void BedeTestApp()
     {
-        assertTrue( true );
+        assertTrue( false );
     }
 }
