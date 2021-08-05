@@ -1,4 +1,3 @@
-package seng202.group10;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,6 +40,6 @@ public class AppTest {
     @Test
     public void BedeTestApp()
     {
-        assertTrue(false);
+        fail();
     }
 }

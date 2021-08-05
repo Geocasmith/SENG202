@@ -23,7 +23,7 @@
           <transformers>
             <transformer>
               <manifestEntries>
-                <Main-Class>seng202.group10.App</Main-Class>
+                <Main-Class>seng202group10.App</Main-Class>
                 <X-Compile-Source-JDK>14</X-Compile-Source-JDK>
                 <X-Compile-Target-JDK>14</X-Compile-Target-JDK>
               </manifestEntries>
