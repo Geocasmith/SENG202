@@ -42,4 +42,9 @@ public class AppTest {
     {
         assertTrue(true);
     }
+    @Test
+    public void DanielTestApp()
+    {
+        assertTrue(true);
+    }
 }
