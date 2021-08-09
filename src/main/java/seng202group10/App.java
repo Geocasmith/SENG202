@@ -12,6 +12,9 @@ public class App
     {
         System.out.println( "Hello SENG202 Team 10" );
         System.out.println( "Daniel test commit" );
+        System.out.println( "Sofonias test commit" );
+        System.out.println( "Sofonias test commit" );
+
 
         MyObject myObject = new MyObject("chair", 3);
         Gson gson = new Gson();
