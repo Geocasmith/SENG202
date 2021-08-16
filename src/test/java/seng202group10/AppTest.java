@@ -20,7 +20,7 @@ public class AppTest {
 //    }
 
     /**
-     * Rigourous Test :-)
+     * Rigorous Test :-)
      */
     @Test
      public void testApp()

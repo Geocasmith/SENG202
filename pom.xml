@@ -21,6 +21,7 @@
       <artifactId>tablesaw-core</artifactId>
       <version>0.38.3</version>
     </dependency>
+
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
