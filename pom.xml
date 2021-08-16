@@ -21,7 +21,11 @@
       <artifactId>tablesaw-core</artifactId>
       <version>0.38.3</version>
     </dependency>
-
+    <dependency>
+      <groupId>org.xerial</groupId>
+      <artifactId>sqlite-jdbc</artifactId>
+      <version>3.36.0</version>
+    </dependency>
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
