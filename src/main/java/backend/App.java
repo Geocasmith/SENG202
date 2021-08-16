@@ -1,6 +1,6 @@
-package seng202group10;
+package backend;
 import com.google.gson.Gson;
-import seng202group10.Database.Database;
+import backend.database.Database;
 
 import java.sql.SQLException;
 

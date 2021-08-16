@@ -1,5 +1,4 @@
-package seng202group10.Database;
-import org.sqlite.core.*;
+package backend.database;
 
 import java.sql.*;
 

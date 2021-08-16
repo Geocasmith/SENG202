@@ -1,4 +1,4 @@
-package seng202group10;
+package backend;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
