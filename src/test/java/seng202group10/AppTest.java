@@ -9,37 +9,31 @@ import org.junit.jupiter.api.Test;
  * Unit test for simple App.
  */
 public class AppTest {
-
-
-//    /**
-//     * @return the suite of tests being tested
-//     */
-//    public static Test suite()
-//    {
-//        return new TestSuite( AppTest.class );
-//    }
+    boolean x;
 
     /**
-     * Rigorous Test :-)
+     * Rigorous Tests :-)
      */
+    @BeforeEach
+    public void init() {x = true;}
     @Test
-     public void testApp()
+    public void testApp()
     {
-        assertTrue(true);
+        assertTrue(x);
     }
     @Test
     public void GeorgeTestApp()
     {
-        assertTrue(true);
+        assertTrue(x);
     }
     @Test
     public void JonathanTestApp()
     {
-        assertTrue(true);
+        assertTrue(x);
     }
     @Test
     public void BedeTestApp()
     {
-        assertTrue(true);
+        assertTrue(x);
     }
 }
