@@ -2,6 +2,7 @@ package backend;
 import com.google.gson.Gson;
 import backend.database.Database;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -24,9 +25,8 @@ public class App
         System.out.println("myObject = " + myObject);
         System.out.println("myObject GSONOBJECT = " + jsonString);
         Database d = new Database();
-        d.createDatabase();
         d.connectDatabase();
-        d.initialiseTable();
-        d.addRow();
+        d.insertRow();
+        d.readRows();
     }
 }
