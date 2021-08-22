@@ -1,6 +1,7 @@
 package backend;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * DataManipulator class owns Record, writer and reader classes
@@ -28,7 +29,7 @@ private ArrayList<Record> currentData;
     public boolean hasUniqueCaseNumber(int line, Record data)
 {
     for (int i = 0; i < currentData.size(); i++) {
-        if (currentData.get(i).getCaseNumber() == data.getCaseNumber()) {
+        if (Objects.equals(currentData.get(i).getCaseNumber(), data.getCaseNumber())) {
             if (i != line) {
                 return false;
             }
