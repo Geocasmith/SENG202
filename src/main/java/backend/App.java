@@ -27,6 +27,6 @@ public class App
         Database d = new Database();
         d.connectDatabase();
         d.insertRow();
-        d.readRows();
+        //d.readRows();
     }
 }

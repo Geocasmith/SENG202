@@ -1,6 +1,9 @@
 package backend.database;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /***
  * TODO: Make CSV import to the database
@@ -10,7 +13,7 @@ import java.sql.*;
 public class Database {
     private static Connection connection;
     private static boolean notEmpty = false;
-
+    private List<String> columns = Arrays.asList("IUCR INTEGER","PRIMARYDESCRIPTION TEXT","SECONDARYDESCRIPTION TEXT","LOCATIONDESCRIPTION TEXT");
 
     public ResultSet getCrimes() throws SQLException {
         if (connection == null) {
@@ -35,6 +38,12 @@ public class Database {
         }
     }
 
+
+    public void setColumns(ArrayList<String> columns) {
+        List<String> list1 = Arrays.asList("IUCR INTEGER","PRIMARYDESCRIPTION TEXT","SECONDARYDESCRIPTION TEXT","LOCATIONDESCRIPTION TEXT");
+        //this.columns = columns;
+    }
+
     /**
      * Creates java database table
      * @throws SQLException
@@ -42,9 +51,16 @@ public class Database {
     public void createTable() throws SQLException {
         Statement state2 = connection.createStatement();
         state2.execute("CREATE TABLE CRIMES " + "(ID INT PRIMARY KEY NOT NULL," +
-                "NAME TEXT NOT NULL, " +
-                "ADDRESS        CHAR(50))");
-
+                "DATE TEXT, " +
+                "ADDRESS TEXT)");
+        for (int i = 0; i < this.columns.size(); i++){
+            Statement state3 = connection.createStatement();
+            state3.execute("ALTER TABLE CRIMES\n" +
+                    "ADD COLUMN "+this.columns.get(i)+";");
+        }
+        Statement state3 = connection.createStatement();
+        state3.execute("ALTER TABLE CRIMES\n" +
+                "ADD COLUMN IUCR INTEGER;\n");
     }
 
     /**
@@ -53,7 +69,8 @@ public class Database {
      */
     public void insertRow() throws SQLException {
         Statement s1 = connection.createStatement();
-        String sql = "INSERT INTO CRIMES (ID, NAME, ADDRESS) " + "VALUES (134, 'Paul', 'Detroit');";
+        String sql = "INSERT INTO CRIMES (ID, DATE, ADDRESS,IUCR,PRIMARYDESCRIPTION,SECONDARYDESCRIPTION,LOCATIONDESCRIPTION) " +
+                "VALUES (134, '11/23/2020 03:05:00 PM', '073XX S SOUTH SHORE DR',50,'THEFT','$500 AND UNDER','APARTMENT');";
         s1.executeUpdate(sql);
         s1.close();
         //connection.commit();
