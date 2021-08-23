@@ -143,4 +143,49 @@ public class Record {
         Record record = new Record(data);
         System.out.println(record.getDate());
     }
+
+
+    /**
+     * Returns "Y" or "N" for true or false input values, respectively.
+     * @param input a true/false boolean
+     * @return "Y" for true, "N" for false
+     */
+    private String booleanStringChanger(boolean input) {
+        if (input) {
+            return "Y";
+        }
+        else {
+            return "N";
+        }
+    }
+
+    /**
+     * Returns a string containing all of the data in the record.
+     * @return a string with all of the data in the record, separated by commas
+     */
+    public String toString() {
+        String output = String.format("%s, %s, %s, %s, %s, %s, %s, %s, %s, %d, %d, %s, %d, %s, %s, %s",
+                this.caseNumber, this.date.format(formatter), this.block, this.iucr, this.primaryDescription, this.secondaryDescription, this.locationDescription, booleanStringChanger(this.arrest), booleanStringChanger(this.domestic), this.beat, this.ward, this.fbicd, this.xcoord, this.ycoord, this.latitude, this.longitude);
+        return output;
+    }
+
+    /**
+     * Returns a string containing all of the data in the record, in the specified format.
+     * Can be modified to support additional formats with different formatStrings.
+     * @param formatString a string specifying the format of the returned string. Options are: "labels" (shows labels for data).
+     * @return a string with all of the data in the record, separated by commas and in the specified format
+     */
+    public String toString(String formatString) {
+        String output;
+        switch (formatString){
+            case "labels":
+                output = String.format("Case Number: %s, Date: %s, Block: %s, IUCR: %s, Primary Description: %s, Secondary Description: %s, Location Description: %s, Arrest: %s, Domestic: %s, Beat: %d, Ward: %d, FBICD: %s, X Coordinate: %d, Y Coordinate: %s, Latitude: %s, Longitude: %s",
+                        this.caseNumber, this.date.format(formatter), this.block, this.iucr, this.primaryDescription, this.secondaryDescription, this.locationDescription, booleanStringChanger(this.arrest), booleanStringChanger(this.domestic), this.beat, this.ward, this.fbicd, this.xcoord, this.ycoord, this.latitude, this.longitude);
+                break;
+            default:
+                output = this.toString();
+                break;
+        }
+        return output;
+    }
 }
