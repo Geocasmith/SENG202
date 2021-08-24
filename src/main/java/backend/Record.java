@@ -138,6 +138,70 @@ public class Record {
         }
     }
 
+    public void setCaseNumber(String caseNumber) {
+        this.caseNumber = caseNumber;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public void setBlock(String block) {
+        this.block = block;
+    }
+
+    public void setIucr(String iucr) {
+        this.iucr = iucr;
+    }
+
+    public void setPrimaryDescription(String primaryDescription) {
+        this.primaryDescription = primaryDescription;
+    }
+
+    public void setSecondaryDescription(String secondaryDescription) {
+        this.secondaryDescription = secondaryDescription;
+    }
+
+    public void setLocationDescription(String locationDescription) {
+        this.locationDescription = locationDescription;
+    }
+
+    public void setArrest(Boolean arrest) {
+        this.arrest = arrest;
+    }
+
+    public void setDomestic(Boolean domestic) {
+        this.domestic = domestic;
+    }
+
+    public void setBeat(int beat) {
+        this.beat = beat;
+    }
+
+    public void setWard(int ward) {
+        this.ward = ward;
+    }
+
+    public void setFbicd(String fbicd) {
+        this.fbicd = fbicd;
+    }
+
+    public void setXcoord(int xcoord) {
+        this.xcoord = xcoord;
+    }
+
+    public void setYcoord(int ycoord) {
+        this.ycoord = ycoord;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
     public static void main(String[] args) {
         ArrayList<String> data = new ArrayList<>(Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "N", "N", "334", "7", "6", "1183633", "1851786", "41.748486365", "-87.602675062"));
         Record record = new Record(data);
