@@ -13,18 +13,11 @@ import java.util.List;
 public class Database {
     private static Connection connection;
     private static boolean notEmpty = false;
-    private List<String> columns = Arrays.asList("IUCR INTEGER","PRIMARYDESCRIPTION TEXT","SECONDARYDESCRIPTION TEXT",
+    private List<String> columns = Arrays.asList("IUCR TEXT","PRIMARYDESCRIPTION TEXT","SECONDARYDESCRIPTION TEXT",
             "LOCATIONDESCRIPTION TEXT","ARREST TEXT", "DOMESTIC TEXT","BEAT INTEGER","WARD INTEGER","FBICD TEXT",
             "XCOORDINATE INTEGER","YCOORDINATE INTEGER","LATITUDE REAL","LONGITUDE REAL", "LOCATION TEXT");
 
-    public ResultSet getCrimes() throws SQLException {
-        if (connection == null) {
-            connectDatabase();
-        }
-        Statement state = connection.createStatement();
-        ResultSet res = state.executeQuery("SELECT  fname, lname FROM user");
-        return res;
-    }
+
 
     /**
      * Helper class to establish database connection
@@ -36,15 +29,10 @@ public class Database {
             connection = DriverManager.getConnection("jdbc:sqlite:crimeRecords.db");
             createTable();
         } catch (Exception e) {
-            System.out.println("Database connection failed");
+            //System.out.println("Database connection failed");
         }
     }
 
-
-    public void setColumns(ArrayList<String> columns) {
-        List<String> list1 = Arrays.asList("IUCR INTEGER","PRIMARYDESCRIPTION TEXT","SECONDARYDESCRIPTION TEXT","LOCATIONDESCRIPTION TEXT");
-        //this.columns = columns;
-    }
 
     /**
      * Creates java database table
@@ -69,41 +57,71 @@ public class Database {
      * Inserts row into java database
      * @throws SQLException
      */
-    public void insertRows(ArrayList<String>inputs) throws SQLException {
-//        for(String line:inputs) {
-//            System.out.println(line);
-//            String[] column = line.split(",");
-//            String id = column[0];
-//            String date = column[1];
-//            String block = column[2];
-//            int iucr = Integer.parseInt(column[3]);
-//            String primary = column[4];
-//            String secondary = column[5];
-//            String location = column[6];
-//            String arrest = column[7];
-//            String domestic = column[8];
-//            int beat = Integer.parseInt(column[9]);
-//            int ward = Integer.parseInt(column[10]);
-//            String fbicd = column[11];
-//            int xcoord = Integer.parseInt(column[12]);
-//            int ycoord = Integer.parseInt(column[13]);
-//            float latitude = Float.parseFloat(column[14]);
-////            float longitude = Float.parseFloat(column[15]);
-////            String latlong = column[16];
-//            for(int i =0;i<=12;i++){
-//                System.out.println(column[i]);
-//            }
-//
-//            Statement s1 = connection.createStatement();
-//            String sql = "INSERT INTO CRIMES (ID, DATE, ADDRESS,IUCR,PRIMARYDESCRIPTION,SECONDARYDESCRIPTION,LOCATIONDESCRIPTION,ARREST,DOMESTIC,BEAT,WARD,FBICD,XCOORDINATE,YCOORDINATE,LATITUDE,LONGITUDE,LOCATION) " +
-//                    "VALUES ('134', '11/23/2020 03:05:00 PM', '073XX S SOUTH SHORE DR',50,'THEFT','$500 AND UNDER','APARTMENT','N','N',334,7,6,1183633,1851786,41.74848637,-87.60267506,'(41.748486365, -87.602675062)');";
-//
-//        }
-        Statement s1 = connection.createStatement();
-        String sql = "INSERT INTO CRIMES (ID, DATE, ADDRESS,IUCR,PRIMARYDESCRIPTION,SECONDARYDESCRIPTION,LOCATIONDESCRIPTION,ARREST,DOMESTIC,BEAT,WARD,FBICD,XCOORDINATE,YCOORDINATE,LATITUDE,LONGITUDE,LOCATION) " +
-                "VALUES ('134', '11/23/2020 03:05:00 PM', '073XX S SOUTH SHORE DR',50,'THEFT','$500 AND UNDER','APARTMENT','N','N',334,7,6,1183633,1851786,41.74848637,-87.60267506,'(41.748486365, -87.602675062)');";
-        s1.executeUpdate(sql);
-        s1.close();
+    public void insertRows(ArrayList<List<String>>inputs) throws SQLException {
+
+        for(List column:inputs) {
+            connection.setAutoCommit(false);
+            PreparedStatement s1 = connection.prepareStatement(
+                    "INSERT OR IGNORE INTO CRIMES (ID, DATE, ADDRESS,IUCR,PRIMARYDESCRIPTION,SECONDARYDESCRIPTION,LOCATIONDESCRIPTION,ARREST,DOMESTIC,BEAT,WARD,FBICD,XCOORDINATE,YCOORDINATE,LATITUDE,LONGITUDE,LOCATION) " +
+                "VALUES (?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+            s1.setString(1, (String) column.get(0));
+            s1.setString(2,(String) column.get(1));
+            s1.setString(3,(String) column.get(2));
+            s1.setString(4,(String) column.get(3));
+            s1.setString(5,(String) column.get(4));
+            s1.setString(6,(String) column.get(5));
+            s1.setString(7,(String) column.get(6));
+            s1.setString(8,(String) column.get(7));
+            s1.setString(9,(String) column.get(8));
+            String c9= (String) column.get(9);
+            if(c9.equals("")){
+                s1.setString(10,"NULL");
+            }else{
+                s1.setInt(10,Integer.parseInt(c9));
+            }
+            String c10= (String) column.get(10);
+            if(c10.equals("")){
+                s1.setString(10,"NULL");
+            }else{
+                s1.setInt(11,Integer.parseInt(c10));
+            }
+
+            s1.setString(12,(String) column.get(11));
+            String c12= (String) column.get(12);
+            if(c12.equals("")){
+                s1.setString(10,"NULL");
+            }else{
+                s1.setInt(13,Integer.parseInt(c12));
+            }
+            String c13= (String) column.get(13);
+            if(c13.equals("")){
+                s1.setString(10,"NULL");
+            }else{
+                s1.setInt(14,Integer.parseInt(c13));
+            }
+            String c14= (String) column.get(14);
+            if(c14.equals("")){
+                s1.setString(10,"NULL");
+            }else{
+                s1.setFloat(15,Float.parseFloat(c14));
+            }
+            String c15= (String) column.get(15);
+            if(c15.equals("")){
+                s1.setString(10,"NULL");
+            }else{
+                s1.setFloat(16,Float.parseFloat(c15));
+            }
+
+            s1.setString(17,(String) column.get(16));
+
+            s1.executeUpdate();
+            connection.commit();
+        }
+//        Statement s1 = connection.createStatement();
+//        String sql = "INSERT INTO CRIMES (ID, DATE, ADDRESS,IUCR,PRIMARYDESCRIPTION,SECONDARYDESCRIPTION,LOCATIONDESCRIPTION,ARREST,DOMESTIC,BEAT,WARD,FBICD,XCOORDINATE,YCOORDINATE,LATITUDE,LONGITUDE,LOCATION) " +
+//                "VALUES ('134', '11/23/2020 03:05:00 PM', '073XX S SOUTH SHORE DR',50,'THEFT','$500 AND UNDER','APARTMENT','N','N',334,7,6,1183633,1851786,41.74848637,-87.60267506,'(41.748486365, -87.602675062)');";
+//        s1.executeUpdate(sql);
+//        s1.close();
         //connection.commit();
 
     }

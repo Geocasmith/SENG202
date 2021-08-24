@@ -2,8 +2,10 @@ package backend;
 import com.google.gson.Gson;
 import backend.database.Database;
 import backend.readerwriter.csvReader;
+import com.opencsv.exceptions.CsvValidationException;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -13,11 +15,8 @@ import java.sql.SQLException;
  */
 public class App 
 {
-    public static void main( String[] args ) throws SQLException, FileNotFoundException {
-        System.out.println( "Hello SENG202 Team 10" );
-        System.out.println( "Daniel test commit" );
-        System.out.println( "Sofonias test commit" );
-        System.out.println( "Sofonias test commit" );
+    public static void main( String[] args ) throws SQLException, IOException, CsvValidationException {
+
 
 
         MyObject myObject = new MyObject("chair", 3);
@@ -32,7 +31,5 @@ public class App
         d.connectDatabase();
         d.insertRows(cs.read());
 
-
-        //d.readRows();
     }
 }
