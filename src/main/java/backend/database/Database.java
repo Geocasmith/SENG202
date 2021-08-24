@@ -64,60 +64,62 @@ public class Database {
      * Inserts row into java database
      * @throws SQLException
      */
-    public void insertRows(ArrayList<String>inputs) throws SQLException {
+    public void insertRows(ArrayList<List<String>>inputs) throws SQLException {
 
-        for(String line:inputs) {
-            String[] column = line.split(",",-1);
-            for(int i=0;i<column.length;i++){
-                System.out.println(column[i]);
-            }
+        for(List column:inputs) {
             connection.setAutoCommit(false);
             PreparedStatement s1 = connection.prepareStatement(
                     "INSERT OR IGNORE INTO CRIMES (ID, DATE, ADDRESS,IUCR,PRIMARYDESCRIPTION,SECONDARYDESCRIPTION,LOCATIONDESCRIPTION,ARREST,DOMESTIC,BEAT,WARD,FBICD,XCOORDINATE,YCOORDINATE,LATITUDE,LONGITUDE,LOCATION) " +
                 "VALUES (?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
-            s1.setString(1,column[0]);
-            s1.setString(2,column[1]);
-            s1.setString(3,column[2]);
-            s1.setString(4,column[3]);
-            s1.setString(5,column[4]);
-            s1.setString(6,column[5]);
-            s1.setString(7,column[6]);
-            System.out.println(column[7]);
-            s1.setString(8,column[7]);
-            s1.setString(9,column[8]);
-            if(column[9].equals("")){
+            s1.setString(1, (String) column.get(0));
+            s1.setString(2,(String) column.get(1));
+            s1.setString(3,(String) column.get(2));
+            s1.setString(4,(String) column.get(3));
+            s1.setString(5,(String) column.get(4));
+            s1.setString(6,(String) column.get(5));
+            s1.setString(7,(String) column.get(6));
+            s1.setString(8,(String) column.get(7));
+            s1.setString(9,(String) column.get(8));
+            String c9= (String) column.get(9);
+            if(c9.equals("")){
                 s1.setString(10,"NULL");
             }else{
-                s1.setInt(10,Integer.parseInt(column[9]));
+                s1.setInt(10,Integer.parseInt(c9));
             }
-            if(column[10].equals("")){
+            String c10= (String) column.get(10);
+            if(c10.equals("")){
                 s1.setString(10,"NULL");
             }else{
-                s1.setInt(11,Integer.parseInt(column[10]));
-            }
-            s1.setString(12,column[11]);
-            if(column[12].equals("")){
-                s1.setString(10,"NULL");
-            }else{
-                s1.setInt(13,Integer.parseInt(column[12]));
-            }
-            if(column[13].equals("")){
-                s1.setString(10,"NULL");
-            }else{
-                s1.setInt(14,Integer.parseInt(column[13]));
-            }
-            if(column[14].equals("")){
-                s1.setString(10,"NULL");
-            }else{
-                s1.setFloat(15,Float.parseFloat(column[14]));
-            }
-            if(column[15].equals("")){
-                s1.setString(10,"NULL");
-            }else{
-                s1.setFloat(16,Float.parseFloat(column[15]));
+                s1.setInt(11,Integer.parseInt(c10));
             }
 
-            s1.setString(17,column[16]);
+            s1.setString(12,(String) column.get(11));
+            String c12= (String) column.get(12);
+            if(c12.equals("")){
+                s1.setString(10,"NULL");
+            }else{
+                s1.setInt(13,Integer.parseInt(c12));
+            }
+            String c13= (String) column.get(13);
+            if(c13.equals("")){
+                s1.setString(10,"NULL");
+            }else{
+                s1.setInt(14,Integer.parseInt(c13));
+            }
+            String c14= (String) column.get(14);
+            if(c14.equals("")){
+                s1.setString(10,"NULL");
+            }else{
+                s1.setFloat(15,Float.parseFloat(c14));
+            }
+            String c15= (String) column.get(15);
+            if(c15.equals("")){
+                s1.setString(10,"NULL");
+            }else{
+                s1.setFloat(16,Float.parseFloat(c15));
+            }
+
+            s1.setString(17,(String) column.get(16));
 
             s1.executeUpdate();
             connection.commit();
