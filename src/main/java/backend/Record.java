@@ -26,7 +26,7 @@ public class Record {
     private Double longitude;
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a", Locale.ENGLISH);
 
-    Record(ArrayList<String> data) {
+    public Record(ArrayList<String> data) {
         caseNumber = data.get(0);
 
         date = LocalDateTime.parse(data.get(1), formatter);
