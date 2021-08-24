@@ -46,12 +46,25 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
-      <version>11.0.2</version>
+      <version>14</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-graphics</artifactId>
+      <version>14</version>
+    </dependency>
+
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
-      <version>11.0.2</version>
+      <version>14</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-web</artifactId>
+      <version>14</version>
     </dependency>
 
   </dependencies>
@@ -63,6 +76,11 @@
   </properties>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
     <testSourceDirectory>src/test/java</testSourceDirectory>
     <plugins>
       <plugin>
