@@ -17,14 +17,7 @@ public class Database {
             "LOCATIONDESCRIPTION TEXT","ARREST TEXT", "DOMESTIC TEXT","BEAT INTEGER","WARD INTEGER","FBICD TEXT",
             "XCOORDINATE INTEGER","YCOORDINATE INTEGER","LATITUDE REAL","LONGITUDE REAL", "LOCATION TEXT");
 
-    public ResultSet getCrimes() throws SQLException {
-        if (connection == null) {
-            connectDatabase();
-        }
-        Statement state = connection.createStatement();
-        ResultSet res = state.executeQuery("SELECT  fname, lname FROM user");
-        return res;
-    }
+
 
     /**
      * Helper class to establish database connection
@@ -36,7 +29,7 @@ public class Database {
             connection = DriverManager.getConnection("jdbc:sqlite:crimeRecords.db");
             createTable();
         } catch (Exception e) {
-            System.out.println("Database connection failed");
+            //System.out.println("Database connection failed");
         }
     }
 
