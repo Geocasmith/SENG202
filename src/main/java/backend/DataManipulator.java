@@ -47,8 +47,7 @@ private ArrayList<Record> currentData;
      * @return true if data is edited or false otherwise
      */
     public boolean editLine(int line, Record data) {
-    if (hasUniqueCaseNumber(line, data))
-    {
+    if (hasUniqueCaseNumber(line, data)) {
         currentData.set(line, data);
         return true;
     }
@@ -62,8 +61,7 @@ private ArrayList<Record> currentData;
      * @return true if the record has been added or false otherwise
      */
     public boolean addLine(int line, Record data) {
-    if (hasUniqueCaseNumber(line, data))
-    {
+    if (hasUniqueCaseNumber(line, data)) {
         currentData.add(data);
         return true;
     }
@@ -171,7 +169,7 @@ private ArrayList<Record> currentData;
                 break;
             default:
                 break;
-    }
+        }
     return extractedCol;
     }
 
