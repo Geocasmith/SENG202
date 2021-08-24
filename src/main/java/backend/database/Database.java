@@ -9,6 +9,7 @@ import java.util.List;
 
 /***
  * TODO: FOR GETTING RECORD OBJECT, MAKE SURE IT WORKS WITH NULL
+ * Search does not work with LATITUDE (returns empty list)
  */
 public class Database {
     private static Connection connection;
