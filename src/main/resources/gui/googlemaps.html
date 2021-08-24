@@ -10,10 +10,12 @@
     </script>
     <script type="text/javascript">
         var map;
+        var marker;
+        var markers = [];
         function initialize() {
             var latlng = new google.maps.LatLng(-25.3444, 131.0369);
             var myOptions = {
-                zoom: 10,
+                zoom: 2,
                 center: latlng,
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
                 mapTypeControl: false,
@@ -24,6 +26,8 @@
 
             document.geocoder = new google.maps.Geocoder();
             map = new google.maps.Map(document.getElementById("map_canvas"),myOptions);
+            marker = new google.maps.Marker({position: new google.maps.LatLng(5, 2), map: map});
+            markers.push(marker);
 
             document.zoomIn = function zoomIn() {
                 var zoomLevel = map.getZoom();
@@ -58,9 +62,21 @@
                 });
             }
         }
-        function plotPoint(lat, long) {
-            document.marker = new google.maps.Marker({position: new google.maps.LatLng(lat, long), map: map});
+
+        document.plotPoint = function plotPoint(lat, long) {
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(lat, long),
+                map: map
+            });
+            markers.push(marker);
         }
+
+        document.deletePoints = function deletePoints() {
+            for (let i = 0; i < markers.length; i++) {
+                markers[i].setMap(null);
+            }
+        }
+
     </script>
 </head>
 <body onload="initialize()">
