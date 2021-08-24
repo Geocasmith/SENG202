@@ -19,17 +19,19 @@ public class App
 
 
 
-        MyObject myObject = new MyObject("chair", 3);
-        Gson gson = new Gson();
-        String jsonString = gson.toJson(myObject);
-
-        System.out.println("myObject = " + myObject);
-        System.out.println("myObject GSONOBJECT = " + jsonString);
+//        MyObject myObject = new MyObject("chair", 3);
+//        Gson gson = new Gson();
+//        String jsonString = gson.toJson(myObject);
+//
+//        System.out.println("myObject = " + myObject);
+//        System.out.println("myObject GSONOBJECT = " + jsonString);
         csvReader cs = new csvReader();
 
         Database d = new Database();
         d.connectDatabase();
         d.insertRows(cs.read());
+        //d.searchDB("ID","JE267466");
+        d.searchDB("IUCR",560);
 
     }
 }
