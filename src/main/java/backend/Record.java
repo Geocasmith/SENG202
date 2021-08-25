@@ -2,10 +2,7 @@ package backend;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 
 public class Record {
     private String caseNumber;
@@ -26,7 +23,7 @@ public class Record {
     private Double longitude;
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a", Locale.ENGLISH);
 
-    public Record(ArrayList<String> data) {
+    public Record(List<String> data) {
         caseNumber = data.get(0);
 
         date = LocalDateTime.parse(data.get(1), formatter);
