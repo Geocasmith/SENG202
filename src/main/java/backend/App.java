@@ -1,12 +1,8 @@
 package backend;
-import com.google.gson.Gson;
 import backend.database.Database;
-import backend.readerwriter.csvReader;
 import com.opencsv.exceptions.CsvValidationException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
