@@ -1,12 +1,15 @@
 package backend;
-import backend.readerwriter.CsvWriter;
-import backend.readerwriter.csvReader;
+
 import com.opencsv.exceptions.CsvValidationException;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test class for CsvWriter
