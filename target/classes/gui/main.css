@@ -1,0 +1,7 @@
+.sidebarTab {
+    //-fx-pref-width: 80;
+}
+
+.sideBarTabPane .sidebarTab {
+    -fx-alignment: CENTER;
+}
