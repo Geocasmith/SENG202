@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: seng202group10.AppTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.052 s <<< FAILURE! - in seng202group10.AppTest
+seng202group10.AppTest.BedeTestApp  Time elapsed: 0.003 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <true> but was: <false>
+	at seng202group10.AppTest.BedeTestApp(AppTest.java:44)
+
