@@ -2,10 +2,7 @@ package backend;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 
 public class Record {
     private String caseNumber;
@@ -26,7 +23,7 @@ public class Record {
     private Double longitude;
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a", Locale.ENGLISH);
 
-    Record(ArrayList<String> data) {
+    public Record(List<String> data) {
         caseNumber = data.get(0);
 
         date = LocalDateTime.parse(data.get(1), formatter);
@@ -136,6 +133,70 @@ public class Record {
         } else {
             return String.format("(%s, %s)", latitude, longitude);
         }
+    }
+
+    public void setCaseNumber(String caseNumber) {
+        this.caseNumber = caseNumber;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public void setBlock(String block) {
+        this.block = block;
+    }
+
+    public void setIucr(String iucr) {
+        this.iucr = iucr;
+    }
+
+    public void setPrimaryDescription(String primaryDescription) {
+        this.primaryDescription = primaryDescription;
+    }
+
+    public void setSecondaryDescription(String secondaryDescription) {
+        this.secondaryDescription = secondaryDescription;
+    }
+
+    public void setLocationDescription(String locationDescription) {
+        this.locationDescription = locationDescription;
+    }
+
+    public void setArrest(Boolean arrest) {
+        this.arrest = arrest;
+    }
+
+    public void setDomestic(Boolean domestic) {
+        this.domestic = domestic;
+    }
+
+    public void setBeat(int beat) {
+        this.beat = beat;
+    }
+
+    public void setWard(int ward) {
+        this.ward = ward;
+    }
+
+    public void setFbicd(String fbicd) {
+        this.fbicd = fbicd;
+    }
+
+    public void setXcoord(int xcoord) {
+        this.xcoord = xcoord;
+    }
+
+    public void setYcoord(int ycoord) {
+        this.ycoord = ycoord;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 
     public static void main(String[] args) {
