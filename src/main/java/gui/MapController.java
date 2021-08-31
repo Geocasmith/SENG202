@@ -25,7 +25,9 @@ public class MapController {
 //    }
 
     public void plotPoint(ActionEvent actionEvent) {
-        String rand = "document.plotPoint(" + 15 + ", " + 23 + ")";
+        String rand = "document.plotPoint(" + 41.748486365 + ", " + -87.602675062 + ")";
+        webEngine.executeScript(rand);
+        rand = "document.plotPoint(" + 41.87154041 + ", " + -87.705838807 + ")";
         webEngine.executeScript(rand);
     }
 

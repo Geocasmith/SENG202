@@ -23,6 +23,11 @@ public class Record {
     private Double longitude;
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a", Locale.ENGLISH);
 
+    /**
+     * Goes through the provided list of crime data and creates a new record object
+     * Assumes that invalid empty fields have been dealt with before being sent to the constructor
+     * @param data A list of data containing the required fields for a record to be created
+     */
     public Record(List<String> data) {
         caseNumber = data.get(0);
 
@@ -67,8 +72,16 @@ public class Record {
         return caseNumber;
     }
 
+    /**
+     * Uses the LocalDateTime formatter to convert the time to string form
+     * @return the date in string form
+     */
     public String getDate() {
         return date.format(formatter);
+    }
+
+    public LocalDateTime getDateAsObject() {
+        return date;
     }
 
     public String getBlock() {
@@ -127,6 +140,11 @@ public class Record {
         return longitude;
     }
 
+    /**
+     * Checks that the record has valid location data and returns it in a tuple form if so
+     * @return The lat long location of the crime in a string tuple form, or null if the
+     *         record is missing location data
+     */
     public String getLocation() {
         if (latitude == null || longitude == null) {
             return null;
@@ -198,13 +216,6 @@ public class Record {
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
-
-    public static void main(String[] args) {
-        ArrayList<String> data = new ArrayList<>(Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "N", "N", "334", "7", "6", "1183633", "1851786", "41.748486365", "-87.602675062"));
-        Record record = new Record(data);
-        System.out.println(record.getDate());
-    }
-
 
     /**
      * Returns "Y" or "N" for true or false input values, respectively.
