@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.lang.String.valueOf;
+
 /***
  * TODO: FOR GETTING RECORD OBJECT, MAKE SURE IT WORKS WITH NULL
  * Search does not work with LATITUDE (returns empty list)
@@ -132,6 +134,107 @@ public class Database {
     }
 
     /**
+     * This method takes in a column number and maps it against column headers in Crime Table
+     * & returns  the corresponding column name
+     * @param colId int type argument representing the column number
+     * @return columnName String object that maps to the given column number
+     */
+    public static String getColName(int colId)
+    {
+        String columnName = "";
+        switch (colId) {
+            case 0:
+                columnName = "ID";
+                break;
+            case 1:
+                columnName = "DATE";
+                break;
+            case 2:
+                columnName = "ADDRESS";
+                break;
+            case 3:
+                columnName = "IUCR";
+                break;
+            case 4:
+                columnName = "PRIMARYDESCRIPTION";
+                break;
+            case 5:
+                columnName = "SECONDARYDESCRIPTION";
+                break;
+            case 6:
+                columnName = "LOCATIONDESCRIPTION";
+                break;
+            case 7:
+                columnName = "ARREST";
+                break;
+            case 8:
+                columnName = "DOMESTIC";
+                break;
+            case 9:
+                columnName = "BEAT";
+                break;
+            case 10:
+                columnName = "WARD";
+                break;
+            case 11:
+                columnName = "FBICD";
+                break;
+            case 12:
+                columnName = "XCOORDINATE";
+                break;
+            case 13:
+                columnName = "YCOORDINATE";
+                break;
+            case 14:
+                columnName = "LATITUDE";
+                break;
+            case 15:
+                columnName = "LONGITUDE";
+                break;
+            case 16:
+                columnName = "LOCATION";
+                break;
+            default:
+                break;
+        }
+
+        return columnName;
+    }
+
+
+
+    /**
+     * Extracts and returns valued of a column from Crime database table
+     * @param columnName String object representing the column name that is to be returned
+     * @return ColumnValues ArrayList<Object> type generated from reading column values
+     * @throws SQLException
+     */
+
+    public ArrayList<Object> extractCol(String columnName) throws SQLException {
+        connection.setAutoCommit(false);
+        PreparedStatement s1 = connection.prepareStatement("select "+ columnName +" from CRIMES");
+        ResultSet rs = s1.executeQuery();
+        ArrayList<Object> columnValues = readColumnValues(rs, columnName);
+        return columnValues;
+    }
+
+    /**
+     * Extracts and returns valued of a column from Crime database table
+     * @param colNum String object representing the column name that is to be returned
+     * @return ColumnValues ArrayList<Object> type generated from reading column values
+     * @throws SQLException
+     */
+
+    public ArrayList<Object> extractCol(int colNum) throws SQLException {
+        String columnName = getColName(colNum);
+        connection.setAutoCommit(false);
+        PreparedStatement s1 = connection.prepareStatement("select "+ columnName +" from CRIMES");
+        ResultSet rs = s1.executeQuery();
+        ArrayList<Object> columnValues = readColumnValues(rs, columnName);
+        return columnValues;
+    }
+
+    /**
      * Returns record objects based on the inputted search terms.
      * @param column String and has to match: ID, DATE, ADDRESS,IUCR, PRIMARYDESCRIPTION, SECONDARYDESCRIPTION,LOCATIONDESCRIPTION,ARREST, DOMESTIC
      * @param searchValue the value you are searching for
@@ -144,6 +247,8 @@ public class Database {
         ResultSet rs = s1.executeQuery();
         return getRecord(rs);
     }
+
+
     /**
      * Returns record objects based on the inputted search terms.
      * @param column String and has to match: BEAT,WARD,XCOORDINATE,YCOORDINATE
@@ -181,7 +286,6 @@ public class Database {
         ArrayList<Record> records = new ArrayList<Record>();
 
         while (rs.next()) {
-
             //Gets the values from the resultset
             String id = rs.getString("ID");
             String date = rs.getString("DATE");
@@ -207,5 +311,23 @@ public class Database {
             records.add(r);
         }
         return records;
+    }
+
+    /**
+     * Reads column values from the provided ResultSet object
+     * @param rs ResultSet object passed from other methods
+     * @param column String object passed from other methods
+     * @return colValues ArrayList<Object> generated from reading ResultSet object
+     * @throws SQLException
+     */
+    public ArrayList<Object> readColumnValues(ResultSet rs, String column) throws SQLException {
+        ArrayList<Object> colValues = new ArrayList<>();
+
+        while (rs.next()) {
+
+            String value = valueOf(rs.getString(column));
+            colValues.add(value);
+        }
+        return colValues;
     }
 }

@@ -1,0 +1,25 @@
+Index: src/main/java/backend/readerwriter/csvReader.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/backend/readerwriter/csvReader.java b/src/main/java/backend/csvReader.java
+rename from src/main/java/backend/readerwriter/csvReader.java
+rename to src/main/java/backend/csvReader.java
+--- a/src/main/java/backend/readerwriter/csvReader.java	
++++ b/src/main/java/backend/csvReader.java	
+@@ -1,11 +1,11 @@
+-package backend.readerwriter;
+-
+-
++package backend;
+ import java.io.*;
+ import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.List;
+ 
++import java.util.ArrayList;
++import java.util.Objects;
+ import com.opencsv.*;
+ import com.opencsv.exceptions.CsvValidationException;
+ 
