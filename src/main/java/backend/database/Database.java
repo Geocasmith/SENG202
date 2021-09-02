@@ -17,14 +17,14 @@ import static java.lang.String.valueOf;
 public class Database {
     private static Connection connection;
     private static boolean notEmpty = false;
-    private List<String> columns = Arrays.asList("IUCR TEXT","PRIMARYDESCRIPTION TEXT","SECONDARYDESCRIPTION TEXT",
-            "LOCATIONDESCRIPTION TEXT","ARREST TEXT", "DOMESTIC TEXT","BEAT INTEGER","WARD INTEGER","FBICD TEXT",
-            "XCOORDINATE INTEGER","YCOORDINATE INTEGER","LATITUDE REAL","LONGITUDE REAL", "LOCATION TEXT");
-
+    private List<String> columns = Arrays.asList("IUCR TEXT", "PRIMARYDESCRIPTION TEXT", "SECONDARYDESCRIPTION TEXT",
+            "LOCATIONDESCRIPTION TEXT", "ARREST TEXT", "DOMESTIC TEXT", "BEAT INTEGER", "WARD INTEGER", "FBICD TEXT",
+            "XCOORDINATE INTEGER", "YCOORDINATE INTEGER", "LATITUDE REAL", "LONGITUDE REAL", "LOCATION TEXT");
 
 
     /**
      * Gets connection to the database and then calls the create table function
+     *
      * @throws SQLException
      */
     public void connectDatabase() throws SQLException {
@@ -40,6 +40,7 @@ public class Database {
 
     /**
      * Creates java database table by executing an SQL command to create the table and then appends the rows on from the list columns
+     *
      * @throws SQLException
      */
     public void createTable() throws SQLException {
@@ -51,10 +52,10 @@ public class Database {
                 "ADDRESS TEXT)");
 
         //Appends the columns in from the columns list
-        for (int i = 0; i < this.columns.size(); i++){
+        for (int i = 0; i < this.columns.size(); i++) {
             Statement state3 = connection.createStatement();
             state3.execute("ALTER TABLE CRIMES\n" +
-                    "ADD COLUMN "+this.columns.get(i)+";");
+                    "ADD COLUMN " + this.columns.get(i) + ";");
         }
 
         //Probably dont need but Im not going to delete it now because I dont want to break the code
@@ -65,78 +66,82 @@ public class Database {
 
     /**
      * Gets an array of Lists from the CSV reader and adds them to the database. Any empty values are entered as NULL type
+     *
      * @param inputs an Arraylist of Lists of Strings that is passed into it from the CSV Reader
      * @throws SQLException
      */
-    public void insertRows(ArrayList<List<String>>inputs) throws SQLException {
+    public void insertRows(ArrayList<List<String>> inputs) throws SQLException {
 
-        for(List column:inputs) {
-            //Creates the statement to be run
-            connection.setAutoCommit(false);
-            PreparedStatement s1 = connection.prepareStatement(
-                    "INSERT OR IGNORE INTO CRIMES (ID, DATE, ADDRESS,IUCR,PRIMARYDESCRIPTION,SECONDARYDESCRIPTION,LOCATIONDESCRIPTION,ARREST,DOMESTIC,BEAT,WARD,FBICD,XCOORDINATE,YCOORDINATE,LATITUDE,LONGITUDE,LOCATION) " +
-                "VALUES (?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
 
+        //Creates the statement to be run
+        connection.setAutoCommit(false);
+        PreparedStatement s1 = connection.prepareStatement(
+                "INSERT OR IGNORE INTO CRIMES (ID, DATE, ADDRESS,IUCR,PRIMARYDESCRIPTION,SECONDARYDESCRIPTION,LOCATIONDESCRIPTION,ARREST,DOMESTIC,BEAT,WARD,FBICD,XCOORDINATE,YCOORDINATE,LATITUDE,LONGITUDE,LOCATION) " +
+                        "VALUES (?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+
+        for (List column : inputs) {
             //Sets the ? values in the statement to their corresponding values.
             s1.setString(1, (String) column.get(0));
-            s1.setString(2,(String) column.get(1));
-            s1.setString(3,(String) column.get(2));
-            s1.setString(4,(String) column.get(3));
-            s1.setString(5,(String) column.get(4));
-            s1.setString(6,(String) column.get(5));
-            s1.setString(7,(String) column.get(6));
-            s1.setString(8,(String) column.get(7));
-            s1.setString(9,(String) column.get(8));
-            String c9= (String) column.get(9);
-            if(c9.equals("")){
-                s1.setString(10,"NULL"); //if Value is empty in list
-            }else{
-                s1.setInt(10,Integer.parseInt(c9));
+            s1.setString(2, (String) column.get(1));
+            s1.setString(3, (String) column.get(2));
+            s1.setString(4, (String) column.get(3));
+            s1.setString(5, (String) column.get(4));
+            s1.setString(6, (String) column.get(5));
+            s1.setString(7, (String) column.get(6));
+            s1.setString(8, (String) column.get(7));
+            s1.setString(9, (String) column.get(8));
+            String c9 = (String) column.get(9);
+            if (c9.equals("")) {
+                s1.setString(10, "NULL"); //if Value is empty in list
+            } else {
+                s1.setInt(10, Integer.parseInt(c9));
             }
-            String c10= (String) column.get(10);
-            if(c10.equals("")){
-                s1.setString(10,"NULL");
-            }else{
-                s1.setInt(11,Integer.parseInt(c10));
+            String c10 = (String) column.get(10);
+            if (c10.equals("")) {
+                s1.setString(10, "NULL");
+            } else {
+                s1.setInt(11, Integer.parseInt(c10));
             }
 
-            s1.setString(12,(String) column.get(11));
-            String c12= (String) column.get(12);
-            if(c12.equals("")){
-                s1.setString(10,"NULL");
-            }else{
-                s1.setInt(13,Integer.parseInt(c12));
+            s1.setString(12, (String) column.get(11));
+            String c12 = (String) column.get(12);
+            if (c12.equals("")) {
+                s1.setString(10, "NULL");
+            } else {
+                s1.setInt(13, Integer.parseInt(c12));
             }
-            String c13= (String) column.get(13);
-            if(c13.equals("")){
-                s1.setString(10,"NULL");
-            }else{
-                s1.setInt(14,Integer.parseInt(c13));
+            String c13 = (String) column.get(13);
+            if (c13.equals("")) {
+                s1.setString(10, "NULL");
+            } else {
+                s1.setInt(14, Integer.parseInt(c13));
             }
-            String c14= (String) column.get(14);
-            if(c14.equals("")){
-                s1.setString(10,"NULL");
-            }else{
-                s1.setFloat(15,Float.parseFloat(c14));
+            String c14 = (String) column.get(14);
+            if (c14.equals("")) {
+                s1.setString(10, "NULL");
+            } else {
+                s1.setFloat(15, Float.parseFloat(c14));
             }
-            String c15= (String) column.get(15);
-            if(c15.equals("")){
-                s1.setString(10,"NULL");
-            }else{
-                s1.setFloat(16,Float.parseFloat(c15));
+            String c15 = (String) column.get(15);
+            if (c15.equals("")) {
+                s1.setString(10, "NULL");
+            } else {
+                s1.setFloat(16, Float.parseFloat(c15));
             }
-            s1.setString(17,(String) column.get(16));
+            s1.setString(17, (String) column.get(16));
 
-            //Executes the prepared statement
-            s1.executeUpdate();
-            connection.commit();
+            s1.addBatch();
         }
-
+        //Executes the prepared statement
+        s1.executeBatch();
+        connection.commit();
     }
+
 
     /**
      * Pass in a record class and it will be added to the database. I decided to add it to an arraylist of lists of strings so I can pass it into the previously
      * made insertRows() method and reuse that code
+     *
      * @param rec Record class object
      * @throws SQLException
      */
@@ -144,7 +149,7 @@ public class Database {
 
         //Gets string from record and adds null to end for the Location Column as that is not needed (can be calculated from Latitude and Longitude)
         String recString = rec.toString();
-        recString+=",NULL";
+        recString += ",NULL";
 
         //Creates a string array by splitting the string and adds it to an arraylist so it can be passed to insertRows(ArrayList<List<String>>) method
         String[] column = recString.trim().split("\\s*,\\s*");
@@ -156,24 +161,51 @@ public class Database {
     }
 
     /**
+     * Pass in a record class and it will be added to the database. I decided to add it to an arraylist of lists of strings so I can pass it into the previously
+     * made insertRows() method and reuse that code
+     *
+     * @param rec Record class object
+     * @throws SQLException
+     */
+    public void manualUpdate(Record rec) throws SQLException {
+
+        //Gets string from record and adds null to end for the Location Column as that is not needed (can be calculated from Latitude and Longitude)
+        String recString = rec.toString();
+        recString += ",NULL";
+
+        //Creates a string array by splitting the string and adds it to an arraylist so it can be passed to insertRows(ArrayList<List<String>>) method
+        String[] column = recString.trim().split("\\s*,\\s*");
+        ArrayList<List<String>> input = new ArrayList<List<String>>();
+        input.add(List.of(column));
+
+        //Deletes outdated entry by calling delete on column[0] which is the string of the Case Number
+        manualDelete(column[0]);
+
+        //Calls insertRows method on the arraylist to add the row to the database
+        insertRows(input);
+    }
+
+    /**
      * Removes the row which matches the case number in the parameter
+     *
      * @param caseNum pass in the case number for the row that will be deleted
      * @throws SQLException
      */
     public void manualDelete(String caseNum) throws SQLException {
         connection.setAutoCommit(false);
-        PreparedStatement s1 = connection.prepareStatement("delete from CRIMES where ID = "+" \'"+caseNum+"\'");
+        PreparedStatement s1 = connection.prepareStatement("delete from CRIMES where ID = " + " \'" + caseNum + "\'");
         s1.executeUpdate();
         connection.commit();
     }
+
     /**
      * This method takes in a column number and maps it against column headers in Crime Table
      * & returns  the corresponding column name
+     *
      * @param colId int type argument representing the column number
      * @return columnName String object that maps to the given column number
      */
-    public static String getColName(int colId)
-    {
+    public static String getColName(int colId) {
         String columnName = "";
         switch (colId) {
             case 0:
@@ -235,9 +267,9 @@ public class Database {
     }
 
 
-
     /**
      * Extracts and returns valued of a column from Crime database table
+     *
      * @param columnName String object representing the column name that is to be returned
      * @return ColumnValues ArrayList<Object> type generated from reading column values
      * @throws SQLException
@@ -245,7 +277,7 @@ public class Database {
 
     public ArrayList<Object> extractCol(String columnName) throws SQLException {
         connection.setAutoCommit(false);
-        PreparedStatement s1 = connection.prepareStatement("select "+ columnName +" from CRIMES");
+        PreparedStatement s1 = connection.prepareStatement("select " + columnName + " from CRIMES");
         ResultSet rs = s1.executeQuery();
         ArrayList<Object> columnValues = readColumnValues(rs, columnName);
         return columnValues;
@@ -253,6 +285,7 @@ public class Database {
 
     /**
      * Extracts and returns valued of a column from Crime database table
+     *
      * @param colNum String object representing the column name that is to be returned
      * @return ColumnValues ArrayList<Object> type generated from reading column values
      * @throws SQLException
@@ -261,7 +294,7 @@ public class Database {
     public ArrayList<Object> extractCol(int colNum) throws SQLException {
         String columnName = getColName(colNum);
         connection.setAutoCommit(false);
-        PreparedStatement s1 = connection.prepareStatement("select "+ columnName +" from CRIMES");
+        PreparedStatement s1 = connection.prepareStatement("select " + columnName + " from CRIMES");
         ResultSet rs = s1.executeQuery();
         ArrayList<Object> columnValues = readColumnValues(rs, columnName);
         return columnValues;
@@ -269,14 +302,15 @@ public class Database {
 
     /**
      * Returns record objects based on the inputted search terms.
-     * @param column String and has to match: ID, DATE, ADDRESS,IUCR, PRIMARYDESCRIPTION, SECONDARYDESCRIPTION,LOCATIONDESCRIPTION,ARREST, DOMESTIC
+     *
+     * @param column      String and has to match: ID, DATE, ADDRESS,IUCR, PRIMARYDESCRIPTION, SECONDARYDESCRIPTION,LOCATIONDESCRIPTION,ARREST, DOMESTIC
      * @param searchValue the value you are searching for
      * @return an Arraylist of Record Objects
      * @throws SQLException
      */
-    public ArrayList<Record> searchDB(String column,String searchValue) throws SQLException {
+    public ArrayList<Record> searchDB(String column, String searchValue) throws SQLException {
         connection.setAutoCommit(false);
-        PreparedStatement s1 = connection.prepareStatement("select * from CRIMES where "+column+ " = "+" \'"+searchValue+"\'");
+        PreparedStatement s1 = connection.prepareStatement("select * from CRIMES where " + column + " = " + " \'" + searchValue + "\'");
         ResultSet rs = s1.executeQuery();
         return getRecord(rs);
     }
@@ -284,33 +318,37 @@ public class Database {
 
     /**
      * Returns record objects based on the inputted search terms.
-     * @param column String and has to match: BEAT,WARD,XCOORDINATE,YCOORDINATE
+     *
+     * @param column      String and has to match: BEAT,WARD,XCOORDINATE,YCOORDINATE
      * @param searchValue the value you are searching for
      * @return an Arraylist of Record Objects
      * @throws SQLException
      */
-    public ArrayList<Record> searchDB(String column,int searchValue) throws SQLException {
+    public ArrayList<Record> searchDB(String column, int searchValue) throws SQLException {
         connection.setAutoCommit(false);
-        PreparedStatement s1 = connection.prepareStatement("select * from CRIMES where "+column+ " = "+" \'"+searchValue+"\'");
+        PreparedStatement s1 = connection.prepareStatement("select * from CRIMES where " + column + " = " + " \'" + searchValue + "\'");
         ResultSet rs = s1.executeQuery();
         return getRecord(rs);
     }
+
     /**
      * Returns record objects based on the inputted search terms.
-     * @param column String and has to match: LATITUDE,LONGITUDE
+     *
+     * @param column      String and has to match: LATITUDE,LONGITUDE
      * @param searchValue the value you are searching for
      * @return an Arraylist of Record Objects
      * @throws SQLException
      */
-    public ArrayList<Record> searchDB(String column,double searchValue) throws SQLException {
+    public ArrayList<Record> searchDB(String column, double searchValue) throws SQLException {
         connection.setAutoCommit(false);
-        PreparedStatement s1 = connection.prepareStatement("select * from CRIMES where "+column+ " = "+" \'"+searchValue+"\'");
+        PreparedStatement s1 = connection.prepareStatement("select * from CRIMES where " + column + " = " + " \'" + searchValue + "\'");
         ResultSet rs = s1.executeQuery();
         return getRecord(rs);
     }
 
     /**
      * Returns whole database of record objects to pass to the tableviewer
+     *
      * @return
      * @throws SQLException
      */
@@ -320,8 +358,23 @@ public class Database {
         ResultSet rs = s1.executeQuery();
         return getRecord(rs);
     }
+
+    /**
+     * Returns whole database of record objects to pass to the tableviewer
+     *
+     * @return
+     * @throws SQLException
+     */
+    public ArrayList<Record> tableViewerLocationRange() throws SQLException {
+        connection.setAutoCommit(false);
+        PreparedStatement s1 = connection.prepareStatement("SELECT COLUMNS FROM CRIMES;");
+        ResultSet rs = s1.executeQuery();
+        return getRecord(rs);
+    }
+
     /**
      * Generates an arraylist of records from a given resultset
+     *
      * @param rs Resultset passed in from other methods
      * @return Arraylist of Records
      * @throws SQLException
@@ -349,8 +402,8 @@ public class Database {
             String lon = Double.toString(rs.getDouble("LONGITUDE"));
 
             //Passes the given values into creating a new Record class. Adds the record class to the arraylist
-            ArrayList<String> add = new ArrayList<String>(Arrays.asList(id,date,address,iucr,primary,secondary,locationDescription,
-                    arrest,domestic,beat,ward,fbicd,xcoor,ycoor,lat,lon));
+            ArrayList<String> add = new ArrayList<String>(Arrays.asList(id, date, address, iucr, primary, secondary, locationDescription,
+                    arrest, domestic, beat, ward, fbicd, xcoor, ycoor, lat, lon));
             Record r = new Record(add);
             records.add(r);
         }
@@ -359,7 +412,8 @@ public class Database {
 
     /**
      * Reads column values from the provided ResultSet object
-     * @param rs ResultSet object passed from other methods
+     *
+     * @param rs     ResultSet object passed from other methods
      * @param column String object passed from other methods
      * @return colValues ArrayList<Object> generated from reading ResultSet object
      * @throws SQLException
