@@ -27,7 +27,7 @@ public class App
         //Example of using the search function to find a crime at a latitude
         ArrayList<Record> lat = d.searchDB("XCOORDINATE",1176416);
 
-
+        ArrayList<Record> all = d.tableViewer();
 
         //Prints out values
         System.out.println("For input terms ID and 41.JE267466 you get the objects");
@@ -42,6 +42,8 @@ public class App
             System.out.println(r.toString());
         }
 
-
+        for (Record r:all){
+            System.out.println(r.toString());
+        }
     }
 }
