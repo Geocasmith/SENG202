@@ -137,7 +137,7 @@ public class Database {
     /**
      * Pass in a record class and it will be added to the database. I decided to add it to an arraylist of lists of strings so I can pass it into the previously
      * made insertRows() method and reuse that code
-     * @param rec
+     * @param rec Record class object
      * @throws SQLException
      */
     public void manualAdd(Record rec) throws SQLException {
@@ -155,6 +155,17 @@ public class Database {
         insertRows(input);
     }
 
+    /**
+     * Removes the row which matches the case number in the parameter
+     * @param caseNum pass in the case number for the row that will be deleted
+     * @throws SQLException
+     */
+    public void manualDelete(String caseNum) throws SQLException {
+        connection.setAutoCommit(false);
+        PreparedStatement s1 = connection.prepareStatement("delete from CRIMES where ID = "+" \'"+caseNum+"\'");
+        s1.executeUpdate();
+        connection.commit();
+    }
     /**
      * This method takes in a column number and maps it against column headers in Crime Table
      * & returns  the corresponding column name

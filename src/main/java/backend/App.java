@@ -33,6 +33,8 @@ public class App
         Record test = all.get(0);
         test.setCaseNumber("JE69");
         d.manualAdd(test);
+
+        d.manualDelete("JE69");
 //
 //        //Prints out values
 //        System.out.println("For input terms ID and 41.JE267466 you get the objects");
