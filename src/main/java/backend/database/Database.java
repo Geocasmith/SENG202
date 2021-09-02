@@ -135,6 +135,27 @@ public class Database {
     }
 
     /**
+     * Pass in a record class and it will be added to the database. I decided to add it to an arraylist of lists of strings so I can pass it into the previously
+     * made insertRows() method and reuse that code
+     * @param rec
+     * @throws SQLException
+     */
+    public void manualAdd(Record rec) throws SQLException {
+
+        //Gets string from record and adds null to end for the Location Column as that is not needed (can be calculated from Latitude and Longitude)
+        String recString = rec.toString();
+        recString+=",NULL";
+
+        //Creates a string array by splitting the string and adds it to an arraylist so it can be passed to insertRows(ArrayList<List<String>>) method
+        String[] column = recString.trim().split("\\s*,\\s*");
+        ArrayList<List<String>> input = new ArrayList<List<String>>();
+        input.add(List.of(column));
+
+        //Calls insertRows method on the arraylist to add the row to the database
+        insertRows(input);
+    }
+
+    /**
      * This method takes in a column number and maps it against column headers in Crime Table
      * & returns  the corresponding column name
      * @param colId int type argument representing the column number
