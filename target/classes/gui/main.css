@@ -1,7 +1,16 @@
-.sidebarTab {
-    //-fx-pref-width: 80;
-}
-
 .sideBarTabPane .sidebarTab {
     -fx-alignment: CENTER;
+}
+
+.applyFilterButton{
+    -fx-border-radius: 4px;
+}
+.clearFilterButton{
+    -fx-border-style: None;
+    -fx-padding: 0;
+    -fx-background-color: None;
+    -fx-text-fill: blue;
+}
+.clearFilterButton:hover{
+    -fx-underline: true;
 }

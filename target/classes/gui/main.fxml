@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
@@ -71,12 +75,32 @@
                            </font>
                         </Label>
                         <TextField layoutX="26.0" layoutY="58.0" promptText="Search" />
+                        <Separator layoutY="106.0" prefWidth="200.0" />
+                        <Label layoutX="79.0" layoutY="127.0" text="From" />
+                        <DatePicker layoutX="14.0" layoutY="144.0" />
+                        <Label layoutX="86.0" layoutY="176.0" text="To" textAlignment="CENTER" />
+                        <DatePicker layoutX="13.0" layoutY="193.0" />
+                        <Separator layoutY="240.0" prefWidth="200.0" />
+                        <ComboBox layoutX="25.0" layoutY="259.0" prefWidth="150.0" promptText="Select Type" />
+                        <Button layoutX="47.0" layoutY="695.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="107.0" styleClass="applyFilterButton" text="Apply Filter" textAlignment="CENTER" />
+                        <Separator layoutX="194.0" orientation="VERTICAL" prefHeight="747.0" prefWidth="13.0" />
+                        <Button layoutX="72.0" layoutY="671.0" mnemonicParsing="false" styleClass="clearFilterButton" text="Clear Filter" />
                      </children></AnchorPane>
             </content>
           </Tab>
           <Tab styleClass="sidebarTab" text="Graph">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="68.0" layoutY="14.0" text="Graph">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <ComboBox layoutX="25.0" layoutY="63.0" prefWidth="150.0" promptText="Select Graph Type" />
+                        <Separator layoutX="1.0" layoutY="101.0" prefWidth="200.0" />
+                        <Separator layoutX="195.0" layoutY="-4.0" orientation="VERTICAL" prefHeight="774.0" prefWidth="12.0" />
+                     </children></AnchorPane>
             </content>
           </Tab>
         </tabs>

@@ -83,14 +83,24 @@
                         <Separator layoutY="240.0" prefWidth="200.0" />
                         <ComboBox layoutX="25.0" layoutY="259.0" prefWidth="150.0" promptText="Select Type" />
                         <Button layoutX="47.0" layoutY="695.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="107.0" styleClass="applyFilterButton" text="Apply Filter" textAlignment="CENTER" />
-                        <Separator layoutX="196.0" orientation="VERTICAL" prefHeight="747.0" prefWidth="11.0" />
+                        <Separator layoutX="194.0" orientation="VERTICAL" prefHeight="747.0" prefWidth="13.0" />
                         <Button layoutX="72.0" layoutY="671.0" mnemonicParsing="false" styleClass="clearFilterButton" text="Clear Filter" />
                      </children></AnchorPane>
             </content>
           </Tab>
           <Tab styleClass="sidebarTab" text="Graph">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="68.0" layoutY="14.0" text="Graph">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <ComboBox layoutX="25.0" layoutY="63.0" prefWidth="150.0" promptText="Select Graph Type" />
+                        <Separator layoutX="1.0" layoutY="101.0" prefWidth="200.0" />
+                        <Separator layoutX="195.0" layoutY="-4.0" orientation="VERTICAL" prefHeight="774.0" prefWidth="12.0" />
+                     </children></AnchorPane>
             </content>
           </Tab>
         </tabs>
