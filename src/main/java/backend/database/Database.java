@@ -3,9 +3,12 @@ package backend.database;
 import backend.Record;
 
 import java.sql.*;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 import static java.lang.String.valueOf;
 
@@ -19,7 +22,7 @@ public class Database {
     private static boolean notEmpty = false;
     private List<String> columns = Arrays.asList("IUCR TEXT", "PRIMARYDESCRIPTION TEXT", "SECONDARYDESCRIPTION TEXT",
             "LOCATIONDESCRIPTION TEXT", "ARREST TEXT", "DOMESTIC TEXT", "BEAT INTEGER", "WARD INTEGER", "FBICD TEXT",
-            "XCOORDINATE INTEGER", "YCOORDINATE INTEGER", "LATITUDE REAL", "LONGITUDE REAL", "LOCATION TEXT");
+            "XCOORDINATE INTEGER", "YCOORDINATE INTEGER", "LATITUDE REAL", "LONGITUDE REAL", "UNIXTIME REAL");
 
 
     /**
@@ -70,19 +73,23 @@ public class Database {
      * @param inputs an Arraylist of Lists of Strings that is passed into it from the CSV Reader
      * @throws SQLException
      */
-    public void insertRows(ArrayList<List<String>> inputs) throws SQLException {
+    public void insertRows(ArrayList<List<String>> inputs) throws SQLException, ParseException {
 
 
         //Creates the statement to be run
         connection.setAutoCommit(false);
         PreparedStatement s1 = connection.prepareStatement(
-                "INSERT OR IGNORE INTO CRIMES (ID, DATE, ADDRESS,IUCR,PRIMARYDESCRIPTION,SECONDARYDESCRIPTION,LOCATIONDESCRIPTION,ARREST,DOMESTIC,BEAT,WARD,FBICD,XCOORDINATE,YCOORDINATE,LATITUDE,LONGITUDE,LOCATION) " +
+                "INSERT OR IGNORE INTO CRIMES (ID, DATE, ADDRESS,IUCR,PRIMARYDESCRIPTION,SECONDARYDESCRIPTION,LOCATIONDESCRIPTION,ARREST,DOMESTIC,BEAT,WARD,FBICD,XCOORDINATE,YCOORDINATE,LATITUDE,LONGITUDE,UNIXTIME) " +
                         "VALUES (?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
 
         for (List column : inputs) {
             //Sets the ? values in the statement to their corresponding values.
             s1.setString(1, (String) column.get(0));
+
+            //Date and unix time
             s1.setString(2, (String) column.get(1));
+            s1.setLong(17,  unixTimeConvert((String) column.get(1)));
+
             s1.setString(3, (String) column.get(2));
             s1.setString(4, (String) column.get(3));
             s1.setString(5, (String) column.get(4));
@@ -128,7 +135,7 @@ public class Database {
             } else {
                 s1.setFloat(16, Float.parseFloat(c15));
             }
-            s1.setString(17, (String) column.get(16));
+
 
             s1.addBatch();
         }
@@ -145,7 +152,7 @@ public class Database {
      * @param rec Record class object
      * @throws SQLException
      */
-    public void manualAdd(Record rec) throws SQLException {
+    public void manualAdd(Record rec) throws SQLException, ParseException {
 
         //Gets string from record and adds null to end for the Location Column as that is not needed (can be calculated from Latitude and Longitude)
         String recString = rec.toString();
@@ -167,7 +174,7 @@ public class Database {
      * @param rec Record class object
      * @throws SQLException
      */
-    public void manualUpdate(Record rec) throws SQLException {
+    public void manualUpdate(Record rec) throws SQLException, ParseException {
 
         //Gets string from record and adds null to end for the Location Column as that is not needed (can be calculated from Latitude and Longitude)
         String recString = rec.toString();
@@ -428,4 +435,20 @@ public class Database {
         }
         return colValues;
     }
+    /**
+     * HELPER METHODS
+     */
+
+    /**
+     * Parse in the date format from the csv and will convert the value to a UNIX time value. Used for calculating date ranges as SQLlite does not have
+     * date data types so it needs the dates stored in unix time to calculate date ranges
+     * @param date
+     * @return
+     * @throws ParseException
+     */
+    public long unixTimeConvert(String date) throws ParseException {
+        Date d = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a").parse(date);
+        return d.getTime();
+    }
 }
+

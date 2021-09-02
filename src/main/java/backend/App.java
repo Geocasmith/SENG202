@@ -4,7 +4,10 @@ import com.opencsv.exceptions.CsvValidationException;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 /**
  * Hello world!
@@ -12,8 +15,8 @@ import java.util.ArrayList;
  */
 public class App 
 {
-    public static void main( String[] args ) throws SQLException, IOException, CsvValidationException {
 
+    public static void main( String[] args ) throws SQLException, IOException, CsvValidationException, ParseException {
 
         //Sets up csvReader and database
         csvReader cs = new csvReader();
@@ -34,7 +37,9 @@ public class App
         test.setCaseNumber("JE69");
         d.manualAdd(test);
 
-        d.manualDelete("JE69");
+        //d.manualDelete("JE69");
+        test.setBeat(4500);
+        d.manualUpdate(test);
 //
 //        //Prints out values
 //        System.out.println("For input terms ID and 41.JE267466 you get the objects");
