@@ -12,6 +12,7 @@ import static java.lang.String.valueOf;
 /***
  * TODO: FOR GETTING RECORD OBJECT, MAKE SURE IT WORKS WITH NULL
  * Search does not work with LATITUDE (returns empty list)
+ * Import from csv right into db
  */
 public class Database {
     private static Connection connection;
@@ -276,6 +277,17 @@ public class Database {
         return getRecord(rs);
     }
 
+    /**
+     * Returns whole database of record objects to pass to the tableviewer
+     * @return
+     * @throws SQLException
+     */
+    public ArrayList<Record> tableViewer() throws SQLException {
+        connection.setAutoCommit(false);
+        PreparedStatement s1 = connection.prepareStatement("SELECT * FROM CRIMES;");
+        ResultSet rs = s1.executeQuery();
+        return getRecord(rs);
+    }
     /**
      * Generates an arraylist of records from a given resultset
      * @param rs Resultset passed in from other methods
