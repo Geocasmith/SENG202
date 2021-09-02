@@ -4,23 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8dca1069-dc9f-4d62-86f1-726c77994e77" name="Changes" comment="Added DatabaseTest.java, modified DataManipulator and CsvWriter Classes">
-      <change afterPath="$PROJECT_DIR$/src/test/java/backend/database/DatabaseTest.java" afterDir="false" />
+    <list default="true" id="255f309c-44ae-4807-92e9-ea0d72dca6eb" name="Default Changelist" comment="Added a docstring">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_08_2021_12_10_AM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_08_2021_12_10_AM__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_31_08_2021_7_06_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_31_08_2021_7_06_PM__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Test.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/backend/CsvWriter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/backend/CsvWriter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/backend/DataManipulator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/backend/DataManipulator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/backend/csvReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/backend/csvReader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/backend/database/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/backend/database/Database.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/backend/DataManipulatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/backend/DataManipulatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SENG202Project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/SENG202Project.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/MainController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/gui/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/gui/main.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/backend/App.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/backend/App.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/backend/CsvWriter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/backend/CsvWriter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/backend/DataManipulator.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/backend/DataManipulator.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/backend/csvReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/backend/csvReader.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/backend/database/Database.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/backend/database/Database.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/backend/CsvWriterTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/backend/CsvWriterTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/backend/DataManipulatorTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/backend/DataManipulatorTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/main.fxml" afterDir="false" />
     </list>
+    <list id="27293495-7f00-43dd-9fe1-e57e626354c2" name="Added a docstring" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -46,6 +44,11 @@
       <filtered-out-file-type name="TAG" />
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/test/java/backend/RecordTest.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/backend/App.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/backend/Record.java" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
@@ -89,7 +92,7 @@
       <recent name="backend.readerwriter" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.DatabaseTest.extractCol">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="gui.Main" />
       <module name="SENG202Project" />
@@ -168,10 +171,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
         <item itemvalue="JUnit.DatabaseTest.extractCol" />
         <item itemvalue="JUnit.CsvWriterTest.writeTest" />
         <item itemvalue="JUnit.DatabaseTest.getCol" />
-        <item itemvalue="Application.Main" />
         <item itemvalue="JUnit.CsvWriterTest" />
       </list>
     </recent_temporary>
@@ -179,7 +182,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="8dca1069-dc9f-4d62-86f1-726c77994e77" name="Changes" comment="" />
+      <changelist id="255f309c-44ae-4807-92e9-ea0d72dca6eb" name="Default Changelist" comment="Added a docstring" />
       <created>1629364106897</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -304,13 +307,8 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/backend/App.java</url>
-          <line>12</line>
+          <line>15</line>
           <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/gui/Main.java</url>
-          <line>2</line>
-          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
