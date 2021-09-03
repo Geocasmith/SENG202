@@ -26,7 +26,7 @@ public class MainController {
     private void initialize()  throws IOException {
     // Pane newLoadedPane = FXMLLoader.load(getClass().getResource("map.fxml"));
     // mainTabPane.getTabs().addAll((Tab)FXMLLoader.load(this.getClass().getResource("testmap.fxml")));
-        tableThing();
+        tableSetup();
     }
 
     /**
@@ -44,7 +44,7 @@ public class MainController {
     }
 
     /**
-     * Should create a checkbox in a panel below the table, and bind it to a column's visibility.
+     * Creates a checkbox in the panel below the main table, and binds it to its column's visibility.
      * @param displayName The String to be used as a label for the checkbox
      * @param col The column object whose visibility will be bound by the checkbox
      */
@@ -66,9 +66,16 @@ public class MainController {
         }
     }
 
-    public void tableThing() { // testing things with tables
-        mainTableView.setEditable(false);
+    /**
+     * Sets up the main table.
+     * Disables editing (provisional).
+     * Creates all columns necessary for viewing crime data.
+     * For now, creates a test record and adds it to the table (for testing).
+     */
+    public void tableSetup() {
+        mainTableView.setEditable(false); // for now, until this can be linked up to the database
 
+        // create all the columns
         addTableCol("Case Number", "caseNumber");
         addTableCol("Date", "date");
         addTableCol("Block", "block");
@@ -92,6 +99,16 @@ public class MainController {
 
         for (int i = 0; i < 50; i++){
             mainTableView.getItems().add(testRecord);
+        }
+    }
+
+    /**
+     * Adds all record objects in an arraylist to the main viewing table.
+     * @param records An ArrayList of record objects to be dispalyed in the table
+     */
+    public void addRecordsToTable(ArrayList<Record> records) {
+        for (Record rec : records) {
+            mainTableView.getItems().add(rec);
         }
     }
 }
