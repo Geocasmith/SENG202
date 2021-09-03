@@ -1,5 +1,7 @@
 package gui;
 
+import backend.csvReader;
+import com.opencsv.exceptions.CsvValidationException;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -10,6 +12,7 @@ import javafx.scene.layout.FlowPane;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MainController {
 
@@ -23,7 +26,7 @@ public class MainController {
     private ToggleButton mainTableToggleAllButton;
 
     @FXML
-    private void initialize()  throws IOException {
+    private void initialize() throws IOException, CsvValidationException {
     // Pane newLoadedPane = FXMLLoader.load(getClass().getResource("map.fxml"));
     // mainTabPane.getTabs().addAll((Tab)FXMLLoader.load(this.getClass().getResource("testmap.fxml")));
         tableSetup();
@@ -72,7 +75,7 @@ public class MainController {
      * Creates all columns necessary for viewing crime data.
      * For now, creates a test record and adds it to the table (for testing).
      */
-    public void tableSetup() {
+    public void tableSetup() throws CsvValidationException, IOException {
         mainTableView.setEditable(false); // for now, until this can be linked up to the database
 
         // create all the columns
@@ -93,13 +96,20 @@ public class MainController {
         addTableCol("Latitude", "latitude");
         addTableCol("Longitude", "longitude");
 
-        Record testRecord;
-        ArrayList<String> data = new ArrayList<>(Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "N", "N", "334", "7", "6", "1183633", "1851786", "41.748486365", "-87.602675062"));
-        testRecord = new Record(data);
-
-        for (int i = 0; i < 50; i++){
-            mainTableView.getItems().add(testRecord);
+        Record testRec;
+        ArrayList<List<String>> recordStrings = csvReader.read();
+        for (List<String> strs : recordStrings) {
+            testRec = new Record(strs);
+            mainTableView.getItems().add(testRec);
         }
+
+//        Record testRecord;
+//        ArrayList<String> data = new ArrayList<>(Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "N", "N", "334", "7", "6", "1183633", "1851786", "41.748486365", "-87.602675062"));
+//        testRecord = new Record(data);
+//
+//        for (int i = 0; i < 50; i++){
+//            mainTableView.getItems().add(testRecord);
+//        }
     }
 
     /**
