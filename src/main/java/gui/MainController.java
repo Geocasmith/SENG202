@@ -1,20 +1,15 @@
 package gui;
 
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Pane;
 import backend.Record;
+import javafx.scene.layout.FlowPane;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 
 public class MainController {
 
@@ -22,6 +17,10 @@ public class MainController {
     private TabPane mainTabPane;
     @FXML
     private TableView mainTableView;
+    @FXML
+    private FlowPane mainTableTogglePane;
+    @FXML
+    private ToggleButton mainTableToggleAllButton;
 
     @FXML
     private void initialize()  throws IOException {
@@ -37,31 +36,55 @@ public class MainController {
      *                     to be case-sensitive. This hooks up to a get[propertyName] method and uses the output
      *                     to fill in the column. Can work with at least strings and bools.
      */
-    public void addTableColumn(String displayName, String propertyName) {
+    public void addTableCol(String displayName, String propertyName) {
         TableColumn<Record, String> col = new TableColumn<>(displayName);
         col.setCellValueFactory(new PropertyValueFactory<>(propertyName));
         mainTableView.getColumns().add(col);
+        addTableColCheck(displayName, col);
+    }
+
+    /**
+     * Should create a checkbox in a panel below the table, and bind it to a column's visibility.
+     * @param displayName The String to be used as a label for the checkbox
+     * @param col The column object whose visibility will be bound by the checkbox
+     */
+    public void addTableColCheck(String displayName, TableColumn col) {
+        CheckBox chk = new CheckBox(displayName);
+        chk.selectedProperty().bindBidirectional(col.visibleProperty());
+        mainTableTogglePane.getChildren().add(chk);
+    }
+
+    /**
+     * Runs through any checkboxes in the checkbox area, and sets their selected attribute to that of the
+     * toggle button.
+     */
+    public void toggleAllTableCols(){
+        for (Node node : mainTableTogglePane.getChildren()){
+            if (node instanceof CheckBox) {
+                ((CheckBox) node).setSelected(mainTableToggleAllButton.isSelected());
+            }
+        }
     }
 
     public void tableThing() { // testing things with tables
         mainTableView.setEditable(false);
 
-        addTableColumn("Case Number", "caseNumber");
-        addTableColumn("Date", "date");
-        addTableColumn("Block", "block");
-        addTableColumn("IUCR", "iucr");
-        addTableColumn("Primary Description", "primaryDescription");
-        addTableColumn("Secondary Description", "secondaryDescription");
-        addTableColumn("Location Description", "locationDescription");
-        addTableColumn("Arrest", "arrest");
-        addTableColumn("Domestic", "domestic");
-        addTableColumn("Beat", "beat");
-        addTableColumn("Ward", "ward");
-        addTableColumn("FBICD", "fbicd");
-        addTableColumn("X-Coordinate", "xcoord");
-        addTableColumn("Y-Coordinate", "ycoord");
-        addTableColumn("Latitude", "latitude");
-        addTableColumn("Longitude", "longitude");
+        addTableCol("Case Number", "caseNumber");
+        addTableCol("Date", "date");
+        addTableCol("Block", "block");
+        addTableCol("IUCR", "iucr");
+        addTableCol("Primary Description", "primaryDescription");
+        addTableCol("Secondary Description", "secondaryDescription");
+        addTableCol("Location Description", "locationDescription");
+        addTableCol("Arrest", "arrest");
+        addTableCol("Domestic", "domestic");
+        addTableCol("Beat", "beat");
+        addTableCol("Ward", "ward");
+        addTableCol("FBICD", "fbicd");
+        addTableCol("X-Coordinate", "xcoord");
+        addTableCol("Y-Coordinate", "ycoord");
+        addTableCol("Latitude", "latitude");
+        addTableCol("Longitude", "longitude");
 
         Record testRecord;
         ArrayList<String> data = new ArrayList<>(Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "N", "N", "334", "7", "6", "1183633", "1851786", "41.748486365", "-87.602675062"));

@@ -4,18 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="255f309c-44ae-4807-92e9-ea0d72dca6eb" name="Default Changelist" comment="Added a docstring">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_08_2021_12_10_AM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_08_2021_12_10_AM__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_31_08_2021_7_06_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_31_08_2021_7_06_PM__Changes_.xml" afterDir="false" />
+    <list default="true" id="255f309c-44ae-4807-92e9-ea0d72dca6eb" name="Default Changelist" comment="Added a table to the other tab in the main gui and some test methods in MainController.">
+      <change afterPath="$PROJECT_DIR$/crimeRecords.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SENG202Project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/SENG202Project.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/gui/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/MainController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/gui/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/gui/main.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/backend/App.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/backend/App.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/backend/database/Database.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/backend/database/Database.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/MainController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/MainController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/gui/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/main.fxml" afterDir="false" />
     </list>
     <list id="27293495-7f00-43dd-9fe1-e57e626354c2" name="Added a docstring" comment="" />
@@ -34,6 +28,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="8277cadaa23fc4d789de4b068508eb776f6563ae" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
@@ -93,6 +92,19 @@
     </key>
   </component>
   <component name="RunManager" selected="Application.Main">
+    <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="backend.App" />
+      <module name="SENG202Project" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="backend.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="gui.Main" />
       <module name="SENG202Project" />
@@ -102,21 +114,6 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="CsvWriterTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="SENG202Project" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="backend.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="backend" />
-      <option name="MAIN_CLASS_NAME" value="backend.CsvWriterTest" />
-      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -172,10 +169,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.App" />
         <item itemvalue="JUnit.DatabaseTest.extractCol" />
         <item itemvalue="JUnit.CsvWriterTest.writeTest" />
         <item itemvalue="JUnit.DatabaseTest.getCol" />
-        <item itemvalue="JUnit.CsvWriterTest" />
       </list>
     </recent_temporary>
   </component>
@@ -265,7 +262,14 @@
       <option name="project" value="LOCAL" />
       <updated>1630394534187</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Added a table to the other tab in the main gui and some test methods in MainController.">
+      <created>1630625874173</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1630625874173</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -300,18 +304,8 @@
     <MESSAGE value="Moved CsvReader class" />
     <MESSAGE value="Moved csvReader.java to reader package" />
     <MESSAGE value="Added DatabaseTest.java, modified DataManipulator and CsvWriter Classes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added DatabaseTest.java, modified DataManipulator and CsvWriter Classes" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/backend/App.java</url>
-          <line>15</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Added a table to the other tab in the main gui and some test methods in MainController." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a table to the other tab in the main gui and some test methods in MainController." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
