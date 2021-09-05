@@ -23,7 +23,13 @@ public class MainController {
     @FXML
     private FlowPane mainTableTogglePane;
     @FXML
+    private FlowPane mainTableAddPane;
+    @FXML
     private ToggleButton mainTableToggleAllButton;
+    @FXML
+    private Button mainTableAddRecordButton;
+    @FXML
+    private Label mainTableAddRecordLabel;
 
     @FXML
     private void initialize() throws IOException, CsvValidationException {
@@ -44,6 +50,7 @@ public class MainController {
         col.setCellValueFactory(new PropertyValueFactory<>(propertyName));
         mainTableView.getColumns().add(col);
         addTableColCheck(displayName, col);
+        addTableTextField(displayName);
     }
 
     /**
@@ -61,12 +68,28 @@ public class MainController {
      * Runs through any checkboxes in the checkbox area, and sets their selected attribute to that of the
      * toggle button.
      */
-    public void toggleAllTableCols(){
+    public void toggleAllTableCols() {
         for (Node node : mainTableTogglePane.getChildren()){
             if (node instanceof CheckBox) {
                 ((CheckBox) node).setSelected(mainTableToggleAllButton.isSelected());
             }
         }
+    }
+
+    /**
+     * Adds a new textfield with the specified prompt text to the panel underneath the table view.
+     * This will be used to add a new record.
+     *
+     * This might be better off done in the .fxml file so that we can refer to the prompts to give better feedback
+     * if the user tried to insert an incorrectly formatted record. This would also help with 'wiring it up', as the
+     * text field needs to be linked to or able to access the relevant column.
+     *
+     * @param prompt the String to be used as prompt text
+     */
+    public void addTableTextField(String prompt) {
+        TextField field = new TextField();
+        field.setPromptText(prompt);
+        mainTableAddPane.getChildren().add(field);
     }
 
     /**
