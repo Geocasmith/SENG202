@@ -359,7 +359,7 @@ public class Database {
      * @return
      * @throws SQLException
      */
-    public ArrayList<Record> tableViewer() throws SQLException {
+    public ArrayList<Record> getAll() throws SQLException {
         connection.setAutoCommit(false);
         PreparedStatement s1 = connection.prepareStatement("SELECT * FROM CRIMES;");
         ResultSet rs = s1.executeQuery();

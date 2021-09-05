@@ -30,7 +30,7 @@ public class App
         //Example of using the search function to find a crime at a latitude
         ArrayList<Record> lat = d.searchDB("XCOORDINATE",1176416);
 
-        ArrayList<Record> all = d.tableViewer();
+        ArrayList<Record> all = d.getAll();
 
         //Test using the manual add function
         Record test = all.get(0);

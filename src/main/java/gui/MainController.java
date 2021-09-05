@@ -1,6 +1,7 @@
 package gui;
 
 import backend.csvReader;
+import backend.database.Database;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -10,6 +11,7 @@ import backend.Record;
 import javafx.scene.layout.FlowPane;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +34,7 @@ public class MainController {
     private Label mainTableAddRecordLabel;
 
     @FXML
-    private void initialize() throws IOException, CsvValidationException {
+    private void initialize() throws IOException, CsvValidationException, SQLException {
     // Pane newLoadedPane = FXMLLoader.load(getClass().getResource("map.fxml"));
     // mainTabPane.getTabs().addAll((Tab)FXMLLoader.load(this.getClass().getResource("testmap.fxml")));
         tableSetup();
@@ -98,7 +100,7 @@ public class MainController {
      * Creates all columns necessary for viewing crime data.
      * For now, creates a test record and adds it to the table (for testing).
      */
-    public void tableSetup() throws CsvValidationException, IOException {
+    public void tableSetup() throws CsvValidationException, IOException, SQLException {
         mainTableView.setEditable(false); // for now, until this can be linked up to the database
 
         // create all the columns
@@ -119,11 +121,14 @@ public class MainController {
         addTableCol("Latitude", "latitude");
         addTableCol("Longitude", "longitude");
 
-        Record testRec;
-        ArrayList<List<String>> recordStrings = csvReader.read();
-        for (List<String> strs : recordStrings) {
-            testRec = new Record(strs);
-            mainTableView.getItems().add(testRec);
+        //Record testRec;
+        //ArrayList<List<String>> recordStrings = csvReader.read();
+        Database d = new Database();
+        d.connectDatabase();
+        ArrayList<Record> allRecords = d.getAll();
+        for (Record r : allRecords) {
+
+            mainTableView.getItems().add(r);
         }
 
 //        Record testRecord;
