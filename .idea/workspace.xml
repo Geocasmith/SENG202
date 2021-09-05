@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="255f309c-44ae-4807-92e9-ea0d72dca6eb" name="Default Changelist" comment="Added a method in MainController.java which tries to get a record from what the user has put in the textfields. Prints the record on success. Only handles generic exceptions and gives yes/no feedback on whether it is a valid record (ie. not which fields are incorrect).">
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/MainController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/gui/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/gui/main.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/backend/App.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/backend/App.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/backend/database/Database.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/backend/database/Database.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/MainController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/MainController.class" afterDir="false" />
-    </list>
+    <list default="true" id="255f309c-44ae-4807-92e9-ea0d72dca6eb" name="Default Changelist" comment="Manually added textfields to the GUI and stopped them being added in the code." />
     <list id="27293495-7f00-43dd-9fe1-e57e626354c2" name="Added a docstring" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -310,7 +304,14 @@
       <option name="project" value="LOCAL" />
       <updated>1630833536577</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Manually added textfields to the GUI and stopped them being added in the code.">
+      <created>1630833860839</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1630833860839</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -352,7 +353,8 @@
     <MESSAGE value="Changed tableSetup() to add 5k records using CsvReader, for better testing. Seems to have fixed the selection issue; that was likely to do with using identical records." />
     <MESSAGE value="Added a method in MainController.java which adds a new textfield for each column of the table, with relevant prompt text.&#10;&#10;Also created the GUI for this in the FXML file." />
     <MESSAGE value="Added a method in MainController.java which tries to get a record from what the user has put in the textfields. Prints the record on success. Only handles generic exceptions and gives yes/no feedback on whether it is a valid record (ie. not which fields are incorrect)." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added a method in MainController.java which tries to get a record from what the user has put in the textfields. Prints the record on success. Only handles generic exceptions and gives yes/no feedback on whether it is a valid record (ie. not which fields are incorrect)." />
+    <MESSAGE value="Manually added textfields to the GUI and stopped them being added in the code." />
+    <option name="LAST_COMMIT_MESSAGE" value="Manually added textfields to the GUI and stopped them being added in the code." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
