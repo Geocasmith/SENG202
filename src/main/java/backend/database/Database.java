@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
+
 import static java.lang.String.valueOf;
 
 /***
@@ -367,18 +368,29 @@ public class Database {
     }
 
     /**
-     * Returns whole database of record objects to pass to the tableviewer
+     * Returns records from the database within the area of the location
+     * Unsure of how to implement, would need the inverse haversine to find the maximum and minimum latitudes
      *
      * @return
      * @throws SQLException
      */
-    public ArrayList<Record> tableViewerLocationRange() throws SQLException {
+    public ArrayList<Record> getLocationRange() throws SQLException {
+        return null;
+    }
+    /**
+     * Returns records between the two dates
+     *
+     * @return
+     * @throws SQLException
+     */
+    public ArrayList<Record> getDateRange(String startDate, String endDate) throws SQLException, ParseException {
+        long startUnix = unixTimeConvert(startDate);
+        long endUnix = unixTimeConvert(endDate);
         connection.setAutoCommit(false);
-        PreparedStatement s1 = connection.prepareStatement("SELECT COLUMNS FROM CRIMES;");
+        PreparedStatement s1 = connection.prepareStatement("SELECT * FROM CRIMES WHERE UNIXTIME BETWEEN "+startUnix+" and "+ endUnix+";");
         ResultSet rs = s1.executeQuery();
         return getRecord(rs);
     }
-
     /**
      * Generates an arraylist of records from a given resultset
      *
@@ -450,5 +462,16 @@ public class Database {
         Date d = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a").parse(date);
         return d.getTime();
     }
+
+    /**
+     * The method converts a date object to a unix time
+     * @param d input date
+     * @return a unix time
+     * @throws ParseException
+     */
+    public long unixTimeConvert(Date d) throws ParseException {
+        return d.getTime();
+    }
+
 }
 
