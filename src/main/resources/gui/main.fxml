@@ -95,7 +95,7 @@
                                        <bottom>
                                           <FlowPane prefHeight="25.0" prefWidth="779.0" BorderPane.alignment="CENTER">
                                              <children>
-                                                <Button fx:id="mainTableAddRecordButton" mnemonicParsing="false" text="Add Record" />
+                                                <Button fx:id="mainTableAddRecordButton" mnemonicParsing="false" onAction="#getRecordFromTextFields" text="Add Record" />
                                                 <Label fx:id="mainTableAddRecordLabel">
                                                    <FlowPane.margin>
                                                       <Insets left="10.0" />

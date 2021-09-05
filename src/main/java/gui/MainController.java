@@ -95,6 +95,32 @@ public class MainController {
     }
 
     /**
+     * Runs through the text fields and "lines them up" with the attributes of a Record object to create one, which
+     * can then be passed to the database.
+     *
+     * There is no error handling yet, so be careful!
+     *
+     * Returns a record object.
+     */
+    public void getRecordFromTextFields() {
+        List<String> recStrings = new ArrayList<String>();
+
+        for (Node node : mainTableAddPane.getChildren()){
+            if (node instanceof TextField) {
+                recStrings.add(((TextField) node).getText());
+            }
+        }
+        try {
+            Record rec = new Record(recStrings);
+            System.out.println(rec.toString());
+            mainTableAddRecordLabel.setText("That's a valid record. Well done!");
+        }
+        catch (Exception e) {
+            mainTableAddRecordLabel.setText("That's not a valid record, but I can't tell you why!");
+        }
+    }
+
+    /**
      * Sets up the main table.
      * Disables editing (provisional).
      * Creates all columns necessary for viewing crime data.

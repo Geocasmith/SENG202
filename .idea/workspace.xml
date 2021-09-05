@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="255f309c-44ae-4807-92e9-ea0d72dca6eb" name="Default Changelist" comment="Changed tableSetup() to add 5k records using CsvReader, for better testing. Seems to have fixed the selection issue; that was likely to do with using identical records.">
+    <list default="true" id="255f309c-44ae-4807-92e9-ea0d72dca6eb" name="Default Changelist" comment="Added a method in MainController.java which adds a new textfield for each column of the table, with relevant prompt text.&#10;&#10;Also created the GUI for this in the FXML file.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/gui/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/MainController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/gui/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/gui/main.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/MainController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/MainController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/main.fxml" afterDir="false" />
     </list>
     <list id="27293495-7f00-43dd-9fe1-e57e626354c2" name="Added a docstring" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -294,7 +296,14 @@
       <option name="project" value="LOCAL" />
       <updated>1630702268077</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Added a method in MainController.java which adds a new textfield for each column of the table, with relevant prompt text.&#10;&#10;Also created the GUI for this in the FXML file.">
+      <created>1630828161672</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1630828161672</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -334,7 +343,8 @@
     <MESSAGE value="Added a method for displaying an arraylist of records in the main table.&#10;&#10;Added and edited javadoc in MainController." />
     <MESSAGE value="Minor fxml changes to try and fix the table selection (didn't work)." />
     <MESSAGE value="Changed tableSetup() to add 5k records using CsvReader, for better testing. Seems to have fixed the selection issue; that was likely to do with using identical records." />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed tableSetup() to add 5k records using CsvReader, for better testing. Seems to have fixed the selection issue; that was likely to do with using identical records." />
+    <MESSAGE value="Added a method in MainController.java which adds a new textfield for each column of the table, with relevant prompt text.&#10;&#10;Also created the GUI for this in the FXML file." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a method in MainController.java which adds a new textfield for each column of the table, with relevant prompt text.&#10;&#10;Also created the GUI for this in the FXML file." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
