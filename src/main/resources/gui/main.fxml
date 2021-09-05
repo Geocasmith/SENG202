@@ -90,7 +90,26 @@
                                  <content>
                                     <BorderPane prefHeight="200.0" prefWidth="200.0">
                                        <center>
-                                          <FlowPane fx:id="mainTableAddPane" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" BorderPane.alignment="CENTER" />
+                                          <FlowPane fx:id="mainTableAddPane" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" BorderPane.alignment="CENTER">
+                                             <children>
+                                                <TextField promptText="Case Number" />
+                                                <TextField promptText="Date" />
+                                                <TextField promptText="Block" />
+                                                <TextField promptText="IUCR" />
+                                                <TextField promptText="Primary Description" />
+                                                <TextField promptText="Secondary Description" />
+                                                <TextField promptText="Location Description" />
+                                                <TextField promptText="Arrest" />
+                                                <TextField promptText="Domestic" />
+                                                <TextField promptText="Beat" />
+                                                <TextField promptText="Ward" />
+                                                <TextField promptText="FBICD" />
+                                                <TextField promptText="X-Coordinate" />
+                                                <TextField promptText="Y-Coordinate" />
+                                                <TextField promptText="Latitude" />
+                                                <TextField promptText="Longitude" />
+                                             </children>
+                                          </FlowPane>
                                        </center>
                                        <bottom>
                                           <FlowPane prefHeight="25.0" prefWidth="779.0" BorderPane.alignment="CENTER">
