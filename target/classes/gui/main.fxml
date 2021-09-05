@@ -92,22 +92,22 @@
                                        <center>
                                           <FlowPane fx:id="mainTableAddPane" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" BorderPane.alignment="CENTER">
                                              <children>
-                                                <TextField promptText="Case Number" />
-                                                <TextField promptText="Date" />
-                                                <TextField promptText="Block" />
-                                                <TextField promptText="IUCR" />
-                                                <TextField promptText="Primary Description" />
-                                                <TextField promptText="Secondary Description" />
-                                                <TextField promptText="Location Description" />
-                                                <TextField promptText="Arrest" />
-                                                <TextField promptText="Domestic" />
-                                                <TextField promptText="Beat" />
-                                                <TextField promptText="Ward" />
-                                                <TextField promptText="FBICD" />
-                                                <TextField promptText="X-Coordinate" />
-                                                <TextField promptText="Y-Coordinate" />
-                                                <TextField promptText="Latitude" />
-                                                <TextField promptText="Longitude" />
+                                                <TextField fx:id="mainTableAddCaseNumberField" promptText="Case Number" />
+                                                <TextField fx:id="mainTableAddDateField" promptText="Date" />
+                                                <TextField fx:id="mainTableAddBlockField" promptText="Block" />
+                                                <TextField fx:id="mainTableAddIUCRField" promptText="IUCR" />
+                                                <TextField fx:id="mainTableAddPrimaryDescField" promptText="Primary Description" />
+                                                <TextField fx:id="mainTableAddSecondaryDescField" promptText="Secondary Description" />
+                                                <TextField fx:id="mainTableAddLocationDescField" promptText="Location Description" />
+                                                <TextField fx:id="mainTableAddArrestField" promptText="Arrest" />
+                                                <TextField fx:id="mainTableAddDomesticField" promptText="Domestic" />
+                                                <TextField fx:id="mainTableAddBeatField" promptText="Beat" />
+                                                <TextField fx:id="mainTableAddWardField" promptText="Ward" />
+                                                <TextField fx:id="mainTableAddFBICDField" promptText="FBICD" />
+                                                <TextField fx:id="mainTableAddXCoordField" promptText="X-Coordinate" />
+                                                <TextField fx:id="mainTableAddYCoordField" promptText="Y-Coordinate" />
+                                                <TextField fx:id="mainTableAddLatitudeField" promptText="Latitude" />
+                                                <TextField fx:id="mainTableAddLongitudeField" promptText="Longitude" />
                                              </children>
                                           </FlowPane>
                                        </center>

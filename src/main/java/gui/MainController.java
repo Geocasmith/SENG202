@@ -32,6 +32,38 @@ public class MainController {
     private Button mainTableAddRecordButton;
     @FXML
     private Label mainTableAddRecordLabel;
+    @FXML
+    private TextField mainTableAddCaseNumberField;
+    @FXML
+    private TextField mainTableAddDateField;
+    @FXML
+    private TextField mainTableAddBlockField;
+    @FXML
+    private TextField mainTableAddIUCRField;
+    @FXML
+    private TextField mainTableAddPrimaryDescField;
+    @FXML
+    private TextField mainTableAddSecondaryDescField;
+    @FXML
+    private TextField mainTableAddLocationDescField;
+    @FXML
+    private TextField mainTableAddArrestField;
+    @FXML
+    private TextField mainTableAddDomesticField;
+    @FXML
+    private TextField mainTableAddBeatField;
+    @FXML
+    private TextField mainTableAddWardField;
+    @FXML
+    private TextField mainTableAddFBICDField;
+    @FXML
+    private TextField mainTableAddXCoordField;
+    @FXML
+    private TextField mainTableAddYCoordField;
+    @FXML
+    private TextField mainTableAddLatitudeField;
+    @FXML
+    private TextField mainTableAddLongitudeField;
 
     @FXML
     private void initialize() throws IOException, CsvValidationException, SQLException {
@@ -147,8 +179,7 @@ public class MainController {
         addTableCol("Latitude", "latitude");
         addTableCol("Longitude", "longitude");
 
-        //Record testRec;
-        //ArrayList<List<String>> recordStrings = csvReader.read();
+        // Test code
         Database d = new Database();
         d.connectDatabase();
         ArrayList<Record> allRecords = d.getAll();
@@ -156,23 +187,23 @@ public class MainController {
 
             mainTableView.getItems().add(r);
         }
-
-//        Record testRecord;
-//        ArrayList<String> data = new ArrayList<>(Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "N", "N", "334", "7", "6", "1183633", "1851786", "41.748486365", "-87.602675062"));
-//        testRecord = new Record(data);
-//
-//        for (int i = 0; i < 50; i++){
-//            mainTableView.getItems().add(testRecord);
-//        }
     }
 
     /**
      * Adds all record objects in an arraylist to the main viewing table.
-     * @param records An ArrayList of record objects to be dispalyed in the table
+     * @param records An ArrayList of record objects to be displayed in the table
      */
     public void addRecordsToTable(ArrayList<Record> records) {
         for (Record rec : records) {
             mainTableView.getItems().add(rec);
         }
+    }
+
+    /**
+     * Adds a record object to the main viewing table.
+     * @param rec A record object to be displayed in the table
+     */
+    public void addRecordsToTable(Record rec) {
+        mainTableView.getItems().add(rec);
     }
 }
