@@ -12,14 +12,10 @@ import javafx.scene.layout.FlowPane;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class MainController {
 
-    @FXML
-    private TabPane mainTabPane;
     @FXML
     private TableView mainTableView;
     @FXML
@@ -64,12 +60,29 @@ public class MainController {
     private TextField mainTableAddLatitudeField;
     @FXML
     private TextField mainTableAddLongitudeField;
+    @FXML
+    private TitledPane filterPane;
+
+    // Filter Sidebar Elements
+    @FXML
+    private Accordion sidebarAccordion;
+    @FXML
+    private ComboBox arrestComboBox;
+    @FXML
+    private ComboBox domesticComboBox;
+    @FXML
+    private ComboBox crimeTypeComboBox;
+    @FXML
+    private ComboBox locationDescriptionComboBox;
+    @FXML
+    private Slider radiusSlider;
+    @FXML
+    private Label radiusLabel;
 
     @FXML
     private void initialize() throws IOException, CsvValidationException, SQLException {
-    // Pane newLoadedPane = FXMLLoader.load(getClass().getResource("map.fxml"));
-    // mainTabPane.getTabs().addAll((Tab)FXMLLoader.load(this.getClass().getResource("testmap.fxml")));
         tableSetup();
+        filterSetup();
     }
 
     /**
@@ -206,4 +219,56 @@ public class MainController {
     public void addRecordsToTable(Record rec) {
         mainTableView.getItems().add(rec);
     }
+
+    /**
+     * Sets up combo boxes in filter pane
+     * Sets filter pane as expanded
+     */
+    public void filterSetup() throws SQLException {
+        // Sets filter pane to expanded pane
+        sidebarAccordion.setExpandedPane(filterPane);
+
+        // Set values for arrests and domestic combo boxes
+        arrestComboBox.getItems().addAll("", "Yes", "No");
+        arrestComboBox.getSelectionModel().select("");
+        domesticComboBox.getItems().addAll("", "Yes", "No");
+        domesticComboBox.getSelectionModel().select("");
+
+        // Basic code to get a list of all crime types - MIGHT BE SLOW WITH LOTS OF RECORDS
+        Database d = new Database();
+        d.connectDatabase();
+        ArrayList<Record> allRecords = d.getAll();
+        ArrayList<String> crimeTypes = new ArrayList<>();
+        ArrayList<String> locationDescriptions = new ArrayList<>();
+        for (int i = 0; i < allRecords.size(); i++) {
+            crimeTypes.add(allRecords.get(i).getPrimaryDescription());
+            locationDescriptions.add(allRecords.get(i).getLocationDescription());
+        }
+        // Remove duplicate values
+        crimeTypes = new ArrayList<>(new HashSet<>(crimeTypes));
+        locationDescriptions = new ArrayList<>(new HashSet<>(locationDescriptions));
+
+        // Sort lists alphabetically
+        Collections.sort(crimeTypes);
+        Collections.sort(locationDescriptions);
+
+        // Set values for crime types combo box
+        crimeTypeComboBox.getItems().add("");
+        crimeTypeComboBox.getItems().addAll(crimeTypes);
+
+        // Set values for location description combo box
+        locationDescriptionComboBox.getItems().add("");
+        locationDescriptionComboBox.getItems().addAll(locationDescriptions);
+    }
+
+    /**
+     * Updates label for radius when slider is updated
+     */
+    public void updateRadiusText() {
+        String radius = String.valueOf(Math.round(radiusSlider.getValue()));
+        radiusLabel.setText(radius + " km");
+    }
+
 }
+
+

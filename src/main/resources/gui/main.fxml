@@ -10,6 +10,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableView?>
@@ -135,47 +136,100 @@
       </TabPane>
    </center>
    <left>
-      <TabPane prefHeight="200.0" prefWidth="200.0" styleClass="sideBarTabPane" tabClosingPolicy="UNAVAILABLE" tabMinWidth="80.0" BorderPane.alignment="CENTER">
-        <tabs>
-          <Tab styleClass="sidebarTab" text="Filter">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+      <Accordion fx:id="sidebarAccordion" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <panes>
+          <TitledPane fx:id="filterPane" animated="false" text="Filter">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Label layoutX="74.0" layoutY="14.0" text="Filter" textAlignment="CENTER">
+                        <Label layoutX="74.0" text="Filter" textAlignment="CENTER">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <TextField layoutX="26.0" layoutY="58.0" promptText="Search" />
-                        <Separator layoutY="106.0" prefWidth="200.0" />
-                        <Label layoutX="79.0" layoutY="127.0" text="From" />
-                        <DatePicker layoutX="14.0" layoutY="144.0" />
-                        <Label layoutX="86.0" layoutY="176.0" text="To" textAlignment="CENTER" />
-                        <DatePicker layoutX="13.0" layoutY="193.0" />
+                        <Label alignment="CENTER" layoutY="60.0" prefWidth="200.0" text="From" />
+                        <DatePicker layoutX="13.0" layoutY="77.0" />
+                        <Label alignment="CENTER" layoutY="102.0" prefWidth="200.0" text="To" textAlignment="CENTER">
+                           <padding>
+                              <Insets bottom="5.0" top="5.0" />
+                           </padding>
+                        </Label>
+                        <DatePicker layoutX="13.0" layoutY="129.0" />
+                        <ComboBox fx:id="crimeTypeComboBox" layoutX="10.0" layoutY="203.0" prefHeight="25.0" prefWidth="180.0" promptText="Select Crime Type" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <Button layoutX="47.0" layoutY="692.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="107.0" styleClass="applyFilterButton" text="Apply Filter" textAlignment="CENTER" AnchorPane.bottomAnchor="29.0" />
+                        <Separator layoutX="194.0" orientation="VERTICAL" prefHeight="3000.0" prefWidth="12.0" />
+                        <Button layoutY="670.0" mnemonicParsing="false" prefWidth="200.0" styleClass="clearFilterButton" text="Clear Filter" AnchorPane.bottomAnchor="59.0" />
+                        <Label alignment="CENTER" layoutY="35.0" prefHeight="17.0" prefWidth="200.0" text="Date Range">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Separator layoutY="34.0" prefWidth="200.0" />
+                        <Separator layoutX="1.0" layoutY="169.0" prefWidth="200.0" />
+                        <TextField layoutX="26.0" layoutY="311.0" prefHeight="25.0" prefWidth="70.0" promptText="Wards" />
+                        <TextField layoutX="104.0" layoutY="311.0" prefHeight="25.0" prefWidth="70.0" promptText="Beats" />
+                        <Label alignment="CENTER" layoutY="171.0" prefHeight="17.0" prefWidth="200.0" text="Crime Type">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
                         <Separator layoutY="240.0" prefWidth="200.0" />
-                        <ComboBox layoutX="25.0" layoutY="259.0" prefWidth="150.0" promptText="Select Type" />
-                        <Button layoutX="47.0" layoutY="695.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="107.0" styleClass="applyFilterButton" text="Apply Filter" textAlignment="CENTER" />
-                        <Separator layoutX="194.0" orientation="VERTICAL" prefHeight="747.0" prefWidth="13.0" />
-                        <Button layoutX="72.0" layoutY="671.0" mnemonicParsing="false" styleClass="clearFilterButton" text="Clear Filter" />
-                     </children></AnchorPane>
-            </content>
-          </Tab>
-          <Tab styleClass="sidebarTab" text="Graph">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <Label alignment="CENTER" layoutY="242.0" prefHeight="17.0" prefWidth="200.0" text="Location">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <TextField layoutX="26.0" layoutY="355.0" prefHeight="25.0" prefWidth="70.0" promptText="Lat" />
+                        <TextField layoutX="104.0" layoutY="355.0" prefHeight="25.0" prefWidth="70.0" promptText="Long" />
+                        <Slider fx:id="radiusSlider" blockIncrement="5.0" layoutX="27.0" layoutY="402.0" onMouseDragged="#updateRadiusText" prefHeight="14.0" prefWidth="125.0" />
+                        <Label alignment="CENTER" layoutX="-4.0" layoutY="380.0" prefHeight="17.0" prefWidth="200.0" text="Radius">
+                           <opaqueInsets>
+                              <Insets top="5.0" />
+                           </opaqueInsets>
+                           <padding>
+                              <Insets top="5.0" />
+                           </padding>
+                        </Label>
+                        <Separator layoutY="425.0" prefWidth="200.0" />
+                        <Label alignment="CENTER" layoutY="427.0" prefHeight="17.0" prefWidth="200.0" text="Other">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="1.0" layoutY="452.0" prefHeight="17.0" prefWidth="100.0" text="Arrest made" />
+                        <Label alignment="CENTER" layoutX="102.0" layoutY="452.0" prefHeight="17.0" prefWidth="100.0" text="Domestic" />
+                        <ComboBox fx:id="arrestComboBox" layoutX="21.0" layoutY="475.0" prefWidth="60.0" />
+                        <ComboBox fx:id="domesticComboBox" layoutX="122.0" layoutY="475.0" prefWidth="60.0" />
+                        <ComboBox fx:id="locationDescriptionComboBox" layoutX="26.0" layoutY="276.0" prefWidth="180.0" promptText="Location Description" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <Label fx:id="radiusLabel" layoutX="150.0" layoutY="399.0" text="0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <padding>
+                              <Insets left="4.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+               </content>
+          </TitledPane>
+          <TitledPane animated="false" text="Graph">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Label layoutX="68.0" layoutY="14.0" text="Graph">
+                        <Label layoutX="68.0" layoutY="14.0" text="Graph" AnchorPane.topAnchor="10.0">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </Label>
                         <ComboBox layoutX="25.0" layoutY="63.0" prefWidth="150.0" promptText="Select Graph Type" />
                         <Separator layoutX="1.0" layoutY="101.0" prefWidth="200.0" />
-                        <Separator layoutX="195.0" layoutY="-4.0" orientation="VERTICAL" prefHeight="774.0" prefWidth="12.0" />
-                     </children></AnchorPane>
-            </content>
-          </Tab>
-        </tabs>
-      </TabPane>
+                        <Separator layoutX="194.0" orientation="VERTICAL" prefHeight="3000.0" prefWidth="12.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+          </TitledPane>
+        </panes>
+      </Accordion>
    </left>
 </BorderPane>
