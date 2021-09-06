@@ -5,11 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test class for CsvWriter
@@ -22,7 +18,7 @@ class CsvWriterTest {
      */
     @Test
     public void writeTest() throws IOException, CsvValidationException {
-        csvReader reader = new csvReader();
+        CsvReader reader = new CsvReader();
         ArrayList<List<String>> readData;
         readData = reader.read();
         ArrayList<Record> recordsList = new ArrayList<>();

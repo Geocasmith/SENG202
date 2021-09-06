@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.text.SimpleDateFormat;
 
 /**
  * Hello world!
@@ -19,7 +17,7 @@ public class App
     public static void main( String[] args ) throws SQLException, IOException, CsvValidationException, ParseException {
 
         //Sets up csvReader and database
-        csvReader cs = new csvReader();
+        CsvReader cs = new CsvReader();
         Database d = new Database();
         d.connectDatabase();
         d.insertRows(cs.read());

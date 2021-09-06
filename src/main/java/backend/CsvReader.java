@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class csvReader {
+public class CsvReader {
 
     public static ArrayList<List<String>> read() throws IOException, CsvValidationException {
 

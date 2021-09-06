@@ -1,6 +1,5 @@
 package gui;
 
-import backend.csvReader;
 import backend.database.Database;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.fxml.FXML;
@@ -13,7 +12,6 @@ import javafx.scene.layout.FlowPane;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MainController {
