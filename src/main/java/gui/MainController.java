@@ -78,6 +78,18 @@ public class MainController {
     private Slider radiusSlider;
     @FXML
     private Label radiusLabel;
+    @FXML
+    private DatePicker filterStartDate;
+    @FXML
+    private DatePicker filterEndDate;
+    @FXML
+    private TextField filterWardTextField;
+    @FXML
+    private TextField filterBeatsTextField;
+    @FXML
+    private TextField filterLatTextField;
+    @FXML
+    private TextField filterLongTextField;
 
     @FXML
     private void initialize() throws IOException, CsvValidationException, SQLException {
@@ -253,11 +265,13 @@ public class MainController {
         Collections.sort(locationDescriptions);
 
         // Set values for crime types combo box
-        crimeTypeComboBox.getItems().add("");
+        crimeTypeComboBox.getItems().add("Select Crime Type");
+        crimeTypeComboBox.getSelectionModel().select("Select Crime Type");
         crimeTypeComboBox.getItems().addAll(crimeTypes);
 
         // Set values for location description combo box
-        locationDescriptionComboBox.getItems().add("");
+        locationDescriptionComboBox.getItems().add("Location Description");
+        locationDescriptionComboBox.getSelectionModel().select("Location Description");
         locationDescriptionComboBox.getItems().addAll(locationDescriptions);
     }
 
@@ -267,6 +281,25 @@ public class MainController {
     public void updateRadiusText() {
         String radius = String.valueOf(Math.round(radiusSlider.getValue()));
         radiusLabel.setText(radius + " km");
+    }
+
+    /**
+     * Sets all filter parameters back to default
+     */
+    public void clearFilters() {
+        filterStartDate.setValue(null);
+        filterEndDate.setValue(null);
+        crimeTypeComboBox.getSelectionModel().select("Select Crime Type");
+        locationDescriptionComboBox.getSelectionModel().select("Location Description");
+        filterWardTextField.setText(null);
+        filterBeatsTextField.setText(null);
+        filterLatTextField.setText(null);
+        filterLongTextField.setText(null);
+        radiusSlider.setValue(1);
+        radiusLabel.setText("1 km");
+        arrestComboBox.getSelectionModel().select("");
+        domesticComboBox.getSelectionModel().select("");
+
     }
 
 }
