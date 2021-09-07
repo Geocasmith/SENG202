@@ -1,14 +1,11 @@
 package backend.database;
 
-import backend.csvReader;
 import com.opencsv.exceptions.CsvValidationException;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class DatabaseTest {
 
