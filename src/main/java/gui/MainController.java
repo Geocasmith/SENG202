@@ -111,7 +111,6 @@ public class MainController {
         col.setCellValueFactory(new PropertyValueFactory<>(propertyName));
         mainTableView.getColumns().add(col);
         addTableColCheck(displayName, col);
-//        addTableTextField(displayName);
     }
 
     /**
