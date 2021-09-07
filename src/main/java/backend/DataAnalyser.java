@@ -1,5 +1,6 @@
 package backend;
 import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class DataAnalyser {
 
@@ -11,6 +12,16 @@ public class DataAnalyser {
      */
     public Duration calculateTimeDifference(Record record1, Record record2) {
         return Duration.between(record1.getDateAsObject(), record2.getDateAsObject()).abs();
+    }
+
+    /**
+     * Calculates the absolute value of the time difference between the crimes
+     * @param time1 the date and time of the first crime record
+     * @param time2 the date and time of the second crime record
+     * @return a duration object that holds the time difference between the crimes
+     */
+    public Duration calculateTimeDifference(LocalDateTime time1, LocalDateTime time2) {
+        return Duration.between(time1, time2).abs();
     }
 
     /**
