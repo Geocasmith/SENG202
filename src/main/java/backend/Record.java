@@ -37,16 +37,16 @@ public class Record {
         primaryDescription = data.get(4);
         secondaryDescription = data.get(5);
         locationDescription = data.get(6);
-        if (Objects.equals(data.get(7), "Y")) {
+        if ((Objects.equals(data.get(7), "Y")) || (Objects.equals(data.get(7), "true"))) {
             arrest = true;
-        } else if (Objects.equals(data.get(7), "N")) {
+        } else if ((Objects.equals(data.get(7), "N")) || (Objects.equals(data.get(7), "false"))) {
             arrest = false;
         } else {
             arrest = null;
         }
-        if (Objects.equals(data.get(8), "Y")) {
+        if ((Objects.equals(data.get(8), "Y")) || (Objects.equals(data.get(8), "true"))) {
             domestic = true;
-        } else if (Objects.equals(data.get(8), "N")) {
+        } else if ((Objects.equals(data.get(8), "N")) || (Objects.equals(data.get(8), "false"))) {
             domestic = false;
         } else {
             domestic = null;
