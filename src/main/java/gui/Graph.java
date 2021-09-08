@@ -11,14 +11,33 @@ import javafx.stage.Stage;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 
 import java.sql.SQLException;
 
 public class Graph extends Application {
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a", Locale.ENGLISH);
+    private static DateTimeFormatter hourFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh a", Locale.ENGLISH);
+    private static DateTimeFormatter dayWeekFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.ENGLISH);
+    private static DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MM/yyyy", Locale.ENGLISH);
+    private static DateTimeFormatter yearFormatter = DateTimeFormatter.ofPattern("yyyy", Locale.ENGLISH);
+
+
+
+
+
+
     private DataAnalyser dataAnalyser = new DataAnalyser();
+    private static final int oneHourInSeconds = 3600;
+    private static final int oneDayInSeconds = 86400;
+    private static final int oneWeekInSeconds = 604800;
+    private static final int twoWeeksInSeconds = 1209600;
+    private static final int oneMonthInSeconds = 2629746;
+    private static final int fourMonthsInSeconds = 10518984;
+    private static final int oneYearInSeconds = 31556952;
     @Override
     public void start(Stage stage) throws SQLException {
         Database db = new Database();
@@ -30,7 +49,7 @@ public class Graph extends Application {
         XYChart.Series series = new XYChart.Series();
 
         BarChart barChart = createCrimesOverTimeGraph(db, hm, series);
-        LineChart lineChart = createWardCrimesOverTimeGraph(db, hm, series);
+//        LineChart lineChart = createWardCrimesOverTimeGraph(db, hm, series);
 
 
         Scene scene  = new Scene(barChart,1920,1080);
@@ -53,7 +72,7 @@ public class Graph extends Application {
         ArrayList<Record> data = new ArrayList<>();
         data = db.getAll();
         ArrayList<LocalDateTime> times = new ArrayList<>();
-        for (Record r: data.subList(0, 50)) {
+        for (Record r: data) {
             times.add(r.getDateAsObject());
             if (hm.containsKey(r.getDateAsObject())) {
                 hm.put(r.getDateAsObject(), (int) hm.get(r.getDateAsObject()) + 1);
@@ -62,34 +81,90 @@ public class Graph extends Application {
             }
         }
         Collections.sort(times);
+//        times = new ArrayList<>(times.subList(0, 2000));
 
-        LocalDateTime lowerBound = times.get(0);
-        LocalDateTime upperBound;
+
+
+
+        Duration width = dataAnalyser.calculateTimeDifference(times.get(0), times.get(times.size() - 1));
+        Duration periodInSeconds;
+        DateTimeFormatter formatter;
+        String requiredDuration;
+        if (width.getSeconds() < oneDayInSeconds) {
+            requiredDuration = "Hours";
+            formatter = hourFormatter;
+            periodInSeconds = Duration.ofSeconds(oneHourInSeconds);
+        } else if (width.getSeconds() < twoWeeksInSeconds) {
+            requiredDuration = "Days";
+            formatter = dayWeekFormatter;
+            periodInSeconds = Duration.ofSeconds(oneDayInSeconds);
+        } else if (width.getSeconds() < fourMonthsInSeconds) {
+            requiredDuration = "Weeks";
+            formatter = dayWeekFormatter;
+            periodInSeconds = Duration.ofSeconds(oneWeekInSeconds);
+        } else if (width.getSeconds() < oneYearInSeconds) {
+            requiredDuration = "Months";
+            formatter = monthFormatter;
+            periodInSeconds = Duration.ofSeconds(oneMonthInSeconds);
+        } else {
+            requiredDuration = "Years";
+            formatter = yearFormatter;
+            periodInSeconds = Duration.ofSeconds(oneYearInSeconds);
+        }
+        sortCrimesByTimePeriod(times, periodInSeconds, formatter, series, requiredDuration);
+
+        return barChart;
+    }
+
+    private LocalDateTime roundDateTime(LocalDateTime timeToRound, String requiredDuration) {
+        if (requiredDuration == "Hours") {
+            timeToRound.withMinute(0).withSecond(0);
+        } else if (requiredDuration == "Days") {
+            timeToRound.withHour(0);
+        } else if (requiredDuration == "Weeks") {
+            if (timeToRound.getDayOfMonth() <= 7) {
+                timeToRound.withDayOfMonth(1);
+            } else if (timeToRound.getDayOfMonth() <=14) {
+                timeToRound.withDayOfMonth(7);
+            } else if (timeToRound.getDayOfMonth() <=21) {
+                timeToRound.withDayOfMonth(14);
+            } else if (timeToRound.getDayOfMonth() <=28) {
+                timeToRound.withDayOfMonth(21);
+            } else {
+                timeToRound.withDayOfMonth(21);
+            }
+        } else if (requiredDuration == "Months") {
+            timeToRound.withDayOfMonth(1);
+        } else if (requiredDuration == "Years") {
+            timeToRound.withMonth(1);
+        }
+        return timeToRound;
+    }
+
+    private void sortCrimesByTimePeriod(ArrayList<LocalDateTime> times, Duration periodInSeconds, DateTimeFormatter formatter, XYChart.Series series, String requiredDuration) {
         int i = 0;
         int count;
-        LinkedHashMap hm2 = new LinkedHashMap();
-        ArrayList<LocalDateTime> times2 = new ArrayList<>();
-        Duration width = dataAnalyser.calculateTimeDifference(times.get(0), times.get(times.size() - 1));
-        Duration segments = Duration.ofSeconds(width.getSeconds() / 5);
+        ArrayList<LocalDateTime> outputTimes = new ArrayList<>();
+        LinkedHashMap outputHashMap = new LinkedHashMap();
+        LocalDateTime lowerBound = roundDateTime(times.get(0), requiredDuration);
+        LocalDateTime upperBound;
         while (Duration.between(times.get(times.size() - 1), lowerBound).getSeconds() < 0) {
-            upperBound = lowerBound.plusSeconds(segments.getSeconds());
+            upperBound = roundDateTime(lowerBound.plusSeconds(periodInSeconds.getSeconds() + 50000), requiredDuration);
             count = 0;
             while (i < times.size() && Duration.between(times.get(i), upperBound).getSeconds() > 0) {
-                count += (int) hm.get(times.get(i));
+                count++;
                 i++;
             }
-            times2.add(lowerBound);
-            hm2.put(lowerBound, count);
+            outputTimes.add(lowerBound);
+            outputHashMap.put(lowerBound, count);
             lowerBound = upperBound;
         }
-        times2.add(lowerBound);
-        hm2.put(lowerBound, 0);
+        outputTimes.add(lowerBound);
+        outputHashMap.put(lowerBound, 0);
 
-        for (LocalDateTime t: times2) {
-            series.getData().add(new XYChart.Data(t.format(formatter), hm2.get(t)));
-            System.out.println(t.format(formatter));
+        for (LocalDateTime t: outputTimes) {
+            series.getData().add(new XYChart.Data(t.format(formatter), outputHashMap.get(t)));
         }
-        return barChart;
     }
 
     private LineChart createWardCrimesOverTimeGraph(Database db, LinkedHashMap hm, XYChart.Series series) throws SQLException {
@@ -123,7 +198,7 @@ public class Graph extends Application {
 //        }
         Collections.sort(times);
         for (LocalDateTime t: times) {
-            series.getData().add(new XYChart.Data(t.format(formatter), hm.get(t)));
+            series.getData().add(new XYChart.Data(t.format(monthFormatter), hm.get(t)));
         }
         return lineChart;
     }
