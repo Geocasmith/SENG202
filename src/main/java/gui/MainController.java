@@ -156,11 +156,11 @@ public class MainController {
      * Runs through the text fields and "lines them up" with the attributes of a Record object to create one, which
      * can then be passed to the database.
      *
-     * There is no error handling yet, so be careful!
+     * Says whether the record is valid or not.
      *
-     * Returns a record object.
+     * @return A record object, if the input is valid, else null.
      */
-    public void getRecordFromTextFields() {
+    public Record getRecordFromTextFields() {
         List<String> recStrings = new ArrayList<String>();
 
         for (Node node : mainTableAddPane.getChildren()){
@@ -172,9 +172,11 @@ public class MainController {
             Record rec = new Record(recStrings);
             System.out.println(rec.toString());
             mainTableAddRecordLabel.setText("That's a valid record. Well done!");
+            return rec;
         }
         catch (Exception e) {
             mainTableAddRecordLabel.setText("That's not a valid record, but I can't tell you why!");
+            return null;
         }
     }
 
