@@ -19,7 +19,7 @@ public class App
         //Sets up csvReader and database
         CsvReader cs = new CsvReader();
         Database d = new Database();
-        d.connectDatabase("crimeRecords");
+        d.connectDatabase();
         d.insertRows(cs.read("./Files/seng202_2021_crimes_one_year_prior_to_present_5k.csv"));
 
         //Examples of using the search function with Casenumber and a string for casenumber

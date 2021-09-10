@@ -210,7 +210,7 @@ private ArrayList<Record> currentData;
     public ArrayList<ArrayList<Object>> dataBaseDataToGraph(int col1, int col2) throws SQLException {
         ArrayList<ArrayList<Object> > dataToGraph = new ArrayList<ArrayList<Object>>();
         Database db = new Database();
-        db.connectDatabase("crimeRecords");
+        db.connectDatabase();
         dataToGraph.add(db.extractCol(Database.getColName(col1)));
         dataToGraph.add(db.extractCol(Database.getColName(col2)));
         return dataToGraph;

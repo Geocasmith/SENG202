@@ -71,7 +71,7 @@ public class MainController {
 
         // Basic code to get a list of all crime types - MIGHT BE SLOW WITH LOTS OF RECORDS
         Database d = new Database();
-        d.connectDatabase("crimeRecords");
+        d.connectDatabase();
         ArrayList<Record> allRecords = d.getAll();
         ArrayList<String> crimeTypes = new ArrayList<>();
         ArrayList<String> locationDescriptions = new ArrayList<>();

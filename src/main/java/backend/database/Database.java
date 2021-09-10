@@ -31,10 +31,10 @@ public class Database {
      *
      * @throws SQLException
      */
-    public void connectDatabase(String databaseName) throws SQLException {
+    public void connectDatabase() throws SQLException {
         try {
             Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:./Files/"+databaseName+".db");
+            connection = DriverManager.getConnection("jdbc:sqlite:./Files/crimeRecords.db");
             createTable();
         } catch (Exception e) {
             //System.out.println("Database connection failed");
