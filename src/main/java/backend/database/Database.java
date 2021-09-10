@@ -34,7 +34,7 @@ public class Database {
     public void connectDatabase(String databaseName) throws SQLException {
         try {
             Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:"+databaseName+".db");
+            connection = DriverManager.getConnection("jdbc:sqlite:./Files/"+databaseName+".db");
             createTable();
         } catch (Exception e) {
             //System.out.println("Database connection failed");

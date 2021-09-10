@@ -29,7 +29,6 @@ public class CsvWriter {
         "X-Coordinate", "Y-Coordinate", "Latitude", "Longitude", "Location"};
         // Insert header to CSV file
         writer.writeNext(header);
-
         // Write CSV records on by one
         for (int i = 0; i < data.size(); i++) {
             String[] nextRecord = new String[]{data.get(i).getCaseNumber(), data.get(i).getDate().toString(),
