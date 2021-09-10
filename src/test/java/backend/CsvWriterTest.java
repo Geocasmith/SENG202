@@ -40,7 +40,7 @@ class CsvWriterTest {
         CsvReader cs = new CsvReader();
         Database d = new Database();
         d.connectDatabase("crimeRecords");
-        d.insertRows(cs.read("./Files/Test.csv"));
+        //d.insertRows(cs.read("./Files/Test.csv"));
 
 
 
