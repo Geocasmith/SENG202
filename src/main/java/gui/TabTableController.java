@@ -178,7 +178,7 @@ public class TabTableController {
 
         // Test code
         Database d = new Database();
-        d.connectDatabase();
+        d.connectDatabase("crimeRecords.db");
         ArrayList<Record> allRecords = d.getAll();
         for (Record r : allRecords) {
 

@@ -42,7 +42,7 @@ public class Graph extends Application {
     public void start(Stage stage) throws SQLException {
         Database db = new Database();
         LinkedHashMap hm = new LinkedHashMap();
-        db.connectDatabase();
+        db.connectDatabase("crimeRecords.db");
         stage.setTitle("Simple Graph");
         //defining the axes
         //defining a series
