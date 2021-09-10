@@ -30,7 +30,7 @@ class CsvWriterTest {
             recordsList.add(record);
         }
         CsvWriter testWrite = new CsvWriter();
-        testWrite.write("Test.csv", recordsList);
+        testWrite.write("./Files/Test.csv", recordsList);
 
 
     }

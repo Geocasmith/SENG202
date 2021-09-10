@@ -227,7 +227,7 @@ private ArrayList<Record> currentData;
     public boolean saveToCsv(String fileName) throws IOException {
         try
         {
-            CsvWriter.write(fileName, currentData);
+            CsvWriter.write("./Files/"+fileName, currentData);
             return true;
         }catch (Exception e)
         {
