@@ -18,54 +18,9 @@ import java.util.List;
 
 public class MainController {
 
-    @FXML
-    private TableView mainTableView;
-    @FXML
-    private FlowPane mainTableTogglePane;
-    @FXML
-    private FlowPane mainTableAddPane;
-    @FXML
-    private ToggleButton mainTableToggleAllButton;
-    @FXML
-    private Button mainTableAddRecordButton;
-    @FXML
-    private Label mainTableAddRecordLabel;
-    @FXML
-    private TextField mainTableAddCaseNumberField;
-    @FXML
-    private TextField mainTableAddDateField;
-    @FXML
-    private TextField mainTableAddBlockField;
-    @FXML
-    private TextField mainTableAddIUCRField;
-    @FXML
-    private TextField mainTableAddPrimaryDescField;
-    @FXML
-    private TextField mainTableAddSecondaryDescField;
-    @FXML
-    private TextField mainTableAddLocationDescField;
-    @FXML
-    private TextField mainTableAddArrestField;
-    @FXML
-    private TextField mainTableAddDomesticField;
-    @FXML
-    private TextField mainTableAddBeatField;
-    @FXML
-    private TextField mainTableAddWardField;
-    @FXML
-    private TextField mainTableAddFBICDField;
-    @FXML
-    private TextField mainTableAddXCoordField;
-    @FXML
-    private TextField mainTableAddYCoordField;
-    @FXML
-    private TextField mainTableAddLatitudeField;
-    @FXML
-    private TextField mainTableAddLongitudeField;
+    // Filter Sidebar Elements
     @FXML
     private TitledPane filterPane;
-
-    // Filter Sidebar Elements
     @FXML
     private Accordion sidebarAccordion;
     @FXML
@@ -94,8 +49,7 @@ public class MainController {
     private TextField filterLongTextField;
 
     @FXML
-    private void initialize() throws IOException, CsvValidationException, SQLException {
-        tableSetup();
+    private void initialize() throws SQLException {
         filterSetup();
     }
 
