@@ -12,7 +12,7 @@ class DatabaseTest {
     @Test
     void extractCol() throws SQLException, CsvValidationException, IOException {
         Database db = new Database();
-        db.connectDatabase();
+        db.connectDatabase("crimeRecords");
         ArrayList<Object> extractedCol = new ArrayList<>();
         extractedCol = db.extractCol(2);
         for (int i = 0; i < extractedCol.size(); i++) {

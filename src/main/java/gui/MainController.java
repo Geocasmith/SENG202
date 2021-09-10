@@ -209,7 +209,7 @@ public class MainController {
 
         // Test code
         Database d = new Database();
-        d.connectDatabase();
+        d.connectDatabase("crimeRecords");
         ArrayList<Record> allRecords = d.getAll();
         for (Record r : allRecords) {
 
@@ -251,7 +251,7 @@ public class MainController {
 
         // Basic code to get a list of all crime types - MIGHT BE SLOW WITH LOTS OF RECORDS
         Database d = new Database();
-        d.connectDatabase();
+        d.connectDatabase("crimeRecords");
         ArrayList<Record> allRecords = d.getAll();
         ArrayList<String> crimeTypes = new ArrayList<>();
         ArrayList<String> locationDescriptions = new ArrayList<>();

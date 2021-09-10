@@ -20,7 +20,7 @@ class CsvWriterTest {
     public void writeTest() throws IOException, CsvValidationException {
         CsvReader reader = new CsvReader();
         ArrayList<List<String>> readData;
-        readData = reader.read();
+        readData = reader.read("seng202_2021_crimes_one_year_prior_to_present_5k.csv");
         ArrayList<Record> recordsList = new ArrayList<>();
         for (int i = 0; i < readData.size(); i++) {
             Record record = new Record(readData.get(i));
@@ -31,5 +31,14 @@ class CsvWriterTest {
 
 
     }
+//Read empty, write empty, read incorrect format, read wrong file type
+    @Test
+    public void readWriteTest() throws IOException, CsvValidationException {
+        CsvReader cs = new CsvReader();
 
+        ArrayList<List<String>> read = cs.read("test.csv");
+
+
+
+    }
 }

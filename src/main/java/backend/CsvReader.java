@@ -12,10 +12,10 @@ import java.util.List;
 
 public class CsvReader {
 
-    public static ArrayList<List<String>> read() throws IOException, CsvValidationException {
+    public static ArrayList<List<String>> read(String path) throws IOException, CsvValidationException {
 
         ArrayList<List<String>>csvValues = new ArrayList<List<String>>();
-        FileReader fr = new FileReader("seng202_2021_crimes_one_year_prior_to_present_5k.csv");
+        FileReader fr = new FileReader(path);
         CSVReader csvR = new CSVReader(fr);
 
         String[] nextRecord;

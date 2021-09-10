@@ -19,8 +19,8 @@ public class App
         //Sets up csvReader and database
         CsvReader cs = new CsvReader();
         Database d = new Database();
-        d.connectDatabase();
-        d.insertRows(cs.read());
+        d.connectDatabase("crimeRecords");
+        d.insertRows(cs.read("seng202_2021_crimes_one_year_prior_to_present_5k.csv"));
 
         //Examples of using the search function with Casenumber and a string for casenumber
         ArrayList<Record> str = d.getDateRange("06/15/2021 09:10:00 AM","06/15/2021 09:43:00 AM");
