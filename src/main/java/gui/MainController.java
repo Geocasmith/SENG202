@@ -1,5 +1,6 @@
 package gui;
 
+import backend.InputValidator;
 import backend.database.Database;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.fxml.FXML;
@@ -11,10 +12,7 @@ import javafx.scene.layout.FlowPane;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class MainController {
 
@@ -50,7 +48,7 @@ public class MainController {
 
 
     @FXML
-    private void initialize() throws SQLException {
+    private void initialize() throws SQLException, IOException, CsvValidationException {
         filterSetup();
     }
 
@@ -59,7 +57,7 @@ public class MainController {
      * Sets up combo boxes in filter pane
      * Sets filter pane as expanded
      */
-    public void filterSetup() throws SQLException {
+    public void filterSetup() throws SQLException, IOException, CsvValidationException {
         // Sets filter pane to expanded pane
         sidebarAccordion.setExpandedPane(filterPane);
 
@@ -72,16 +70,14 @@ public class MainController {
         // Basic code to get a list of all crime types - MIGHT BE SLOW WITH LOTS OF RECORDS
         Database d = new Database();
         d.connectDatabase();
-        ArrayList<Record> allRecords = d.getAll();
-        ArrayList<String> crimeTypes = new ArrayList<>();
-        ArrayList<String> locationDescriptions = new ArrayList<>();
-        for (int i = 0; i < allRecords.size(); i++) {
-            crimeTypes.add(allRecords.get(i).getPrimaryDescription());
-            locationDescriptions.add(allRecords.get(i).getLocationDescription());
-        }
+        ArrayList<String> locationDescriptions  = (ArrayList<String>)(ArrayList<?>)(d.extractCol("LOCATIONDESCRIPTION"));
+
         // Remove duplicate values
-        crimeTypes = new ArrayList<>(new HashSet<>(crimeTypes));
         locationDescriptions = new ArrayList<>(new HashSet<>(locationDescriptions));
+
+        // Get Crime types
+        List<String> crimeTypes = new ArrayList<String>();
+        crimeTypes = InputValidator.getSetOfPrimaryDescriptions();
 
         // Sort lists alphabetically
         Collections.sort(crimeTypes);

@@ -117,13 +117,15 @@ public class InputValidator {
     * @throws CsvValidationException
     * @throws IOException
     */
-   public static Set<String> getSetOfPrimaryDescriptions() throws CsvValidationException, IOException {
+   public static List<String> getSetOfPrimaryDescriptions() throws CsvValidationException, IOException {
       crimeDescription = initializeCrimeDescriptions("Crime_Descriptions_Data_Source.csv");
       Set<String> primaryDes = new HashSet<>();
       for (List<String> descriptions : crimeDescription) {
          primaryDes.add(descriptions.get(1));
       }
-      return primaryDes;
+      List<String> primaryDesList = new ArrayList<>();
+      primaryDesList.addAll(primaryDes);
+      return primaryDesList;
    }
 
    /**
