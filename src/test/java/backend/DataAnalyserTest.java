@@ -24,7 +24,7 @@ public class DataAnalyserTest {
     }
 
     @Test
-    public void calculateTimeDifferenceTest() {
+    public void calculateRecordTimeDifferenceTest() {
         Duration difference1 = Duration.ofMinutes(20);
         assertEquals(difference1, dataAnalyser.calculateTimeDifference(testRecord1, testRecord2));
         assertEquals(difference1, dataAnalyser.calculateTimeDifference(testRecord2, testRecord1));
@@ -34,6 +34,19 @@ public class DataAnalyserTest {
 
         Duration difference3 = Duration.ofDays(365);
         assertEquals(difference3, dataAnalyser.calculateTimeDifference(testRecord2, testRecord3));
+    }
+
+    @Test
+    public void calculateObjectTimeDifferenceTest() {
+        Duration difference1 = Duration.ofMinutes(20);
+        assertEquals(difference1, dataAnalyser.calculateTimeDifference(testRecord1.getDateAsObject(), testRecord2.getDateAsObject()));
+        assertEquals(difference1, dataAnalyser.calculateTimeDifference(testRecord2.getDateAsObject(), testRecord1.getDateAsObject()));
+
+        Duration difference2 = Duration.ofMinutes(0);
+        assertEquals(difference2, dataAnalyser.calculateTimeDifference(testRecord2.getDateAsObject(), testRecord2.getDateAsObject()));
+
+        Duration difference3 = Duration.ofDays(365);
+        assertEquals(difference3, dataAnalyser.calculateTimeDifference(testRecord2.getDateAsObject(), testRecord3.getDateAsObject()));
     }
 
     @Test

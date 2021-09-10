@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 /**
  * CSV Writer class for writing CSV files
  */
@@ -39,6 +40,18 @@ public class CsvWriter {
                     valueOf(data.get(i).getLatitude()), valueOf(data.get(i).getLongitude()), valueOf(data.get(i).getLocation())};
             writer.writeNext(nextRecord);
         }
+        writer.close();
+    }
+
+    public static void write(String fileName,  List<String[]> data) throws IOException {
+        CSVWriter writer = new CSVWriter(new FileWriter(fileName));
+        for (String[] datum : data)
+        {
+            writer.writeNext(datum);
+        }
+
+
+
         writer.close();
     }
 }
