@@ -34,18 +34,18 @@ class CsvWriterTest {
 
 
     }
-//Read empty, write empty, read incorrect format, read wrong file type
-    @Test
-    public void readWriteTest() throws IOException, CsvValidationException, SQLException, ParseException {
-        CsvReader cs = new CsvReader();
-        Database d = new Database();
-        d.connectDatabase("crimeRecords");
-        //d.insertRows(cs.read("./Files/Test.csv"));
-
-
-
-
-
-
-    }
+////Read empty, write empty, read incorrect format, read wrong file type
+//    @Test
+//    public void readWriteTest() throws IOException, CsvValidationException, SQLException, ParseException {
+//        CsvReader cs = new CsvReader();
+//        Database d = new Database();
+//        d.connectDatabase("crimeRecords");
+//        //d.insertRows(cs.read("./Files/Test.csv"));
+//
+//
+//
+//
+//
+//
+//    }
 }
