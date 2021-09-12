@@ -67,11 +67,8 @@ public class MainController {
         domesticComboBox.getItems().addAll("", "Yes", "No");
         domesticComboBox.getSelectionModel().select("");
 
-        // Basic code to get a list of all crime types - MIGHT BE SLOW WITH LOTS OF RECORDS
-        Database d = new Database();
-        d.connectDatabase();
-        ArrayList<String> locationDescriptions  = (ArrayList<String>)(ArrayList<?>)(d.extractCol("LOCATIONDESCRIPTION"));
 
+        ArrayList<String> locationDescriptions  = (ArrayList<String>)(ArrayList<?>)(Database.extractCol("LOCATIONDESCRIPTION"));
         // Remove duplicate values
         locationDescriptions = new ArrayList<>(new HashSet<>(locationDescriptions));
 

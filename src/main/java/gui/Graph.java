@@ -1,5 +1,6 @@
 package gui;
 
+import backend.DataManipulator;
 import backend.Record;
 import backend.database.Database;
 import backend.DataAnalyser;
@@ -40,15 +41,13 @@ public class Graph extends Application {
     private static final int oneYearInSeconds = 31556952;
     @Override
     public void start(Stage stage) throws SQLException {
-        Database db = new Database();
         LinkedHashMap hm = new LinkedHashMap();
-        db.connectDatabase();
         stage.setTitle("Simple Graph");
         //defining the axes
         //defining a series
         XYChart.Series series = new XYChart.Series();
 
-        BarChart barChart = createCrimesOverTimeGraph(db, hm, series);
+        BarChart barChart = createCrimesOverTimeGraph(hm, series);
 //        LineChart lineChart = createWardCrimesOverTimeGraph(db, hm, series);
 
 
@@ -59,7 +58,7 @@ public class Graph extends Application {
         stage.show();
     }
 
-    private BarChart createCrimesOverTimeGraph(Database db, LinkedHashMap hm, XYChart.Series series) throws SQLException {
+    private BarChart createCrimesOverTimeGraph(LinkedHashMap hm, XYChart.Series series) throws SQLException {
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Time");
@@ -70,7 +69,7 @@ public class Graph extends Application {
         barChart.setTitle("Crimes by Time");
 
         ArrayList<Record> data = new ArrayList<>();
-        data = db.getAll();
+        data = DataManipulator.getAllRecords();
         ArrayList<LocalDateTime> times = new ArrayList<>();
         for (Record r: data) {
             times.add(r.getDateAsObject());
@@ -167,7 +166,7 @@ public class Graph extends Application {
         }
     }
 
-    private LineChart createWardCrimesOverTimeGraph(Database db, LinkedHashMap hm, XYChart.Series series) throws SQLException {
+    private LineChart createWardCrimesOverTimeGraph(LinkedHashMap hm, XYChart.Series series) throws SQLException {
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Time");
@@ -179,7 +178,7 @@ public class Graph extends Application {
 
         ArrayList<Record> data = new ArrayList<>();
         ArrayList<Integer> wards = new ArrayList<>();
-        data = db.getAll();
+        data = DataManipulator.getAllRecords();
         List<LocalDateTime> times = new ArrayList<>();
         for (Record r: data) {
             times.add(r.getDateAsObject());

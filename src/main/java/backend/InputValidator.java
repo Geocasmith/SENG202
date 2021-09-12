@@ -46,6 +46,48 @@ public class InputValidator {
    }
 
    /**
+    * Checks if the given coordinate is valid based on the lower range and upper range parameters provided
+    * @param gpsCoordinate
+    * @param lowerRange
+    * @param upperRange
+    * @return true or false depending on the validity of the coordinate
+    * @throws IOException
+    */
+   public static boolean hasGpsCoordinate(String gpsCoordinate, float lowerRange, float upperRange) throws IOException{
+      if (gpsCoordinate.isEmpty()) {
+         return true;
+      }
+      else {
+         try {
+            float floatValue;
+            floatValue = Float.parseFloat(gpsCoordinate);
+            if ((lowerRange <= floatValue) && (floatValue <= upperRange)) {
+               return true;
+            }
+         } catch (Exception e) {
+            return false;
+         }
+         return false;
+      }
+
+   }
+
+   /**
+    * Calls several methods of InputValidator class on the record parameter to make sure that the given record
+    * is a valid record
+    * @param record
+    * @return boolean value depending on the validity of the record
+    * @throws IOException
+    */
+   public static boolean isValidRecord(List<String> record) throws IOException {
+      if ((hasValidCaseNumber(record.get(0))) && hasValidDateAndTimeFormat(record.get(1))) {
+
+
+      }
+      return false;
+   }
+
+   /**
     * Prints valid list of crime descriptions
     * @throws CsvValidationException
     * @throws IOException
@@ -61,7 +103,7 @@ public class InputValidator {
 
    /**
     * Checks if case number has a valid length (eight), The first two starting charachters are letters
-    * and the rest of the charachters are digits (No special character is allowed)
+    * and the rest of the characters are digits (No special character is allowed)
     * @param caseNumber
     * @return
     */
@@ -172,7 +214,7 @@ public class InputValidator {
    }
 
    /**
-    *
+    * Given the primary description and secondary description for a crime, it returns the associated FBICD value
     * @param primaryDescription
     * @param secondaryDescription
     * @return

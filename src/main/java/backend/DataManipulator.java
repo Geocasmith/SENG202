@@ -201,6 +201,17 @@ private ArrayList<Record> currentData;
     }
 
     /**
+     * Gets all record objects from the database
+     * @return
+     * @throws SQLException
+     */
+
+    public static ArrayList<Record> getAllRecords() throws SQLException {
+        Database.connectDatabase();
+        return Database.getAll();
+    }
+
+    /**
      * Calls extractCol Database class method to extract column values from Database Crime Table
      * @param col1 represents column number of the first column to be extracted
      * @param col2 represents column number of the second column to be extracted

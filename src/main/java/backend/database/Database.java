@@ -21,7 +21,7 @@ import static java.lang.String.valueOf;
 public class Database {
     private static Connection connection;
     private static boolean notEmpty = false;
-    private List<String> columns = Arrays.asList("IUCR TEXT", "PRIMARYDESCRIPTION TEXT", "SECONDARYDESCRIPTION TEXT",
+    private static List<String> columns = Arrays.asList("IUCR TEXT", "PRIMARYDESCRIPTION TEXT", "SECONDARYDESCRIPTION TEXT",
             "LOCATIONDESCRIPTION TEXT", "ARREST TEXT", "DOMESTIC TEXT", "BEAT INTEGER", "WARD INTEGER", "FBICD TEXT",
             "XCOORDINATE INTEGER", "YCOORDINATE INTEGER", "LATITUDE REAL", "LONGITUDE REAL", "UNIXTIME REAL");
 
@@ -31,7 +31,7 @@ public class Database {
      *
      * @throws SQLException
      */
-    public void connectDatabase() throws SQLException {
+    public static void connectDatabase() throws SQLException {
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:./Files/crimeRecords.db");
@@ -47,7 +47,7 @@ public class Database {
      *
      * @throws SQLException
      */
-    public void createTable() throws SQLException {
+    public static void createTable() throws SQLException {
 
         //Creates the original table
         Statement state2 = connection.createStatement();
@@ -56,10 +56,10 @@ public class Database {
                 "ADDRESS TEXT)");
 
         //Appends the columns in from the columns list
-        for (int i = 0; i < this.columns.size(); i++) {
+        for (int i = 0; i < columns.size(); i++) {
             Statement state3 = connection.createStatement();
             state3.execute("ALTER TABLE CRIMES\n" +
-                    "ADD COLUMN " + this.columns.get(i) + ";");
+                    "ADD COLUMN " + columns.get(i) + ";");
         }
 
         //Probably dont need but Im not going to delete it now because I dont want to break the code
@@ -283,7 +283,7 @@ public class Database {
      * @throws SQLException
      */
 
-    public ArrayList<Object> extractCol(String columnName) throws SQLException {
+    public static ArrayList<Object> extractCol(String columnName) throws SQLException {
         connection.setAutoCommit(false);
         PreparedStatement s1 = connection.prepareStatement("select " + columnName + " from CRIMES");
         ResultSet rs = s1.executeQuery();
@@ -360,7 +360,7 @@ public class Database {
      * @return
      * @throws SQLException
      */
-    public ArrayList<Record> getAll() throws SQLException {
+    public static ArrayList<Record> getAll() throws SQLException {
         connection.setAutoCommit(false);
         PreparedStatement s1 = connection.prepareStatement("SELECT * FROM CRIMES;");
         ResultSet rs = s1.executeQuery();
@@ -398,7 +398,7 @@ public class Database {
      * @return Arraylist of Records
      * @throws SQLException
      */
-    public ArrayList<Record> getRecord(ResultSet rs) throws SQLException {
+    public static ArrayList<Record> getRecord(ResultSet rs) throws SQLException {
         ArrayList<Record> records = new ArrayList<Record>();
 
         while (rs.next()) {
@@ -437,7 +437,7 @@ public class Database {
      * @return colValues ArrayList<Object> generated from reading ResultSet object
      * @throws SQLException
      */
-    public ArrayList<Object> readColumnValues(ResultSet rs, String column) throws SQLException {
+    public static ArrayList<Object> readColumnValues(ResultSet rs, String column) throws SQLException {
         ArrayList<Object> colValues = new ArrayList<>();
 
         while (rs.next()) {
