@@ -11,8 +11,9 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="tabTable" fx:controller="gui.TabTableController" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="tabTable" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="200.0" stylesheets="@tabTable.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.TabTableController">
    <center>
       <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
@@ -39,20 +40,80 @@
                <content>
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
                      <center>
-                        <FlowPane fx:id="mainTableAddPane" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" BorderPane.alignment="CENTER">
+                        <FlowPane fx:id="mainTableAddPane" hgap="10.0" prefHeight="200.0" prefWidth="200.0" rowValignment="TOP" vgap="10.0" BorderPane.alignment="CENTER">
                            <children>
-                              <TextField fx:id="mainTableAddCaseNumberField" promptText="Case Number" />
-                              <TextField fx:id="mainTableAddDateField" promptText="Date" />
-                              <TextField fx:id="mainTableAddBlockField" promptText="Block" />
-                              <TextField fx:id="mainTableAddIUCRField" promptText="IUCR" />
-                              <TextField fx:id="mainTableAddPrimaryDescField" promptText="Primary Description" />
-                              <TextField fx:id="mainTableAddSecondaryDescField" promptText="Secondary Description" />
-                              <TextField fx:id="mainTableAddLocationDescField" promptText="Location Description" />
-                              <TextField fx:id="mainTableAddArrestField" promptText="Arrest" />
-                              <TextField fx:id="mainTableAddDomesticField" promptText="Domestic" />
-                              <TextField fx:id="mainTableAddBeatField" promptText="Beat" />
-                              <TextField fx:id="mainTableAddWardField" promptText="Ward" />
-                              <TextField fx:id="mainTableAddFBICDField" promptText="FBICD" />
+                              <VBox>
+                                 <children>
+                                    <TextField fx:id="mainTableAddCaseNumberField" promptText="Case Number" styleClass="required" />
+                                    <Label text="* Required" />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <TextField fx:id="mainTableAddDateField" promptText="Date" styleClass="required" />
+                                    <Label text="* Required" />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <TextField fx:id="mainTableAddBlockField" promptText="Block" styleClass="required" />
+                                    <Label text="* Required" />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <TextField fx:id="mainTableAddIUCRField" promptText="IUCR" styleClass="required" />
+                                    <Label text="* Required" />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <TextField fx:id="mainTableAddPrimaryDescField" promptText="Primary Description" styleClass="required" />
+                                    <Label text="* Required" />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <TextField fx:id="mainTableAddSecondaryDescField" promptText="Secondary Description" styleClass="required" />
+                                    <Label text="* Required" />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <TextField fx:id="mainTableAddLocationDescField" promptText="Location Description" styleClass="required" />
+                                    <Label text="* Required" />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <TextField fx:id="mainTableAddArrestField" promptText="Arrest" styleClass="required" />
+                                    <Label text="* Required" />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <TextField fx:id="mainTableAddDomesticField" promptText="Domestic" styleClass="required" />
+                                    <Label text="* Required" />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <TextField fx:id="mainTableAddBeatField" promptText="Beat" styleClass="required" />
+                                    <Label text="* Required" />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <TextField fx:id="mainTableAddWardField" promptText="Ward" styleClass="required" />
+                                    <Label text="* Required" />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <TextField fx:id="mainTableAddFBICDField" promptText="FBICD" styleClass="required" />
+                                    <Label text="* Required" />
+                                 </children>
+                              </VBox>
                               <TextField fx:id="mainTableAddXCoordField" promptText="X-Coordinate" />
                               <TextField fx:id="mainTableAddYCoordField" promptText="Y-Coordinate" />
                               <TextField fx:id="mainTableAddLatitudeField" promptText="Latitude" />
@@ -70,6 +131,9 @@
                                  </FlowPane.margin>
                               </Label>
                            </children>
+                           <BorderPane.margin>
+                              <Insets top="15.0" />
+                           </BorderPane.margin>
                         </FlowPane>
                      </bottom>
                   </BorderPane>
