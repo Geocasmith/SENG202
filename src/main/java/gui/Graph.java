@@ -72,54 +72,28 @@ public class Graph extends Application {
 //            lineChart.getData().add(seriesList.get(wards.indexOf(ward)));
 //        }
 
-//        ArrayList<String> crimeTypes = new ArrayList<>(Arrays.asList("THEFT", "ASSAULT", "HOMICIDE"));
-//
-//        ArrayList<XYChart.Series> seriesList = createCrimesPerTypeOverTimeGraph(db, crimeTypes);
-//        Scene scene  = new Scene(lineChart,1920,1080);
-//        for (String crimetype : crimeTypes) {
-//            lineChart.getData().add(seriesList.get(crimeTypes.indexOf(crimetype)));
-//        }
+        ArrayList<String> crimeTypes = new ArrayList<>(Arrays.asList("THEFT", "ASSAULT", "HOMICIDE"));
 
-        ArrayList<Integer> beats = new ArrayList<>(Arrays.asList(1213, 1121, 332, 1724));
-        Collections.sort(beats);
-
-        ArrayList<XYChart.Series> seriesList = createCrimesPerBeatOverTimeGraph(db, beats);
+        ArrayList<XYChart.Series> seriesList = createCrimesPerTypeOverTimeGraph(db, crimeTypes);
         Scene scene  = new Scene(lineChart,1920,1080);
-        for (int beat : beats) {
-            lineChart.getData().add(seriesList.get(beats.indexOf(beat)));
+        for (String crimetype : crimeTypes) {
+            lineChart.getData().add(seriesList.get(crimeTypes.indexOf(crimetype)));
         }
+//
+//        ArrayList<Integer> beats = new ArrayList<>(Arrays.asList(1213, 1121, 332, 1724));
+//        Collections.sort(beats);
+//
+//        ArrayList<XYChart.Series> seriesList = createCrimesPerBeatOverTimeGraph(db, beats);
+//        Scene scene  = new Scene(lineChart,1920,1080);
+//        for (int beat : beats) {
+//            lineChart.getData().add(seriesList.get(beats.indexOf(beat)));
+//        }
 
         stage.setScene(scene);
         stage.show();
     }
 
-    private XYChart.Series createCrimesOverTimeGraph(Database db) throws SQLException {
 
-        XYChart.Series series = new XYChart.Series<>();
-
-
-        ArrayList<Record> data;
-        data = db.getAll();
-        ArrayList<LocalDateTime> times = new ArrayList<>();
-
-        for (Record r: data) {
-            times.add(r.getDateAsObject());
-        }
-        Collections.sort(times);
-//        times = new ArrayList<>(times.subList(0, 2000));
-
-
-
-        ArrayList<Object> calculations = calculateFormatForGraph(times);
-
-        Duration periodInSeconds = (Duration) calculations.get(2);
-        DateTimeFormatter formatter = (DateTimeFormatter) calculations.get(1);
-        String requiredDuration = (String) calculations.get(0);
-
-        sortCrimesByTimePeriod(times, periodInSeconds, formatter, series, requiredDuration);
-
-        return series;
-    }
 
     private LocalDateTime roundDateTime(LocalDateTime timeToRound, String requiredDuration) {
         if (Objects.equals(requiredDuration, "Hours")) {
@@ -176,14 +150,23 @@ public class Graph extends Application {
         return new ArrayList<>(Arrays.asList(requiredDuration, formatter, periodInSeconds));
     }
 
-    private void sortCrimesByTimePeriod(ArrayList<LocalDateTime> times, Duration periodInSeconds, DateTimeFormatter formatter, XYChart.Series series, String requiredDuration) {
+    /**
+     *
+     * @param times An ArrayList of times
+     * @param periodInSeconds
+     * @param formatter
+     * @param series
+     * @param requiredDuration
+     * @param lowerBound
+     * @param maxUpperBound
+     */
+    private void sortCrimesByTimePeriod(ArrayList<LocalDateTime> times, Duration periodInSeconds, DateTimeFormatter formatter, XYChart.Series series, String requiredDuration, LocalDateTime lowerBound, LocalDateTime maxUpperBound) {
         int i = 0;
         int count;
         ArrayList<LocalDateTime> outputTimes = new ArrayList<>();
         LinkedHashMap outputHashMap = new LinkedHashMap();
-        LocalDateTime lowerBound = roundDateTime(times.get(0), requiredDuration);
-        LocalDateTime upperBound;
-        while (Duration.between(times.get(times.size() - 1), lowerBound).getSeconds() < 0) {
+        LocalDateTime upperBound = lowerBound;
+        while (Duration.between(maxUpperBound, upperBound).getSeconds() < 0) {
             upperBound = roundDateTime(lowerBound.plusSeconds(periodInSeconds.getSeconds() + 50000), requiredDuration);
             count = 0;
             while (i < times.size() && Duration.between(times.get(i), upperBound).getSeconds() > 0) {
@@ -202,6 +185,51 @@ public class Graph extends Application {
         }
     }
 
+    /**
+     *
+     * @param db The database object used to retrieve the data
+     * @return An XYChart.Series object containing all the data points as a <String, Integer> pair, where the String is
+     *         the date and time in string form and the Integer is the number of crimes that occurred in the calculated
+     *         timeframe
+     * @throws SQLException
+     */
+    private XYChart.Series createCrimesOverTimeGraph(Database db) throws SQLException {
+
+        XYChart.Series series = new XYChart.Series<>();
+
+
+        ArrayList<Record> data;
+        data = db.getAll();
+        ArrayList<LocalDateTime> times = new ArrayList<>();
+
+        for (Record r: data) {
+            times.add(r.getDateAsObject());
+        }
+        Collections.sort(times);
+//        times = new ArrayList<>(times.subList(0, 2000));
+
+
+
+        ArrayList<Object> calculations = calculateFormatForGraph(times);
+
+        Duration periodInSeconds = (Duration) calculations.get(2);
+        DateTimeFormatter formatter = (DateTimeFormatter) calculations.get(1);
+        String requiredDuration = (String) calculations.get(0);
+
+        sortCrimesByTimePeriod(times, periodInSeconds, formatter, series, requiredDuration, times.get(0), times.get(times.size()-1));
+
+        return series;
+    }
+
+    /**
+     *
+     * @param db The database object used to retrieve the data
+     * @param wards An ArrayList of integers which contains the wards that need to be graphed
+     * @return An XYChart.Series object containing all the data points as a <String, Integer> pair, where the String is
+     *         the date and time in string form and the Integer is the number of crimes that occurred in the calculated
+     *         timeframe
+     * @throws SQLException
+     */
     private ArrayList<XYChart.Series> createCrimesPerWardOverTimeGraph(Database db, ArrayList<Integer> wards) throws SQLException {
 
         ArrayList<Record> data = db.getAll();
@@ -240,12 +268,21 @@ public class Graph extends Application {
         String requiredDuration = (String) calculations.get(0);
 
         for (int ward : wards) {
-            sortCrimesByTimePeriod(timesList.get(wards.indexOf(ward)), periodInSeconds, formatter, seriesList.get(wards.indexOf(ward)), requiredDuration);
+            sortCrimesByTimePeriod(timesList.get(wards.indexOf(ward)), periodInSeconds, formatter, seriesList.get(wards.indexOf(ward)), requiredDuration, overallTime.get(0), overallTime.get(overallTime.size()-1));
         }
 
         return seriesList;
     }
 
+    /**
+     *
+     * @param db The database object used to retrieve the data
+     * @param crimeTypes An ArrayList of Strings which contains the types of crimes that need to be graphed
+     * @return An XYChart.Series object containing all the data points as a <String, Integer> pair, where the String is
+     *         the date and time in string form and the Integer is the number of crimes that occurred in the calculated
+     *         timeframe
+     * @throws SQLException
+     */
     private ArrayList<XYChart.Series> createCrimesPerTypeOverTimeGraph(Database db, ArrayList<String> crimeTypes) throws SQLException {
 
         ArrayList<Record> data = db.getAll();
@@ -284,12 +321,21 @@ public class Graph extends Application {
         String requiredDuration = (String) calculations.get(0);
 
         for (String crimeType: crimeTypes) {
-            sortCrimesByTimePeriod(timesList.get(crimeTypes.indexOf(crimeType)), periodInSeconds, formatter, seriesList.get(crimeTypes.indexOf(crimeType)), requiredDuration);
+            sortCrimesByTimePeriod(timesList.get(crimeTypes.indexOf(crimeType)), periodInSeconds, formatter, seriesList.get(crimeTypes.indexOf(crimeType)), requiredDuration, overallTime.get(0), overallTime.get(overallTime.size()-1));
         }
 
         return seriesList;
     }
 
+    /**
+     *
+     * @param db The database object used to retrieve the data
+     * @param crimeBeats An ArrayList of integers which contains the beats that need to be graphed
+     * @return An XYChart.Series object containing all the data points as a <String, Integer> pair, where the String is
+     *         the date and time in string form and the Integer is the number of crimes that occurred in the calculated
+     *         timeframe
+     * @throws SQLException
+     */
     private ArrayList<XYChart.Series> createCrimesPerBeatOverTimeGraph(Database db, ArrayList<Integer> crimeBeats) throws SQLException {
 
         ArrayList<Record> data = db.getAll();
@@ -326,7 +372,7 @@ public class Graph extends Application {
             DateTimeFormatter formatter = (DateTimeFormatter) calculations.get(1);
             String requiredDuration = (String) calculations.get(0);
             for (Integer crimeBeat: crimeBeats) {
-                sortCrimesByTimePeriod(timesList.get(crimeBeats.indexOf(crimeBeat)), periodInSeconds, formatter, seriesList.get(crimeBeats.indexOf(crimeBeat)), requiredDuration);
+                sortCrimesByTimePeriod(timesList.get(crimeBeats.indexOf(crimeBeat)), periodInSeconds, formatter, seriesList.get(crimeBeats.indexOf(crimeBeat)), requiredDuration, overallTime.get(0), overallTime.get(overallTime.size()-1));
             }
         }
         return seriesList;
