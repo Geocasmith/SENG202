@@ -114,10 +114,30 @@
                                     <Label text="* Required" />
                                  </children>
                               </VBox>
-                              <TextField fx:id="mainTableAddXCoordField" promptText="X-Coordinate" />
-                              <TextField fx:id="mainTableAddYCoordField" promptText="Y-Coordinate" />
-                              <TextField fx:id="mainTableAddLatitudeField" promptText="Latitude" />
-                              <TextField fx:id="mainTableAddLongitudeField" promptText="Longitude" />
+                              <VBox>
+                                 <children>
+                                    <TextField fx:id="mainTableAddXCoordField" promptText="X-Coordinate" />
+                                    <Label />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <TextField fx:id="mainTableAddYCoordField" promptText="Y-Coordinate" />
+                                    <Label />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <TextField fx:id="mainTableAddLatitudeField" promptText="Latitude" />
+                                    <Label />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <TextField fx:id="mainTableAddLongitudeField" promptText="Longitude" />
+                                    <Label />
+                                 </children>
+                              </VBox>
                            </children>
                         </FlowPane>
                      </center>

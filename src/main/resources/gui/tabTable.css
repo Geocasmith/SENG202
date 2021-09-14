@@ -1,3 +1,21 @@
 .required {
-    -fx-border-color: red;
+    /* from default stylesheet
+       https://gist.github.com/maxd/63691840fc372f22f470 */
+
+    /*-fx-background-color:
+        -fx-control-inner-background,
+        -fx-faint-focus-color,
+        linear-gradient(from 0px 0px to 0px 5px, derive(-fx-control-inner-background, -9%), -fx-control-inner-background);
+    -fx-background-insets: 1 0 1 1, 1 0 1 1, 3 2 3 3;*/
+
+    -fx-background-color:
+        -fx-control-inner-background,
+        red,
+        linear-gradient(from 0px 0px to 0px 5px, derive(-fx-control-inner-background, -9%), -fx-control-inner-background);
+    -fx-background-insets: 1 0 1 1, 1 0 1 1, 2 1 2 2;
+
+
+    /* uncomment to see what insets do */
+    /*-fx-background-color: red, blue, green, yellow;
+    -fx-background-insets: -40, -30, -20, -10;*/
 }
