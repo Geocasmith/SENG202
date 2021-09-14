@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -133,8 +134,9 @@ public class TabTableController {
         List<String> recStrings = new ArrayList<String>();
 
         for (Node node : mainTableAddPane.getChildren()){
-            if (node instanceof TextField) {
-                recStrings.add(((TextField) node).getText());
+            if (node instanceof VBox) {
+
+                recStrings.add(((TextField) ((VBox) node).getChildren().get(0)).getText());
             }
         }
         try {
@@ -144,7 +146,9 @@ public class TabTableController {
             return rec;
         }
         catch (Exception e) {
-            mainTableAddRecordLabel.setText("That's not a valid record, but I can't tell you why!");
+            mainTableAddRecordLabel.setText("That's not a valid record. Printing exception.");
+            System.err.println(e);
+            e.printStackTrace();
             return null;
         }
     }

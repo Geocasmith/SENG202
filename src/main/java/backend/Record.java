@@ -22,6 +22,16 @@ public class Record {
     private Double latitude;
     private Double longitude;
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a", Locale.ENGLISH);
+    /**
+     * List of strings that will be counted as "true" when parsing fields.
+     * Strings in lower case; use a case-insensitive check.
+     */
+    private static List<String> trueStrings = Arrays.asList("y", "true", "yes", "1");
+    /**
+     * List of strings that will be counted as "false" when parsing fields.
+     * Strings in lower case; use a case-insensitive check.
+     */
+    private static List<String> falseStrings = Arrays.asList("n", "false", "no", "0");
 
     /**
      * Goes through the provided list of crime data and creates a new record object
@@ -37,20 +47,10 @@ public class Record {
         primaryDescription = data.get(4);
         secondaryDescription = data.get(5);
         locationDescription = data.get(6);
-        if ((Objects.equals(data.get(7), "Y")) || (Objects.equals(data.get(7), "true"))) {
-            arrest = true;
-        } else if ((Objects.equals(data.get(7), "N")) || (Objects.equals(data.get(7), "false"))) {
-            arrest = false;
-        } else {
-            arrest = null;
-        }
-        if ((Objects.equals(data.get(8), "Y")) || (Objects.equals(data.get(8), "true"))) {
-            domestic = true;
-        } else if ((Objects.equals(data.get(8), "N")) || (Objects.equals(data.get(8), "false"))) {
-            domestic = false;
-        } else {
-            domestic = null;
-        }
+        System.out.println(data.get(7));
+        arrest = parseBooleanString(data.get(7).toLowerCase());
+        System.out.println(data.get(8));
+        domestic = parseBooleanString(data.get(8).toLowerCase());
         beat = Integer.parseInt(data.get(9));
         ward = Integer.parseInt(data.get(10));
         fbicd = data.get(11);
@@ -218,12 +218,37 @@ public class Record {
     }
 
     /**
-     * Returns "Y" or "N" for true or false input values, respectively.
-     * @param input a true/false boolean
-     * @return "Y" for true, "N" for false
+     * Returns true if the input (case-insensitive) is contained within Record.trueStrings,
+     * false if in Record.falseStrings. Returns null if it is in neither.
+     * TODO: is this the behaviour we want?
+     * @param input the string to be read
+     * @return corresponding boolean value
      */
-    private String booleanStringChanger(boolean input) {
-        if (input) {
+    private Boolean parseBooleanString(String input) {
+        if (Record.trueStrings.contains(input.toLowerCase())) {
+            System.out.println("got true");
+            return true;
+        }
+        else if (Record.falseStrings.contains(input.toLowerCase())) {
+            System.out.println("got false");
+            return false;
+        }
+        else {
+            System.out.println("got null");
+            return null;
+        }
+    }
+
+    /**
+     * Returns "Y" or "N" for true or false input values, respectively.
+     * Prints null if input is null.
+     * @param input a true/false boolean
+     * @return "Y" for true, "N" for false, "null" for null
+     */
+    private String booleanStringChanger(Boolean input) {
+        if (input == null) {
+            return "null";
+        } else if (input) {
             return "Y";
         }
         else {
