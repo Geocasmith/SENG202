@@ -191,6 +191,13 @@ public class TabTableController {
     }
 
     /**
+     * Clears the text from the feedback label in the "add record" accordion tab.
+     */
+    public void clearAddFeedbackLabel() {
+        mainTableAddRecordLabel.setText("");
+    }
+
+    /**
      * Adds all record objects in an arraylist to the main viewing table.
      * @param records An ArrayList of record objects to be displayed in the table
      */

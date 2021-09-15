@@ -36,7 +36,7 @@
                   </BorderPane>
                </content>
             </TitledPane>
-            <TitledPane animated="false" text="Add Data">
+            <TitledPane fx:id="mainTableAddAccordionTab" animated="false" onMouseClicked="#clearAddFeedbackLabel" text="Add Data">
                <content>
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
                      <center>
