@@ -15,53 +15,33 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class TabTableController {
     @FXML private BorderPane tabTable;
-    @FXML
-    private TableView mainTableView;
-    @FXML
-    private FlowPane mainTableTogglePane;
-    @FXML
-    private FlowPane mainTableAddPane;
-    @FXML
-    private ToggleButton mainTableToggleAllButton;
-    @FXML
-    private Button mainTableAddRecordButton;
-    @FXML
-    private Label mainTableAddRecordLabel;
-    @FXML
-    private TextField mainTableAddCaseNumberField;
-    @FXML
-    private TextField mainTableAddDateField;
-    @FXML
-    private TextField mainTableAddBlockField;
-    @FXML
-    private TextField mainTableAddIUCRField;
-    @FXML
-    private TextField mainTableAddPrimaryDescField;
-    @FXML
-    private TextField mainTableAddSecondaryDescField;
-    @FXML
-    private TextField mainTableAddLocationDescField;
-    @FXML
-    private TextField mainTableAddArrestField;
-    @FXML
-    private TextField mainTableAddDomesticField;
-    @FXML
-    private TextField mainTableAddBeatField;
-    @FXML
-    private TextField mainTableAddWardField;
-    @FXML
-    private TextField mainTableAddFBICDField;
-    @FXML
-    private TextField mainTableAddXCoordField;
-    @FXML
-    private TextField mainTableAddYCoordField;
-    @FXML
-    private TextField mainTableAddLatitudeField;
-    @FXML
-    private TextField mainTableAddLongitudeField;
+    @FXML private TableView mainTableView;
+    @FXML private FlowPane mainTableTogglePane;
+    @FXML private FlowPane mainTableAddPane;
+    @FXML private ToggleButton mainTableToggleAllButton;
+    @FXML private Button mainTableAddRecordButton;
+    @FXML private Label mainTableAddRecordLabel;
+    @FXML private TextField mainTableAddCaseNumberField;
+    @FXML private TextField mainTableAddDateField;
+    @FXML private TextField mainTableAddBlockField;
+    @FXML private TextField mainTableAddIUCRField;
+    @FXML private TextField mainTableAddPrimaryDescField;
+    @FXML private TextField mainTableAddSecondaryDescField;
+    @FXML private TextField mainTableAddLocationDescField;
+    @FXML private TextField mainTableAddArrestField;
+    @FXML private TextField mainTableAddDomesticField;
+    @FXML private TextField mainTableAddBeatField;
+    @FXML private TextField mainTableAddWardField;
+    @FXML private TextField mainTableAddFBICDField;
+    @FXML private TextField mainTableAddXCoordField;
+    @FXML private TextField mainTableAddYCoordField;
+    @FXML private TextField mainTableAddLatitudeField;
+    @FXML private TextField mainTableAddLongitudeField;
+    @FXML private TitledPane mainTableAddAccordionTab;
 
 
     @FXML
@@ -126,31 +106,45 @@ public class TabTableController {
      * Runs through the text fields and "lines them up" with the attributes of a Record object to create one, which
      * can then be passed to the database.
      *
-     * Says whether the record is valid or not.
+     * Gives the user feedback on their provided record. Messages for success, missing fields, invalid record.
+     * Validation is currently checking if required fields are filled in and whether an exception is encountered
+     * trying to create the record.
      *
-     * @return A record object, if the input is valid, else null.
+     * @return A record object if the input is complete and valid, else null.
      */
     public Record getRecordFromTextFields() {
         List<String> recStrings = new ArrayList<String>();
+        int emptyFields = 0;
 
-        for (Node node : mainTableAddPane.getChildren()){
-            if (node instanceof VBox) {
+        for (Node vbox : mainTableAddPane.getChildren()){
+            if (vbox instanceof VBox) { // only look at vboxes, which contain a textfield + label
+                TextField field = (TextField) ((VBox) vbox).getChildren().get(0);
+                Label label = (Label) ((VBox) vbox).getChildren().get(1);
 
-                recStrings.add(((TextField) ((VBox) node).getChildren().get(0)).getText());
+                // label text is faster than looking at the list of field's classes
+                if (Objects.equals(label.getText(), "* Required") && field.getText().isEmpty()) {
+                    emptyFields++;
+                }
+                recStrings.add(field.getText());
             }
         }
-        try {
-            Record rec = new Record(recStrings);
-            System.out.println(rec.toString());
-            mainTableAddRecordLabel.setText("That's a valid record. Well done!");
-            return rec;
+        if (emptyFields > 0) {
+            mainTableAddRecordLabel.setText(String.format("%d required field(s) are empty.", emptyFields));
         }
-        catch (Exception e) {
-            mainTableAddRecordLabel.setText("That's not a valid record. Printing exception.");
-            System.err.println(e);
-            e.printStackTrace();
-            return null;
+        else { // create the record
+            try {
+                Record rec = new Record(recStrings);
+                System.out.println(rec); //TODO check if tostring is needed here?
+                mainTableAddRecordLabel.setText("That's a valid record. Well done!");
+                return rec;
+            } catch (Exception e) {
+                mainTableAddRecordLabel.setText("That's not a valid record. Printing exception.");
+                System.err.println(e);
+                e.printStackTrace();
+            }
         }
+        // returns null if the record can't be created (missing/invalid fields)
+        return null;
     }
 
     /**
