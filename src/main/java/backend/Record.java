@@ -47,9 +47,7 @@ public class Record {
         primaryDescription = data.get(4);
         secondaryDescription = data.get(5);
         locationDescription = data.get(6);
-        System.out.println(data.get(7));
         arrest = parseBooleanString(data.get(7).toLowerCase());
-        System.out.println(data.get(8));
         domestic = parseBooleanString(data.get(8).toLowerCase());
         beat = Integer.parseInt(data.get(9));
         ward = Integer.parseInt(data.get(10));
@@ -226,15 +224,12 @@ public class Record {
      */
     private Boolean parseBooleanString(String input) {
         if (Record.trueStrings.contains(input.toLowerCase())) {
-            System.out.println("got true");
             return true;
         }
         else if (Record.falseStrings.contains(input.toLowerCase())) {
-            System.out.println("got false");
             return false;
         }
         else {
-            System.out.println("got null");
             return null;
         }
     }
