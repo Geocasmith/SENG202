@@ -1,5 +1,7 @@
 package gui;
 
+import backend.DataManipulator;
+import backend.InputValidator;
 import backend.Record;
 import backend.database.Database;
 import com.opencsv.exceptions.CsvValidationException;
@@ -134,7 +136,7 @@ public class TabTableController {
      *
      * @return A record object if the input is complete and valid, else null.
      */
-    public Record getRecordFromTextFields() {
+    public Record getRecordFromTextFields() throws IOException, CsvValidationException {
         List<String> recStrings = new ArrayList<String>();
         int emptyFields = 0;
 
@@ -153,21 +155,20 @@ public class TabTableController {
 
         checkRequiredFields();
 
-        if (emptyFields > 0) {
-            mainTableAddRecordLabel.setText(String.format("%d required field(s) are empty.", emptyFields));
-        }
-        else { // create the record
-            try {
+        //if (emptyFields > 0) {
+           // mainTableAddRecordLabel.setText(String.format("%d required field(s) are empty.", emptyFields));
+      //  }
+        //else { // create the record
+            if (InputValidator.isValidRecord(recStrings)) {
                 Record rec = new Record(recStrings);
                 System.out.println(rec); //TODO check if tostring is needed here?
-                mainTableAddRecordLabel.setText("That's a valid record. Well done!");
+                mainTableAddRecordLabel.setText((InputValidator.recordEntryFeedback(recStrings).get(1)));
                 return rec;
-            } catch (Exception e) {
-                mainTableAddRecordLabel.setText("That's not a valid record. Printing exception.");
-                System.err.println(e);
-                e.printStackTrace();
+            } else {
+                mainTableAddRecordLabel.setText((InputValidator.recordEntryFeedback(recStrings).get(1)));
+
             }
-        }
+        //}
         // returns null if the record can't be created (missing/invalid fields)
         return null;
     }
@@ -200,9 +201,8 @@ public class TabTableController {
         addTableCol("Longitude", "longitude");
 
         // Test code
-        Database d = new Database();
-        d.connectDatabase();
-        ArrayList<Record> allRecords = d.getAll();
+
+        ArrayList<Record> allRecords = DataManipulator.getAllRecords();
         for (Record r : allRecords) {
 
             mainTableView.getItems().add(r);
