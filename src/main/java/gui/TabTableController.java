@@ -43,6 +43,7 @@ public class TabTableController {
     @FXML private TextField mainTableAddLongitudeField;
     @FXML private TitledPane mainTableAddAccordionTab;
 
+    private static String TEXTFIELDREQUIREDSTYLE = "-fx-background-color: -fx-control-inner-background, red,\n linear-gradient(from 0px 0px to 0px 5px, derive(-fx-control-inner-background, -9%), -fx-control-inner-background); -fx-background-insets: 1 0 1 1, 1 0 1 1, 2 1 2 2;";
 
     @FXML
     private void initialize() throws CsvValidationException, SQLException, IOException {
@@ -102,6 +103,27 @@ public class TabTableController {
         mainTableAddPane.getChildren().add(field);
     }
 
+    public void checkRequiredFields() {
+        for (Node vbox : mainTableAddPane.getChildren()){
+            if (vbox instanceof VBox) { // only look at vboxes, which contain a textfield + label
+                TextField field = (TextField) ((VBox) vbox).getChildren().get(0);
+                Label label = (Label) ((VBox) vbox).getChildren().get(1);
+
+                // label text is faster than looking at the list of field's classes
+                if (Objects.equals(label.getText(), "* Required") && field.getText().isEmpty()) {
+                    if (field.getStyleClass().contains("defaulttextfield")) {
+                        field.getStyleClass().remove("defaulttextfield");
+                    }
+                    field.getStyleClass().add("required");
+                } // the style changes are this clumsy because of a bug with javafx updating styles - not my problem!
+                else if (field.getStyleClass().contains("required")) {
+                    field.getStyleClass().remove("required");
+                    field.getStyleClass().add("defaulttextfield");
+                }
+            }
+        }
+    }
+
     /**
      * Runs through the text fields and "lines them up" with the attributes of a Record object to create one, which
      * can then be passed to the database.
@@ -128,6 +150,9 @@ public class TabTableController {
                 recStrings.add(field.getText());
             }
         }
+
+        checkRequiredFields();
+
         if (emptyFields > 0) {
             mainTableAddRecordLabel.setText(String.format("%d required field(s) are empty.", emptyFields));
         }
