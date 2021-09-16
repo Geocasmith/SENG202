@@ -430,32 +430,17 @@ public class Database {
     }
 
     //Test with different filters
-    public static ArrayList<Record> getFilter(Date startDate, Date endDate,ArrayList<String> crimeTypes,ArrayList<String> locDes,String ward,String beat,String lat,String lon,String arrest,String domestic) throws SQLException {
+    public static ArrayList<Record> getFilter(Date startDate, Date endDate,ArrayList<String> crimeTypes,ArrayList<String> locDes,String ward,String beat,String lat,String lon,int radius,String arrest,String domestic) throws SQLException {
         connection.setAutoCommit(false);
         String SQLString = "SELECT * FROM CRIMES where (UNIXTIME >= 0) ";
-
-
-//        ArrayList<String> iucr = new ArrayList<String>();
-//        iucr.add("ARSON");
-//        iucr.add("ASSAULT");
-//
-//        ArrayList<String> locDes = new ArrayList<String>();
-//        locDes.add("RESIDENCE");
-//        locDes.add("APARTMENT");
-//
-//        int ward=11;
-//        int beat=914;
-//        double lat = 41.8391952514648;
-//        double lon = -87.6341323852539;
-//        String arrest = "N";
-//        String domestic = "N";
+        double radiusInDegrees = radius*(1/110.54);
 
         //Cycles through Crime Type values if not empty and appends to SQL string
         if(!crimeTypes.isEmpty()){
             for (int i = 0; i < crimeTypes.size(); i++){
                 //Does not add the OR for the first one. Adds the IUCR values from the filter to the SQL statement
                 if(i==0){
-                    SQLString+="(PRIMARYDESCRIPTION='"+crimeTypes.get(i)+"' ";
+                    SQLString+="AND (PRIMARYDESCRIPTION='"+crimeTypes.get(i)+"' ";
                 } else{
                     SQLString+="OR PRIMARYDESCRIPTION='"+crimeTypes.get(i)+"' ";
                 }
@@ -495,11 +480,18 @@ public class Database {
         if(beat!=null) {
             SQLString += "AND (BEAT=" + beat + ")";
         }
-        if(lat!=null) {
-            SQLString += "AND (LATITUDE=" + lat + ")";
-        }
-        if(lon!=null) {
-            SQLString += "AND (LONGITUDE=" + lon + ")";
+        if(radius==0) {
+            if (lat != null&&lon != null) {
+                SQLString += "AND (LATITUDE=" + lat + ")";
+                SQLString += "AND (LONGITUDE=" + lon + ")";
+            }
+        }else{
+            if (lat != null&&lon != null) {
+                double latDouble = Double.parseDouble(lat);
+                double lonDouble = Double.parseDouble(lon);
+                SQLString += "AND (LATITUDE BETWEEN " + (latDouble + radiusInDegrees) + " AND " + (latDouble - radiusInDegrees) + ")";
+                SQLString += "AND (LATITUDE BETWEEN " + (lonDouble + radiusInDegrees) + " AND " + (lonDouble - radiusInDegrees) + ")";
+            }
         }
         if(arrest!=null) {
             SQLString += "AND (ARREST='" + arrest + "')";

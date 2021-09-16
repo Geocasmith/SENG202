@@ -29,7 +29,7 @@ public class App
 
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
-        str = d.getFilter(new SimpleDateFormat("MM/dd/yyyy h:mm:ss a").parse("07/05/2020 12:00:00 PM"),new SimpleDateFormat("MM/dd/yyyy h:mm:ss a").parse("07/18/2020 08:00:00 AM"),crimeTypes,locationDescriptions,null,null,null,null,null,null);
+        str = d.getFilter(new SimpleDateFormat("MM/dd/yyyy h:mm:ss a").parse("07/05/2020 12:00:00 PM"),new SimpleDateFormat("MM/dd/yyyy h:mm:ss a").parse("07/18/2020 08:00:00 AM"),crimeTypes,locationDescriptions,null,null,null,null,0,null,null);
         //Example of using the search function to find a crime at a latitude
         ArrayList<Record> lat = d.searchDB("XCOORDINATE",1176416);
 
