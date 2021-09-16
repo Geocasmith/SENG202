@@ -489,8 +489,8 @@ public class Database {
             if (lat != null&&lon != null) {
                 double latDouble = Double.parseDouble(lat);
                 double lonDouble = Double.parseDouble(lon);
-                SQLString += "AND (LATITUDE BETWEEN " + (latDouble + radiusInDegrees) + " AND " + (latDouble - radiusInDegrees) + ")";
-                SQLString += "AND (LATITUDE BETWEEN " + (lonDouble + radiusInDegrees) + " AND " + (lonDouble - radiusInDegrees) + ")";
+                SQLString += " AND (LATITUDE BETWEEN " + (latDouble - radiusInDegrees) + " AND " + (latDouble + radiusInDegrees) + ")";
+                SQLString += " AND (LONGITUDE BETWEEN " + (lonDouble - radiusInDegrees) + " AND " + (lonDouble + radiusInDegrees) + ")";
             }
         }
         if(arrest!=null) {

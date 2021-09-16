@@ -341,7 +341,7 @@ class DatabaseTest {
         d.connectDatabase();
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
-        ArrayList<Record>str = d.getFilter(null,null,crimeTypes,locationDescriptions,null,null,"41.7057609558105","-87.5328750610352",10,null,null);
+        ArrayList<Record>str = d.getFilter(null,null,crimeTypes,locationDescriptions,null,null,"41.7057609558105","-87.5328750610352",100,null,null);
 
         int count = 1;
         for (Record r:str){
