@@ -13,15 +13,12 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.CheckComboBox?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" stylesheets="@main.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainController">
    <top>
@@ -59,12 +56,12 @@
         <tabs>
           <Tab styleClass="mainTab" text="Map">
             <content>
-                <fx:include fx:id="map" source="map.fxml"/>
+                <fx:include fx:id="map" source="map.fxml" />
             </content>
           </Tab>
             <Tab text="Table">
                <content>
-                   <fx:include fx:id="tabTable" source="tabTable.fxml"/>
+                   <fx:include fx:id="tabTable" source="tabTable.fxml" />
                </content>
             </Tab>
         </tabs>
@@ -90,7 +87,6 @@
                            </padding>
                         </Label>
                         <DatePicker fx:id="filterEndDate" layoutX="13.0" layoutY="129.0" />
-                        <ComboBox fx:id="crimeTypeComboBox" layoutX="10.0" layoutY="203.0" prefHeight="25.0" prefWidth="180.0" promptText="Select Crime Type" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                         <Button layoutX="47.0" layoutY="692.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="107.0" styleClass="applyFilterButton" text="Apply Filter" textAlignment="CENTER" AnchorPane.bottomAnchor="29.0" />
                         <Separator layoutX="194.0" orientation="VERTICAL" prefHeight="3000.0" prefWidth="12.0" />
                         <Button layoutY="670.0" mnemonicParsing="false" onAction="#clearFilters" prefWidth="200.0" styleClass="clearFilterButton" text="Clear Filter" AnchorPane.bottomAnchor="59.0" />
@@ -103,11 +99,12 @@
                         <Separator layoutX="1.0" layoutY="169.0" prefWidth="200.0" />
                         <TextField fx:id="filterWardTextField" layoutX="26.0" layoutY="311.0" prefHeight="25.0" prefWidth="70.0" promptText="Wards" />
                         <TextField fx:id="filterBeatsTextField" layoutX="104.0" layoutY="311.0" prefHeight="25.0" prefWidth="70.0" promptText="Beats" />
-                        <Label alignment="CENTER" layoutY="171.0" prefHeight="17.0" prefWidth="200.0" text="Crime Type">
+                        <Label alignment="CENTER" layoutY="171.0" prefHeight="17.0" prefWidth="200.0" text="Crime Types">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
+                        <CheckComboBox fx:id="crimeTypeComboBox" layoutX="10.0" layoutY="203.0" title="Select Crime Types" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                         <Separator layoutY="240.0" prefWidth="200.0" />
                         <Label alignment="CENTER" layoutY="242.0" prefHeight="17.0" prefWidth="200.0" text="Location">
                            <font>
@@ -135,7 +132,6 @@
                         <Label alignment="CENTER" layoutX="102.0" layoutY="452.0" prefHeight="17.0" prefWidth="100.0" text="Domestic" />
                         <ComboBox fx:id="arrestComboBox" layoutX="21.0" layoutY="475.0" prefWidth="60.0" />
                         <ComboBox fx:id="domesticComboBox" layoutX="122.0" layoutY="475.0" prefWidth="60.0" />
-                        <ComboBox fx:id="locationDescriptionComboBox" layoutX="26.0" layoutY="276.0" prefWidth="180.0" promptText="Location Description" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                         <Label fx:id="radiusLabel" layoutX="150.0" layoutY="399.0" text="1 km">
                            <font>
                               <Font size="14.0" />
@@ -144,6 +140,7 @@
                               <Insets left="4.0" />
                            </padding>
                         </Label>
+                        <CheckComboBox fx:id="locationDescriptionComboBox" layoutX="26.0" layoutY="276.0" title="Location Descriptions" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                      </children>
                   </AnchorPane>
                </content>

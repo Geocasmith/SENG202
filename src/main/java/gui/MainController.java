@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import backend.Record;
 import javafx.scene.layout.FlowPane;
+import org.controlsfx.control.CheckComboBox;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -26,9 +27,9 @@ public class MainController {
     @FXML
     private ComboBox domesticComboBox;
     @FXML
-    private ComboBox crimeTypeComboBox;
+    private CheckComboBox crimeTypeComboBox;
     @FXML
-    private ComboBox locationDescriptionComboBox;
+    private CheckComboBox locationDescriptionComboBox;
     @FXML
     private Slider radiusSlider;
     @FXML
@@ -81,15 +82,13 @@ public class MainController {
         Collections.sort(locationDescriptions);
 
         // Set values for crime types combo box
-        crimeTypeComboBox.getItems().add("Select Crime Type");
-        crimeTypeComboBox.getSelectionModel().select("Select Crime Type");
         crimeTypeComboBox.getItems().addAll(crimeTypes);
 
         // Set values for location description combo box
-        locationDescriptionComboBox.getItems().add("Location Description");
-        locationDescriptionComboBox.getSelectionModel().select("Location Description");
         locationDescriptionComboBox.getItems().addAll(locationDescriptions);
     }
+
+
 
     /**
      * Updates label for radius when slider is updated
@@ -105,8 +104,8 @@ public class MainController {
     public void clearFilters() {
         filterStartDate.setValue(null);
         filterEndDate.setValue(null);
-        crimeTypeComboBox.getSelectionModel().select("Select Crime Type");
-        locationDescriptionComboBox.getSelectionModel().select("Location Description");
+        crimeTypeComboBox.getCheckModel().clearChecks();
+        locationDescriptionComboBox.getCheckModel().clearChecks();
         filterWardTextField.setText(null);
         filterBeatsTextField.setText(null);
         filterLatTextField.setText(null);
