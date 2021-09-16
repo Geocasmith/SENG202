@@ -2,10 +2,7 @@ package backend;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 
 public class Record {
     private String caseNumber;
@@ -25,8 +22,23 @@ public class Record {
     private Double latitude;
     private Double longitude;
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a", Locale.ENGLISH);
+    /**
+     * List of strings that will be counted as "true" when parsing fields.
+     * Strings in lower case; use a case-insensitive check.
+     */
+    private static List<String> trueStrings = Arrays.asList("y", "true", "yes", "1");
+    /**
+     * List of strings that will be counted as "false" when parsing fields.
+     * Strings in lower case; use a case-insensitive check.
+     */
+    private static List<String> falseStrings = Arrays.asList("n", "false", "no", "0");
 
-    Record(ArrayList<String> data) {
+    /**
+     * Goes through the provided list of crime data and creates a new record object
+     * Assumes that invalid empty fields have been dealt with before being sent to the constructor
+     * @param data A list of data containing the required fields for a record to be created
+     */
+    public Record(List<String> data) {
         caseNumber = data.get(0);
 
         date = LocalDateTime.parse(data.get(1), formatter);
@@ -35,20 +47,8 @@ public class Record {
         primaryDescription = data.get(4);
         secondaryDescription = data.get(5);
         locationDescription = data.get(6);
-        if (Objects.equals(data.get(7), "Y")) {
-            arrest = true;
-        } else if (Objects.equals(data.get(7), "N")) {
-            arrest = false;
-        } else {
-            arrest = null;
-        }
-        if (Objects.equals(data.get(8), "Y")) {
-            domestic = true;
-        } else if (Objects.equals(data.get(8), "N")) {
-            domestic = false;
-        } else {
-            domestic = null;
-        }
+        arrest = parseBooleanString(data.get(7).toLowerCase());
+        domestic = parseBooleanString(data.get(8).toLowerCase());
         beat = Integer.parseInt(data.get(9));
         ward = Integer.parseInt(data.get(10));
         fbicd = data.get(11);
@@ -70,8 +70,16 @@ public class Record {
         return caseNumber;
     }
 
+    /**
+     * Uses the LocalDateTime formatter to convert the time to string form
+     * @return the date in string form
+     */
     public String getDate() {
         return date.format(formatter);
+    }
+
+    public LocalDateTime getDateAsObject() {
+        return date;
     }
 
     public String getBlock() {
@@ -130,6 +138,11 @@ public class Record {
         return longitude;
     }
 
+    /**
+     * Checks that the record has valid location data and returns it in a tuple form if so
+     * @return The lat long location of the crime in a string tuple form, or null if the
+     *         record is missing location data
+     */
     public String getLocation() {
         if (latitude == null || longitude == null) {
             return null;
@@ -138,20 +151,99 @@ public class Record {
         }
     }
 
-    public static void main(String[] args) {
-        ArrayList<String> data = new ArrayList<>(Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "N", "N", "334", "7", "6", "1183633", "1851786", "41.748486365", "-87.602675062"));
-        Record record = new Record(data);
-        System.out.println(record.getDate());
+    public void setCaseNumber(String caseNumber) {
+        this.caseNumber = caseNumber;
     }
 
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public void setBlock(String block) {
+        this.block = block;
+    }
+
+    public void setIucr(String iucr) {
+        this.iucr = iucr;
+    }
+
+    public void setPrimaryDescription(String primaryDescription) {
+        this.primaryDescription = primaryDescription;
+    }
+
+    public void setSecondaryDescription(String secondaryDescription) {
+        this.secondaryDescription = secondaryDescription;
+    }
+
+    public void setLocationDescription(String locationDescription) {
+        this.locationDescription = locationDescription;
+    }
+
+    public void setArrest(Boolean arrest) {
+        this.arrest = arrest;
+    }
+
+    public void setDomestic(Boolean domestic) {
+        this.domestic = domestic;
+    }
+
+    public void setBeat(int beat) {
+        this.beat = beat;
+    }
+
+    public void setWard(int ward) {
+        this.ward = ward;
+    }
+
+    public void setFbicd(String fbicd) {
+        this.fbicd = fbicd;
+    }
+
+    public void setXcoord(int xcoord) {
+        this.xcoord = xcoord;
+    }
+
+    public void setYcoord(int ycoord) {
+        this.ycoord = ycoord;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    /**
+     * Returns true if the input (case-insensitive) is contained within Record.trueStrings,
+     * false if in Record.falseStrings. Returns null if it is in neither.
+     * TODO: is this the behaviour we want?
+     * @param input the string to be read
+     * @return corresponding boolean value
+     */
+    private Boolean parseBooleanString(String input) {
+        if (Record.trueStrings.contains(input.toLowerCase())) {
+            return true;
+        }
+        else if (Record.falseStrings.contains(input.toLowerCase())) {
+            return false;
+        }
+        else {
+            return null;
+        }
+    }
 
     /**
      * Returns "Y" or "N" for true or false input values, respectively.
+     * Prints null if input is null.
      * @param input a true/false boolean
-     * @return "Y" for true, "N" for false
+     * @return "Y" for true, "N" for false, "null" for null
      */
-    private String booleanStringChanger(boolean input) {
-        if (input) {
+    private String booleanStringChanger(Boolean input) {
+        if (input == null) {
+            return "null";
+        } else if (input) {
             return "Y";
         }
         else {

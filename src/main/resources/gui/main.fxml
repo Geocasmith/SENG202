@@ -1,19 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.web.WebView?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MapController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" stylesheets="@main.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem fx:id="plot" mnemonicParsing="false" onAction="#plotPoint" text="Plot" />
-                  <MenuItem mnemonicParsing="false" onAction="#deleteMarkers" text="Delete" />
+                  <MenuItem mnemonicParsing="false" text="Import CSV" />
+                  <MenuItem mnemonicParsing="false" text="Export CSV" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
@@ -21,15 +38,133 @@
               <MenuItem mnemonicParsing="false" text="Delete" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Help">
+          <Menu mnemonicParsing="false" text="Analysis">
             <items>
-              <MenuItem mnemonicParsing="false" text="About" />
+              <MenuItem mnemonicParsing="false" text="Distance" />
+                  <MenuItem mnemonicParsing="false" text="Time" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Sort">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Case#" />
+                  <MenuItem mnemonicParsing="false" text="Date" />
+                  <MenuItem mnemonicParsing="false" text="Type" />
+               </items>
+            </Menu>
         </menus>
       </MenuBar>
    </top>
    <center>
-      <WebView fx:id="webView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <TabPane fx:id="mainTabPane" nodeOrientation="RIGHT_TO_LEFT" prefHeight="200.0" prefWidth="200.0" styleClass="mainTabPane" stylesheets="@main.css" tabClosingPolicy="UNAVAILABLE" tabMinWidth="60.0" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab styleClass="mainTab" text="Map">
+            <content>
+                <fx:include fx:id="map" source="map.fxml"/>
+            </content>
+          </Tab>
+            <Tab text="Table">
+               <content>
+                   <fx:include fx:id="tabTable" source="tabTable.fxml"/>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
    </center>
+   <left>
+      <Accordion fx:id="sidebarAccordion" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <panes>
+          <TitledPane fx:id="filterPane" animated="false" text="Filter">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="74.0" text="Filter" textAlignment="CENTER">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutY="60.0" prefWidth="200.0" text="From" />
+                        <DatePicker fx:id="filterStartDate" layoutX="13.0" layoutY="77.0" />
+                        <Label alignment="CENTER" layoutY="102.0" prefWidth="200.0" text="To" textAlignment="CENTER">
+                           <padding>
+                              <Insets bottom="5.0" top="5.0" />
+                           </padding>
+                        </Label>
+                        <DatePicker fx:id="filterEndDate" layoutX="13.0" layoutY="129.0" />
+                        <ComboBox fx:id="crimeTypeComboBox" layoutX="10.0" layoutY="203.0" prefHeight="25.0" prefWidth="180.0" promptText="Select Crime Type" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <Button layoutX="47.0" layoutY="692.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="107.0" styleClass="applyFilterButton" text="Apply Filter" textAlignment="CENTER" AnchorPane.bottomAnchor="29.0" />
+                        <Separator layoutX="194.0" orientation="VERTICAL" prefHeight="3000.0" prefWidth="12.0" />
+                        <Button layoutY="670.0" mnemonicParsing="false" onAction="#clearFilters" prefWidth="200.0" styleClass="clearFilterButton" text="Clear Filter" AnchorPane.bottomAnchor="59.0" />
+                        <Label alignment="CENTER" layoutY="35.0" prefHeight="17.0" prefWidth="200.0" text="Date Range">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Separator layoutY="34.0" prefWidth="200.0" />
+                        <Separator layoutX="1.0" layoutY="169.0" prefWidth="200.0" />
+                        <TextField fx:id="filterWardTextField" layoutX="26.0" layoutY="311.0" prefHeight="25.0" prefWidth="70.0" promptText="Wards" />
+                        <TextField fx:id="filterBeatsTextField" layoutX="104.0" layoutY="311.0" prefHeight="25.0" prefWidth="70.0" promptText="Beats" />
+                        <Label alignment="CENTER" layoutY="171.0" prefHeight="17.0" prefWidth="200.0" text="Crime Type">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Separator layoutY="240.0" prefWidth="200.0" />
+                        <Label alignment="CENTER" layoutY="242.0" prefHeight="17.0" prefWidth="200.0" text="Location">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="filterLatTextField" layoutX="26.0" layoutY="355.0" prefHeight="25.0" prefWidth="70.0" promptText="Lat" />
+                        <TextField fx:id="filterLongTextField" layoutX="104.0" layoutY="355.0" prefHeight="25.0" prefWidth="70.0" promptText="Long" />
+                        <Slider fx:id="radiusSlider" blockIncrement="5.0" layoutX="27.0" layoutY="402.0" min="1.0" onMouseDragged="#updateRadiusText" prefHeight="14.0" prefWidth="125.0" />
+                        <Label alignment="CENTER" layoutX="-4.0" layoutY="380.0" prefHeight="17.0" prefWidth="200.0" text="Radius">
+                           <opaqueInsets>
+                              <Insets top="5.0" />
+                           </opaqueInsets>
+                           <padding>
+                              <Insets top="5.0" />
+                           </padding>
+                        </Label>
+                        <Separator layoutY="425.0" prefWidth="200.0" />
+                        <Label alignment="CENTER" layoutY="427.0" prefHeight="17.0" prefWidth="200.0" text="Other">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="1.0" layoutY="452.0" prefHeight="17.0" prefWidth="100.0" text="Arrest made" />
+                        <Label alignment="CENTER" layoutX="102.0" layoutY="452.0" prefHeight="17.0" prefWidth="100.0" text="Domestic" />
+                        <ComboBox fx:id="arrestComboBox" layoutX="21.0" layoutY="475.0" prefWidth="60.0" />
+                        <ComboBox fx:id="domesticComboBox" layoutX="122.0" layoutY="475.0" prefWidth="60.0" />
+                        <ComboBox fx:id="locationDescriptionComboBox" layoutX="26.0" layoutY="276.0" prefWidth="180.0" promptText="Location Description" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <Label fx:id="radiusLabel" layoutX="150.0" layoutY="399.0" text="1 km">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <padding>
+                              <Insets left="4.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+               </content>
+          </TitledPane>
+          <TitledPane animated="false" text="Graph">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="68.0" layoutY="14.0" text="Graph" AnchorPane.topAnchor="10.0">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <ComboBox layoutX="25.0" layoutY="63.0" prefWidth="150.0" promptText="Select Graph Type" />
+                        <Separator layoutX="1.0" layoutY="101.0" prefWidth="200.0" />
+                        <Separator layoutX="194.0" orientation="VERTICAL" prefHeight="3000.0" prefWidth="12.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+          </TitledPane>
+        </panes>
+      </Accordion>
+   </left>
 </BorderPane>

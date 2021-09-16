@@ -18,7 +18,7 @@ public class MapGUI extends Application {
     public void start(Stage primaryStage) throws IOException {
 
 
-        Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("map.fxml"));
         primaryStage.setTitle("Google Maps");
         primaryStage.setScene(new Scene(root, 1920, 1080, Color.web("#666970")));
         primaryStage.show();

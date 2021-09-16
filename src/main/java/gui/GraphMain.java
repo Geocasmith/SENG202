@@ -1,7 +1,7 @@
 package gui;
 
-public class Main {
+public class GraphMain {
     public static void main(String[] args) {
-        MainGUI.main(args);
+        Graph.main(args);
     }
 }

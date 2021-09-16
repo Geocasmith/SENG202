@@ -1,27 +1,27 @@
 package backend;
 
+import backend.database.Database;
+
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
 /**
- * DataManipulator class owns Record, writer and reader classes
+ * DataManipulator class owns Record, Database, writer and reader classes
  * It includes methods for adding, editing and removing, records
  */
 
 public class DataManipulator {
 private ArrayList<Record> currentData;
 
-    /**
-     * Constructor for DataManipulator class
-     * @param currentData
-     */
+
     DataManipulator(ArrayList<Record> currentData) {
     this.currentData = currentData;
 }
 
     /**
      * This method checks if a record has a unique entry
-     * It may need to be replaced as it is an expensive call
      * @param line Integer
      * @param data Record
      * @return true if Record case number is unique or false otherwise
@@ -46,16 +46,22 @@ private ArrayList<Record> currentData;
      * @param data
      * @return true if data is edited or false otherwise
      */
-    public boolean editLine(int line, Record data) {
-    if (hasUniqueCaseNumber(line, data)) {
-        currentData.set(line, data);
-        return true;
-    }
+    public boolean editLine(int line, Record data) throws IOException {
+        try {
+            if (hasUniqueCaseNumber(line, data)) {
+                currentData.set(line, data);
+                return true;
+
+        }
+
+    }catch(Exception e){
+            //Display error message?
+        }
     return false;
 }
 
     /**
-     *Adds a record into CurrentData
+     * Adds a record into CurrentData object
      * @param line
      * @param data
      * @return true if the record has been added or false otherwise
@@ -70,7 +76,7 @@ private ArrayList<Record> currentData;
     }
 
     /**
-     * Removes a record from list of records in currentData
+     * Removes a record from list of records in currentData object
      * @param line
      */
     public void deleteLine(int line) {
@@ -78,7 +84,7 @@ private ArrayList<Record> currentData;
     }
 
     /**
-     *
+     * Takes column number and extracts corresponding column values from currentData object
      * @param col int
      * @return extractedCol
      */
@@ -88,83 +94,88 @@ private ArrayList<Record> currentData;
         ArrayList<Object> extractedCol = new ArrayList<>();
         switch (col) {
             case 0:
-                for(int i = 0; i < colSize; i++) {
-                    extractedCol.add(currentData.get(i).getCaseNumber());
+                for (Record record : currentData) {
+                    extractedCol.add(record.getCaseNumber());
                 }
                 break;
             case 1:
-                for(int i = 0; i < colSize; i++) {
-                    extractedCol.add(currentData.get(i).getDate());
+                for (Record record : currentData) {
+                    extractedCol.add(record.getDate());
                 }
                 break;
             case 2:
-                for(int i = 0; i < colSize; i++) {
-                    extractedCol.add(currentData.get(i).getBlock());
+                for (Record record : currentData) {
+                    extractedCol.add(record.getBlock());
                 }
                 break;
             case 3:
-                for(int i = 0; i < colSize; i++) {
-                    extractedCol.add(currentData.get(i).getIucr());
+                for (Record record : currentData) {
+                    extractedCol.add(record.getIucr());
                 }
                 break;
             case 4:
-                for(int i = 0; i < colSize; i++) {
-                    extractedCol.add(currentData.get(i).getPrimaryDescription());
+                for (Record record : currentData) {
+                    extractedCol.add(record.getPrimaryDescription());
                 }
                 break;
             case 5:
-                for(int i = 0; i < colSize; i++) {
-                    extractedCol.add(currentData.get(i).getSecondaryDescription());
+                for (Record record : currentData) {
+                    extractedCol.add(record.getSecondaryDescription());
                 }
                 break;
             case 6:
-                for(int i = 0; i < colSize; i++) {
-                    extractedCol.add(currentData.get(i).getLocation());
+                for (Record record : currentData) {
+                    extractedCol.add(record.getLocationDescription());
                 }
                 break;
             case 7:
-                for(int i = 0; i < colSize; i++) {
-                    extractedCol.add(currentData.get(i).getArrest());
+                for (Record record : currentData) {
+                    extractedCol.add(record.getArrest());
                 }
                 break;
             case 8:
-                for(int i = 0; i < colSize; i++) {
-                    extractedCol.add(currentData.get(i).getDomestic());
+                for (Record record : currentData) {
+                    extractedCol.add(record.getDomestic());
                 }
                 break;
             case 9:
-                for(int i = 0; i < colSize; i++) {
-                    extractedCol.add(currentData.get(i).getBeat());
+                for (Record record : currentData) {
+                    extractedCol.add(record.getBeat());
                 }
                 break;
             case 10:
-                for(int i = 0; i < colSize; i++) {
-                    extractedCol.add(currentData.get(i).getWard());
+                for (Record record : currentData) {
+                    extractedCol.add(record.getWard());
                 }
                 break;
             case 11:
-                for(int i = 0; i < colSize; i++) {
-                    extractedCol.add(currentData.get(i).getFbicd());
+                for (Record record : currentData) {
+                    extractedCol.add(record.getFbicd());
                 }
                 break;
             case 12:
-                for(int i = 0; i < colSize; i++) {
-                    extractedCol.add(currentData.get(i).getXcoord());
+                for (Record record : currentData) {
+                    extractedCol.add(record.getXcoord());
                 }
                 break;
             case 13:
-                for(int i = 0; i < colSize; i++) {
-                    extractedCol.add(currentData.get(i).getYcoord());
+                for (Record record : currentData) {
+                    extractedCol.add(record.getYcoord());
                 }
                 break;
             case 14:
-                for(int i = 0; i < colSize; i++) {
-                    extractedCol.add(currentData.get(i).getLatitude());
+                for (Record record : currentData) {
+                    extractedCol.add(record.getLatitude());
                 }
                 break;
             case 15:
-                for(int i = 0; i < colSize; i++) {
-                    extractedCol.add(currentData.get(i).getLongitude());
+                for (Record record : currentData) {
+                    extractedCol.add(record.getLongitude());
+                }
+                break;
+            case 16:
+                for (Record record : currentData) {
+                    extractedCol.add(record.getLocation());
                 }
                 break;
             default:
@@ -175,21 +186,65 @@ private ArrayList<Record> currentData;
 
 
     /**
-     *
-     * @param col1 int
-     * @param col2 int
-     * @return dataToGraph
+     * Calls extractCol DataManipulator class method to extract column values from CurrentData record object
+     * @param col1 represents column number of the first column to be extracted
+     * @param col2 represents column number of the second column to be extracted
+     * @return dataToGraph Array<ArrayList<Object>> type that contain list of extracted column values
      */
-    public ArrayList<ArrayList<Object>> getDataToGraph(int col1, int col2)
+    public ArrayList<ArrayList<Object>> getCurrentDataToGraph(int col1, int col2)
     {
         ArrayList<ArrayList<Object> > dataToGraph = new ArrayList<ArrayList<Object>>();
-        ArrayList<Object> dataCol1;
-        ArrayList<Object> dataCol2;
-        dataCol1 = extractCol(col1);
-        dataCol2 = extractCol(col2);
-        dataToGraph.add(dataCol1);
-        dataToGraph.add(dataCol2);
+        dataToGraph.add(extractCol(col1));
+        dataToGraph.add(extractCol(col2));
         return dataToGraph;
 
     }
+
+    /**
+     * Gets all record objects from the database
+     * @return
+     * @throws SQLException
+     */
+
+    public static ArrayList<Record> getAllRecords() throws SQLException {
+        Database.connectDatabase();
+        return Database.getAll();
+    }
+
+    /**
+     * Calls extractCol Database class method to extract column values from Database Crime Table
+     * @param col1 represents column number of the first column to be extracted
+     * @param col2 represents column number of the second column to be extracted
+     * @return dataToGraph Array<ArrayList<Object>> type that contain list of extracted column values
+     */
+
+    public ArrayList<ArrayList<Object>> dataBaseDataToGraph(int col1, int col2) throws SQLException {
+        ArrayList<ArrayList<Object> > dataToGraph = new ArrayList<ArrayList<Object>>();
+        Database db = new Database();
+        db.connectDatabase();
+        dataToGraph.add(db.extractCol(Database.getColName(col1)));
+        dataToGraph.add(db.extractCol(Database.getColName(col2)));
+        return dataToGraph;
+
+    }
+
+    /**
+     * Saves the current data to CSV file
+     * @param fileName name of the Csv file
+     * @return
+     * @throws IOException
+     */
+
+    public boolean saveToCsv(String fileName) throws IOException {
+        try
+        {
+            CsvWriter.write("./Files/"+fileName, currentData);
+            return true;
+        }catch (Exception e)
+        {
+            //Display Error Message?
+        }
+        return false;
+    }
+
 }
