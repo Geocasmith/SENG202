@@ -429,6 +429,91 @@ public class Database {
         return records;
     }
 
+    //Test with different filters
+    public static ArrayList<Record> getFilter(Date startDate, Date endDate,ArrayList<String> crimeTypes,ArrayList<String> locDes,String ward,String beat,String lat,String lon,String arrest,String domestic) throws SQLException {
+        connection.setAutoCommit(false);
+        String SQLString = "SELECT * FROM CRIMES where (UNIXTIME >= 0) ";
+
+
+//        ArrayList<String> iucr = new ArrayList<String>();
+//        iucr.add("ARSON");
+//        iucr.add("ASSAULT");
+//
+//        ArrayList<String> locDes = new ArrayList<String>();
+//        locDes.add("RESIDENCE");
+//        locDes.add("APARTMENT");
+//
+//        int ward=11;
+//        int beat=914;
+//        double lat = 41.8391952514648;
+//        double lon = -87.6341323852539;
+//        String arrest = "N";
+//        String domestic = "N";
+
+        //Cycles through Crime Type values if not empty and appends to SQL string
+        if(!crimeTypes.isEmpty()){
+            for (int i = 0; i < crimeTypes.size(); i++){
+                //Does not add the OR for the first one. Adds the IUCR values from the filter to the SQL statement
+                if(i==0){
+                    SQLString+="(PRIMARYDESCRIPTION='"+crimeTypes.get(i)+"' ";
+                } else{
+                    SQLString+="OR PRIMARYDESCRIPTION='"+crimeTypes.get(i)+"' ";
+                }
+
+            }
+            //Appends parenthesis to group the SQL WHERE statements
+            SQLString+=") ";
+        }
+
+        //Cycles through IUCR values if not empty and appends to SQL string
+        if(!locDes.isEmpty()){
+            for (int i = 0; i < locDes.size(); i++){
+                //Does not add the OR for the first one. Adds the LOCATIONDESCRIPTION values from the filter to the SQL statement
+                if(i==0){
+                    SQLString+="AND (LOCATIONDESCRIPTION='"+locDes.get(i)+"' ";
+                }else{
+                    SQLString+="OR LOCATIONDESCRIPTION='"+locDes.get(i)+"' ";
+                }
+            }
+            //Appends parenthesis to group the SQL WHERE statements
+            SQLString+=") ";
+        }
+        if(startDate!=null&&endDate!=null) {
+            SQLString += "AND (UNIXTIME BETWEEN " + startDate.getTime() + " AND " + endDate.getTime()+") ";
+        }else if(startDate!=null){
+            SQLString+="AND (UNIXTIME >= "+startDate.getTime()+") ";
+        }else if(endDate!=null){
+            SQLString+="AND (UNIXTIME <= "+endDate.getTime()+") ";
+        }
+
+        /***
+         * NEEDS INPUT VALIDATION
+        ***/
+        if(ward!=null){
+            SQLString+="AND (WARD="+ward+")";
+        }
+        if(beat!=null) {
+            SQLString += "AND (BEAT=" + beat + ")";
+        }
+        if(lat!=null) {
+            SQLString += "AND (LATITUDE=" + lat + ")";
+        }
+        if(lon!=null) {
+            SQLString += "AND (LONGITUDE=" + lon + ")";
+        }
+        if(arrest!=null) {
+            SQLString += "AND (ARREST='" + arrest + "')";
+        }
+        if(domestic!=null) {
+            SQLString += "AND (DOMESTIC='" + domestic + "')";
+        }
+
+        System.out.println(SQLString);
+        PreparedStatement s1 = connection.prepareStatement(SQLString);
+        ResultSet rs = s1.executeQuery();
+        return getRecord(rs);
+    }
+
     /**
      * Reads column values from the provided ResultSet object
      *

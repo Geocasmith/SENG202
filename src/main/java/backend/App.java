@@ -5,6 +5,7 @@ import com.opencsv.exceptions.CsvValidationException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -25,6 +26,10 @@ public class App
         //Examples of using the search function with Casenumber and a string for casenumber
         ArrayList<Record> str = d.getDateRange("06/15/2021 09:10:00 AM","06/15/2021 09:43:00 AM");
 
+
+        ArrayList<String> crimeTypes = new ArrayList<String>();
+        ArrayList<String> locationDescriptions = new ArrayList<String>();
+        str = d.getFilter(new SimpleDateFormat("MM/dd/yyyy h:mm:ss a").parse("07/05/2020 12:00:00 PM"),new SimpleDateFormat("MM/dd/yyyy h:mm:ss a").parse("07/18/2020 08:00:00 AM"),crimeTypes,locationDescriptions,null,null,null,null,null,null);
         //Example of using the search function to find a crime at a latitude
         ArrayList<Record> lat = d.searchDB("XCOORDINATE",1176416);
 
@@ -41,8 +46,10 @@ public class App
 //
 //        //Prints out values
 //        System.out.println("For input terms ID and 41.JE267466 you get the objects");
+        int count = 1;
         for (Record r:str){
-            System.out.println(r.toString());
+            System.out.println(count+":"+r.toString());
+            count ++;
         }
 //        System.out.println();
 //
@@ -56,4 +63,5 @@ public class App
 //            System.out.println(r.toString());
 //        }
     }
+
 }
