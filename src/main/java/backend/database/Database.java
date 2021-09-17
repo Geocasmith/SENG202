@@ -1,7 +1,10 @@
 package backend.database;
 
+import backend.CsvReader;
 import backend.Record;
+import com.opencsv.exceptions.CsvValidationException;
 
+import java.io.IOException;
 import java.sql.*;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -474,5 +477,12 @@ public class Database {
         return d.getTime();
     }
 
+    public static void main(String[] args) throws SQLException, CsvValidationException, IOException, ParseException {
+        Database db = new Database();
+        CsvReader csv = new CsvReader();
+        db.connectDatabase();
+        db.insertRows(csv.read());
+        System.out.println("SUccess");
+    }
 }
 
