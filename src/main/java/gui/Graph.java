@@ -33,9 +33,7 @@ public class Graph extends Application {
     private static final int oneMonthInSeconds = 2629746;
     private static final int oneYearInSeconds = 31556952;
     @Override
-    public void start(Stage stage) throws SQLException {
-        Database db = new Database();
-        db.connectDatabase();
+    public void start(Stage stage) {
         stage.setTitle("Simple Graph");
         //defining the axes
         //defining a series
@@ -197,19 +195,15 @@ public class Graph extends Application {
 
     /**
      *
-     * @param db The database object used to retrieve the data
+     * @param data An ArrayList of the crime records wanted to graph
      * @return An XYChart.Series object containing all the data points as a <String, Integer> pair, where the String is
      *         the date and time in string form and the Integer is the number of crimes that occurred in the calculated
      *         timeframe
-     * @throws SQLException
      */
-    private ArrayList<Object> createCrimesOverTimeGraph(Database db) throws SQLException {
+    private ArrayList<Object> createCrimesOverTimeGraph(ArrayList<Record> data){
 
         XYChart.Series series = new XYChart.Series<>();
 
-
-        ArrayList<Record> data;
-        data = db.getAll();
         ArrayList<LocalDateTime> times = new ArrayList<>();
 
         for (Record r: data) {
@@ -233,16 +227,13 @@ public class Graph extends Application {
 
     /**
      *
-     * @param db The database object used to retrieve the data
+     * @param data An ArrayList of the crime records wanted to graph
      * @param wards An ArrayList of integers which contains the wards that need to be graphed
      * @return An XYChart.Series object containing all the data points as a <String, Integer> pair, where the String is
      *         the date and time in string form and the Integer is the number of crimes that occurred in the calculated
      *         timeframe
-     * @throws SQLException
      */
-    private ArrayList<Object> createCrimesPerWardOverTimeGraph(Database db, ArrayList<Integer> wards) throws SQLException {
-
-        ArrayList<Record> data = db.getAll();
+    private ArrayList<Object> createCrimesPerWardOverTimeGraph(ArrayList<Record> data, ArrayList<Integer> wards) {
 
         ArrayList<XYChart.Series> seriesList = new ArrayList<>();
         ArrayList<ArrayList<LocalDateTime>> timesList = new ArrayList<>();
@@ -286,16 +277,13 @@ public class Graph extends Application {
 
     /**
      *
-     * @param db The database object used to retrieve the data
+     * @param data An ArrayList of the crime records wanted to graph
      * @param crimeTypes An ArrayList of Strings which contains the types of crimes that need to be graphed
      * @return An XYChart.Series object containing all the data points as a <String, Integer> pair, where the String is
      *         the date and time in string form and the Integer is the number of crimes that occurred in the calculated
      *         timeframe
-     * @throws SQLException
      */
-    private ArrayList<Object> createCrimesPerTypeOverTimeGraph(Database db, ArrayList<String> crimeTypes) throws SQLException {
-
-        ArrayList<Record> data = db.getAll();
+    private ArrayList<Object> createCrimesPerTypeOverTimeGraph(ArrayList<Record> data, ArrayList<String> crimeTypes) {
 
         ArrayList<XYChart.Series> seriesList = new ArrayList<>();
         ArrayList<ArrayList<LocalDateTime>> timesList = new ArrayList<>();
@@ -339,16 +327,13 @@ public class Graph extends Application {
 
     /**
      *
-     * @param db The database object used to retrieve the data
+     * @param data An ArrayList of the crime records wanted to graph
      * @param crimeBeats An ArrayList of integers which contains the beats that need to be graphed
      * @return An XYChart.Series object containing all the data points as a <String, Integer> pair, where the String is
      *         the date and time in string form and the Integer is the number of crimes that occurred in the calculated
      *         timeframe
-     * @throws SQLException
      */
-    private ArrayList<Object> createCrimesPerBeatOverTimeGraph(Database db, ArrayList<Integer> crimeBeats) throws SQLException {
-
-        ArrayList<Record> data = db.getAll();
+    private ArrayList<Object> createCrimesPerBeatOverTimeGraph(ArrayList<Record> data, ArrayList<Integer> crimeBeats) {
 
         ArrayList<XYChart.Series> seriesList = new ArrayList<>();
         ArrayList<ArrayList<LocalDateTime>> timesList = new ArrayList<>();
