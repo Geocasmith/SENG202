@@ -1,20 +1,27 @@
 package gui;
 
+import backend.CsvReader;
 import backend.InputValidator;
 import backend.database.Database;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import backend.Record;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.apache.commons.lang3.ObjectUtils;
 import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.CheckModel;
 import org.controlsfx.control.IndexedCheckModel;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.Instant;
@@ -23,6 +30,8 @@ import java.time.ZoneId;
 import java.util.*;
 
 public class MainController {
+
+    @FXML private TabTableController tabTableController;
 
     // Filter Sidebar Elements
     @FXML
@@ -65,7 +74,7 @@ public class MainController {
      * Sets up combo boxes in filter pane
      * Sets filter pane as expanded
      */
-    public void filterSetup() throws SQLException, IOException, CsvValidationException {
+    public void filterSetup() throws SQLException, IOException, CsvValidationException, java.io.IOException {
         // Sets filter pane to expanded pane
         sidebarAccordion.setExpandedPane(filterPane);
 
@@ -93,6 +102,7 @@ public class MainController {
 
         // Set values for location description combo box
         locationDescriptionComboBox.getItems().addAll(locationDescriptions);
+
     }
 
     /**
@@ -106,16 +116,16 @@ public class MainController {
     /**
      * Applies all currently selected filters
      */
-    public void applyFilters() {
+    public void applyFilters() throws SQLException, IOException {
         // Initialize variables for filter
         Date startDate = null;
         Date endDate = null;
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
-        String wards = "*";
-        String beats = "*";
-        String lat = "*";
-        String lon = "*";
+        String wards = null;
+        String beats = null;
+        String lat = null;
+        String lon = null;
         int radius = 0;
         String arrest = null;
         String domestic = null;
@@ -154,25 +164,26 @@ public class MainController {
         // Get values for each text field as long as they aren't empty
         // Wards
         String text;
-        text = filterWardTextField.getText().trim();
-        if (!text.isEmpty()) {
+        text = filterWardTextField.getText();
+        if (!(text == "")) {
             wards = text;
         }
         // Beats
-        text = filterBeatsTextField.getText().trim();
-        if (!text.isEmpty()) {
+        text = filterBeatsTextField.getText();
+        if (!(text == "")) {
             beats = text;
         }
         // Latitude
-        text = filterLatTextField.getText().trim();
-        if (!text.isEmpty()) {
+        text = filterLatTextField.getText();
+        if (!(text == "")) {
             lat = text;
         }
         // Longitude
-        text = filterLongTextField.getText().trim();
-        if (!text.isEmpty()) {
+        text = filterLongTextField.getText();
+        if (!(text == "")) {
             lon = text;
         }
+
 
         // Get value for radius
         radius = (int) Math.round(radiusSlider.getValue());
@@ -187,9 +198,13 @@ public class MainController {
             arrest = text;
         }
 
-
-
+        ArrayList<Record> records = Database.getFilter(startDate,endDate,crimeTypes, locationDescriptions, wards, beats, lat, lon, radius, arrest, domestic);
+        // Set table to records
+        tabTableController.setTableRecords(records);
     }
+
+
+
 
     /**
      * Sets all filter parameters back to default
@@ -203,11 +218,27 @@ public class MainController {
         filterBeatsTextField.setText(null);
         filterLatTextField.setText(null);
         filterLongTextField.setText(null);
-        radiusSlider.setValue(1);
-        radiusLabel.setText("1 km");
+        radiusSlider.setValue(0);
+        radiusLabel.setText("0 km");
         arrestComboBox.getSelectionModel().select("");
         domesticComboBox.getSelectionModel().select("");
 
+    }
+
+    /**
+     * Opens file explorer for user to select a csv file to import
+     * @return
+     */
+    public String getPathToCsv() {
+        String filepath = null;
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select csv file");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"),
+                                                 new FileChooser.ExtensionFilter("All Files", "*.*"));
+        File selectedFile = fileChooser.showOpenDialog(new Stage());
+        filepath = selectedFile.getAbsolutePath();
+
+        return filepath;
     }
 
 }

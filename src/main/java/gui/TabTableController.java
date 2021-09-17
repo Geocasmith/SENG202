@@ -233,4 +233,13 @@ public class TabTableController {
     public void addRecordsToTable(Record rec) {
         mainTableView.getItems().add(rec);
     }
+
+    /**
+     * Sets the record objects displayed in table to those contained in an arraylist.
+     * @param records An ArrayList of record objects to be displayed in the table
+     */
+    public void setTableRecords(ArrayList<Record> records) {
+        mainTableView.getItems().clear();
+        addRecordsToTable(records);
+    }
 }
