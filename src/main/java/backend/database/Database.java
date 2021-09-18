@@ -558,7 +558,7 @@ public class Database {
         Database db = new Database();
         CsvReader csv = new CsvReader();
         db.connectDatabase();
-        db.insertRows(csv.read());
+        db.insertRows(csv.read("full_crimes.csv"));
         System.out.println("SUccess");
     }
 }

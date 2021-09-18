@@ -1,106 +1,31 @@
-package gui;
+package backend;
 
-import backend.DataAnalyser;
-import backend.Record;
-import backend.database.Database;
-import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.scene.chart.*;
-import javafx.stage.Stage;
-
-import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class Graph extends Application {
+public class GraphCreator {
     private static final DateTimeFormatter hourFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy hh a", Locale.ENGLISH);
     private static final DateTimeFormatter dayWeekFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.ENGLISH);
     private static final DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MM/yyyy", Locale.ENGLISH);
     private static final DateTimeFormatter yearFormatter = DateTimeFormatter.ofPattern("yyyy", Locale.ENGLISH);
 
-
-
-
-
-
     private static final DataAnalyser dataAnalyser = new DataAnalyser();
+
     private static final int oneHourInSeconds = 3600;
     private static final int oneDayInSeconds = 86400;
     private static final int oneWeekInSeconds = 604800;
     private static final int oneMonthInSeconds = 2629746;
     private static final int oneYearInSeconds = 31556952;
-    @Override
-    public void start(Stage stage) {
-        stage.setTitle("Simple Graph");
-        //defining the axes
-        //defining a series
-        XYChart.Series series;
-         ArrayList<Object> returnedInfo = createCrimesOverTimeGraph(db);
-         series = (XYChart.Series) returnedInfo.get(1);
-         String label = (String) returnedInfo.get(0);
 
-
-
-
-
-//        Scene scene  = new Scene(barChart,1920,1080);
-//        barChart.getData().add(series);
-
-//        ArrayList<Integer> wards = new ArrayList<>(Arrays.asList(1, 2, 32, 7, 23, 28, 12));
-//        Collections.sort(wards);
-//
-//        ArrayList<XYChart.Series> seriesList = createCrimesPerWardOverTimeGraph(db, wards);
-//        Scene scene  = new Scene(lineChart,1920,1080);
-//        for (int ward : wards) {
-//            lineChart.getData().add(seriesList.get(wards.indexOf(ward)));
-//        }
-
-        ArrayList<String> crimeTypes = new ArrayList<>(Arrays.asList("THEFT", "ASSAULT", "HOMICIDE"));
-
-        ArrayList<XYChart.Series> seriesList;
-        returnedInfo = createCrimesPerTypeOverTimeGraph(db, crimeTypes);
-        seriesList = (ArrayList<XYChart.Series>) returnedInfo.get(1);
-        label = (String) returnedInfo.get(0);
-
-        final CategoryAxis xAxis = new CategoryAxis();
-        final NumberAxis yAxis = new NumberAxis();
-        xAxis.setLabel("Time (" + label + ")");
-        yAxis.setLabel("Number of Crimes");
-        //creating the chart
-        final BarChart barChart = new BarChart(xAxis,yAxis);
-        barChart.setTitle("Crimes by Time");
-
-        final CategoryAxis xAxis2 = new CategoryAxis();
-        final NumberAxis yAxis2 = new NumberAxis();
-        xAxis2.setLabel("Time (" + label + ")");
-        yAxis2.setLabel("Number of Crimes Per Ward");
-        //creating the chart
-        final LineChart lineChart = new LineChart(xAxis2,yAxis2);
-        lineChart.setTitle("Crimes per Ward by Time");
-
-        Scene scene  = new Scene(lineChart,1920,1080);
-        for (String crimetype : crimeTypes) {
-            lineChart.getData().add(seriesList.get(crimeTypes.indexOf(crimetype)));
-        }
-//
-//        ArrayList<Integer> beats = new ArrayList<>(Arrays.asList(1213, 1121, 332, 1724));
-//        Collections.sort(beats);
-//
-//        ArrayList<XYChart.Series> seriesList = createCrimesPerBeatOverTimeGraph(db, beats);
-//        Scene scene  = new Scene(lineChart,1920,1080);
-//        for (int beat : beats) {
-//            lineChart.getData().add(seriesList.get(beats.indexOf(beat)));
-//        }
-
-        stage.setScene(scene);
-        stage.show();
-    }
-
-
-
+    /**
+     * Rounds the given LocalDateTime down to the given duration
+     * @param timeToRound A LocalDateTime object that needs to be rounded
+     * @param requiredDuration A string containing the time duration the timeToRound needs to be rounded down to
+     * @return A LocalDateTime object that has been rounded to the given duration
+     */
     private LocalDateTime roundDateTime(LocalDateTime timeToRound, String requiredDuration) {
         if (Objects.equals(requiredDuration, "Hours")) {
             timeToRound.withMinute(0).withSecond(0);
@@ -113,8 +38,6 @@ public class Graph extends Application {
                 timeToRound.withDayOfMonth(7);
             } else if (timeToRound.getDayOfMonth() <=21) {
                 timeToRound.withDayOfMonth(14);
-            } else if (timeToRound.getDayOfMonth() <=28) {
-                timeToRound.withDayOfMonth(21);
             } else {
                 timeToRound.withDayOfMonth(21);
             }
@@ -126,6 +49,13 @@ public class Graph extends Application {
         return timeToRound;
     }
 
+    /**
+     * Calculates the total range of the given list of LocalDateTime objects and uses that range to choose the spacing
+     * for the graph that fits the best
+     * @param times A sorted arrayList of LocalDateTimes
+     * @return An ArrayList of Objects containing a String of the required duration, a DateTime formatter and a Duration
+     *         object of the required time period
+     */
     private ArrayList<Object> calculateFormatForGraph(ArrayList<LocalDateTime> times) {
         Duration width = dataAnalyser.calculateTimeDifference(times.get(0), times.get(times.size() - 1));
         Duration periodInSeconds;
@@ -152,15 +82,12 @@ public class Graph extends Application {
             formatter = yearFormatter;
             periodInSeconds = Duration.ofSeconds(oneYearInSeconds);
         }
-        requiredDuration = "Weeks";
-        formatter = dayWeekFormatter;
-        periodInSeconds = Duration.ofSeconds(oneWeekInSeconds);
         return new ArrayList<>(Arrays.asList(requiredDuration, formatter, periodInSeconds));
     }
 
     /**
      *
-     * @param times An ArrayList of times
+     * @param times An ArrayList of LocalDateTime Objects
      * @param periodInSeconds
      * @param formatter
      * @param series
@@ -200,7 +127,7 @@ public class Graph extends Application {
      *         the date and time in string form and the Integer is the number of crimes that occurred in the calculated
      *         timeframe
      */
-    private ArrayList<Object> createCrimesOverTimeGraph(ArrayList<Record> data){
+    public ArrayList<Object> createCrimesOverTimeGraph(ArrayList<Record> data){
 
         XYChart.Series series = new XYChart.Series<>();
 
@@ -233,7 +160,7 @@ public class Graph extends Application {
      *         the date and time in string form and the Integer is the number of crimes that occurred in the calculated
      *         timeframe
      */
-    private ArrayList<Object> createCrimesPerWardOverTimeGraph(ArrayList<Record> data, ArrayList<Integer> wards) {
+    public ArrayList<Object> createCrimesPerWardOverTimeGraph(ArrayList<Record> data, ArrayList<Integer> wards) {
 
         ArrayList<XYChart.Series> seriesList = new ArrayList<>();
         ArrayList<ArrayList<LocalDateTime>> timesList = new ArrayList<>();
@@ -283,7 +210,7 @@ public class Graph extends Application {
      *         the date and time in string form and the Integer is the number of crimes that occurred in the calculated
      *         timeframe
      */
-    private ArrayList<Object> createCrimesPerTypeOverTimeGraph(ArrayList<Record> data, ArrayList<String> crimeTypes) {
+    public ArrayList<Object> createCrimesPerTypeOverTimeGraph(ArrayList<Record> data, ArrayList<String> crimeTypes) {
 
         ArrayList<XYChart.Series> seriesList = new ArrayList<>();
         ArrayList<ArrayList<LocalDateTime>> timesList = new ArrayList<>();
@@ -333,7 +260,7 @@ public class Graph extends Application {
      *         the date and time in string form and the Integer is the number of crimes that occurred in the calculated
      *         timeframe
      */
-    private ArrayList<Object> createCrimesPerBeatOverTimeGraph(ArrayList<Record> data, ArrayList<Integer> crimeBeats) {
+    public ArrayList<Object> createCrimesPerBeatOverTimeGraph(ArrayList<Record> data, ArrayList<Integer> crimeBeats) {
 
         ArrayList<XYChart.Series> seriesList = new ArrayList<>();
         ArrayList<ArrayList<LocalDateTime>> timesList = new ArrayList<>();
@@ -372,13 +299,5 @@ public class Graph extends Application {
             }
         }
         return new ArrayList<>(Arrays.asList(requiredDuration, seriesList));
-    }
-
-
-
-
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

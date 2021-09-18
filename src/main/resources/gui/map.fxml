@@ -1,44 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.web.WebView?>
 
-<BorderPane fx:id="map" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MapController">
-   <top>
-      <MenuBar BorderPane.alignment="CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem fx:id="plot" mnemonicParsing="false" onAction="#plotPoint" text="Plot" />
-                  <MenuItem mnemonicParsing="false" onAction="#deleteMarkers" text="Delete" />
-                  <MenuItem fx:id="plot1" mnemonicParsing="false" onAction="#plotPoint" text="Import CSV" />
-                  <MenuItem fx:id="plot11" mnemonicParsing="false" onAction="#plotPoint" text="Export CSV" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Analysis">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Distance" />
-                  <MenuItem mnemonicParsing="false" text="Time" />
-            </items>
-          </Menu>
-            <Menu mnemonicParsing="false" text="Sort">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="Case#" />
-                  <MenuItem mnemonicParsing="false" text="Date" />
-                  <MenuItem mnemonicParsing="false" text="Type" />
-               </items>
-            </Menu>
-        </menus>
-      </MenuBar>
-   </top>
+<BorderPane fx:id="map" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MapController">
    <center>
       <WebView fx:id="webView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </center>

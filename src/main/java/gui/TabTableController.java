@@ -242,4 +242,12 @@ public class TabTableController {
         mainTableView.getItems().clear();
         addRecordsToTable(records);
     }
+
+    public ArrayList<Record> getDisplayedRecords() {
+        ArrayList<Record> currentRecords = new ArrayList<>();
+        for (Object o : mainTableView.getItems()) {
+            currentRecords.add((Record) o);
+        }
+        return currentRecords;
+    }
 }

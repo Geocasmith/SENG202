@@ -1,9 +1,11 @@
 package gui;
 
-import backend.CsvReader;
-import backend.InputValidator;
+import backend.*;
+import backend.Record;
 import backend.database.Database;
 import com.opencsv.exceptions.CsvValidationException;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +13,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import backend.Record;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
@@ -23,6 +24,7 @@ import org.controlsfx.control.IndexedCheckModel;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Array;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -31,7 +33,14 @@ import java.util.*;
 
 public class MainController {
 
-    @FXML private TabTableController tabTableController;
+    @FXML
+    private TabTableController tabTableController;
+
+    @FXML
+    private DataAnalyser dataAnalyser = new DataAnalyser(DataManipulator.getAllRecords());
+
+    @FXML
+    private GraphController graphController;
 
     // Filter Sidebar Elements
     @FXML
@@ -63,10 +72,24 @@ public class MainController {
     @FXML
     private TextField filterLongTextField;
 
+    // Graph Sidebar Elements
+    @FXML
+    private ComboBox graphTypeComboBox;
+    @FXML
+    private Button generateGraphButton;
+    @FXML
+    private CheckComboBox graphFilterComboBox;
+
+
+
+    public MainController() throws SQLException {
+    }
+
 
     @FXML
     private void initialize() throws SQLException, IOException, CsvValidationException {
         filterSetup();
+        graphSetup();
     }
 
 
@@ -102,6 +125,110 @@ public class MainController {
 
         // Set values for location description combo box
         locationDescriptionComboBox.getItems().addAll(locationDescriptions);
+
+    }
+
+    /**
+     * Sets up combo boxes in the graph pane
+     */
+    public void graphSetup() {
+        graphTypeComboBox.getItems().addAll( "", "All Crimes", "Crimes Per Ward", "Crimes Per Beat", "Crimes Per Type");
+        graphTypeComboBox.getSelectionModel().select("");
+
+//        graphFilterComboBox.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+//            public void onChanged(ListChangeListener.Change<? extends String> c) {
+//                ObservableList<Integer> indicesToCheck = (ObservableList<Integer>) graphFilterComboBox.getCheckModel().getCheckedIndices();
+//                for (Object o : indicesToCheck) {
+//                    System.out.println(o);
+//                }
+//                if (graphFilterComboBox.getCheckModel().getCheckedItems().size() > 5) {
+//
+//
+//                    graphFilterComboBox.getCheckModel().checkAll();
+//                    graphFilterComboBox.getCheckModel().clearChecks();
+//                    for (Object index : indicesToCheck.subList(0, 4)) {
+//                        graphFilterComboBox.getCheckModel().check(index);
+//                    }
+//
+//                }
+//            }
+//        });
+
+
+    }
+
+
+    public void showGraphOptions() {
+
+        if (graphTypeComboBox.getValue().equals("All Crimes")) {
+            graphFilterComboBox.setVisible(false);
+            generateGraphButton.setVisible(true);
+            generateGraphButton.setDisable(false);
+        } else if (graphTypeComboBox.getValue().equals("Crimes Per Ward")) {
+            graphFilterComboBox.setVisible(true);
+            generateGraphButton.setVisible(true);
+            generateGraphButton.setDisable(false);
+            ArrayList<Integer> crimeWards = dataAnalyser.getCrimeWards();
+            graphFilterComboBox.getItems().clear();
+            graphFilterComboBox.getItems().addAll(crimeWards);
+
+        } else if (graphTypeComboBox.getValue().equals("Crimes Per Beat")) {
+            graphFilterComboBox.setVisible(true);
+            generateGraphButton.setVisible(true);
+            generateGraphButton.setDisable(false);
+            ArrayList<Integer> crimeBeats = dataAnalyser.getCrimeBeats();
+            graphFilterComboBox.getItems().clear();
+            graphFilterComboBox.getItems().addAll(crimeBeats);
+
+        } else if (graphTypeComboBox.getValue().equals("Crimes Per Type")) {
+            graphFilterComboBox.setVisible(true);
+            generateGraphButton.setVisible(true);
+            generateGraphButton.setDisable(false);
+            ArrayList<String> crimeTypes = dataAnalyser.getCrimeTypes();
+            graphFilterComboBox.getItems().clear();
+            graphFilterComboBox.getItems().addAll(crimeTypes);
+
+        } else {
+            graphFilterComboBox.setVisible(false);
+            generateGraphButton.setVisible(false);
+            generateGraphButton.setDisable(true);
+        }
+    }
+
+    public void generateGraph() {
+        ArrayList<Record> currentRecords = tabTableController.getDisplayedRecords();
+        if (graphTypeComboBox.getValue().equals("All Crimes")) {
+            graphController.createCrimesOverTimeGraph(currentRecords);
+
+        } else if (graphTypeComboBox.getValue().equals("Crimes Per Ward")) {
+            ArrayList<Integer> checkedWards = new ArrayList<>();
+            ObservableList<Integer> checkedIndices = (ObservableList<Integer>) graphFilterComboBox.getCheckModel().getCheckedIndices();
+            for (Integer index : checkedIndices)
+            {
+                checkedWards.add((int) graphFilterComboBox.getCheckModel().getItem(index));
+            }
+            graphController.createCrimesPerWardOverTimeGraph(currentRecords, checkedWards);
+
+
+        } else if (graphTypeComboBox.getValue().equals("Crimes Per Beat")) {
+            ArrayList<Integer> checkedBeats = new ArrayList<>();
+            ObservableList<Integer> checkedIndices = (ObservableList<Integer>) graphFilterComboBox.getCheckModel().getCheckedIndices();
+            for (Integer index : checkedIndices)
+            {
+                checkedBeats.add((int) graphFilterComboBox.getCheckModel().getItem(index));
+            }
+            graphController.createCrimesPerBeatOverTimeGraph(currentRecords, checkedBeats);
+
+        } else if (graphTypeComboBox.getValue().equals("Crimes Per Type")) {
+            ArrayList<String> checkedTypes = new ArrayList<>();
+            ObservableList<Integer> checkedIndices = (ObservableList<Integer>) graphFilterComboBox.getCheckModel().getCheckedIndices();
+            for (Integer index : checkedIndices)
+            {
+                checkedTypes.add((String) graphFilterComboBox.getCheckModel().getItem(index));
+            }
+            graphController.createCrimesPerTypeOverTimeGraph(currentRecords, checkedTypes);
+
+        }
 
     }
 

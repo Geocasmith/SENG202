@@ -19,7 +19,8 @@ class DatabaseTest {
         ArrayList<Object> extractedCol = new ArrayList<>();
         extractedCol = db.extractCol(2);
         for (int i = 0; i < extractedCol.size(); i++) {
-            System.out.println(extractedCol.get(i));
+//            System.out.println(extractedCol.get(i));
+            continue;
         }
 
     }
@@ -33,7 +34,7 @@ class DatabaseTest {
 
         int count = 1;
         for (Record r:str){
-            System.out.println(count+":"+r.toString());
+//            System.out.println(count+":"+r.toString());
             count ++;
         }
     }
@@ -48,7 +49,7 @@ class DatabaseTest {
 
         int count = 1;
         for (Record r:str){
-            System.out.println(count+":"+r.toString());
+//            System.out.println(count+":"+r.toString());
             count ++;
         }
     }
@@ -62,7 +63,7 @@ class DatabaseTest {
 
         int count = 1;
         for (Record r:str){
-            System.out.println(count+":"+r.toString());
+//            System.out.println(count+":"+r.toString());
             count ++;
         }
     }
@@ -76,7 +77,7 @@ class DatabaseTest {
 
         int count = 1;
         for (Record r:str){
-            System.out.println(count+":"+r.toString());
+//            System.out.println(count+":"+r.toString());
             count ++;
         }
     }
@@ -97,7 +98,7 @@ class DatabaseTest {
 
         int count = 1;
         for (Record r:str){
-            System.out.println(count+":"+r.toString());
+//            System.out.println(count+":"+r.toString());
             count ++;
         }
     }
@@ -119,7 +120,7 @@ class DatabaseTest {
 
         int count = 1;
         for (Record r:str){
-            System.out.println(count+":"+r.toString());
+//            System.out.println(count+":"+r.toString());
             count ++;
         }
     }
@@ -162,7 +163,7 @@ class DatabaseTest {
 
         int count = 1;
         for (Record r:str){
-            System.out.println(count+":"+r.toString());
+//            System.out.println(count+":"+r.toString());
             count ++;
             assert ward.equals(Integer.toString(r.getWard()));
 
@@ -185,7 +186,7 @@ class DatabaseTest {
 
             int count = 1;
             for (Record r : str) {
-                System.out.println(count + ":" + r.toString());
+//                System.out.println(count + ":" + r.toString());
                 count++;
 
 
@@ -211,7 +212,7 @@ class DatabaseTest {
 
         int count = 1;
         for (Record r:str){
-            System.out.println(count+":"+r.toString());
+//            System.out.println(count+":"+r.toString());
             count ++;
             assert beat.equals(Integer.toString(r.getBeat()));
 
@@ -234,7 +235,7 @@ class DatabaseTest {
 
             int count = 1;
             for (Record r : str) {
-                System.out.println(count + ":" + r.toString());
+//                System.out.println(count + ":" + r.toString());
                 count++;
 
 
@@ -260,7 +261,7 @@ class DatabaseTest {
 
         int count = 1;
         for (Record r:str){
-            System.out.println(count+":"+r.toString());
+//            System.out.println(count+":"+r.toString());
             count ++;
 
 
@@ -281,7 +282,7 @@ class DatabaseTest {
 
         int count = 1;
         for (Record r:str){
-            System.out.println(count+":"+r.toString());
+//            System.out.println(count+":"+r.toString());
             count ++;
 
 
@@ -304,7 +305,7 @@ class DatabaseTest {
 
         int count = 1;
         for (Record r:str){
-            System.out.println(count+":"+r.toString());
+//            System.out.println(count+":"+r.toString());
             count ++;
 
         }
@@ -325,7 +326,7 @@ class DatabaseTest {
 
         int count = 1;
         for (Record r:str){
-            System.out.println(count+":"+r.toString());
+//            System.out.println(count+":"+r.toString());
             count ++;
 
         }
@@ -345,7 +346,7 @@ class DatabaseTest {
 
         int count = 1;
         for (Record r:str){
-            System.out.println(count+":"+r.toString());
+//            System.out.println(count+":"+r.toString());
             count ++;
 
         }

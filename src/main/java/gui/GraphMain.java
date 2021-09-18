@@ -1,7 +1,9 @@
-package gui;
-
-public class GraphMain {
-    public static void main(String[] args) {
-        Graph.main(args);
-    }
-}
+//package gui;
+//
+//import backend.GraphCreator;
+//
+//public class GraphMain {
+//    public static void main(String[] args) {
+//        GraphCreator.main(args);
+//    }
+//}

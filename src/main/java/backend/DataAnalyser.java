@@ -1,8 +1,42 @@
 package backend;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class DataAnalyser {
+
+    ArrayList<Integer> crimeWards = new ArrayList<>();
+    ArrayList<String> crimeTypes = new ArrayList<>();
+    ArrayList<Integer> crimeBeats = new ArrayList<>();
+
+    public DataAnalyser() {
+
+    }
+
+    /**
+     *
+     * @param records
+     */
+    public DataAnalyser(ArrayList<Record> records) {
+        for (Record record : records) {
+            if (!crimeWards.contains(record.getWard())) {
+                crimeWards.add(record.getWard());
+            }
+            if (!crimeTypes.contains(record.getPrimaryDescription())) {
+                crimeTypes.add(record.getPrimaryDescription());
+            }
+            if (!crimeBeats.contains(record.getBeat())) {
+                crimeBeats.add(record.getBeat());
+            }
+        }
+        Collections.sort(crimeTypes);
+        Collections.sort(crimeWards);
+        Collections.sort(crimeBeats);
+    }
+
+
 
     /**
      * Calculates the absolute value of the time difference between the crimes
@@ -57,5 +91,17 @@ public class DataAnalyser {
 
         // Convert to meters and round to the nearest integer
         return (int) Math.round(result * 1000.0);
+    }
+
+    public ArrayList<String> getCrimeTypes() {
+        return crimeTypes;
+    }
+
+    public ArrayList<Integer> getCrimeBeats() {
+        return crimeBeats;
+    }
+
+    public ArrayList<Integer> getCrimeWards() {
+        return crimeWards;
     }
 }
