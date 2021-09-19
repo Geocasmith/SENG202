@@ -40,7 +40,7 @@ public class MainController {
     private DataAnalyser dataAnalyser = new DataAnalyser(DataManipulator.getAllRecords());
 
     @FXML
-    private GraphController graphController;
+    private GraphController graphTabController;
 
     // Filter Sidebar Elements
     @FXML
@@ -198,7 +198,7 @@ public class MainController {
     public void generateGraph() {
         ArrayList<Record> currentRecords = tabTableController.getDisplayedRecords();
         if (graphTypeComboBox.getValue().equals("All Crimes")) {
-            graphController.createCrimesOverTimeGraph(currentRecords);
+            graphTabController.createCrimesOverTimeGraph(currentRecords);
 
         } else if (graphTypeComboBox.getValue().equals("Crimes Per Ward")) {
             ArrayList<Integer> checkedWards = new ArrayList<>();
@@ -207,7 +207,7 @@ public class MainController {
             {
                 checkedWards.add((int) graphFilterComboBox.getCheckModel().getItem(index));
             }
-            graphController.createCrimesPerWardOverTimeGraph(currentRecords, checkedWards);
+            graphTabController.createCrimesPerWardOverTimeGraph(currentRecords, checkedWards);
 
 
         } else if (graphTypeComboBox.getValue().equals("Crimes Per Beat")) {
@@ -217,7 +217,7 @@ public class MainController {
             {
                 checkedBeats.add((int) graphFilterComboBox.getCheckModel().getItem(index));
             }
-            graphController.createCrimesPerBeatOverTimeGraph(currentRecords, checkedBeats);
+            graphTabController.createCrimesPerBeatOverTimeGraph(currentRecords, checkedBeats);
 
         } else if (graphTypeComboBox.getValue().equals("Crimes Per Type")) {
             ArrayList<String> checkedTypes = new ArrayList<>();
@@ -226,7 +226,7 @@ public class MainController {
             {
                 checkedTypes.add((String) graphFilterComboBox.getCheckModel().getItem(index));
             }
-            graphController.createCrimesPerTypeOverTimeGraph(currentRecords, checkedTypes);
+            graphTabController.createCrimesPerTypeOverTimeGraph(currentRecords, checkedTypes);
 
         }
 
