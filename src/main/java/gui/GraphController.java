@@ -16,7 +16,6 @@ public class GraphController {
     CategoryAxis xAxis = new CategoryAxis();
     NumberAxis yAxis = new NumberAxis();
 
-    BarChart barChart = new BarChart(xAxis, yAxis);
     LineChart lineChart = new LineChart(xAxis, yAxis);
 
     @FXML
@@ -41,6 +40,15 @@ public class GraphController {
         lineChart.setTitle("Number of Crimes Per Type Over Time");
         xAxis.setLabel("Time (" + label + ")");
         yAxis.setLabel("Number of Crimes Per Type");
+
+        lineChart.getData().clear();
+        lineChart.setLegendVisible(true);
+
+        for (String crimeType : crimeTypes) {
+            lineChart.getData().add(seriesList.get(crimeTypes.indexOf(crimeType)));
+        }
+
+        graphBorderPane.setCenter(lineChart);
     }
     public void createCrimesPerBeatOverTimeGraph(ArrayList<Record> currentRecords, ArrayList<Integer> crimeBeats) {
         ArrayList<Record> filteredRecords = new ArrayList<>();
@@ -56,6 +64,15 @@ public class GraphController {
         lineChart.setTitle("Number of Crimes Per Beat Over Time");
         xAxis.setLabel("Time (" + label + ")");
         yAxis.setLabel("Number of Crimes Per Beat");
+
+        lineChart.getData().clear();
+        lineChart.setLegendVisible(true);
+
+        for (int beat : crimeBeats) {
+            lineChart.getData().add(seriesList.get(crimeBeats.indexOf(beat)));
+        }
+
+        graphBorderPane.setCenter(lineChart);
     }
 
     public void createCrimesPerWardOverTimeGraph(ArrayList<Record> currentRecords, ArrayList<Integer> crimeWards) {
@@ -73,6 +90,9 @@ public class GraphController {
         xAxis.setLabel("Time (" + label + ")");
         yAxis.setLabel("Number of Crimes Per Ward");
 
+        lineChart.getData().clear();
+        lineChart.setLegendVisible(true);
+
         for (int ward : crimeWards) {
             lineChart.getData().add(seriesList.get(crimeWards.indexOf(ward)));
         }
@@ -87,11 +107,15 @@ public class GraphController {
         XYChart.Series series = (XYChart.Series) returnedInfo.get(1);
         String label = (String) returnedInfo.get(0);
 
-        barChart.setTitle("Crimes by Time");
+        lineChart.setTitle("Crimes Over Time");
         xAxis.setLabel("Time (" + label + ")");
         yAxis.setLabel("Number of Crimes");
 
-        barChart.getData().add(series);
+        lineChart.setLegendVisible(false);
+        lineChart.getData().clear();
+        lineChart.getData().add(series);
+
+        graphBorderPane.setCenter(lineChart);
     }
 
     public void start(Stage stage) {

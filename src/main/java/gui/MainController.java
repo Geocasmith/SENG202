@@ -160,6 +160,8 @@ public class MainController {
 
     public void showGraphOptions() {
 
+        graphFilterComboBox.getCheckModel().clearChecks();
+
         if (graphTypeComboBox.getValue().equals("All Crimes")) {
             graphFilterComboBox.setVisible(false);
             generateGraphButton.setVisible(true);
