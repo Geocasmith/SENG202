@@ -12,6 +12,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
@@ -22,14 +25,19 @@ import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.CheckModel;
 import org.controlsfx.control.IndexedCheckModel;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.sql.Array;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.List;
 
 public class MainController {
 
@@ -87,9 +95,13 @@ public class MainController {
 
 
     @FXML
-    private void initialize() throws SQLException, IOException, CsvValidationException {
+    private void initialize() throws SQLException, IOException, CsvValidationException, URISyntaxException {
         filterSetup();
         graphSetup();
+        // Example link opener code
+//        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+//            Desktop.getDesktop().browse(new URI("hello"));
+//        }
     }
 
 
@@ -125,6 +137,8 @@ public class MainController {
 
         // Set values for location description combo box
         locationDescriptionComboBox.getItems().addAll(locationDescriptions);
+
+        clearFilters();
 
     }
 
@@ -330,6 +344,7 @@ public class MainController {
         ArrayList<Record> records = Database.getFilter(startDate,endDate,crimeTypes, locationDescriptions, wards, beats, lat, lon, radius, arrest, domestic);
         // Set table to records
         tabTableController.setTableRecords(records);
+        
     }
 
 
