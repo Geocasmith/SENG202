@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,6 +19,8 @@ public class MainGUI extends Application {
         primaryStage.setMinHeight(840);
         primaryStage.setMinWidth(1020);
         primaryStage.show();
+
+
 
 
     }

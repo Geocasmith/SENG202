@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class TabTableController {
+public class TableTabController {
     @FXML private BorderPane tabTable;
     @FXML private TableView mainTableView;
     @FXML private FlowPane mainTableTogglePane;

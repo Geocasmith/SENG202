@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
-public class GraphController {
+public class GraphTabController {
     GraphCreator graphCreator = new GraphCreator();
 
     CategoryAxis xAxis = new CategoryAxis();
@@ -25,6 +25,8 @@ public class GraphController {
     private void initialize() {
 
     }
+
+
 
     public void createCrimesPerTypeOverTimeGraph(ArrayList<Record> currentRecords, ArrayList<String> crimeTypes) {
         ArrayList<Record> filteredRecords = new ArrayList<>();
