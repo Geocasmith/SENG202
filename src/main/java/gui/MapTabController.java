@@ -9,7 +9,7 @@ import javafx.scene.web.WebView;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class MapController {
+public class MapTabController {
     @FXML
     private WebView webView;
 

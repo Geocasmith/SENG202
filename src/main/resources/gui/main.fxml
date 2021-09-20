@@ -64,11 +64,16 @@
                   <fx:include fx:id="graphTab" source="graphTab.fxml" />
               </content>
             </Tab>
-          <Tab onSelectionChanged="#refreshMarkers" styleClass="mainTab" text="Map">
+          <Tab onSelectionChanged="#refreshMarkers" styleClass="mainTab" text="Map" >
             <content>
                 <fx:include fx:id="mapTab" source="mapTab.fxml" />
             </content>
-          </Tab>
+        </Tab>
+            <Tab text="Web Browser">
+               <content>
+                <fx:include fx:id="browserTab" source="browserTab.fxml" />
+               </content>
+            </Tab>
         </tabs>
       </TabPane>
    </center>

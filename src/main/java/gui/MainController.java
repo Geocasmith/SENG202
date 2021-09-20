@@ -4,34 +4,20 @@ import backend.*;
 import backend.Record;
 import backend.database.Database;
 import com.opencsv.exceptions.CsvValidationException;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.apache.commons.lang3.ObjectUtils;
 import org.controlsfx.control.CheckComboBox;
-import org.controlsfx.control.CheckModel;
 import org.controlsfx.control.IndexedCheckModel;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.sql.Array;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -42,7 +28,7 @@ import java.util.List;
 public class MainController {
 
     @FXML
-    private MapController mapTabController;
+    private MapTabController mapTabController;
 
     @FXML
     private TabTableController tabTableController;
