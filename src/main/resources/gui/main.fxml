@@ -54,11 +54,6 @@
    <center>
       <TabPane fx:id="mainTabPane" nodeOrientation="RIGHT_TO_LEFT" prefHeight="200.0" prefWidth="200.0" styleClass="mainTabPane" stylesheets="@main.css" tabClosingPolicy="UNAVAILABLE" tabMinWidth="60.0" BorderPane.alignment="CENTER">
         <tabs>
-          <Tab styleClass="mainTab" text="Map">
-            <content>
-                <fx:include fx:id="map" source="map.fxml" />
-            </content>
-          </Tab>
             <Tab text="Table">
                <content>
                    <fx:include fx:id="tabTable" source="tabTable.fxml" />
@@ -69,6 +64,11 @@
                   <fx:include fx:id="graphTab" source="graphTab.fxml" />
               </content>
             </Tab>
+          <Tab onSelectionChanged="#refreshMarkers" styleClass="mainTab" text="Map">
+            <content>
+                <fx:include fx:id="mapTab" source="mapTab.fxml" />
+            </content>
+          </Tab>
         </tabs>
       </TabPane>
    </center>

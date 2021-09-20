@@ -1,5 +1,6 @@
 package gui;
 
+import backend.Record;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.web.WebEngine;
@@ -15,23 +16,34 @@ public class MapController {
     private WebEngine webEngine;
 
     @FXML
-    private void initialize() {
+    void initialize() {
         webEngine= webView.getEngine();
         webEngine.load(getClass().getResource("googlemaps.html").toString());
     }
 
-//    public void plotPoint(Double lat, Double lng) {
-//
-//    }
-
-    public void plotPoint(ActionEvent actionEvent) {
+    public void plotOnePoint(ActionEvent actionEvent) {
         String rand = "document.plotPoint(" + 41.748486365 + ", " + -87.602675062 + ")";
         webEngine.executeScript(rand);
         rand = "document.plotPoint(" + 41.87154041 + ", " + -87.705838807 + ")";
         webEngine.executeScript(rand);
     }
 
-    public void deleteMarkers(ActionEvent actionEvent) {
+    public void plotMultiplePoints(ArrayList<Record> records) {
+        String newLocationMarker;
+        for (Record record : records) {
+            newLocationMarker = "document.plotPoint(" + record.getLatitude() + ", " + record.getLongitude() + ")";
+            webEngine.executeScript(newLocationMarker);
+        }
+
+
+    }
+
+    public void updateMarkers(ArrayList<Record> records) {
+        clearMarkers();
+        plotMultiplePoints(records);
+    }
+
+    public void clearMarkers() {
         webEngine.executeScript("document.deletePoints()");
     }
 }

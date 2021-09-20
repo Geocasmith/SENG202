@@ -12,13 +12,13 @@ public class MainGUI extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-
         Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
         primaryStage.setTitle("Insight");
         primaryStage.setScene(new Scene(root));
         primaryStage.setMinHeight(840);
         primaryStage.setMinWidth(1020);
         primaryStage.show();
+
 
     }
 

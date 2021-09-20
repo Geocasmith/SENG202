@@ -22,9 +22,9 @@
         var marker;
         var markers = [];
         function initialize() {
-            var latlng = new google.maps.LatLng(-25.3444, 131.0369);
+            var latlng = new google.maps.LatLng(41.7, -87.7);
             var myOptions = {
-                zoom: 2,
+                zoom: 7,
                 center: latlng,
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
                 mapTypeControl: false,
@@ -35,8 +35,6 @@
 
             document.geocoder = new google.maps.Geocoder();
             map = new google.maps.Map(document.getElementById("map_canvas"),myOptions);
-            marker = new google.maps.Marker({position: new google.maps.LatLng(5, 2), map: map});
-            markers.push(marker);
 
             document.zoomIn = function zoomIn() {
                 var zoomLevel = map.getZoom();

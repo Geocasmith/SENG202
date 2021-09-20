@@ -42,6 +42,9 @@ import java.util.List;
 public class MainController {
 
     @FXML
+    private MapController mapTabController;
+
+    @FXML
     private TabTableController tabTableController;
 
     @FXML
@@ -98,10 +101,21 @@ public class MainController {
     private void initialize() throws SQLException, IOException, CsvValidationException, URISyntaxException {
         filterSetup();
         graphSetup();
+        mapSetup();
         // Example link opener code
 //        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 //            Desktop.getDesktop().browse(new URI("hello"));
 //        }
+    }
+
+    private void mapSetup() {
+//        mapTabController.updateMarkers(tabTableController.getDisplayedRecords());
+
+    }
+
+    @FXML
+    private void refreshMarkers() {
+        mapTabController.updateMarkers(tabTableController.getDisplayedRecords());
     }
 
 
@@ -138,7 +152,7 @@ public class MainController {
         // Set values for location description combo box
         locationDescriptionComboBox.getItems().addAll(locationDescriptions);
 
-        clearFilters();
+
 
     }
 
@@ -244,6 +258,7 @@ public class MainController {
             }
             graphTabController.createCrimesPerTypeOverTimeGraph(currentRecords, checkedTypes);
 
+
         }
 
     }
@@ -306,24 +321,24 @@ public class MainController {
 
         // Get values for each text field as long as they aren't empty
         // Wards
-        String text;
+        String text = "";
         text = filterWardTextField.getText();
-        if (!(text == "")) {
+        if (!(text.equals(""))) {
             wards = text;
         }
         // Beats
         text = filterBeatsTextField.getText();
-        if (!(text == "")) {
+        if (!(text.equals(""))) {
             beats = text;
         }
         // Latitude
         text = filterLatTextField.getText();
-        if (!(text == "")) {
+        if (!(text.equals(""))) {
             lat = text;
         }
         // Longitude
         text = filterLongTextField.getText();
-        if (!(text == "")) {
+        if (!(text.equals(""))) {
             lon = text;
         }
 
@@ -344,6 +359,7 @@ public class MainController {
         ArrayList<Record> records = Database.getFilter(startDate,endDate,crimeTypes, locationDescriptions, wards, beats, lat, lon, radius, arrest, domestic);
         // Set table to records
         tabTableController.setTableRecords(records);
+        refreshMarkers();
         
     }
 
@@ -353,20 +369,21 @@ public class MainController {
     /**
      * Sets all filter parameters back to default
      */
-    public void clearFilters() {
+    public void clearFilters() throws SQLException {
         filterStartDate.setValue(null);
         filterEndDate.setValue(null);
         crimeTypeComboBox.getCheckModel().clearChecks();
         locationDescriptionComboBox.getCheckModel().clearChecks();
-        filterWardTextField.setText(null);
-        filterBeatsTextField.setText(null);
-        filterLatTextField.setText(null);
-        filterLongTextField.setText(null);
+        filterWardTextField.setText("");
+        filterBeatsTextField.setText("");
+        filterLatTextField.setText("");
+        filterLongTextField.setText("");
         radiusSlider.setValue(0);
         radiusLabel.setText("0 km");
         arrestComboBox.getSelectionModel().select("");
         domesticComboBox.getSelectionModel().select("");
-
+        tabTableController.setTableRecords(Database.getAll());
+        refreshMarkers();
     }
 
     /**
