@@ -45,7 +45,6 @@ public class TableTabController {
     @FXML private TextField mainTableAddLongitudeField;
     @FXML private TitledPane mainTableAddAccordionTab;
 
-    private static String TEXTFIELDREQUIREDSTYLE = "-fx-background-color: -fx-control-inner-background, red,\n linear-gradient(from 0px 0px to 0px 5px, derive(-fx-control-inner-background, -9%), -fx-control-inner-background); -fx-background-insets: 1 0 1 1, 1 0 1 1, 2 1 2 2;";
 
     @FXML
     private void initialize() throws CsvValidationException, SQLException, IOException {
@@ -87,22 +86,6 @@ public class TableTabController {
                 ((CheckBox) node).setSelected(mainTableToggleAllButton.isSelected());
             }
         }
-    }
-
-    /**
-     * Adds a new textfield with the specified prompt text to the panel underneath the table view.
-     * This will be used to add a new record.
-     *
-     * This might be better off done in the .fxml file so that we can refer to the prompts to give better feedback
-     * if the user tried to insert an incorrectly formatted record. This would also help with 'wiring it up', as the
-     * text field needs to be linked to or able to access the relevant column.
-     *
-     * @param prompt the String to be used as prompt text
-     */
-    public void addTableTextField(String prompt) {
-        TextField field = new TextField();
-        field.setPromptText(prompt);
-        mainTableAddPane.getChildren().add(field);
     }
 
     public void checkRequiredFields() {
@@ -161,7 +144,7 @@ public class TableTabController {
         //else { // create the record
             if (InputValidator.isValidRecord(recStrings)) {
                 Record rec = new Record(recStrings);
-                System.out.println(rec); //TODO check if tostring is needed here?
+                System.out.println(rec);
                 mainTableAddRecordLabel.setText((InputValidator.recordEntryFeedback(recStrings).get(1)));
                 return rec;
             } else {
@@ -243,6 +226,10 @@ public class TableTabController {
         addRecordsToTable(records);
     }
 
+    /**
+     * Returns an arraylist of all of the record objects in the table.
+     * @return an ArrayList of all record objects in the table.
+     */
     public ArrayList<Record> getDisplayedRecords() {
         ArrayList<Record> currentRecords = new ArrayList<>();
         for (Object o : mainTableView.getItems()) {
