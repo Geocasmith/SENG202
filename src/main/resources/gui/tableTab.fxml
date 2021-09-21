@@ -24,21 +24,21 @@
    <bottom>
       <VBox BorderPane.alignment="CENTER">
          <children>
-            <Accordion>
+            <Accordion fx:id="tableAccordion">
                <panes>
-                  <TitledPane animated="false" text="Toggle Columns">
+                  <TitledPane fx:id="toggleColumnsAccordionTab" animated="false" text="Toggle Columns">
                      <content>
                         <BorderPane prefHeight="200.0" prefWidth="200.0">
                            <center>
                               <FlowPane fx:id="mainTableTogglePane" hgap="10.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="200.0" vgap="10.0" BorderPane.alignment="CENTER" />
                            </center>
                            <bottom>
-                              <ToggleButton fx:id="mainTableToggleAllButton" mnemonicParsing="false" onAction="#toggleAllTableCols" selected="true" text="Toggle All" BorderPane.alignment="CENTER_LEFT" />
+                              <ToggleButton fx:id="toggleAllColumnsButton" mnemonicParsing="false" onAction="#toggleAllTableCols" selected="true" text="Toggle All" BorderPane.alignment="CENTER_LEFT" />
                            </bottom>
                         </BorderPane>
                      </content>
                   </TitledPane>
-                  <TitledPane fx:id="mainTableAddAccordionTab" animated="false" onMouseClicked="#clearAddFeedbackLabel" text="Add Data">
+                  <TitledPane fx:id="addAccordionTab" animated="false" onMouseClicked="#clearAddFeedbackLabel" text="Add Data">
                      <content>
                         <BorderPane prefHeight="200.0" prefWidth="200.0">
                            <center>
@@ -146,8 +146,8 @@
                            <bottom>
                               <FlowPane prefHeight="25.0" prefWidth="779.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <Button fx:id="mainTableAddRecordButton" mnemonicParsing="false" onAction="#getRecordFromTextFields" text="Add Record" />
-                                    <Label fx:id="mainTableAddRecordLabel">
+                                    <Button fx:id="addRecordButton" mnemonicParsing="false" onAction="#getRecordFromTextFields" text="Add Record" />
+                                    <Label fx:id="addRecordLabel">
                                        <FlowPane.margin>
                                           <Insets left="10.0" />
                                        </FlowPane.margin>
@@ -170,7 +170,7 @@
                         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                      </FlowPane.margin>
                   </Button>
-                  <Button fx:id="editRowButton" mnemonicParsing="false" text="Edit Row">
+                  <Button fx:id="editRowButton" mnemonicParsing="false" onAction="#editRow" text="Edit Row">
                      <FlowPane.margin>
                         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                      </FlowPane.margin>

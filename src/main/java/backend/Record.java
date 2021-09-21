@@ -279,4 +279,20 @@ public class Record {
         }
         return output;
     }
+
+    /**
+     * Returns the record object as a list of strings. It's not pretty, but it is useful for iterating over the
+     * record object.
+     * @return
+     */
+    public List<String> toList() {
+        return Arrays.asList(
+                this.getCaseNumber(), this.getDate(), this.getBlock(), this.getIucr(),
+                this.getPrimaryDescription(), this.getSecondaryDescription(), this.getLocationDescription(),
+                booleanStringChanger(this.getArrest()), booleanStringChanger(this.getDomestic()),
+                Integer.toString(this.getBeat()), Integer.toString(this.getWard()), this.getFbicd(),
+                Integer.toString(this.getXcoord()), Integer.toString(this.getYcoord()),
+                Double.toString(this.getLatitude()), Double.toString(this.getLongitude())
+                );
+    }
 }
