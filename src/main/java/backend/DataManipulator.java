@@ -1,10 +1,12 @@
 package backend;
 
 import backend.database.Database;
+import com.opencsv.exceptions.CsvValidationException;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -245,6 +247,42 @@ private ArrayList<Record> currentData;
             //Display Error Message?
         }
         return false;
+    }
+
+    /**
+     * Reads and returns valid and invalid rows from CSV
+     * @param filepath
+     * @return
+     * @throws IOException
+     * @throws CsvValidationException
+     */
+
+    public static ArrayList<ArrayList<List<String>>> getRowsfromCsv(String filepath) throws IOException,  CsvValidationException {
+        try
+        {
+            ArrayList<ArrayList<List<String>>> result = new ArrayList<ArrayList<List<String>>>();
+            ArrayList<List<String>> csvValues = new  ArrayList<List<String>>();
+            ArrayList<List<String>> validRows = new ArrayList<List<String>>();
+            ArrayList<List<String>> invalidRows = new ArrayList<List<String>>();
+            csvValues = CsvReader.read(filepath);
+            for (List<String> rec : csvValues) {
+                if (InputValidator.isValidRecord(rec)){
+                    validRows.add(rec);
+                }
+                else {
+                    invalidRows.add(rec);
+                }
+            }
+            result.add(validRows);
+            result.add(invalidRows);
+
+            return result;
+        } catch (CsvValidationException e) {
+            e.printStackTrace();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+       return null;
     }
 
 }
