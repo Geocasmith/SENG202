@@ -3,7 +3,6 @@ package gui;
 import backend.DataManipulator;
 import backend.InputValidator;
 import backend.Record;
-import backend.database.Database;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -22,13 +21,13 @@ import java.util.List;
 import java.util.Objects;
 
 public class TableTabController {
-    @FXML private BorderPane tabTable;
+    @FXML private BorderPane tableTab;
     @FXML private TableView<Record> mainTableView;
     @FXML private FlowPane mainTableTogglePane;
     @FXML private FlowPane mainTableAddPane;
-    @FXML private ToggleButton mainTableToggleAllButton;
-    @FXML private Button mainTableAddRecordButton;
-    @FXML private Label mainTableAddRecordLabel;
+    @FXML private ToggleButton toggleAllColumnsButton;
+    @FXML private Button addRecordButton;
+    @FXML private Label addRecordLabel;
     @FXML private TextField addCaseNumberField;
     @FXML private TextField addDateField;
     @FXML private TextField addBlockField;
@@ -45,9 +44,11 @@ public class TableTabController {
     @FXML private TextField addYCoordField;
     @FXML private TextField addLatitudeField;
     @FXML private TextField addLongitudeField;
-    @FXML private TitledPane addAccordionTab;
     @FXML private Button deleteRowsButton;
     @FXML private Button editRowButton;
+    @FXML private Accordion tableAccordion;
+    @FXML private TitledPane toggleColumnsAccordionTab;
+    @FXML private TitledPane addAccordionTab;
 
     private List<TextField> textFieldsAdd = new ArrayList<TextField>();
 
@@ -93,7 +94,7 @@ public class TableTabController {
     public void toggleAllTableCols() {
         for (Node node : mainTableTogglePane.getChildren()){
             if (node instanceof CheckBox) {
-                ((CheckBox) node).setSelected(mainTableToggleAllButton.isSelected());
+                ((CheckBox) node).setSelected(toggleAllColumnsButton.isSelected());
             }
         }
     }
@@ -158,10 +159,10 @@ public class TableTabController {
             if (InputValidator.isValidRecord(recStrings)) {
                 Record rec = new Record(recStrings);
                 System.out.println(rec);
-                mainTableAddRecordLabel.setText((InputValidator.recordEntryFeedback(recStrings).get(1)));
+                addRecordLabel.setText((InputValidator.recordEntryFeedback(recStrings).get(1)));
                 return rec;
             } else {
-                mainTableAddRecordLabel.setText((InputValidator.recordEntryFeedback(recStrings).get(1)));
+                addRecordLabel.setText((InputValidator.recordEntryFeedback(recStrings).get(1)));
 
             }
         //}
@@ -233,10 +234,31 @@ public class TableTabController {
     }
 
     /**
+     * If only one row is selected, then call setupEditRow, else show an error somewhere.
+     */
+    @FXML
+    private void editRow() {
+        if (getNumSelectedRows() == 1) {
+            setupEditRow(getSelectedRows().get(0));
+        }
+        else {
+            PopupWindow.displayPopup("Error", "You must have only one row selected to edit a record.");
+        }
+    }
+
+    /**
+     * Should fill in the values of the specific record in the add record pane
+     * maybe disable the case number field?
+     */
+    private void setupEditRow(Record rec){
+        tableAccordion.setExpandedPane(addAccordionTab);
+    }
+
+    /**
      * Clears the text from the feedback label in the "add record" accordion tab.
      */
     public void clearAddFeedbackLabel() {
-        mainTableAddRecordLabel.setText("");
+        addRecordLabel.setText("");
     }
 
     /**
