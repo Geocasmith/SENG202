@@ -406,7 +406,7 @@ public class MainController {
 
     /**
      * Opens file explorer for user to select a csv file to import
-     * @return
+     * @return path to csv file
      */
     public String getPathToCsv() {
         String filepath = null;
@@ -418,6 +418,24 @@ public class MainController {
         filepath = selectedFile.getAbsolutePath();
 
         return filepath;
+    }
+
+    /**
+     * Opens the file explorer for the user to select a save location and then passes
+     * this to the CsvWriter along with the currently displayed records.
+     * @throws IOException
+     */
+    public void exportCsv() throws IOException{
+        String filepath = null;
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select location to save csv file");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"),
+                                                 new FileChooser.ExtensionFilter("All Files", "*.*"));
+        File selectedFile = fileChooser.showSaveDialog(new Stage());
+        filepath = selectedFile.getAbsolutePath();
+        System.out.println(filepath);
+        CsvWriter.write(filepath, tableTabController.getDisplayedRecords());
+
     }
 
 }
