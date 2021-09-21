@@ -4,7 +4,6 @@ import com.opencsv.exceptions.CsvValidationException;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class InputValidator {
@@ -150,11 +149,11 @@ public class InputValidator {
                               return result;
                            }
                            result.add("0");
-                           result.add("Accepted values  for Domestic entry are y or n");
+                           result.add("Accepted values for Domestic entry are y or n");
                            return result;
                         }
                         result.add("0");
-                        result.add("Accepted values  for Arrest entry are y or n");
+                        result.add("Accepted values for Arrest entry are y or n");
                         return result;
                      }
                      result.add("0");

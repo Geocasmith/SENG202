@@ -22,144 +22,165 @@
       </StackPane>
    </center>
    <bottom>
-      <Accordion BorderPane.alignment="CENTER">
-         <panes>
-            <TitledPane animated="false" text="Toggle Columns">
-               <content>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0">
-                     <center>
-                        <FlowPane fx:id="mainTableTogglePane" hgap="10.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="200.0" vgap="10.0" BorderPane.alignment="CENTER" />
-                     </center>
-                     <bottom>
-                        <ToggleButton fx:id="mainTableToggleAllButton" mnemonicParsing="false" onAction="#toggleAllTableCols" selected="true" text="Toggle All" BorderPane.alignment="CENTER_LEFT" />
-                     </bottom>
-                  </BorderPane>
-               </content>
-            </TitledPane>
-            <TitledPane fx:id="mainTableAddAccordionTab" animated="false" onMouseClicked="#clearAddFeedbackLabel" text="Add Data">
-               <content>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0">
-                     <center>
-                        <FlowPane fx:id="mainTableAddPane" hgap="10.0" prefHeight="200.0" prefWidth="200.0" rowValignment="TOP" vgap="10.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <VBox>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <Accordion>
+               <panes>
+                  <TitledPane animated="false" text="Toggle Columns">
+                     <content>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                           <center>
+                              <FlowPane fx:id="mainTableTogglePane" hgap="10.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="200.0" vgap="10.0" BorderPane.alignment="CENTER" />
+                           </center>
+                           <bottom>
+                              <ToggleButton fx:id="mainTableToggleAllButton" mnemonicParsing="false" onAction="#toggleAllTableCols" selected="true" text="Toggle All" BorderPane.alignment="CENTER_LEFT" />
+                           </bottom>
+                        </BorderPane>
+                     </content>
+                  </TitledPane>
+                  <TitledPane fx:id="mainTableAddAccordionTab" animated="false" onMouseClicked="#clearAddFeedbackLabel" text="Add Data">
+                     <content>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                           <center>
+                              <FlowPane fx:id="mainTableAddPane" hgap="10.0" prefHeight="200.0" prefWidth="200.0" rowValignment="TOP" vgap="10.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <TextField fx:id="addCaseNumberField" promptText="Case Number" styleClass="defaulttextfield" />
-                                    <Label text="* Required" />
+                                    <VBox>
+                                       <children>
+                                          <TextField fx:id="addCaseNumberField" promptText="Case Number" styleClass="defaulttextfield" />
+                                          <Label text="* Required" />
+                                       </children>
+                                    </VBox>
+                                    <VBox>
+                                       <children>
+                                          <TextField fx:id="addDateField" promptText="Date" styleClass="defaulttextfield" />
+                                          <Label text="* Required" />
+                                       </children>
+                                    </VBox>
+                                    <VBox>
+                                       <children>
+                                          <TextField fx:id="addBlockField" promptText="Block" styleClass="defaulttextfield" />
+                                          <Label text="* Required" />
+                                       </children>
+                                    </VBox>
+                                    <VBox>
+                                       <children>
+                                          <TextField fx:id="addIUCRField" promptText="IUCR" styleClass="defaulttextfield" />
+                                          <Label text="* Required" />
+                                       </children>
+                                    </VBox>
+                                    <VBox>
+                                       <children>
+                                          <TextField fx:id="addPrimaryDescField" promptText="Primary Description" styleClass="defaulttextfield" />
+                                          <Label text="* Required" />
+                                       </children>
+                                    </VBox>
+                                    <VBox>
+                                       <children>
+                                          <TextField fx:id="addSecondaryDescField" promptText="Secondary Description" styleClass="defaulttextfield" />
+                                          <Label text="* Required" />
+                                       </children>
+                                    </VBox>
+                                    <VBox>
+                                       <children>
+                                          <TextField fx:id="addLocationDescField" promptText="Location Description" styleClass="defaulttextfield" />
+                                          <Label text="* Required" />
+                                       </children>
+                                    </VBox>
+                                    <VBox>
+                                       <children>
+                                          <TextField fx:id="addArrestField" promptText="Arrest" styleClass="defaulttextfield" />
+                                          <Label text="* Required" />
+                                       </children>
+                                    </VBox>
+                                    <VBox>
+                                       <children>
+                                          <TextField fx:id="addDomesticField" promptText="Domestic" styleClass="defaulttextfield" />
+                                          <Label text="* Required" />
+                                       </children>
+                                    </VBox>
+                                    <VBox>
+                                       <children>
+                                          <TextField fx:id="addBeatField" promptText="Beat" styleClass="defaulttextfield" />
+                                          <Label text="* Required" />
+                                       </children>
+                                    </VBox>
+                                    <VBox>
+                                       <children>
+                                          <TextField fx:id="addWardField" promptText="Ward" styleClass="defaulttextfield" />
+                                          <Label text="* Required" />
+                                       </children>
+                                    </VBox>
+                                    <VBox>
+                                       <children>
+                                          <TextField fx:id="addFBICDField" promptText="FBICD" styleClass="defaulttextfield" />
+                                          <Label text="* Required" />
+                                       </children>
+                                    </VBox>
+                                    <VBox>
+                                       <children>
+                                          <TextField fx:id="addXCoordField" promptText="X-Coordinate" />
+                                          <Label />
+                                       </children>
+                                    </VBox>
+                                    <VBox>
+                                       <children>
+                                          <TextField fx:id="addYCoordField" promptText="Y-Coordinate" />
+                                          <Label />
+                                       </children>
+                                    </VBox>
+                                    <VBox>
+                                       <children>
+                                          <TextField fx:id="addLatitudeField" promptText="Latitude" />
+                                          <Label />
+                                       </children>
+                                    </VBox>
+                                    <VBox>
+                                       <children>
+                                          <TextField fx:id="addLongitudeField" promptText="Longitude" />
+                                          <Label />
+                                       </children>
+                                    </VBox>
                                  </children>
-                              </VBox>
-                              <VBox>
+                              </FlowPane>
+                           </center>
+                           <bottom>
+                              <FlowPane prefHeight="25.0" prefWidth="779.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <TextField fx:id="addDateField" promptText="Date" styleClass="defaulttextfield" />
-                                    <Label text="* Required" />
+                                    <Button fx:id="mainTableAddRecordButton" mnemonicParsing="false" onAction="#getRecordFromTextFields" text="Add Record" />
+                                    <Label fx:id="mainTableAddRecordLabel">
+                                       <FlowPane.margin>
+                                          <Insets left="10.0" />
+                                       </FlowPane.margin>
+                                    </Label>
                                  </children>
-                              </VBox>
-                              <VBox>
-                                 <children>
-                                    <TextField fx:id="addBlockField" promptText="Block" styleClass="defaulttextfield" />
-                                    <Label text="* Required" />
-                                 </children>
-                              </VBox>
-                              <VBox>
-                                 <children>
-                                    <TextField fx:id="addIUCRField" promptText="IUCR" styleClass="defaulttextfield" />
-                                    <Label text="* Required" />
-                                 </children>
-                              </VBox>
-                              <VBox>
-                                 <children>
-                                    <TextField fx:id="addPrimaryDescField" promptText="Primary Description" styleClass="defaulttextfield" />
-                                    <Label text="* Required" />
-                                 </children>
-                              </VBox>
-                              <VBox>
-                                 <children>
-                                    <TextField fx:id="addSecondaryDescField" promptText="Secondary Description" styleClass="defaulttextfield" />
-                                    <Label text="* Required" />
-                                 </children>
-                              </VBox>
-                              <VBox>
-                                 <children>
-                                    <TextField fx:id="addLocationDescField" promptText="Location Description" styleClass="defaulttextfield" />
-                                    <Label text="* Required" />
-                                 </children>
-                              </VBox>
-                              <VBox>
-                                 <children>
-                                    <TextField fx:id="addArrestField" promptText="Arrest" styleClass="defaulttextfield" />
-                                    <Label text="* Required" />
-                                 </children>
-                              </VBox>
-                              <VBox>
-                                 <children>
-                                    <TextField fx:id="addDomesticField" promptText="Domestic" styleClass="defaulttextfield" />
-                                    <Label text="* Required" />
-                                 </children>
-                              </VBox>
-                              <VBox>
-                                 <children>
-                                    <TextField fx:id="addBeatField" promptText="Beat" styleClass="defaulttextfield" />
-                                    <Label text="* Required" />
-                                 </children>
-                              </VBox>
-                              <VBox>
-                                 <children>
-                                    <TextField fx:id="addWardField" promptText="Ward" styleClass="defaulttextfield" />
-                                    <Label text="* Required" />
-                                 </children>
-                              </VBox>
-                              <VBox>
-                                 <children>
-                                    <TextField fx:id="addFBICDField" promptText="FBICD" styleClass="defaulttextfield" />
-                                    <Label text="* Required" />
-                                 </children>
-                              </VBox>
-                              <VBox>
-                                 <children>
-                                    <TextField fx:id="addXCoordField" promptText="X-Coordinate" />
-                                    <Label />
-                                 </children>
-                              </VBox>
-                              <VBox>
-                                 <children>
-                                    <TextField fx:id="addYCoordField" promptText="Y-Coordinate" />
-                                    <Label />
-                                 </children>
-                              </VBox>
-                              <VBox>
-                                 <children>
-                                    <TextField fx:id="addLatitudeField" promptText="Latitude" />
-                                    <Label />
-                                 </children>
-                              </VBox>
-                              <VBox>
-                                 <children>
-                                    <TextField fx:id="addLongitudeField" promptText="Longitude" />
-                                    <Label />
-                                 </children>
-                              </VBox>
-                           </children>
-                        </FlowPane>
-                     </center>
-                     <bottom>
-                        <FlowPane prefHeight="25.0" prefWidth="779.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <Button fx:id="mainTableAddRecordButton" mnemonicParsing="false" onAction="#getRecordFromTextFields" text="Add Record" />
-                              <Label fx:id="mainTableAddRecordLabel">
-                                 <FlowPane.margin>
-                                    <Insets left="10.0" />
-                                 </FlowPane.margin>
-                              </Label>
-                           </children>
-                           <BorderPane.margin>
-                              <Insets top="15.0" />
-                           </BorderPane.margin>
-                        </FlowPane>
-                     </bottom>
-                  </BorderPane>
-               </content>
-            </TitledPane>
-         </panes>
-      </Accordion>
+                                 <BorderPane.margin>
+                                    <Insets top="15.0" />
+                                 </BorderPane.margin>
+                              </FlowPane>
+                           </bottom>
+                        </BorderPane>
+                     </content>
+                  </TitledPane>
+               </panes>
+            </Accordion>
+            <FlowPane>
+               <children>
+                  <Button fx:id="deleteRowsButton" mnemonicParsing="false" onAction="#deleteSelectedRows" text="Delete Selected Row(s)">
+                     <FlowPane.margin>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </FlowPane.margin>
+                  </Button>
+                  <Button fx:id="editRowButton" mnemonicParsing="false" text="Edit Row">
+                     <FlowPane.margin>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </FlowPane.margin>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </FlowPane>
+         </children>
+      </VBox>
    </bottom>
 </BorderPane>

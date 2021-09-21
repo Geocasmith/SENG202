@@ -5,6 +5,7 @@ import backend.InputValidator;
 import backend.Record;
 import backend.database.Database;
 import com.opencsv.exceptions.CsvValidationException;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -22,7 +23,7 @@ import java.util.Objects;
 
 public class TableTabController {
     @FXML private BorderPane tabTable;
-    @FXML private TableView mainTableView;
+    @FXML private TableView<Record> mainTableView;
     @FXML private FlowPane mainTableTogglePane;
     @FXML private FlowPane mainTableAddPane;
     @FXML private ToggleButton mainTableToggleAllButton;
@@ -45,6 +46,8 @@ public class TableTabController {
     @FXML private TextField addLatitudeField;
     @FXML private TextField addLongitudeField;
     @FXML private TitledPane addAccordionTab;
+    @FXML private Button deleteRowsButton;
+    @FXML private Button editRowButton;
 
     private List<TextField> textFieldsAdd = new ArrayList<TextField>();
 
@@ -167,6 +170,22 @@ public class TableTabController {
     }
 
     /**
+     * Returns the number of rows the user has selected in the table view.
+     * @return integer number of selected rows
+     */
+    private int getNumSelectedRows() {
+        return getSelectedRows().size();
+    }
+
+    /**
+     * Returns a READ ONLY (!!!) list of records the user has selected in the table view.
+     * @return
+     */
+    private ObservableList<Record> getSelectedRows() {
+        return mainTableView.getSelectionModel().getSelectedItems();
+    }
+
+    /**
      * Sets up the main table.
      * Disables editing (provisional).
      * Creates all columns necessary for viewing crime data.
@@ -174,6 +193,7 @@ public class TableTabController {
      */
     public void tableSetup() throws CsvValidationException, IOException, SQLException {
         mainTableView.setEditable(false); // for now, until this can be linked up to the database
+        mainTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         // create all the columns
         addTableCol("Case Number", "caseNumber");
@@ -199,6 +219,16 @@ public class TableTabController {
         for (Record r : allRecords) {
 
             mainTableView.getItems().add(r);
+        }
+    }
+
+    /**
+     * Deletes the selected rows. Don't know how this will work.
+     */
+    @FXML
+    private void deleteSelectedRows() throws SQLException {
+        for (Record rec : getSelectedRows()) {
+            //Database.manualDelete(rec.getCaseNumber());
         }
     }
 
