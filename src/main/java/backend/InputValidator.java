@@ -55,7 +55,7 @@ public class InputValidator {
     * @return true or false depending on the validity of the coordinate
     * @throws IOException
     */
-   public static boolean hasGpsCoordinate(String gpsCoordinate, float lowerRange, float upperRange) throws IOException{
+   public static boolean hasGpsCoordinate(String gpsCoordinate, float lowerRange, float upperRange) {
       if (gpsCoordinate.isEmpty()) {
          return true;
       }
@@ -124,7 +124,7 @@ public class InputValidator {
     * @return boolean value depending on the validity of the record
     * @throws IOException
     */
-   public static ArrayList<String> recordEntryFeedback(List<String> record) throws IOException, CsvValidationException {
+   public static ArrayList<String> recordEntryFeedback(List<String> record) throws CsvValidationException, IOException {
       ArrayList<String> result = new ArrayList<>();
       if (hasValidCaseNumber(record.get(0))) {
          if(hasValidDateAndTimeFormat(record.get(1))) {
@@ -240,7 +240,7 @@ public class InputValidator {
     * @return true or false depending on validity of the passed parameter
     * @throws IOException
     */
-   public static boolean hasValidDateAndTimeFormat(String dateAndTime) throws IOException{
+   public static boolean hasValidDateAndTimeFormat(String dateAndTime) {
       try {
          LocalDateTime.parse(dateAndTime.toUpperCase(), Record.formatter);
          return true;

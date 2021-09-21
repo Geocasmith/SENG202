@@ -188,9 +188,9 @@ public class TableTabController {
 
     /**
      * Sets up the main table.
-     * Disables editing (provisional).
+     * Disables direct table editing.
+     * Allows for the selection of many rows at once.
      * Creates all columns necessary for viewing crime data.
-     * For now, creates a test record and adds it to the table (for testing).
      */
     public void tableSetup() throws CsvValidationException, IOException, SQLException {
         mainTableView.setEditable(false); // for now, until this can be linked up to the database
@@ -250,8 +250,9 @@ public class TableTabController {
      * Should fill in the values of the specific record in the add record pane
      * maybe disable the case number field?
      */
-    private void setupEditRow(Record rec){
-        tableAccordion.setExpandedPane(addAccordionTab);
+    private void setupEditRow(Record rec) {
+//        tableAccordion.setExpandedPane(addAccordionTab);
+        EditRecordWindow.displayEditRecordWindow(rec);
     }
 
     /**

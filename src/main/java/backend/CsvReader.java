@@ -12,7 +12,7 @@ import java.util.List;
 
 public class CsvReader {
 
-    public static ArrayList<List<String>> read(String path) throws IOException, CsvValidationException {
+    public static ArrayList<List<String>> read(String path) throws CsvValidationException, IOException {
 
         ArrayList<List<String>>csvValues = new ArrayList<List<String>>();
         FileReader fr = new FileReader(path);
