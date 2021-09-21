@@ -124,9 +124,9 @@ public class MainController {
         sidebarAccordion.setExpandedPane(filterPane);
 
         // Set values for arrests and domestic combo boxes
-        arrestComboBox.getItems().addAll("", "Yes", "No");
+        arrestComboBox.getItems().addAll("", "Y", "N");
         arrestComboBox.getSelectionModel().select("");
-        domesticComboBox.getItems().addAll("", "Yes", "No");
+        domesticComboBox.getItems().addAll("", "Y", "N");
         domesticComboBox.getSelectionModel().select("");
 
 
