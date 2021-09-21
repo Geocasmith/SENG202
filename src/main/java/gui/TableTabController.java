@@ -16,6 +16,7 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,28 +28,34 @@ public class TableTabController {
     @FXML private ToggleButton mainTableToggleAllButton;
     @FXML private Button mainTableAddRecordButton;
     @FXML private Label mainTableAddRecordLabel;
-    @FXML private TextField mainTableAddCaseNumberField;
-    @FXML private TextField mainTableAddDateField;
-    @FXML private TextField mainTableAddBlockField;
-    @FXML private TextField mainTableAddIUCRField;
-    @FXML private TextField mainTableAddPrimaryDescField;
-    @FXML private TextField mainTableAddSecondaryDescField;
-    @FXML private TextField mainTableAddLocationDescField;
-    @FXML private TextField mainTableAddArrestField;
-    @FXML private TextField mainTableAddDomesticField;
-    @FXML private TextField mainTableAddBeatField;
-    @FXML private TextField mainTableAddWardField;
-    @FXML private TextField mainTableAddFBICDField;
-    @FXML private TextField mainTableAddXCoordField;
-    @FXML private TextField mainTableAddYCoordField;
-    @FXML private TextField mainTableAddLatitudeField;
-    @FXML private TextField mainTableAddLongitudeField;
-    @FXML private TitledPane mainTableAddAccordionTab;
+    @FXML private TextField addCaseNumberField;
+    @FXML private TextField addDateField;
+    @FXML private TextField addBlockField;
+    @FXML private TextField addIUCRField;
+    @FXML private TextField addPrimaryDescField;
+    @FXML private TextField addSecondaryDescField;
+    @FXML private TextField addLocationDescField;
+    @FXML private TextField addArrestField;
+    @FXML private TextField addDomesticField;
+    @FXML private TextField addBeatField;
+    @FXML private TextField addWardField;
+    @FXML private TextField addFBICDField;
+    @FXML private TextField addXCoordField;
+    @FXML private TextField addYCoordField;
+    @FXML private TextField addLatitudeField;
+    @FXML private TextField addLongitudeField;
+    @FXML private TitledPane addAccordionTab;
+
+    private List<TextField> textFieldsAdd = new ArrayList<TextField>();
 
 
     @FXML
     private void initialize() throws CsvValidationException, SQLException, IOException {
         tableSetup();
+        textFieldsAdd = Arrays.asList(addCaseNumberField, addDateField, addBlockField, addIUCRField,
+                addPrimaryDescField, addSecondaryDescField, addLocationDescField, addArrestField, addDomesticField,
+                addBeatField, addWardField, addFBICDField, addXCoordField, addYCoordField, addLatitudeField,
+                addLongitudeField);
     }
 
     /**
@@ -88,6 +95,9 @@ public class TableTabController {
         }
     }
 
+    /**
+     * Marks all EMPTY (not invalid!) fields with a red outline.
+     */
     public void checkRequiredFields() {
         for (Node vbox : mainTableAddPane.getChildren()){
             if (vbox instanceof VBox) { // only look at vboxes, which contain a textfield + label

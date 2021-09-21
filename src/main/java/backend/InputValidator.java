@@ -168,7 +168,6 @@ public class InputValidator {
       }
       result.add("0");
       result.add("Invalid Case Number. Please make sure case number starts with two letters followed by 6 digits");
-      System.out.println(result);
       return result;
 
 
