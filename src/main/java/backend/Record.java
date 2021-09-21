@@ -218,7 +218,6 @@ public class Record {
     /**
      * Returns true if the input (case-insensitive) is contained within Record.trueStrings,
      * false if in Record.falseStrings. Returns null if it is in neither.
-     * TODO: is this the behaviour we want?
      * @param input the string to be read
      * @return corresponding boolean value
      */
