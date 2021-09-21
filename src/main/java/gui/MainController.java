@@ -74,6 +74,9 @@ public class MainController {
     private TextField filterLatTextField;
     @FXML
     private TextField filterLongTextField;
+    @FXML
+    private Label filterErrorLabel;
+
 
     // Graph Sidebar Elements
     @FXML
@@ -305,6 +308,7 @@ public class MainController {
         int radius = 0;
         String arrest = null;
         String domestic = null;
+        Boolean validFilter = true;
 
         // Get local start data and convert to date
         Instant instant;
@@ -321,6 +325,15 @@ public class MainController {
             instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
             endDate = Date.from(instant);
         }
+
+        if (!(startDate == null) && !(endDate == null)) {
+            if (startDate.after(endDate)) {
+                filterErrorLabel.setText("Filter end date must come before start date");
+                filterErrorLabel.setVisible(true);
+                validFilter = false;
+            }
+        }
+
 
         // Get names of all checked items in crime type CheckComboBox
         IndexedCheckModel checkModel = crimeTypeComboBox.getCheckModel();
@@ -343,22 +356,46 @@ public class MainController {
         text = filterWardTextField.getText();
         if (!(text.equals(""))) {
             wards = text;
+
+            if (!InputValidator.hasValidInt(wards)) {
+                filterErrorLabel.setText("Ward must be a number");
+                validFilter = false;
+            }
         }
+
         // Beats
         text = filterBeatsTextField.getText();
         if (!(text.equals(""))) {
             beats = text;
+
+            if (!InputValidator.hasValidInt(beats)) {
+                filterErrorLabel.setText("Beat must be a number");
+                validFilter = false;
+            }
         }
+
         // Latitude
         text = filterLatTextField.getText();
         if (!(text.equals(""))) {
             lat = text;
+
+            if (!InputValidator.hasValidDouble(lat)) {
+                filterErrorLabel.setText("Latitude must be a number");
+                validFilter = false;
+            }
         }
+
         // Longitude
         text = filterLongTextField.getText();
         if (!(text.equals(""))) {
             lon = text;
+
+            if (!InputValidator.hasValidDouble(lon)) {
+                filterErrorLabel.setText("Longitude must be a number");
+                validFilter = false;
+            }
         }
+
 
 
         // Get value for radius
@@ -374,10 +411,15 @@ public class MainController {
             arrest = text;
         }
 
-        ArrayList<Record> records = Database.getFilter(startDate,endDate,crimeTypes, locationDescriptions, wards, beats, lat, lon, radius, arrest, domestic);
-        // Set table to records
-        tableTabController.setTableRecords(records);
-        refreshMarkers();
+        if (validFilter) {
+            filterErrorLabel.setVisible(false);
+            ArrayList<Record> records = Database.getFilter(startDate, endDate, crimeTypes, locationDescriptions, wards, beats, lat, lon, radius, arrest, domestic);
+            // Set table to records
+            tableTabController.setTableRecords(records);
+            refreshMarkers();
+        } else {
+            filterErrorLabel.setVisible(true);
+        }
         
     }
 
@@ -401,6 +443,7 @@ public class MainController {
         arrestComboBox.getSelectionModel().select("");
         domesticComboBox.getSelectionModel().select("");
         tableTabController.setTableRecords(Database.getAll());
+        filterErrorLabel.setVisible(false);
         refreshMarkers();
     }
 

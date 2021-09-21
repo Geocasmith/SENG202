@@ -151,6 +151,7 @@
                            </padding>
                         </Label>
                         <CheckComboBox fx:id="locationDescriptionComboBox" layoutX="26.0" layoutY="276.0" title="Location Descriptions" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <Label fx:id="filterErrorLabel" alignment="CENTER" contentDisplay="CENTER" layoutY="591.0" prefHeight="34.0" prefWidth="200.0" text="Error Text" textAlignment="CENTER" textFill="#fc0606" visible="false" wrapText="true" />
                      </children>
                   </AnchorPane>
                </content>

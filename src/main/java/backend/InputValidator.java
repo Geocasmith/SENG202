@@ -91,6 +91,21 @@ public class InputValidator {
    }
 
    /**
+    * Checks whether the string provided is a valid double value.
+    * @param data the String to be checked
+    * @return true or false
+    */
+   public static boolean hasValidDouble(String data)
+   {
+      try {
+         Double.parseDouble(data);
+         return true;
+      } catch (Exception e) {
+         return false;
+      }
+   }
+
+   /**
     * Checks whether the string is a true, false, or null value for a field as specified in the Record class.
     * TODO: check how the user might add null values
     * @param domestic a String representing a potential boolean value
