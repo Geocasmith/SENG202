@@ -8,9 +8,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class InputValidator {
-   private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a", Locale.ENGLISH);
 
    private static Set<List<String>> crimeDescription;
+   private static int LONGITUDEUPPERBOUND = 180;
+   private static int LONGITUDELOWERBOUND = -180;
+   private static int LATITUDEUPPERBOUND = 90;
+   private static int LATITUDELOWERBOUND = -90;
 
    /**
     * Initializes set of valid crime descriptions (Primary, Secondary and IUCR information from
@@ -33,13 +36,13 @@ public class InputValidator {
 
    /**
     * Checks the given List of Strings has valid crime descriptions
-    * @param candidateCrimedescriptions
+    * @param candidateCrimeDescriptions
     * @return
     */
-   public static boolean hasValidCrimeDescriptions(List<String> candidateCrimedescriptions) throws CsvValidationException, IOException {
+   public static boolean hasValidCrimeDescriptions(List<String> candidateCrimeDescriptions) throws CsvValidationException, IOException {
       crimeDescription = initializeCrimeDescriptions("Crime_Descriptions_Data_Source.csv");
 
-      if (crimeDescription.contains(candidateCrimedescriptions)) {
+      if (crimeDescription.contains(candidateCrimeDescriptions)) {
          return true;
       }
       return false;
@@ -72,35 +75,32 @@ public class InputValidator {
 
    }
 
-
+   /**
+    * Checks whether the string provided is a valid integer value.
+    * @param data the String to be checked
+    * @return true or false
+    */
    public static boolean hasValidInt(String data)
    {
       try {
-         int intValue;
-         intValue = Integer.parseInt(data);
+         Integer.parseInt(data);
          return true;
       } catch (Exception e) {
          return false;
       }
    }
-   public static boolean hasValidDomesticData(String domestic)
+
+   /**
+    * Checks whether the string is a true, false, or null value for a field as specified in the Record class.
+    * TODO: check how the user might add null values
+    * @param domestic a String representing a potential boolean value
+    * @return boolean true/false whether the string is valid or not
+    */
+   public static boolean hasValidBooleanData(String domestic)
    {
-      if(domestic.equalsIgnoreCase("y") || domestic.equalsIgnoreCase("n"))
-      {
-         return true;
-      }
-      return false;
-   }
-
-
-
-   public static boolean hasValidArresstData(String arrest)
-   {
-      if(arrest.equalsIgnoreCase("y") || arrest.equalsIgnoreCase("n"))
-      {
-         return true;
-      }
-      return false;
+      return (Record.trueStrings.contains(domestic.toLowerCase()) ||
+              Record.falseStrings.contains(domestic.toLowerCase()) ||
+              domestic == "null");
    }
 
    /**
@@ -116,10 +116,10 @@ public class InputValidator {
          if(hasValidDateAndTimeFormat(record.get(1))) {
             if(hasValidInt(record.get(9))) {
                if(hasValidInt(record.get(10))){
-                  if(hasGpsCoordinate(record.get(14),-90, 90 )) {
-                     if(hasGpsCoordinate(record.get(15), -180, 180)) {
-                        if (hasValidArresstData(record.get(7))) {
-                           if(hasValidDomesticData(record.get(8))) {
+                  if(hasGpsCoordinate(record.get(14),LATITUDELOWERBOUND, LATITUDEUPPERBOUND)) {
+                     if(hasGpsCoordinate(record.get(15), LONGITUDELOWERBOUND, LONGITUDEUPPERBOUND)) {
+                        if (hasValidBooleanData(record.get(7))) {
+                           if(hasValidBooleanData(record.get(8))) {
                               List<String> crimeDes = new ArrayList<>();
                               crimeDes.add(record.get(3));
                               crimeDes.add(record.get(4));
@@ -168,6 +168,7 @@ public class InputValidator {
       }
       result.add("0");
       result.add("Invalid Case Number. Please make sure case number starts with two letters followed by 6 digits");
+      System.out.println(result);
       return result;
 
 
@@ -198,12 +199,11 @@ public class InputValidator {
 
 
    /**
-    * Checks if case number has a valid length (eight), The first two starting charachters are letters
+    * Checks if case number has a valid length (eight), The first two starting characters are letters
     * and the rest of the characters are digits (No special character is allowed)
     * @param caseNumber
     * @return
     */
-
    public static boolean hasValidCaseNumber(String caseNumber) {
       if ( caseNumber.length() == 8 ) {
          if (Character.isAlphabetic(caseNumber.charAt(0)) && Character.isAlphabetic(caseNumber.charAt(1))) {
@@ -229,13 +229,12 @@ public class InputValidator {
     */
    public static boolean hasValidDateAndTimeFormat(String dateAndTime) throws IOException{
       try {
-         LocalDateTime date = LocalDateTime.parse(dateAndTime, formatter);
+         LocalDateTime.parse(dateAndTime.toUpperCase(), Record.formatter);
          return true;
       } catch (Exception e) {
          return false;
       }
    }
-
 
    /**
     * Initializes Set of list of valid crime descriptions and returns in the order of (IUCR number,
@@ -244,7 +243,6 @@ public class InputValidator {
     * @throws CsvValidationException
     * @throws IOException
     */
-
    public static Set<List<String>> getCrimeDescriptions() throws CsvValidationException, IOException {
       crimeDescription = initializeCrimeDescriptions("Crime_Descriptions_Data_Source.csv");
       return crimeDescription;
@@ -277,7 +275,6 @@ public class InputValidator {
     * @throws CsvValidationException
     * @throws IOException
     */
-
    public static Set<String> getSetOfSecondaryDescriptions(String primaryDescription) throws CsvValidationException, IOException {
       crimeDescription = initializeCrimeDescriptions("Crime_Descriptions_Data_Source.csv");
       Set<String> secondaryDescription = new HashSet<>();
@@ -301,7 +298,6 @@ public class InputValidator {
     * @throws CsvValidationException
     * @throws IOException
     */
-
    public static String getIucr(String primaryDescription, String secondaryDescription) throws CsvValidationException, IOException {
       crimeDescription = initializeCrimeDescriptions("Crime_Descriptions_Data_Source.csv");
       if (getSetOfPrimaryDescriptions().contains(primaryDescription)) {
@@ -314,8 +310,6 @@ public class InputValidator {
       return null;
    }
 
-
-
    /**
     * Given the primary description and secondary description for a crime, it returns the associated FBICD value
     * @param primaryDescription
@@ -324,7 +318,6 @@ public class InputValidator {
     * @throws CsvValidationException
     * @throws IOException
     */
-
    public static String getFbicd(String primaryDescription, String secondaryDescription) throws CsvValidationException, IOException {
       crimeDescription = initializeCrimeDescriptions("Crime_Descriptions_Data_Source.csv");
       if (getSetOfPrimaryDescriptions().contains(primaryDescription)) {

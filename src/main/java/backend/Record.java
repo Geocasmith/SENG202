@@ -21,17 +21,17 @@ public class Record {
     private int ycoord;
     private Double latitude;
     private Double longitude;
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a", Locale.ENGLISH);
+    public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a", Locale.ENGLISH);
     /**
      * List of strings that will be counted as "true" when parsing fields.
      * Strings in lower case; use a case-insensitive check.
      */
-    private static List<String> trueStrings = Arrays.asList("y", "true", "yes", "1");
+    public static List<String> trueStrings = Arrays.asList("y", "true", "yes", "1");
     /**
      * List of strings that will be counted as "false" when parsing fields.
      * Strings in lower case; use a case-insensitive check.
      */
-    private static List<String> falseStrings = Arrays.asList("n", "false", "no", "0");
+    public static List<String> falseStrings = Arrays.asList("n", "false", "no", "0");
 
     /**
      * Goes through the provided list of crime data and creates a new record object
@@ -41,7 +41,7 @@ public class Record {
     public Record(List<String> data) {
         caseNumber = data.get(0);
 
-        date = LocalDateTime.parse(data.get(1), formatter);
+        date = LocalDateTime.parse(data.get(1).toUpperCase(), formatter);
         block = data.get(2);
         iucr = data.get(3);
         primaryDescription = data.get(4);
@@ -221,7 +221,7 @@ public class Record {
      * @param input the string to be read
      * @return corresponding boolean value
      */
-    private Boolean parseBooleanString(String input) {
+    private static Boolean parseBooleanString(String input) {
         if (Record.trueStrings.contains(input.toLowerCase())) {
             return true;
         }
