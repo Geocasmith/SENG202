@@ -52,6 +52,15 @@ public class Database {
         }
     }
 
+    /**
+     * Deletes the CRIMES table. Used to remove all of the data so it can be replaced
+     * @throws SQLException
+     */
+    public void deleteTable(String tableName) throws SQLException {
+        Statement state = connection.createStatement();
+        state.execute("DELETE FROM "+tableName);
+        createTable();
+    }
 
     /**
      * Creates java database table by executing an SQL command to create the table and then appends the rows on from the list columns
@@ -153,6 +162,86 @@ public class Database {
 
             s1.addBatch();
         }
+        //Executes the prepared statement
+        s1.executeBatch();
+        connection.commit();
+
+    }
+
+    /**
+     * Deletes current table, gets an array of Lists from the CSV reader and adds them to the database. Any empty values are entered as NULL type
+     *
+     * @param inputs an Arraylist of Lists of Strings that is passed into it from the CSV Reader
+     * @throws SQLException
+     */
+    public void replaceRows(ArrayList<List<String>> inputs) throws SQLException, ParseException {
+
+
+        //Creates the statement to be run
+        connection.setAutoCommit(false);
+        PreparedStatement s = connection.prepareStatement("DELETE FROM CRIMES");
+        PreparedStatement s1 = connection.prepareStatement(
+                "INSERT OR IGNORE INTO CRIMES (ID, DATE, ADDRESS,IUCR,PRIMARYDESCRIPTION,SECONDARYDESCRIPTION,LOCATIONDESCRIPTION,ARREST,DOMESTIC,BEAT,WARD,FBICD,XCOORDINATE,YCOORDINATE,LATITUDE,LONGITUDE,UNIXTIME) " +
+                        "VALUES (?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+
+        for (List column : inputs) {
+            //Sets the ? values in the statement to their corresponding values.
+            s1.setString(1, (String) column.get(0));
+
+            //Date and unix time
+            s1.setString(2, (String) column.get(1));
+            s1.setLong(17,  unixTimeConvert((String) column.get(1)));
+
+            s1.setString(3, (String) column.get(2));
+            s1.setString(4, (String) column.get(3));
+            s1.setString(5, (String) column.get(4));
+            s1.setString(6, (String) column.get(5));
+            s1.setString(7, (String) column.get(6));
+            s1.setString(8, (String) column.get(7));
+            s1.setString(9, (String) column.get(8));
+            String c9 = (String) column.get(9);
+            if (c9.equals("")) {
+                s1.setString(10, "NULL"); //if Value is empty in list
+            } else {
+                s1.setInt(10, Integer.parseInt(c9));
+            }
+            String c10 = (String) column.get(10);
+            if (c10.equals("")) {
+                s1.setString(10, "NULL");
+            } else {
+                s1.setInt(11, Integer.parseInt(c10));
+            }
+
+            s1.setString(12, (String) column.get(11));
+            String c12 = (String) column.get(12);
+            if (c12.equals("")) {
+                s1.setString(10, "NULL");
+            } else {
+                s1.setInt(13, Integer.parseInt(c12));
+            }
+            String c13 = (String) column.get(13);
+            if (c13.equals("")) {
+                s1.setString(10, "NULL");
+            } else {
+                s1.setInt(14, Integer.parseInt(c13));
+            }
+            String c14 = (String) column.get(14);
+            if (c14.equals("")) {
+                s1.setString(10, "NULL");
+            } else {
+                s1.setFloat(15, Float.parseFloat(c14));
+            }
+            String c15 = (String) column.get(15);
+            if (c15.equals("")) {
+                s1.setString(10, "NULL");
+            } else {
+                s1.setFloat(16, Float.parseFloat(c15));
+            }
+
+
+            s1.addBatch();
+        }
+        s.execute();
         //Executes the prepared statement
         s1.executeBatch();
         connection.commit();
