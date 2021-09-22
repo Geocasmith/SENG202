@@ -166,10 +166,10 @@ public class TableTabController {
             if (InputValidator.isValidRecord(recStrings)) {
                 Record rec = new Record(recStrings);
                 System.out.println(rec);
-                addRecordLabel.setText((InputValidator.recordEntryFeedback(recStrings).get(1)));
+                addRecordLabel.setText((InputValidator.recordEntryFeedbackLong(recStrings).get(17)));
                 return rec;
             } else {
-                addRecordLabel.setText((InputValidator.recordEntryFeedback(recStrings).get(1)));
+                addRecordLabel.setText((InputValidator.recordEntryFeedbackLong(recStrings).get(17)));
 
             }
         //}

@@ -120,6 +120,7 @@ public class InputValidator {
    public static ArrayList<String> recordEntryFeedbackLong(List<String> record) throws CsvValidationException, IOException {
       // will have 1 = good, 0 = bad for all rows and then a 1 or 0 at the end along with the first error message
       ArrayList<String> result = new ArrayList<>(Arrays.asList("1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1"));
+      ArrayList<String> dataFieldFeedBack = new ArrayList<>();
       String errMsg = "";
       String isValid = "1";
 
@@ -128,6 +129,7 @@ public class InputValidator {
          isValid = "0";
          System.out.println("casenum");
          errMsg = "Invalid case number. The case number should be two letters followed by six digits.";
+         dataFieldFeedBack.add(errMsg);
       }
 
       if (!hasValidDateAndTimeFormat(record.get(1))) {
@@ -135,6 +137,7 @@ public class InputValidator {
          isValid = "0";
          System.out.println("date");
          errMsg = "Invalid date and time. The correct format is mm/dd/yyyy hh:mm:ss am/pm.";
+         dataFieldFeedBack.add(errMsg);
       }
 
       // block is not validated
@@ -142,6 +145,7 @@ public class InputValidator {
          result.set(2, "0");
          isValid = "0";
          errMsg = "Block is a required field.";
+         dataFieldFeedBack.add(errMsg);
       }
 
       // check IUCR, primary and secondary descriptions, and FBICD
@@ -154,6 +158,7 @@ public class InputValidator {
          isValid = "0";
          System.out.println("desc");
          errMsg = "Invalid crime description, FBICD and/or IUCR. These fields need to correspond to one another.";
+         dataFieldFeedBack.add(errMsg);
       }
 
       // location description is not validated
@@ -161,6 +166,7 @@ public class InputValidator {
          result.set(6, "0");
          isValid = "0";
          errMsg = "Location description is a required field.";
+         dataFieldFeedBack.add(errMsg);
       }
 
       if (!hasValidBooleanData(record.get(7))) {
@@ -168,12 +174,14 @@ public class InputValidator {
          isValid = "0";
          System.out.println("arrest");
          errMsg = "Invalid arrest value. Arrest should be either Y or N.";
+         dataFieldFeedBack.add(errMsg);
       }
       if (!hasValidBooleanData(record.get(8))) {
          result.set(8, "0");
          isValid = "0";
          System.out.println("domestic");
          errMsg = "Invalid domestic value. Domestic should be either Y or N.";
+         dataFieldFeedBack.add(errMsg);
       }
 
       if (!hasValidInt(record.get(9))) {
@@ -181,6 +189,7 @@ public class InputValidator {
          isValid = "0";
          System.out.println("beat");
          errMsg = "Invalid beat value. Beat should be an integer.";
+         dataFieldFeedBack.add(errMsg);
       }
 
       if (!hasValidInt(record.get(10))) {
@@ -188,6 +197,7 @@ public class InputValidator {
          isValid = "0";
          System.out.println("ward");
          errMsg = "Invalid ward value. Ward should be an integer.";
+         dataFieldFeedBack.add(errMsg);
       }
 
       // FBICD already validated
@@ -198,6 +208,7 @@ public class InputValidator {
          isValid = "0";
          System.out.println("xcoord");
          errMsg = "Invalid X-Coordinate value. X-Coordinate should be an integer.";
+         dataFieldFeedBack.add(errMsg);
       }
 
       if (!hasValidInt(record.get(13))) {
@@ -205,6 +216,7 @@ public class InputValidator {
          isValid = "0";
          System.out.println("ycoord");
          errMsg = "Invalid Y-Coordinate value. Y-Coordinate should be an integer.";
+         dataFieldFeedBack.add(errMsg);
       }
 
       if (!hasGpsCoordinate(record.get(14), LATITUDELOWERBOUND, LATITUDEUPPERBOUND)) {
@@ -212,6 +224,7 @@ public class InputValidator {
          isValid = "0";
          System.out.println("lat");
          errMsg ="Invalid latitude value. Latitude should be between 90 and -90.";
+         dataFieldFeedBack.add(errMsg);
       }
 
       if (!hasGpsCoordinate(record.get(15), LONGITUDELOWERBOUND, LONGITUDEUPPERBOUND)) {
@@ -219,9 +232,11 @@ public class InputValidator {
          isValid = "0";
          System.out.println("long");
          errMsg = "Invalid longitude value. Longitude should be between 180 and -180.";
+         dataFieldFeedBack.add(errMsg);
       }
       result.add(isValid);
-      result.add(errMsg);
+      result.add(dataFieldFeedBack.get(0));
+
 
       return result;
    }
@@ -233,71 +248,10 @@ public class InputValidator {
     * @return boolean value depending on the validity of the record
     * @throws IOException
     */
-   public static ArrayList<String> recordEntryFeedback(List<String> record) throws CsvValidationException, IOException {
-      ArrayList<String> result = new ArrayList<>();
-      if (hasValidCaseNumber(record.get(0))) {
-         if(hasValidDateAndTimeFormat(record.get(1))) {
-            if(hasValidInt(record.get(9))) {
-               if(hasValidInt(record.get(10))){
-                  if(hasGpsCoordinate(record.get(14),LATITUDELOWERBOUND, LATITUDEUPPERBOUND)) {
-                     if(hasGpsCoordinate(record.get(15), LONGITUDELOWERBOUND, LONGITUDEUPPERBOUND)) {
-                        if (hasValidBooleanData(record.get(7))) {
-                           if(hasValidBooleanData(record.get(8))) {
-                              List<String> crimeDes = new ArrayList<>();
-                              crimeDes.add(record.get(3));
-                              crimeDes.add(record.get(4));
-                              crimeDes.add(record.get(5));
-                              crimeDes.add(record.get(11));
-                              if (hasValidCrimeDescriptions(crimeDes)) {
-                                 result.add("1");
-                                 result.add("Valid record data");
-                                 return result;
-                              }
-                              result.add("0");
-                              result.add("Make sure primary & secondary descriptions have the right IUCR and FBICD values");
-                              return result;
-                           }
-                           result.add("0");
-                           result.add("Accepted values for Domestic entry are y or n");
-                           return result;
-                        }
-                        result.add("0");
-                        result.add("Accepted values for Arrest entry are y or n");
-                        return result;
-                     }
-                     result.add("0");
-                     result.add("Accepted values for Longitude Coordinate are between -180 to 180");
-                     return result;
-                  }
-                  result.add("0");
-                  result.add("Accepted values for Latitude Coordinate are between -90 to 90");
-                  return result;
-               }
-               result.add("0");
-               result.add("Ward should be a number");
-               return result;
-            }
-            result.add("0");
-            result.add("Beat should be a number");
-            return result;
-         }
-         else
-         {
-            result.add("0");
-            result.add("Accepted date and type format is MM/dd/yyyy hh:mm:ss am/pm");
-            return result;
-         }
 
-      }
-      result.add("0");
-      result.add("Invalid Case Number. Please make sure case number starts with two letters followed by 6 digits");
-      return result;
-
-
-   }
 
    public static boolean isValidRecord(List<String> record) throws IOException, CsvValidationException {
-      if (recordEntryFeedback(record).get(0) == "1") {
+      if (recordEntryFeedbackLong(record).get(0) == "1") {
          return true;
       }
       return false;
