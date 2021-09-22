@@ -153,7 +153,7 @@ public class InputValidator {
          result.set(11, "0");
          isValid = "0";
          System.out.println("desc");
-         errMsg = "Invalid crime description, FBICD and/or IUCR.";
+         errMsg = "Invalid crime description, FBICD and/or IUCR. These fields need to correspond to one another.";
       }
 
       // location description is not validated
