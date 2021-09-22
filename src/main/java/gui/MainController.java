@@ -326,7 +326,7 @@ public class MainController {
             endDate = Date.from(instant);
         }
 
-        if (!(startDate == null) && !(endDate == null)) {
+        if ((startDate != null) && (endDate != null)) {
             if (startDate.after(endDate)) {
                 filterErrorLabel.setText("Filter end date must come before start date");
                 filterErrorLabel.setVisible(true);
@@ -458,7 +458,9 @@ public class MainController {
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"),
                                                  new FileChooser.ExtensionFilter("All Files", "*.*"));
         File selectedFile = fileChooser.showOpenDialog(new Stage());
-        filepath = selectedFile.getAbsolutePath();
+        if (selectedFile != null) {
+            filepath = selectedFile.getAbsolutePath();
+        }
 
         return filepath;
     }
@@ -478,6 +480,27 @@ public class MainController {
         filepath = selectedFile.getAbsolutePath();
         System.out.println(filepath);
         CsvWriter.write(filepath, tableTabController.getDisplayedRecords());
+
+    }
+
+    public void importCsv(){
+        String filepath = getPathToCsv();
+        ArrayList<List<String>> rows;
+        if (filepath != null) {
+            try {
+                /*Database.closeConnection();
+                Database d = new Database();
+                d.connectDatabase();
+                Database.insertRows(CsvReader.read(filepath));
+                tableTabController.setTableRecords(Database.getAll());
+                d.closeConnection();*/
+            } catch (Exception e) {
+                System.out.println("Error " + e);
+            }
+
+
+
+        }
 
     }
 
