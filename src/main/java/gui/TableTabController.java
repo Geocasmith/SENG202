@@ -253,13 +253,9 @@ public class TableTabController {
     }
 
     /**
-     * Should fill in the values of the specific record in the add record pane
-     * maybe disable the case number field?
+     * Opens a new window with the record's data filled in, which the user can use to edit (or view) it with.
      */
     private void setupEditRow(Record rec) throws IOException {
-//        tableAccordion.setExpandedPane(addAccordionTab);
-//        EditRecordWindow.displayEditRecordWindow(rec);
-
         Stage popupEdit = new Stage();
         popupEdit.initModality(Modality.APPLICATION_MODAL);
         FXMLLoader loader = new FXMLLoader(
