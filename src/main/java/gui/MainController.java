@@ -186,7 +186,8 @@ public class MainController {
     }
 
 
-    public void showGraphOptions() {
+    public void showGraphOptions() throws SQLException {
+        dataAnalyser = new DataAnalyser(DataManipulator.getAllRecords());
 
         graphFilterComboBox.getCheckModel().clearChecks();
 
