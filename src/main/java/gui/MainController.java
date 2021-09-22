@@ -18,6 +18,7 @@ import org.controlsfx.control.IndexedCheckModel;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.sql.Array;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -491,12 +492,19 @@ public class MainController {
 
     public void importCsv(){
         String filepath = getPathToCsv();
-        ArrayList<List<String>> rows;
+        Boolean replace = null;
         if (filepath != null) {
+            replace = PopupWindow.displayYesNoPopup("Replace Data?", "Do you want to replace the current data?");
+        }
+        if (replace != null) {
             try {
                 Database d = new Database();
                 d.connectDatabase();
-                d.insertRows(CsvReader.read(filepath));
+                if (!replace) {
+                    d.insertRows(CsvReader.read(filepath));
+                } else {
+                    System.out.print("Replace");
+                }
                 tableTabController.setTableRecords(d.getAll());
                 d.closeConnection();
                 filterSetup();
