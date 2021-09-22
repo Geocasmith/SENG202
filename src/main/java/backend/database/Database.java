@@ -70,14 +70,16 @@ public class Database {
         state3.execute("ALTER TABLE CRIMES\n" +
                 "ADD COLUMN IUCR INTEGER;\n");
     }
-
+    public static void closeConnection() throws SQLException {
+        connection.close();
+    }
     /**
      * Gets an array of Lists from the CSV reader and adds them to the database. Any empty values are entered as NULL type
      *
      * @param inputs an Arraylist of Lists of Strings that is passed into it from the CSV Reader
      * @throws SQLException
      */
-    public void insertRows(ArrayList<List<String>> inputs) throws SQLException, ParseException {
+    public static void insertRows(ArrayList<List<String>> inputs) throws SQLException, ParseException {
 
 
         //Creates the statement to be run
@@ -146,6 +148,7 @@ public class Database {
         //Executes the prepared statement
         s1.executeBatch();
         connection.commit();
+
     }
 
 
@@ -539,7 +542,7 @@ public class Database {
      * @return
      * @throws ParseException
      */
-    public long unixTimeConvert(String date) throws ParseException {
+    public static long unixTimeConvert(String date) throws ParseException {
         Date d = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a").parse(date);
         return d.getTime();
     }
@@ -550,7 +553,7 @@ public class Database {
      * @return a unix time
      * @throws ParseException
      */
-    public long unixTimeConvert(Date d) throws ParseException {
+    public static long unixTimeConvert(Date d) throws ParseException {
         return d.getTime();
     }
 
