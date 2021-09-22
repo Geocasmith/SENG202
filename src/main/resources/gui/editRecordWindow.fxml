@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@textFieldValidation.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.editRecordWindowController">
+   <children>
+      <Label text="Edit Record">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <FlowPane fx:id="fieldPane" hgap="10.0" prefWrapLength="750.0" rowValignment="TOP" vgap="10.0" />
+      <FlowPane fx:id="buttonPane" alignment="CENTER_LEFT" hgap="10.0" vgap="10.0">
+         <children>
+            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveRecord" text="Save record" />
+            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#closeWindow" text="Cancel" />
+         </children>
+      </FlowPane>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</VBox>

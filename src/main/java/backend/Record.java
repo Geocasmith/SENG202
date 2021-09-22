@@ -12,8 +12,8 @@ public class Record {
     private String primaryDescription;
     private String secondaryDescription;
     private String locationDescription;
-    private Boolean arrest;
-    private Boolean domestic;
+    private String arrest;
+    private String domestic;
     private int beat;
     private int ward;
     private String fbicd;
@@ -26,12 +26,14 @@ public class Record {
      * List of strings that will be counted as "true" when parsing fields.
      * Strings in lower case; use a case-insensitive check.
      */
-    public static List<String> trueStrings = Arrays.asList("y", "true", "yes", "1");
+    public static final List<String> trueStrings = Arrays.asList("y", "true", "yes", "1");
     /**
      * List of strings that will be counted as "false" when parsing fields.
      * Strings in lower case; use a case-insensitive check.
      */
-    public static List<String> falseStrings = Arrays.asList("n", "false", "no", "0");
+    public static final List<String> falseStrings = Arrays.asList("n", "false", "no", "0");
+    public static final String TRUE = "Y";
+    public static final String FALSE = "N";
 
     /**
      * Goes through the provided list of crime data and creates a new record object
@@ -47,8 +49,8 @@ public class Record {
         primaryDescription = data.get(4);
         secondaryDescription = data.get(5);
         locationDescription = data.get(6);
-        arrest = parseBooleanString(data.get(7).toLowerCase());
-        domestic = parseBooleanString(data.get(8).toLowerCase());
+        arrest = readBooleanString(data.get(7).toLowerCase());
+        domestic = readBooleanString(data.get(8).toLowerCase());
         beat = Integer.parseInt(data.get(9));
         ward = Integer.parseInt(data.get(10));
         fbicd = data.get(11);
@@ -102,11 +104,11 @@ public class Record {
         return locationDescription;
     }
 
-    public Boolean getArrest() {
+    public String getArrest() {
         return arrest;
     }
 
-    public Boolean getDomestic() {
+    public String getDomestic() {
         return domestic;
     }
 
@@ -179,12 +181,20 @@ public class Record {
         this.locationDescription = locationDescription;
     }
 
-    public void setArrest(Boolean arrest) {
-        this.arrest = arrest;
+    /**
+     * Sets the arrest string value to either a valid input or null.
+     * @param arrest input string
+     */
+    public void setArrest(String arrest) {
+        this.arrest = readBooleanString(arrest);
     }
 
-    public void setDomestic(Boolean domestic) {
-        this.domestic = domestic;
+    /**
+     * Sets the domestic string value to either a valid input or null.
+     * @param domestic input string
+     */
+    public void setDomestic(String domestic) {
+        this.domestic = readBooleanString(domestic);
     }
 
     public void setBeat(int beat) {
@@ -234,19 +244,38 @@ public class Record {
     }
 
     /**
+     * Returns "Y" if the input (case-insensitive) is contained within Record.trueStrings,
+     * "N" if in Record.falseStrings. Returns null if it is in neither.
+     * @param input the string to be read
+     * @return corresponding boolean value
+     */
+    private static String readBooleanString(String input) {
+        if (Record.trueStrings.contains(input.toLowerCase())) {
+            return Record.TRUE;
+        }
+        else if (Record.falseStrings.contains(input.toLowerCase())) {
+            return Record.FALSE;
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
      * Returns "Y" or "N" for true or false input values, respectively.
      * Prints null if input is null.
      * @param input a true/false boolean
-     * @return "Y" for true, "N" for false, "null" for null
+     * @return "Y" for true, "N" for false, null for null
      */
     private String booleanStringChanger(Boolean input) {
         if (input == null) {
-            return "null";
-        } else if (input) {
-            return "Y";
+            return null;
+        }
+        else if (input) {
+            return Record.TRUE;
         }
         else {
-            return "N";
+            return Record.FALSE;
         }
     }
 
@@ -256,22 +285,31 @@ public class Record {
      */
     public String toString() {
         String output = String.format("%s, %s, %s, %s, %s, %s, %s, %s, %s, %d, %d, %s, %d, %s, %s, %s",
-                this.caseNumber, this.date.format(formatter), this.block, this.iucr, this.primaryDescription, this.secondaryDescription, this.locationDescription, booleanStringChanger(this.arrest), booleanStringChanger(this.domestic), this.beat, this.ward, this.fbicd, this.xcoord, this.ycoord, this.latitude, this.longitude);
+                this.caseNumber, this.date.format(formatter), this.block, this.iucr, this.primaryDescription,
+                this.secondaryDescription, this.locationDescription, this.arrest,
+                this.domestic, this.beat, this.ward, this.fbicd, this.xcoord, this.ycoord,
+                this.latitude, this.longitude);
         return output;
     }
 
     /**
      * Returns a string containing all of the data in the record, in the specified format.
      * Can be modified to support additional formats with different formatStrings.
-     * @param formatString a string specifying the format of the returned string. Options are: "labels" (shows labels for data).
+     * @param formatString a string specifying the format of the returned string.
+     *                     Options are: "labels" (shows labels for data).
      * @return a string with all of the data in the record, separated by commas and in the specified format
      */
     public String toString(String formatString) {
         String output;
         switch (formatString){
             case "labels":
-                output = String.format("Case Number: %s, Date: %s, Block: %s, IUCR: %s, Primary Description: %s, Secondary Description: %s, Location Description: %s, Arrest: %s, Domestic: %s, Beat: %d, Ward: %d, FBICD: %s, X Coordinate: %d, Y Coordinate: %s, Latitude: %s, Longitude: %s",
-                        this.caseNumber, this.date.format(formatter), this.block, this.iucr, this.primaryDescription, this.secondaryDescription, this.locationDescription, booleanStringChanger(this.arrest), booleanStringChanger(this.domestic), this.beat, this.ward, this.fbicd, this.xcoord, this.ycoord, this.latitude, this.longitude);
+                output = String.format("Case Number: %s, Date: %s, Block: %s, IUCR: %s, Primary Description: %s, " +
+                                "Secondary Description: %s, Location Description: %s, Arrest: %s, Domestic: %s, " +
+                                "Beat: %d, Ward: %d, FBICD: %s, X Coordinate: %d, Y Coordinate: %s, Latitude: %s, " +
+                                "Longitude: %s",
+                        this.caseNumber, this.date.format(formatter), this.block, this.iucr, this.primaryDescription,
+                        this.secondaryDescription, this.locationDescription, this.arrest, this.domestic, this.beat,
+                        this.ward, this.fbicd, this.xcoord, this.ycoord, this.latitude, this.longitude);
                 break;
             default:
                 output = this.toString();
@@ -289,10 +327,10 @@ public class Record {
         return Arrays.asList(
                 this.getCaseNumber(), this.getDate(), this.getBlock(), this.getIucr(),
                 this.getPrimaryDescription(), this.getSecondaryDescription(), this.getLocationDescription(),
-                booleanStringChanger(this.getArrest()), booleanStringChanger(this.getDomestic()),
-                Integer.toString(this.getBeat()), Integer.toString(this.getWard()), this.getFbicd(),
-                Integer.toString(this.getXcoord()), Integer.toString(this.getYcoord()),
-                Double.toString(this.getLatitude()), Double.toString(this.getLongitude())
+                this.getArrest(), this.getDomestic(), Integer.toString(this.getBeat()),
+                Integer.toString(this.getWard()), this.getFbicd(), Integer.toString(this.getXcoord()),
+                Integer.toString(this.getYcoord()), Double.toString(this.getLatitude()),
+                Double.toString(this.getLongitude())
                 );
     }
 }

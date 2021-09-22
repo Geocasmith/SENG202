@@ -117,6 +117,115 @@ public class InputValidator {
               domestic == "null");
    }
 
+   public static ArrayList<String> recordEntryFeedbackLong(List<String> record) throws CsvValidationException, IOException {
+      // will have 1 = good, 0 = bad for all rows and then a 1 or 0 at the end along with the first error message
+      ArrayList<String> result = new ArrayList<>(Arrays.asList("1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1"));
+      String errMsg = "";
+      String isValid = "1";
+
+      if (!hasValidCaseNumber(record.get(0))) {
+         result.set(0, "0");
+         isValid = "0";
+         System.out.println("casenum");
+         errMsg = "Invalid case number. The case number should be two letters followed by six digits.";
+      }
+
+      if (!hasValidDateAndTimeFormat(record.get(1))) {
+         result.set(1, "0");
+         isValid = "0";
+         System.out.println("date");
+         errMsg = "Invalid date and time. The correct format is mm/dd/yyyy hh:mm:ss am/pm.";
+      }
+
+      // block is not validated
+      if (record.get(2) == null || record.get(2).isEmpty()) {
+         result.set(2, "0");
+         isValid = "0";
+         errMsg = "Block is a required field.";
+      }
+
+      // check IUCR, primary and secondary descriptions, and FBICD
+      List<String> crimeDes = Arrays.asList(record.get(3), record.get(4), record.get(5), record.get(11));
+      if (!hasValidCrimeDescriptions(crimeDes)) {
+         result.set(3, "0");
+         result.set(4, "0");
+         result.set(5, "0");
+         result.set(11, "0");
+         isValid = "0";
+         System.out.println("desc");
+         errMsg = "Invalid crime description, FBICD and/or IUCR.";
+      }
+
+      // location description is not validated
+      if (record.get(6) == null || record.get(6).isEmpty()) {
+         result.set(6, "0");
+         isValid = "0";
+         errMsg = "Location description is a required field.";
+      }
+
+      if (!hasValidBooleanData(record.get(7))) {
+         result.set(7, "0");
+         isValid = "0";
+         System.out.println("arrest");
+         errMsg = "Invalid arrest value. Arrest should be either Y or N.";
+      }
+      if (!hasValidBooleanData(record.get(8))) {
+         result.set(8, "0");
+         isValid = "0";
+         System.out.println("domestic");
+         errMsg = "Invalid domestic value. Domestic should be either Y or N.";
+      }
+
+      if (!hasValidInt(record.get(9))) {
+         result.set(9, "0");
+         isValid = "0";
+         System.out.println("beat");
+         errMsg = "Invalid beat value. Beat should be an integer.";
+      }
+
+      if (!hasValidInt(record.get(10))) {
+         result.set(10, "0");
+         isValid = "0";
+         System.out.println("ward");
+         errMsg = "Invalid ward value. Ward should be an integer.";
+      }
+
+      // FBICD already validated
+
+
+      if (record.get(12).length() > 0 && !hasValidInt(record.get(12))) {
+         result.set(12, "0");
+         isValid = "0";
+         System.out.println("xcoord");
+         errMsg = "Invalid X-Coordinate value. X-Coordinate should be an integer.";
+      }
+
+      if (!hasValidInt(record.get(13))) {
+         result.set(13, "0");
+         isValid = "0";
+         System.out.println("ycoord");
+         errMsg = "Invalid Y-Coordinate value. Y-Coordinate should be an integer.";
+      }
+
+      if (!hasGpsCoordinate(record.get(14), LATITUDELOWERBOUND, LATITUDEUPPERBOUND)) {
+         result.set(14, "0");
+         isValid = "0";
+         System.out.println("lat");
+         errMsg ="Invalid latitude value. Latitude should be between 90 and -90.";
+      }
+
+      if (!hasGpsCoordinate(record.get(15), LONGITUDELOWERBOUND, LONGITUDEUPPERBOUND)) {
+         result.set(15, "0");
+         isValid = "0";
+         System.out.println("long");
+         errMsg = "Invalid longitude value. Longitude should be between 180 and -180.";
+      }
+      result.add(isValid);
+      result.add(errMsg);
+
+      return result;
+   }
+
    /**
     * Calls several methods of InputValidator class on the record parameter to make sure that the given record
     * is a valid record

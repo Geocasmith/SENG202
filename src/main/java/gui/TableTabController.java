@@ -6,12 +6,18 @@ import backend.Record;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -237,7 +243,7 @@ public class TableTabController {
      * If only one row is selected, then call setupEditRow, else show an error somewhere.
      */
     @FXML
-    private void editRow() {
+    private void editRow() throws IOException {
         if (getNumSelectedRows() == 1) {
             setupEditRow(getSelectedRows().get(0));
         }
@@ -247,12 +253,20 @@ public class TableTabController {
     }
 
     /**
-     * Should fill in the values of the specific record in the add record pane
-     * maybe disable the case number field?
+     * Opens a new window with the record's data filled in, which the user can use to edit (or view) it with.
      */
-    private void setupEditRow(Record rec) {
-//        tableAccordion.setExpandedPane(addAccordionTab);
-        EditRecordWindow.displayEditRecordWindow(rec);
+    private void setupEditRow(Record rec) throws IOException {
+        Stage popupEdit = new Stage();
+        popupEdit.initModality(Modality.APPLICATION_MODAL);
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("editRecordWindow.fxml")
+        );
+        popupEdit.setTitle("Edit Record");
+        popupEdit.setScene(new Scene(loader.load()));
+        editRecordWindowController controller = loader.getController();
+        controller.initData(rec);
+        popupEdit.setResizable(false);
+        popupEdit.showAndWait();
     }
 
     /**
