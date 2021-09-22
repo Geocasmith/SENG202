@@ -414,7 +414,9 @@ public class MainController {
 
         if (validFilter) {
             filterErrorLabel.setVisible(false);
-            ArrayList<Record> records = Database.getFilter(startDate, endDate, crimeTypes, locationDescriptions, wards, beats, lat, lon, radius, arrest, domestic);
+            Database d = new Database();
+            ArrayList<Record> records = d.getFilter(startDate, endDate, crimeTypes, locationDescriptions, wards, beats, lat, lon, radius, arrest, domestic);
+            d.closeConnection();
             // Set table to records
             tableTabController.setTableRecords(records);
             refreshMarkers();
