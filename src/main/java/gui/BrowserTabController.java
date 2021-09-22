@@ -6,19 +6,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-
-import java.awt.*;
 
 public class BrowserTabController {
     @FXML
     private WebView browserWebView;
     @FXML
-    private TextField searchQueryField;
-    @FXML
-    private AnchorPane searchPageAnchorPane;
+    private TextField webBrowserSearchField;
     @FXML
     private Button webBrowserForwardButton;
     @FXML
@@ -27,6 +22,10 @@ public class BrowserTabController {
     private RadioButton govWebsitesRadioButton;
     @FXML
     private RadioButton newsWebsitesRadioButton;
+    @FXML
+    private Button webBrowserHomeButton;
+    @FXML
+    private Button webBrowserSearchButton;
 
     private WebEngine browserWebEngine;
 
@@ -52,7 +51,7 @@ public class BrowserTabController {
         webBrowserBackButton.setVisible(false);
         webBrowserForwardButton.setVisible(false);
         browserWebView.setVisible(false);
-        searchQueryField.setText("");
+        webBrowserSearchField.setText("");
         browserWebEngine.load("http://www.blank.org/");
     }
 
@@ -63,7 +62,7 @@ public class BrowserTabController {
 
     public void searchQuery() {
 
-        String query = searchQueryField.getText();
+        String query = webBrowserSearchField.getText();
         if (!query.equals("")) {
             String webpage = "http://google.com/search?q=";
             query.replace(" ", "+");
@@ -72,6 +71,8 @@ public class BrowserTabController {
             } else if (newsWebsitesRadioButton.isSelected()) {
                 webpage = "http://news.google.com/search?q=";
             }
+
+            query += "&hl=en-US&gl=US&ceid=US:en";
 
             browserWebEngine.load(webpage + query);
 

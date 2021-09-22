@@ -24,7 +24,7 @@
         function initialize() {
             var latlng = new google.maps.LatLng(41.7, -87.7);
             var myOptions = {
-                zoom: 7,
+                zoom: 8,
                 center: latlng,
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
                 mapTypeControl: false,
@@ -73,7 +73,8 @@
         document.plotPoint = function plotPoint(lat, long) {
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(lat, long),
-                map: map
+                map: map,
+                'optimized': false
             });
             markers.push(marker);
         }
