@@ -477,8 +477,10 @@ public class MainController {
      * this to the CsvWriter along with the currently displayed records.
      * @throws IOException
      */
-    public void exportCsv() throws IOException{
-        String filepath = null;
+    public void exportCsv() throws IOException, NullPointerException{
+        try{
+            String filepath = null;
+
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select location to save csv file");
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"),
@@ -487,7 +489,9 @@ public class MainController {
         filepath = selectedFile.getAbsolutePath();
         System.out.println(filepath);
         CsvWriter.write(filepath, tableTabController.getDisplayedRecords());
-
+        }catch (Exception e){
+            System.out.println("Path selected is null, error: "+e);
+        }
     }
 
     public void importCsv(){
@@ -508,6 +512,7 @@ public class MainController {
                 tableTabController.setTableRecords(d.getAll());
                 d.closeConnection();
                 filterSetup();
+
             } catch (Exception e) {
                 System.out.println("Error " + e);
             }
@@ -517,6 +522,28 @@ public class MainController {
         }
 
     }
+    /**
+     * Opens the file explorer for the user to select a save location and then passes
+     * this to the database path method which will change the static variable path in database
+     * which is accessed every time the database is connected to
+     * @throws IOException
+     */
+    public void changeDatabase() throws IOException{
+        String filepath = null;
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select location to save csv file");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Database Files", "*.db"),
+                new FileChooser.ExtensionFilter("All Files", "*.*"));
+        File selectedFile = fileChooser.showSaveDialog(new Stage());
+        filepath = selectedFile.getAbsolutePath();
+
+        //Changes the database to the selected path
+        Database d = new Database();
+        d.setDatabasePath(filepath);
+
+        //Refresh all GUI
+    }
+
 
 }
 
