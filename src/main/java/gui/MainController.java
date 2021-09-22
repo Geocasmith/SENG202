@@ -499,6 +499,7 @@ public class MainController {
                 d.insertRows(CsvReader.read(filepath));
                 tableTabController.setTableRecords(d.getAll());
                 d.closeConnection();
+                filterSetup();
             } catch (Exception e) {
                 System.out.println("Error " + e);
             }
