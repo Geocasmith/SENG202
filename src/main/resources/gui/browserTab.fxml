@@ -1,21 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.web.WebView?>
 
 <BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BrowserTabController">
    <center>
-      <WebView fx:id="browserWebView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <WebView fx:id="browserWebView" prefHeight="200.0" prefWidth="200.0" visible="false" />
+         </children>
+      </StackPane>
    </center>
    <top>
-      <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-        <buttons>
-            <Button mnemonicParsing="false" onAction="#goHome" text="Home" />
-            <Button mnemonicParsing="false" onAction="#goForward" text="Forward" />
-          <Button mnemonicParsing="false" onAction="#goBack" text="Back" />
-        </buttons>
-      </ButtonBar>
+      <AnchorPane fx:id="searchPageAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="82.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button layoutX="187.0" layoutY="14.0" mnemonicParsing="false" onAction="#goHome" text="Home" />
+          <Button fx:id="webBrowserBackButton" layoutX="64.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" text="Back" visible="false" />
+            <Button fx:id="webBrowserForwardButton" layoutX="117.0" layoutY="14.0" mnemonicParsing="false" onAction="#goForward" text="Forward" visible="false" />
+            <TextField fx:id="searchQueryField" layoutX="248.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" onAction="#searchFieldOnEnter" prefHeight="25.0" prefWidth="200.0" />
+            <Button fx:id="searchQueryButton" alignment="CENTER" layoutX="462.0" layoutY="14.0" mnemonicParsing="false" onAction="#searchQuery" text="Search" />
+            <RadioButton fx:id="newsWebsitesRadioButton" layoutX="327.0" layoutY="51.0" mnemonicParsing="false" text="News Results">
+               <toggleGroup>
+                  <ToggleGroup fx:id="searchModifierButtonGroup" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="govWebsitesRadioButton" layoutX="182.0" layoutY="51.0" mnemonicParsing="false" selected="true" text="Government Websites" toggleGroup="$searchModifierButtonGroup" />
+         </children>
+      </AnchorPane>
    </top>
 </BorderPane>

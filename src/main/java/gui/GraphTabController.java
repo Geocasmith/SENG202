@@ -23,7 +23,9 @@ public class GraphTabController {
 
     @FXML
     private void initialize() {
-
+        xAxis.setAnimated(false);
+        yAxis.setAnimated(false);
+        lineChart.setAnimated(false);
     }
 
 
@@ -118,70 +120,5 @@ public class GraphTabController {
         lineChart.getData().add(series);
 
         graphBorderPane.setCenter(lineChart);
-    }
-
-    public void start(Stage stage) {
-        stage.setTitle("Simple Graph");
-        //defining the axes
-        //defining a series
-        XYChart.Series series;
-        ArrayList<Object> returnedInfo = graphCreator.createCrimesOverTimeGraph(new ArrayList<Record>());
-        series = (XYChart.Series) returnedInfo.get(1);
-        String label = (String) returnedInfo.get(0);
-
-
-
-
-
-//        Scene scene  = new Scene(barChart,1920,1080);
-//        barChart.getData().add(series);
-
-//        ArrayList<Integer> wards = new ArrayList<>(Arrays.asList(1, 2, 32, 7, 23, 28, 12));
-//        Collections.sort(wards);
-//
-//        ArrayList<XYChart.Series> seriesList = createCrimesPerWardOverTimeGraph(db, wards);
-//        Scene scene  = new Scene(lineChart,1920,1080);
-//        for (int ward : wards) {
-//            lineChart.getData().add(seriesList.get(wards.indexOf(ward)));
-//        }
-
-//        ArrayList<String> crimeTypes = new ArrayList<>(Arrays.asList("THEFT", "ASSAULT", "HOMICIDE"));
-//
-//        ArrayList<XYChart.Series> seriesList;
-//        returnedInfo = createCrimesPerTypeOverTimeGraph(db, crimeTypes);
-//        seriesList = (ArrayList<XYChart.Series>) returnedInfo.get(1);
-//        label = (String) returnedInfo.get(0);
-
-
-        xAxis.setLabel("Time (" + label + ")");
-        yAxis.setLabel("Number of Crimes");
-        //creating the chart
-        final BarChart barChart = new BarChart(xAxis,yAxis);
-        barChart.setTitle("Crimes by Time");
-
-        final CategoryAxis xAxis2 = new CategoryAxis();
-        final NumberAxis yAxis2 = new NumberAxis();
-
-        yAxis2.setLabel("Number of Crimes Per Ward");
-        //creating the chart
-        final LineChart lineChart = new LineChart(xAxis2,yAxis2);
-        lineChart.setTitle("Crimes per Ward by Time");
-
-        Scene scene  = new Scene(lineChart,1920,1080);
-//        for (String crimetype : crimeTypes) {
-//            lineChart.getData().add(seriesList.get(crimeTypes.indexOf(crimetype)));
-//        }
-//
-//        ArrayList<Integer> beats = new ArrayList<>(Arrays.asList(1213, 1121, 332, 1724));
-//        Collections.sort(beats);
-//
-//        ArrayList<XYChart.Series> seriesList = createCrimesPerBeatOverTimeGraph(db, beats);
-//        Scene scene  = new Scene(lineChart,1920,1080);
-//        for (int beat : beats) {
-//            lineChart.getData().add(seriesList.get(beats.indexOf(beat)));
-//        }
-
-        stage.setScene(scene);
-        stage.show();
     }
 }
