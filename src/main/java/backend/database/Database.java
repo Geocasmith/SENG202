@@ -412,7 +412,7 @@ public class Database {
      * @return Arraylist of Records
      * @throws SQLException
      */
-    public static ArrayList<Record> getRecord(ResultSet rs) throws SQLException {
+    public ArrayList<Record> getRecord(ResultSet rs) throws SQLException {
         ArrayList<Record> records = new ArrayList<Record>();
 
         while (rs.next()) {
@@ -444,7 +444,7 @@ public class Database {
     }
 
     //Test with different filters
-    public static ArrayList<Record> getFilter(Date startDate, Date endDate,ArrayList<String> crimeTypes,ArrayList<String> locDes,String ward,String beat,String lat,String lon,int radius,String arrest,String domestic) throws SQLException {
+    public ArrayList<Record> getFilter(Date startDate, Date endDate,ArrayList<String> crimeTypes,ArrayList<String> locDes,String ward,String beat,String lat,String lon,int radius,String arrest,String domestic) throws SQLException {
         connection.setAutoCommit(false);
         String SQLString = "SELECT * FROM CRIMES where (UNIXTIME >= 0) ";
         double radiusInDegrees = radius*(1/110.54);
