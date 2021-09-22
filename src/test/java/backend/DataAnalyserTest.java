@@ -1,9 +1,11 @@
 package backend;
 
+import backend.database.Database;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.time.Duration;
@@ -56,4 +58,15 @@ public class DataAnalyserTest {
         assertEquals(-1, dataAnalyser.calculateLocationDifferenceMeters(testRecord2, testRecord3));
     }
 
+    @Test
+    void getTypeFrequencyTest() throws SQLException {
+        Database db = new Database();
+        DataAnalyser dataAnalyser = new DataAnalyser(db.getAll());
+        ArrayList<TypeFrequencypair> res = new ArrayList<>();
+        ArrayList<Object> testcol = new ArrayList<Object>(Arrays.asList("WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION", "NARCOTICS",
+                "CRIMINAL SEXUAL ASSAULT", "PUBLIC INDECENCY", "NARCOTICS", "NARCOTICS", "NARCOTICS"));
+        res= dataAnalyser.getTypeFrequency(testcol);
+        assertEquals(4, res.get(0).getFrequency());
+
+    }
 }

@@ -1,11 +1,14 @@
 package backend;
+import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-public class DataAnalyser {
+public class
+DataAnalyser {
 
     ArrayList<Integer> crimeWards = new ArrayList<>();
     ArrayList<String> crimeTypes = new ArrayList<>();
@@ -93,6 +96,56 @@ public class DataAnalyser {
         return (int) Math.round(result * 1000.0);
     }
 
+    /**
+     * Comparator for TypeFrequency pair objects (Compares on basis of frequency in a descending order)
+     */
+
+    class frequecyComparatorDescending implements Comparator<TypeFrequencypair> {
+        @Override
+        public int compare(TypeFrequencypair a, TypeFrequencypair b) {
+            return a.getFrequency() > b.getFrequency() ? -1 : a.getFrequency() == b.getFrequency() ? 0 : 1;
+        }
+    }
+
+
+    /**
+     * Comparator for TypeFrequency pair objects (Compares on basis of frequency in an ascending order)
+     */
+
+    class frequecyComparatorAscending implements Comparator<TypeFrequencypair> {
+        @Override
+        public int compare(TypeFrequencypair a, TypeFrequencypair b) {
+            return a.getFrequency() > b.getFrequency() ? -1 : a.getFrequency() == b.getFrequency() ? 0 : 1;
+        }
+    }
+
+    /**
+     * Takes a data column and returns list of data column items together with their appearance frequency
+     * @param column represents the data column
+     * @return res  List of TypeFrequency pair objects
+     * @throws SQLException
+     */
+
+    public ArrayList<TypeFrequencypair> getTypeFrequency(ArrayList<Object> column) throws SQLException {
+        ArrayList<TypeFrequencypair> res = new ArrayList<TypeFrequencypair>();
+        int frequency;
+        for (Object r : column) {
+            TypeFrequencypair pair = new TypeFrequencypair();
+            frequency = Collections.frequency(column, r);
+            // Add to list if items appears in list
+            if (frequency > 0) {
+                pair.setType((String) r);
+                pair.setFrequency(frequency);
+                res.add(pair);
+            }
+        }
+        // Sort descending (Based in frequency)
+        Collections.sort(res, new frequecyComparatorDescending());
+        return res;
+    }
+
+
+
     public ArrayList<String> getCrimeTypes() {
         return crimeTypes;
     }
@@ -104,4 +157,5 @@ public class DataAnalyser {
     public ArrayList<Integer> getCrimeWards() {
         return crimeWards;
     }
+
 }
