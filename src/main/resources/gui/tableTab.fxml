@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="tableTab" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="200.0" stylesheets="@tableTab.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.TableTabController">
+<BorderPane fx:id="tableTab" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="200.0" stylesheets="@textFieldValidation.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.TableTabController">
    <center>
       <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>

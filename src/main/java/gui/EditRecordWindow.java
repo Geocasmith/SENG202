@@ -19,7 +19,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,6 +54,7 @@ public class EditRecordWindow {
 
         // Create & populate textfields
         List<VBox> vBoxes = new ArrayList<>(); // created for use in validation
+        List<TextField> textFields = new ArrayList<>(); // created for use in validation
         FlowPane fieldPane = new FlowPane();
         fieldPane.setPrefWidth(Region.USE_COMPUTED_SIZE);
         fieldPane.setPrefHeight(Region.USE_COMPUTED_SIZE);
@@ -75,6 +78,7 @@ public class EditRecordWindow {
             }
             vbox.getChildren().addAll(fieldTitleLabel, field, reqLabel);
             vBoxes.add(vbox);
+            textFields.add(field);
         }
         fieldPane.getChildren().addAll(vBoxes);
 
@@ -82,25 +86,46 @@ public class EditRecordWindow {
         // Set up validation & attempt at saving data...
         saveButton.setOnAction(e -> {
             List<String> data = new ArrayList<>();
-            for (VBox vbox : vBoxes){
-                data.add(((TextField) vbox.getChildren().get(1)).getText());
+            for (TextField field : textFields){
+                data.add(field.getText());
             }
             try {
-                ArrayList<String> feedback = InputValidator.recordEntryFeedback(data);
-                if (feedback.get(0) == "1") {
+                List<String> feedback = InputValidator.recordEntryFeedbackLong(data);
+                System.out.println(feedback);
+                if (feedback.get(16) == "1") {
                     // TODO find how to edit/delete/add from the database!!!!
                     PopupWindow.displayPopup("Success", "That record is good, but this feature isn't finished yet.");
                 }
                 else {
-                    PopupWindow.displayPopup("Error", feedback.get(1));
+                    for (int i = 0; i < 15; i++) { // there is 1 value for each textfield
+                        TextField field = textFields.get(i);
+                        if (feedback.get(i) == "0") {
+                            if (field.getStyleClass().contains("defaulttextfield")) {
+                                field.getStyleClass().remove("defaulttextfield");
+                            }
+                            field.getStyleClass().add("required");
+                        }
+                        else {
+                            if (field.getStyleClass().contains("required")) {
+                                field.getStyleClass().remove("required");
+                            }
+                            field.getStyleClass().add("defaulttextfield");
+                        }
+                    }
+                    PopupWindow.displayPopup("Error", feedback.get(17));
                 }
             } catch (Exception ex) {
                 PopupWindow.displayPopup("Error", "An exception occurred while trying to save that record.");
+                ex.printStackTrace();
+                System.out.println(ex);
             }
         });
 
         // setup overall window layout
         VBox layout = new VBox();
+//        layout.getStylesheets().add("../../resources/gui/textFieldValidation.css");
+//        .getStylesheets().add(this.getClass().
+//                getResource(“/cssStyles/base.css”).toExternalForm());
         layout.setPrefHeight(Region.USE_COMPUTED_SIZE);
         layout.setPrefWidth(Region.USE_COMPUTED_SIZE);
         Label titleLabel = new Label("Edit Record");
