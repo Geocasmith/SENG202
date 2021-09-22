@@ -3,6 +3,7 @@ package gui;
 import backend.DataManipulator;
 import backend.InputValidator;
 import backend.Record;
+import backend.database.Database;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -230,12 +231,23 @@ public class TableTabController {
     }
 
     /**
-     * Deletes the selected rows. Don't know how this will work.
+     * Deletes the selected rows from the database.
      */
     @FXML
     private void deleteSelectedRows() throws SQLException {
-        for (Record rec : getSelectedRows()) {
-            //Database.manualDelete(rec.getCaseNumber());
+        int num = getNumSelectedRows();
+        if (PopupWindow.displayYesNoPopup("Confirm Action", "You are about to delete " +
+                num + " rows. This action cannot be undone.\nAre you sure you want" +
+                " to do this?")) {
+            Database d = new Database();
+            List<Record> selectedRows = getSelectedRows();
+            for (Record rec : selectedRows) {
+                d.manualDelete(rec.getCaseNumber());
+            }
+            mainTableView.getItems().removeAll(selectedRows);
+            mainTableView.getSelectionModel().clearSelection();
+            d.closeConnection();
+            PopupWindow.displayPopup("Success", num + " rows successfully deleted.");
         }
     }
 

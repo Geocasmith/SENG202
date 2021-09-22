@@ -2,6 +2,7 @@ package gui;
 
 import backend.InputValidator;
 import backend.Record;
+import backend.database.Database;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -89,7 +90,8 @@ public class editRecordWindowController {
             }
 
             if (feedback.get(16) == "1") {
-                // TODO find how to edit/delete/add from the database!!!!
+                //Database d = new Database();
+                //d.manualUpdate();
                 PopupWindow.displayPopup("Success", "That record is good, but this feature isn't finished yet.");
             }
             else {

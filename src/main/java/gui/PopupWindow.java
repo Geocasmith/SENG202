@@ -65,6 +65,7 @@ public class PopupWindow {
         });
 
         VBox layout = new VBox(10);
+        layout.setPadding(new Insets(20));
         layout.getChildren().addAll(label, yesButton, noButton);
         layout.setAlignment(Pos.CENTER);
 
