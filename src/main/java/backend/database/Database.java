@@ -23,6 +23,7 @@ import static java.lang.String.valueOf;
  */
 public class Database {
     private static Connection connection;
+    private static String databaseName = "crimeRecords";
     private static boolean notEmpty = false;
     private static List<String> columns = Arrays.asList("IUCR TEXT", "PRIMARYDESCRIPTION TEXT", "SECONDARYDESCRIPTION TEXT",
             "LOCATIONDESCRIPTION TEXT", "ARREST TEXT", "DOMESTIC TEXT", "BEAT INTEGER", "WARD INTEGER", "FBICD TEXT",
@@ -36,7 +37,9 @@ public class Database {
             e.printStackTrace();
         }
     }
-
+    public void setDatabaseName(String databaseName) {
+        this.databaseName = databaseName;
+    }
     /**
      * Gets connection to the database and then calls the create table function
      *
@@ -45,7 +48,7 @@ public class Database {
     public void connectDatabase() throws SQLException {
         try {
             Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:./Files/crimeRecords.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:./Files/"+databaseName+".db");
             createTable();
         } catch (Exception e) {
             //System.out.println("Database connection failed");
