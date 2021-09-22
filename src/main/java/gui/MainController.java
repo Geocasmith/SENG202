@@ -503,7 +503,7 @@ public class MainController {
                 if (!replace) {
                     d.insertRows(CsvReader.read(filepath));
                 } else {
-                    System.out.print("Replace");
+                    d.replaceRows(CsvReader.read(filepath));
                 }
                 tableTabController.setTableRecords(d.getAll());
                 d.closeConnection();
