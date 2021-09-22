@@ -29,12 +29,20 @@ public class Database {
             "XCOORDINATE INTEGER", "YCOORDINATE INTEGER", "LATITUDE REAL", "LONGITUDE REAL", "UNIXTIME REAL");
 
 
+    public Database() {
+        try {
+            connectDatabase();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Gets connection to the database and then calls the create table function
      *
      * @throws SQLException
      */
-    public static void connectDatabase() throws SQLException {
+    public void connectDatabase() throws SQLException {
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:./Files/crimeRecords.db");
@@ -50,7 +58,7 @@ public class Database {
      *
      * @throws SQLException
      */
-    public static void createTable() throws SQLException {
+    public void createTable() throws SQLException {
 
         //Creates the original table
         Statement state2 = connection.createStatement();
@@ -70,7 +78,7 @@ public class Database {
         state3.execute("ALTER TABLE CRIMES\n" +
                 "ADD COLUMN IUCR INTEGER;\n");
     }
-    public static void closeConnection() throws SQLException {
+    public void closeConnection() throws SQLException {
         connection.close();
     }
     /**
@@ -79,7 +87,7 @@ public class Database {
      * @param inputs an Arraylist of Lists of Strings that is passed into it from the CSV Reader
      * @throws SQLException
      */
-    public static void insertRows(ArrayList<List<String>> inputs) throws SQLException, ParseException {
+    public void insertRows(ArrayList<List<String>> inputs) throws SQLException, ParseException {
 
 
         //Creates the statement to be run
@@ -219,7 +227,7 @@ public class Database {
      * @param colId int type argument representing the column number
      * @return columnName String object that maps to the given column number
      */
-    public static String getColName(int colId) {
+    public String getColName(int colId) {
         String columnName = "";
         switch (colId) {
             case 0:
@@ -289,7 +297,7 @@ public class Database {
      * @throws SQLException
      */
 
-    public static ArrayList<Object> extractCol(String columnName) throws SQLException {
+    public ArrayList<Object> extractCol(String columnName) throws SQLException {
         connection.setAutoCommit(false);
         PreparedStatement s1 = connection.prepareStatement("select " + columnName + " from CRIMES");
         ResultSet rs = s1.executeQuery();
@@ -366,7 +374,7 @@ public class Database {
      * @return
      * @throws SQLException
      */
-    public static ArrayList<Record> getAll() throws SQLException {
+    public ArrayList<Record> getAll() throws SQLException {
         connection.setAutoCommit(false);
         PreparedStatement s1 = connection.prepareStatement("SELECT * FROM CRIMES;");
         ResultSet rs = s1.executeQuery();
@@ -520,7 +528,7 @@ public class Database {
      * @return colValues ArrayList<Object> generated from reading ResultSet object
      * @throws SQLException
      */
-    public static ArrayList<Object> readColumnValues(ResultSet rs, String column) throws SQLException {
+    public ArrayList<Object> readColumnValues(ResultSet rs, String column) throws SQLException {
         ArrayList<Object> colValues = new ArrayList<>();
 
         while (rs.next()) {

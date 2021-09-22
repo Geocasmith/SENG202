@@ -132,8 +132,9 @@ public class MainController {
         domesticComboBox.getItems().addAll("", "Y", "N");
         domesticComboBox.getSelectionModel().select("");
 
-
-        ArrayList<String> locationDescriptions  = (ArrayList<String>)(ArrayList<?>)(Database.extractCol("LOCATIONDESCRIPTION"));
+        Database d = new Database();
+        ArrayList<String> locationDescriptions  = (ArrayList<String>)(ArrayList<?>)(d.extractCol("LOCATIONDESCRIPTION"));
+        d.closeConnection();
         // Remove duplicate values
         locationDescriptions = new ArrayList<>(new HashSet<>(locationDescriptions));
 
@@ -442,7 +443,9 @@ public class MainController {
         radiusLabel.setText("0 km");
         arrestComboBox.getSelectionModel().select("");
         domesticComboBox.getSelectionModel().select("");
-        tableTabController.setTableRecords(Database.getAll());
+        Database d = new Database();
+        tableTabController.setTableRecords(d.getAll());
+        d.closeConnection();
         filterErrorLabel.setVisible(false);
         refreshMarkers();
     }
@@ -488,12 +491,11 @@ public class MainController {
         ArrayList<List<String>> rows;
         if (filepath != null) {
             try {
-                /*Database.closeConnection();
                 Database d = new Database();
                 d.connectDatabase();
-                Database.insertRows(CsvReader.read(filepath));
-                tableTabController.setTableRecords(Database.getAll());
-                d.closeConnection();*/
+                d.insertRows(CsvReader.read(filepath));
+                tableTabController.setTableRecords(d.getAll());
+                d.closeConnection();
             } catch (Exception e) {
                 System.out.println("Error " + e);
             }

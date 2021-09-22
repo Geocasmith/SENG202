@@ -209,8 +209,10 @@ private ArrayList<Record> currentData;
      */
 
     public static ArrayList<Record> getAllRecords() throws SQLException {
-        Database.connectDatabase();
-        return Database.getAll();
+        Database d = new Database();
+        ArrayList<Record> records = d.getAll();
+        d.closeConnection();
+        return records;
     }
 
     /**
@@ -224,8 +226,9 @@ private ArrayList<Record> currentData;
         ArrayList<ArrayList<Object> > dataToGraph = new ArrayList<ArrayList<Object>>();
         Database db = new Database();
         db.connectDatabase();
-        dataToGraph.add(db.extractCol(Database.getColName(col1)));
-        dataToGraph.add(db.extractCol(Database.getColName(col2)));
+        dataToGraph.add(db.extractCol(db.getColName(col1)));
+        dataToGraph.add(db.extractCol(db.getColName(col2)));
+        db.closeConnection();
         return dataToGraph;
 
     }
