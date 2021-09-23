@@ -77,15 +77,21 @@ public class InputValidator {
    /**
     * Checks whether the string provided is a valid integer value.
     * @param data the String to be checked
+    * @param empty whether or not the number can empty
     * @return true or false
     */
-   public static boolean hasValidInt(String data)
+   public static boolean hasValidInt(String data, boolean empty)
    {
-      try {
-         Integer.parseInt(data);
+      if (empty && data.isEmpty()) {
          return true;
-      } catch (Exception e) {
-         return false;
+      }
+      else {
+         try {
+            Integer.parseInt(data);
+            return true;
+         } catch (Exception e) {
+            return false;
+         }
       }
    }
 
@@ -184,7 +190,7 @@ public class InputValidator {
          dataFieldFeedBack.add(errMsg);
       }
 
-      if (!hasValidInt(record.get(9))) {
+      if (!hasValidInt(record.get(9), false)) {
          result.set(9, "0");
          isValid = "0";
          System.out.println("beat");
@@ -192,7 +198,7 @@ public class InputValidator {
          dataFieldFeedBack.add(errMsg);
       }
 
-      if (!hasValidInt(record.get(10))) {
+      if (!hasValidInt(record.get(10), false)) {
          result.set(10, "0");
          isValid = "0";
          System.out.println("ward");
@@ -203,19 +209,20 @@ public class InputValidator {
       // FBICD already validated
 
 
-      if (record.get(12).length() > 0 && !hasValidInt(record.get(12))) {
+      if (record.get(12).length() > 0 && !hasValidInt(record.get(12), true)) {
          result.set(12, "0");
          isValid = "0";
          System.out.println("xcoord");
-         errMsg = "Invalid X-Coordinate value. X-Coordinate should be an integer.";
+         errMsg = "Invalid X-Coordinate value. X-Coordinate should be an integer or empty.";
          dataFieldFeedBack.add(errMsg);
       }
 
-      if (!hasValidInt(record.get(13))) {
+      if (!hasValidInt(record.get(13), true)) {
          result.set(13, "0");
          isValid = "0";
          System.out.println("ycoord");
-         errMsg = "Invalid Y-Coordinate value. Y-Coordinate should be an integer.";
+         System.out.println(record.get(13));
+         errMsg = "Invalid Y-Coordinate value. Y-Coordinate should be an integer or empty.";
          dataFieldFeedBack.add(errMsg);
       }
 
@@ -223,7 +230,7 @@ public class InputValidator {
          result.set(14, "0");
          isValid = "0";
          System.out.println("lat");
-         errMsg ="Invalid latitude value. Latitude should be between 90 and -90.";
+         errMsg ="Invalid latitude value. Latitude should be between 90 and -90 or empty.";
          dataFieldFeedBack.add(errMsg);
       }
 
@@ -231,7 +238,7 @@ public class InputValidator {
          result.set(15, "0");
          isValid = "0";
          System.out.println("long");
-         errMsg = "Invalid longitude value. Longitude should be between 180 and -180.";
+         errMsg = "Invalid longitude value. Longitude should be between 180 and -180 or empty.";
          dataFieldFeedBack.add(errMsg);
       }
       result.add(isValid);

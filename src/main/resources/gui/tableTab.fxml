@@ -165,12 +165,17 @@
             </Accordion>
             <FlowPane>
                <children>
-                  <Button fx:id="deleteRowsButton" mnemonicParsing="false" onAction="#deleteSelectedRows" text="Delete Selected Row(s)">
+                  <Button fx:id="addRowButton" mnemonicParsing="false" onAction="#addRow" text="Add Record (fancy)">
                      <FlowPane.margin>
                         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                      </FlowPane.margin>
                   </Button>
                   <Button fx:id="editRowButton" mnemonicParsing="false" onAction="#editRow" text="Edit Row">
+                     <FlowPane.margin>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </FlowPane.margin>
+                  </Button>
+                  <Button fx:id="deleteRowsButton" mnemonicParsing="false" onAction="#deleteSelectedRows" text="Delete Selected Row(s)">
                      <FlowPane.margin>
                         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                      </FlowPane.margin>

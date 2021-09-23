@@ -102,6 +102,7 @@ public class MainController {
         filterSetup();
         graphSetup();
         mapSetup();
+        tableTabController.setParentController(this);
         // Example link opener code
 //        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 //            Desktop.getDesktop().browse(new URI("hello"));
@@ -299,6 +300,7 @@ public class MainController {
      * Applies all currently selected filters
      */
     public void applyFilters() throws SQLException, IOException {
+        System.out.println("Doing the thing");
         // Initialize variables for filter
         Date startDate = null;
         Date endDate = null;
@@ -360,7 +362,7 @@ public class MainController {
         if (!(text.equals(""))) {
             wards = text;
 
-            if (!InputValidator.hasValidInt(wards)) {
+            if (!InputValidator.hasValidInt(wards, false)) {
                 filterErrorLabel.setText("Ward must be a number");
                 validFilter = false;
             }
@@ -371,7 +373,7 @@ public class MainController {
         if (!(text.equals(""))) {
             beats = text;
 
-            if (!InputValidator.hasValidInt(beats)) {
+            if (!InputValidator.hasValidInt(beats, false)) {
                 filterErrorLabel.setText("Beat must be a number");
                 validFilter = false;
             }

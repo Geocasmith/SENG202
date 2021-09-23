@@ -51,6 +51,7 @@ public class TableTabController {
     @FXML private TextField addYCoordField;
     @FXML private TextField addLatitudeField;
     @FXML private TextField addLongitudeField;
+    @FXML private Button addRowButton;
     @FXML private Button deleteRowsButton;
     @FXML private Button editRowButton;
     @FXML private Accordion tableAccordion;
@@ -58,6 +59,7 @@ public class TableTabController {
     @FXML private TitledPane addAccordionTab;
 
     private List<TextField> textFieldsAdd = new ArrayList<TextField>();
+    private MainController parentController;
 
 
     @FXML
@@ -255,13 +257,21 @@ public class TableTabController {
      * If only one row is selected, then call setupEditRow, else show an error somewhere.
      */
     @FXML
-    private void editRow() throws IOException {
+    private void editRow() throws IOException, SQLException {
         if (getNumSelectedRows() == 1) {
             setupEditRow(getSelectedRows().get(0));
         }
         else {
             PopupWindow.displayPopup("Error", "You must have only one row selected to edit a record.");
         }
+    }
+
+    /**
+     * Opens the "edit" window, but configured to add rows instead of edit them.
+     */
+    @FXML
+    private void addRow() throws SQLException, IOException {
+        setupEditRow(null);
     }
 
     /**
@@ -277,6 +287,7 @@ public class TableTabController {
         popupEdit.setScene(new Scene(loader.load()));
         editRecordWindowController controller = loader.getController();
         controller.initData(rec);
+        controller.setParentController(this);
         popupEdit.setResizable(false);
         popupEdit.showAndWait();
     }
@@ -325,5 +336,20 @@ public class TableTabController {
             currentRecords.add((Record) o);
         }
         return currentRecords;
+    }
+
+    /**
+     * Stores a reference to the parent controller, in this case mainController.
+     * @param mainController
+     */
+    public void setParentController(MainController mainController) {
+        this.parentController = mainController;
+    }
+
+    /**
+     * Heavy-handed method of refreshing the table's data - reloads everything from the database with filters applied.
+     */
+    public void refreshTableData() throws SQLException, IOException {
+        parentController.applyFilters();
     }
 }

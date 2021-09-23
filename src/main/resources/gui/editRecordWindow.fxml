@@ -9,7 +9,7 @@
 
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@textFieldValidation.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.editRecordWindowController">
    <children>
-      <Label text="Edit Record">
+      <Label fx:id="titleLabel" text="Edit Record">
          <font>
             <Font size="24.0" />
          </font>
@@ -18,7 +18,7 @@
       <FlowPane fx:id="buttonPane" alignment="CENTER_LEFT" hgap="10.0" vgap="10.0">
          <children>
             <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveRecord" text="Save record" />
-            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#closeWindow" text="Cancel" />
+            <Button fx:id="closeButton" mnemonicParsing="false" onAction="#closeWindow" text="Close" />
          </children>
       </FlowPane>
    </children>
