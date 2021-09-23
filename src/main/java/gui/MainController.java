@@ -111,7 +111,6 @@ public class MainController {
     private void initialize() throws SQLException, IOException, CsvValidationException, URISyntaxException {
         filterSetup();
         graphSetup();
-        mapSetup();
         tableTabController.setParentController(this);
         // Example link opener code
 //        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
