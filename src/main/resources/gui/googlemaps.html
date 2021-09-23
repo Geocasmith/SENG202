@@ -15,7 +15,7 @@
             background:none !important;
         }
     </style>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBW-d_-W5qGFc9RBlZuvA0UyyimTnuKUfE&callback=initMap">
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=weekly&key=AIzaSyBW-d_-W5qGFc9RBlZuvA0UyyimTnuKUfE&callback=initMap">
     </script>
     <script type="text/javascript">
         var map;
@@ -74,7 +74,7 @@
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(lat, long),
                 map: map,
-                'optimized': false
+                'optimized': true
             });
             markers.push(marker);
         }

@@ -4,12 +4,17 @@ import backend.*;
 import backend.Record;
 import backend.database.Database;
 import com.opencsv.exceptions.CsvValidationException;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
@@ -17,7 +22,10 @@ import org.controlsfx.control.IndexedCheckModel;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.sql.Array;
 import java.sql.SQLException;
 import java.time.Instant;
@@ -49,6 +57,8 @@ public class MainController {
     private TabPane mainTabPane;
     @FXML
     private Tab graphTabPane;
+    @FXML
+    private Tab tableTabPane;
     @FXML
     private Accordion sidebarAccordion;
     @FXML
@@ -109,14 +119,32 @@ public class MainController {
 //        }
     }
 
-    private void mapSetup() {
-//        mapTabController.updateMarkers(tabTableController.getDisplayedRecords());
-
-    }
-
     @FXML
     private void refreshMarkers() {
-        mapTabController.updateMarkers(tableTabController.getDisplayedRecords());
+        boolean connected;
+        try {
+            URL url = new URL("http://www.google.com");
+            URLConnection connection = url.openConnection();
+            connection.connect();
+            connected = true;
+        } catch (MalformedURLException e) {
+            connected = false;
+        } catch (IOException e) {
+            connected = false;
+        }
+        if (!connected) {
+            PopupWindow.displayPopup("Error", "You must be connected to the internet to use this feature");
+            mainTabPane.getSelectionModel().select(tableTabPane);
+        } else {
+            ArrayList<Record> displayedRecords = tableTabController.getDisplayedRecords();
+            if (displayedRecords.size() < 1001) {
+                mapTabController.updateMarkers(displayedRecords);
+            } else {
+                mapTabController.updateMarkers(new ArrayList<Record>(displayedRecords.subList(0, 1000)));
+            }
+
+        }
+
     }
 
 
@@ -161,30 +189,9 @@ public class MainController {
     /**
      * Sets up combo boxes in the graph pane
      */
-    public void graphSetup() {
+    public void graphSetup() throws SQLException {
         graphTypeComboBox.getItems().addAll( "", "All Crimes", "Crimes Per Ward", "Crimes Per Beat", "Crimes Per Type");
         graphTypeComboBox.getSelectionModel().select("");
-
-//        graphFilterComboBox.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
-//            public void onChanged(ListChangeListener.Change<? extends String> c) {
-//                ObservableList<Integer> indicesToCheck = (ObservableList<Integer>) graphFilterComboBox.getCheckModel().getCheckedIndices();
-//                for (Object o : indicesToCheck) {
-//                    System.out.println(o);
-//                }
-//                 {
-//
-//
-//                    graphFilterComboBox.getCheckModel().checkAll();
-//                    graphFilterComboBox.getCheckModel().clearChecks();
-//                    for (Object index : indicesToCheck.subList(0, 4)) {
-//                        graphFilterComboBox.getCheckModel().check(index);
-//                    }
-//
-//                }
-//            }
-//        });
-
-
     }
 
 
