@@ -90,9 +90,10 @@ public class editRecordWindowController {
             }
 
             if (feedback.get(16) == "1") {
-                //Database d = new Database();
-                //d.manualUpdate();
-                PopupWindow.displayPopup("Success", "That record is good, but this feature isn't finished yet.");
+                Database d = new Database();
+                d.manualUpdate(new Record(data));
+                d.closeConnection();
+                PopupWindow.displayPopup("Success", "The record has been updated.");
             }
             else {
                 PopupWindow.displayPopup("Error", feedback.get(17));

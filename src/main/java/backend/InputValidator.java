@@ -235,8 +235,9 @@ public class InputValidator {
          dataFieldFeedBack.add(errMsg);
       }
       result.add(isValid);
-      result.add(dataFieldFeedBack.get(0));
-
+      if (dataFieldFeedBack.size() > 0) {
+         result.add(dataFieldFeedBack.get(0));
+      }
 
       return result;
    }
