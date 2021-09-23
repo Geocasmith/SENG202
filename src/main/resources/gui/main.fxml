@@ -54,7 +54,7 @@
    <center>
       <TabPane fx:id="mainTabPane" nodeOrientation="RIGHT_TO_LEFT" prefHeight="200.0" prefWidth="200.0" styleClass="mainTabPane" stylesheets="@main.css" tabClosingPolicy="UNAVAILABLE" tabMinWidth="60.0" BorderPane.alignment="CENTER">
         <tabs>
-            <Tab text="Table">
+            <Tab fx:id="tableTabPane" text="Table">
                <content>
                    <fx:include fx:id="tableTab" source="tableTab.fxml" />
                </content>
