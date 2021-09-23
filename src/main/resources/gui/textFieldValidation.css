@@ -1,6 +1,6 @@
 /*  default stylesheet: https://gist.github.com/maxd/63691840fc372f22f470 */
 
-.required {
+:textfield-required {
     -fx-background-color:
         -fx-control-inner-background,
         red,
@@ -12,7 +12,7 @@
     -fx-background-insets: -40, -30, -20, -10;*/
 }
 
-.defaulttextfield { /* default styles for textfields */
+.textfield-default { /* default styles for textfields */
 
     -fx-background-color: linear-gradient(to bottom, derive(-fx-text-box-border, -10%), -fx-text-box-border),
         linear-gradient(from 0px 0px to 0px 5px, derive(-fx-control-inner-background, -9%), -fx-control-inner-background);

@@ -4,6 +4,7 @@ import backend.InputValidator;
 import backend.Record;
 import backend.database.Database;
 import com.opencsv.exceptions.CsvValidationException;
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -57,7 +58,7 @@ public class editRecordWindowController {
             for (int i = 0; i < textFieldNames.size(); i++) {
                 textFields.get(i).setText(recStrings.get(i));
             }
-            textFields.get(0).setEditable(false); // disable editing of case number as this must be unique
+            textFields.get(0).setDisable(true); // disables editing, focus, and click for casenum
         }
         else {
             edit = false;
@@ -114,16 +115,10 @@ public class editRecordWindowController {
         for (int i = 0; i < 16; i++) { // there is 1 value for each textfield
             TextField field = textFields.get(i);
             if (feedback.get(i) == "0") {
-                if (field.getStyleClass().contains("defaulttextfield")) {
-                    field.getStyleClass().remove("defaulttextfield");
-                }
-                field.getStyleClass().add("required");
+                field.pseudoClassStateChanged(PseudoClass.getPseudoClass("textfield-required"), true);
             }
             else {
-                if (field.getStyleClass().contains("required")) {
-                    field.getStyleClass().remove("required");
-                }
-                field.getStyleClass().add("defaulttextfield");
+                field.pseudoClassStateChanged(PseudoClass.getPseudoClass("textfield-required"), false);
             }
         }
 
