@@ -111,10 +111,6 @@ public class MainController {
     private void initialize() throws SQLException, IOException, CsvValidationException, URISyntaxException {
         filterSetup();
         graphSetup();
-        // Example link opener code
-//        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-//            Desktop.getDesktop().browse(new URI("hello"));
-//        }
     }
 
     @FXML
@@ -134,7 +130,13 @@ public class MainController {
             PopupWindow.displayPopup("Error", "You must be connected to the internet to use this feature");
             mainTabPane.getSelectionModel().select(tableTabPane);
         } else {
-            mapTabController.updateMarkers(tableTabController.getDisplayedRecords());
+            ArrayList<Record> displayedRecords = tableTabController.getDisplayedRecords();
+            if (displayedRecords.size() < 1001) {
+                mapTabController.updateMarkers(displayedRecords);
+            } else {
+                mapTabController.updateMarkers(new ArrayList<Record>(displayedRecords.subList(0, 1000)));
+            }
+
         }
 
     }
@@ -184,9 +186,6 @@ public class MainController {
     public void graphSetup() throws SQLException {
         graphTypeComboBox.getItems().addAll( "", "All Crimes", "Crimes Per Ward", "Crimes Per Beat", "Crimes Per Type");
         graphTypeComboBox.getSelectionModel().select("");
-
-        System.out.println(DataManipulator.getAllRecords().size());
-
     }
 
 
