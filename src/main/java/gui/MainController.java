@@ -300,7 +300,6 @@ public class MainController {
      * Applies all currently selected filters
      */
     public void applyFilters() throws SQLException, IOException {
-        System.out.println("Doing the thing");
         // Initialize variables for filter
         Date startDate = null;
         Date endDate = null;

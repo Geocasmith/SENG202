@@ -662,7 +662,7 @@ public class Database {
         CsvReader csv = new CsvReader();
         db.connectDatabase();
         db.insertRows(csv.read("full_crimes.csv"));
-        System.out.println("SUccess");
+        System.out.println("Success");
     }
 }
 

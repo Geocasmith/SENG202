@@ -167,7 +167,6 @@ public class TableTabController {
         //else { // create the record
             if (InputValidator.isValidRecord(recStrings)) {
                 Record rec = new Record(recStrings);
-                System.out.println(rec);
                 addRecordLabel.setText((InputValidator.recordEntryFeedbackLong(recStrings).get(17)));
                 return rec;
             } else {
