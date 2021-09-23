@@ -56,13 +56,22 @@ public class Record {
         fbicd = data.get(11);
         if (Objects.equals(data.get(12), "")) {
             xcoord = -1;
-            ycoord = -1;
-            latitude = null;
-            longitude = null;
         } else {
             xcoord = Integer.parseInt(data.get(12));
+        }
+        if (Objects.equals(data.get(13), "")) {
+            ycoord = -1;
+        } else {
             ycoord = Integer.parseInt(data.get(13));
+        }
+        if (Objects.equals(data.get(14), "")) {
+            latitude = null;
+        } else {
             latitude = Double.parseDouble(data.get(14));
+        }
+        if (Objects.equals(data.get(15), "")) {
+            longitude = null;
+        } else {
             longitude = Double.parseDouble(data.get(15));
         }
 

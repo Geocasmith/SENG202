@@ -150,13 +150,13 @@ public class Database {
                 s1.setInt(14, Integer.parseInt(c13));
             }
             String c14 = (String) column.get(14);
-            if (c14.equals("")) {
+            if (c14.equals("") || c14.equals("null")) {
                 s1.setString(10, "NULL");
             } else {
                 s1.setFloat(15, Float.parseFloat(c14));
             }
             String c15 = (String) column.get(15);
-            if (c15.equals("")) {
+            if (c15.equals("") || c15.equals("null")) {
                 s1.setString(10, "NULL");
             } else {
                 s1.setFloat(16, Float.parseFloat(c15));
