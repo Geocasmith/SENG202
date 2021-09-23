@@ -24,7 +24,7 @@ public class PopupWindow {
         Label label = new Label();
         label.setText(message);
 
-        Button exitButton = new Button("Exit");
+        Button exitButton = new Button("OK");
         exitButton.setOnAction(e -> popupWindow.close());
 
         VBox layout = new VBox(10);
