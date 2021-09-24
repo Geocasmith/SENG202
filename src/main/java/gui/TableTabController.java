@@ -229,6 +229,22 @@ public class TableTabController {
 
             mainTableView.getItems().add(r);
         }
+
+        // Setup double click event to open the edit window when a row is double clicked
+        mainTableView.setRowFactory( tv -> {
+            TableRow<Record> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                    Record rowData = row.getItem();
+                    try {
+                        setupEditRow(rowData);
+                    } catch (IOException e) {
+
+                    }
+                }
+            });
+            return row ;
+        });
     }
 
     /**
@@ -289,6 +305,7 @@ public class TableTabController {
         controller.setParentController(this);
         popupEdit.setResizable(false);
         popupEdit.showAndWait();
+
     }
 
     /**
