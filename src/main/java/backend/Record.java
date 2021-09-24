@@ -235,24 +235,6 @@ public class Record {
     }
 
     /**
-     * Returns true if the input (case-insensitive) is contained within Record.trueStrings,
-     * false if in Record.falseStrings. Returns null if it is in neither.
-     * @param input the string to be read
-     * @return corresponding boolean value
-     */
-    private static Boolean parseBooleanString(String input) {
-        if (Record.trueStrings.contains(input.toLowerCase())) {
-            return true;
-        }
-        else if (Record.falseStrings.contains(input.toLowerCase())) {
-            return false;
-        }
-        else {
-            return null;
-        }
-    }
-
-    /**
      * Returns "Y" if the input (case-insensitive) is contained within Record.trueStrings,
      * "N" if in Record.falseStrings. Returns null if it is in neither.
      * @param input the string to be read
@@ -267,24 +249,6 @@ public class Record {
         }
         else {
             return null;
-        }
-    }
-
-    /**
-     * Returns "Y" or "N" for true or false input values, respectively.
-     * Prints null if input is null.
-     * @param input a true/false boolean
-     * @return "Y" for true, "N" for false, null for null
-     */
-    private String booleanStringChanger(Boolean input) {
-        if (input == null) {
-            return null;
-        }
-        else if (input) {
-            return Record.TRUE;
-        }
-        else {
-            return Record.FALSE;
         }
     }
 
@@ -328,18 +292,46 @@ public class Record {
     }
 
     /**
+     * Support function for toList(). Returns null if o is null, else o.toString().
+     * @param o
+     * @return
+     */
+    private String parsePossibleNullToString(Object o) {
+        if (o == null) {
+            return null;
+        }
+        else {
+            return o.toString();
+        }
+    }
+
+    /**
      * Returns the record object as a list of strings. It's not pretty, but it is useful for iterating over the
      * record object.
      * @return
      */
     public List<String> toList() {
+//        List<String> result = Arrays.asList(
+//            this.getCaseNumber(), this.getDate(), this.getBlock(), this.getIucr(),
+//            this.getPrimaryDescription(), this.getSecondaryDescription(), this.getLocationDescription(),
+//            this.getArrest(), this.getDomestic(), Integer.toString(this.getBeat()),
+//            Integer.toString(this.getWard()), this.getFbicd(),
+//            String.valueOf(this.getXcoord()), String.valueOf(this.getYcoord())
+//            );
+//        String test = parsePossibleNullToString(this.getLatitude());
+//        result.add(parsePossibleNullToString(this.getLatitude()));
+//        result.add(parsePossibleNullToString(this.getLongitude()));
+
+
         return Arrays.asList(
-                this.getCaseNumber(), this.getDate(), this.getBlock(), this.getIucr(),
+        this.getCaseNumber(), this.getDate(), this.getBlock(), this.getIucr(),
                 this.getPrimaryDescription(), this.getSecondaryDescription(), this.getLocationDescription(),
                 this.getArrest(), this.getDomestic(), Integer.toString(this.getBeat()),
-                Integer.toString(this.getWard()), this.getFbicd(), Integer.toString(this.getXcoord()),
-                Integer.toString(this.getYcoord()), Double.toString(this.getLatitude()),
-                Double.toString(this.getLongitude())
+                Integer.toString(this.getWard()), this.getFbicd(),
+                String.valueOf(this.getXcoord()), String.valueOf(this.getYcoord()), String.valueOf(this.getLatitude()),
+                String.valueOf(this.getLongitude())
                 );
+
+//        return result;
     }
 }
