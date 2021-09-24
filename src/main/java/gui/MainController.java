@@ -499,7 +499,7 @@ public class MainController {
     public String getPathToFile(String fileType, String fileExtension) {
         String filepath = null;
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select csv file");
+        fileChooser.setTitle("Select " + fileType + " file");
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(fileType + " Files", "*."+fileExtension),
                                                  new FileChooser.ExtensionFilter("All Files", "*.*"));
         File selectedFile = fileChooser.showOpenDialog(new Stage());
@@ -510,6 +510,21 @@ public class MainController {
         return filepath;
     }
 
+    public String getFileSavePath(String fileType, String fileExtension) {
+        String filepath = null;
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select location to save " + fileType + " file");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(fileType + " Files", "*."+fileExtension),
+                new FileChooser.ExtensionFilter("All Files", "*.*"));
+        File selectedFile = fileChooser.showSaveDialog(new Stage());
+        filepath = selectedFile.getAbsolutePath();
+        System.out.println(filepath);
+
+        return filepath;
+
+    }
+
     /**
      * Opens the file explorer for the user to select a save location and then passes
      * this to the CsvWriter along with the currently displayed records.
@@ -517,21 +532,16 @@ public class MainController {
      */
     public void exportCsv() throws IOException, NullPointerException{
         try{
-            String filepath = null;
-
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select location to save csv file");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"),
-                                                 new FileChooser.ExtensionFilter("All Files", "*.*"));
-        File selectedFile = fileChooser.showSaveDialog(new Stage());
-        filepath = selectedFile.getAbsolutePath();
-        System.out.println(filepath);
-        CsvWriter.write(filepath, tableTabController.getDisplayedRecords());
+            String filepath = getFileSavePath("CSV", "csv");
+            CsvWriter.write(filepath, tableTabController.getDisplayedRecords());
         }catch (Exception e){
             System.out.println("Path selected is null, error: "+e);
         }
     }
 
+    /**
+     * Opens a file explorer for the user to select csv file to import then loads it
+     */
     public void importCsv(){
         String filepath = getPathToFile("CSV", "csv");
         Boolean replace = null;
@@ -583,19 +593,11 @@ public class MainController {
      */
     public void newDatabase() throws IOException, NullPointerException{
         try{
-            String filepath = null;
-
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Select location to create the database");
-            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Database Files", "*.db"),
-                    new FileChooser.ExtensionFilter("All Files", "*.*"));
-            File selectedFile = fileChooser.showSaveDialog(new Stage());
-            filepath = selectedFile.getAbsolutePath();
-
-            CsvWriter.write(filepath, tableTabController.getDisplayedRecords());
+            String filepath = getFileSavePath("Database", "db");
 
             Database d = new Database();
             d.setDatabasePath(filepath);
+            d.closeConnection();
         }catch (Exception e){
             System.out.println("Path selected is null, error: "+e);
         }
