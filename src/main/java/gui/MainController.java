@@ -565,9 +565,9 @@ public class MainController {
                 Database d = new Database();
                 d.connectDatabase();
                 if (!replace) {
-                    d.insertRows(CsvReader.read(filepath));
+                    d.insertRows(DataManipulator.getRowsfromCsv(filepath).get(0));
                 } else {
-                    d.replaceRows(CsvReader.read(filepath));
+                    d.replaceRows(DataManipulator.getRowsfromCsv(filepath).get(0));
                 }
                 tableTabController.setTableRecords(d.getAll());
                 d.closeConnection();
