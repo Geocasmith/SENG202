@@ -188,23 +188,25 @@ public class MainController {
         graphTypeComboBox.getSelectionModel().select("");
     }
 
-
+    /**
+     *
+     * @throws SQLException
+     */
     public void showGraphOptions() throws SQLException {
-        dataAnalyser = new DataAnalyser(DataManipulator.getAllRecords());
-
         graphFilterComboBox.getCheckModel().clearChecks();
 
         if (graphTypeComboBox.getValue().equals("All Crimes")) {
             graphOptionLabel.setVisible(false);
             graphFilterComboBox.setVisible(false);
-            generateGraphButton.setVisible(true);
             generateGraphButton.setDisable(false);
+
         } else if (graphTypeComboBox.getValue().equals("Crimes Per Ward")) {
             graphOptionLabel.setText("Select which wards to graph");
             graphOptionLabel.setVisible(true);
             graphFilterComboBox.setVisible(true);
-            generateGraphButton.setVisible(true);
             generateGraphButton.setDisable(false);
+
+            dataAnalyser = new DataAnalyser(DataManipulator.getAllRecords());
             ArrayList<Integer> crimeWards = dataAnalyser.getCrimeWards();
             graphFilterComboBox.getItems().clear();
             graphFilterComboBox.getItems().addAll(crimeWards);
@@ -213,8 +215,9 @@ public class MainController {
             graphOptionLabel.setText("Select which beats to graph");
             graphOptionLabel.setVisible(true);
             graphFilterComboBox.setVisible(true);
-            generateGraphButton.setVisible(true);
             generateGraphButton.setDisable(false);
+
+            dataAnalyser = new DataAnalyser(DataManipulator.getAllRecords());
             ArrayList<Integer> crimeBeats = dataAnalyser.getCrimeBeats();
             graphFilterComboBox.getItems().clear();
             graphFilterComboBox.getItems().addAll(crimeBeats);
@@ -223,15 +226,16 @@ public class MainController {
             graphOptionLabel.setText("Select which crime types to graph");
             graphOptionLabel.setVisible(true);
             graphFilterComboBox.setVisible(true);
-            generateGraphButton.setVisible(true);
             generateGraphButton.setDisable(false);
+
+            dataAnalyser = new DataAnalyser(DataManipulator.getAllRecords());
             ArrayList<String> crimeTypes = dataAnalyser.getCrimeTypes();
             graphFilterComboBox.getItems().clear();
             graphFilterComboBox.getItems().addAll(crimeTypes);
 
         } else {
+            graphOptionLabel.setVisible(false);
             graphFilterComboBox.setVisible(false);
-            generateGraphButton.setVisible(false);
             generateGraphButton.setDisable(true);
         }
     }
