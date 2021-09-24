@@ -531,7 +531,7 @@ public class MainController {
      * this to the CsvWriter along with the currently displayed records.
      * @throws IOException
      */
-    public void exportCsv() throws IOException, NullPointerException{
+    public void exportCsv() throws NullPointerException{
         try{
             String filepath = getFileSavePath("CSV", "csv");
             CsvWriter.write(filepath, tableTabController.getDisplayedRecords());
@@ -543,22 +543,24 @@ public class MainController {
     /**
      * Opens a file explorer for the user to select csv file to import then loads it
      */
-    public void importCsv() throws SQLException, IOException, CsvValidationException, ParseException {
+    public void importCsv() throws SQLException, IOException {
         String filepath = getPathToFile("CSV", "csv");
         Boolean replace = null;
         Boolean newDB = null;
 
 
-
+        // If User Selected file
         if (filepath != null) {
             newDB = PopupWindow.displayTwoButtonPopup("Create New Database?", "Do you want to store this data in a new database?", "New Database", "Existing Database");
             if (newDB != null && !newDB) {
                 replace = PopupWindow.displayTwoButtonPopup("Replace data?", "Do you want to replace the current data or append to it?", "Replace", "Append");
             }
         }
+        // If user selected new database
         if (newDB != null && newDB) {
             newDatabase(filepath);
-        } else if (replace != null) {
+        // if user selected existing database
+        } else if (replace != null && newDB != null) {
             try {
                 Database d = new Database();
                 d.connectDatabase();
@@ -567,8 +569,9 @@ public class MainController {
                 } else {
                     d.replaceRows(CsvReader.read(filepath));
                 }
-                tableTabController.setTableRecords(d.getAll());
                 d.closeConnection();
+                // Refresh GUI
+                tableTabController.refreshTableData();
                 filterSetup();
 
             } catch (Exception e) {
