@@ -241,10 +241,10 @@ public class TableTabController {
                     } catch (IOException e) {
 
                     }
-                }// else if (event.getClickCount() == 1 && (! row.isEmpty()) ) {
-//                    Record rowData = row.getItem();
-//                    parentController.updateLatLong(rowData);
-//                }
+                } else if (event.getClickCount() == 1 && (! row.isEmpty()) ) {
+                    Record rowData = row.getItem();
+                    parentController.updateLatLong(rowData);
+                }
             });
             return row ;
         });

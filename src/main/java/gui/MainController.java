@@ -435,7 +435,10 @@ public class MainController {
         
     }
 
-
+    public void updateLatLong(Record record) {
+        filterLatTextField.setText(record.getLatitude().toString());
+        filterLongTextField.setText(record.getLongitude().toString());
+    }
 
 
     /**
