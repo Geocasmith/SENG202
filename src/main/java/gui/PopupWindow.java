@@ -39,7 +39,7 @@ public class PopupWindow {
 
     }
 
-    public static Boolean displayYesNoPopup(String title, String message) {
+    public static Boolean displayTwoButtonPopup(String title, String message, String button1Text, String button2Text) {
         Stage popupWindow = new Stage();
 
         popupWindow.initModality(Modality.APPLICATION_MODAL);
@@ -52,13 +52,13 @@ public class PopupWindow {
 
         final Boolean[] returnValue = {false};
 
-        Button yesButton = new Button("Yes");
+        Button yesButton = new Button(button1Text);
         yesButton.setOnAction(e -> {
             popupWindow.close();
             returnValue[0] = true;
         });
 
-        Button noButton = new Button("No");
+        Button noButton = new Button(button2Text);
         noButton.setOnAction(e -> {
             popupWindow.close();
             returnValue[0] = false;

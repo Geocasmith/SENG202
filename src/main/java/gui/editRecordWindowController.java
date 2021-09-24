@@ -93,9 +93,9 @@ public class editRecordWindowController {
      */
     @FXML private void closeWindow() throws SQLException, IOException {
         if (edited) {
-            if (PopupWindow.displayYesNoPopup("Refresh Table", "Any changes or additions to the data will not be " +
+            if (PopupWindow.displayTwoButtonPopup("Refresh Table", "Any changes or additions to the data will not be " +
                     "visible unless the table is refreshed.\nThis could take some time if there are many records loaded.\n" +
-                    "Would you like to refresh the table?")) {
+                    "Would you like to refresh the table?", "Yes", "No")) {
                 parentController.refreshTableData();
             }
         }

@@ -256,9 +256,9 @@ public class TableTabController {
     @FXML
     private void deleteSelectedRows() throws SQLException {
         int num = getNumSelectedRows();
-        if (PopupWindow.displayYesNoPopup("Confirm Action", "You are about to delete " +
+        if (PopupWindow.displayTwoButtonPopup("Confirm Action", "You are about to delete " +
                 num + " rows. This action cannot be undone.\nAre you sure you want" +
-                " to do this?")) {
+                " to do this?", "Yes", "No")) {
             Database d = new Database();
             List<Record> selectedRows = getSelectedRows();
             for (Record rec : selectedRows) {

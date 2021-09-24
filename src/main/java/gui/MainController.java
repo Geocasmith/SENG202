@@ -456,6 +456,7 @@ public class MainController {
         String lon;
         lat = filterLatTextField.getText();
         lon = filterLongTextField.getText();
+        // Checks that both lat and long field are valid
         if ( !(lat.equals("") && lon.equals("")) && !(lat.equals(null) && lon.equals(null)) && (InputValidator.hasValidDouble(lat) && InputValidator.hasValidDouble(lon))) {
             radiusSlider.setDisable(false);
         } else {
@@ -490,14 +491,16 @@ public class MainController {
     }
 
     /**
-     * Opens file explorer for user to select a csv file to import
+     * Opens file explorer for user to select a file
+     * @param fileType  Type of file
+     * @param fileExtension Extension of file
      * @return path to csv file
      */
-    public String getPathToCsv() {
+    public String getPathToFile(String fileType, String fileExtension) {
         String filepath = null;
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select csv file");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"),
+        fileChooser.setTitle("Select " + fileType + " file");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(fileType + " Files", "*."+fileExtension),
                                                  new FileChooser.ExtensionFilter("All Files", "*.*"));
         File selectedFile = fileChooser.showOpenDialog(new Stage());
         if (selectedFile != null) {
@@ -507,6 +510,21 @@ public class MainController {
         return filepath;
     }
 
+    public String getFileSavePath(String fileType, String fileExtension) {
+        String filepath = null;
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select location to save " + fileType + " file");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(fileType + " Files", "*."+fileExtension),
+                new FileChooser.ExtensionFilter("All Files", "*.*"));
+        File selectedFile = fileChooser.showSaveDialog(new Stage());
+        filepath = selectedFile.getAbsolutePath();
+        System.out.println(filepath);
+
+        return filepath;
+
+    }
+
     /**
      * Opens the file explorer for the user to select a save location and then passes
      * this to the CsvWriter along with the currently displayed records.
@@ -514,28 +532,32 @@ public class MainController {
      */
     public void exportCsv() throws IOException, NullPointerException{
         try{
-            String filepath = null;
-
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select location to save csv file");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"),
-                                                 new FileChooser.ExtensionFilter("All Files", "*.*"));
-        File selectedFile = fileChooser.showSaveDialog(new Stage());
-        filepath = selectedFile.getAbsolutePath();
-        System.out.println(filepath);
-        CsvWriter.write(filepath, tableTabController.getDisplayedRecords());
+            String filepath = getFileSavePath("CSV", "csv");
+            CsvWriter.write(filepath, tableTabController.getDisplayedRecords());
         }catch (Exception e){
             System.out.println("Path selected is null, error: "+e);
         }
     }
 
-    public void importCsv(){
-        String filepath = getPathToCsv();
+    /**
+     * Opens a file explorer for the user to select csv file to import then loads it
+     */
+    public void importCsv() throws SQLException, IOException {
+        String filepath = getPathToFile("CSV", "csv");
         Boolean replace = null;
+        Boolean newDB = null;
+
+
+
         if (filepath != null) {
-            replace = PopupWindow.displayYesNoPopup("Replace Data?", "Do you want to replace the current data?");
+            newDB = PopupWindow.displayTwoButtonPopup("Create New Database?", "Do you want to store this data in a new database?", "New Database", "Existing Database");
+            if (newDB != null && !newDB) {
+                replace = PopupWindow.displayTwoButtonPopup("Replace data?", "Do you want to replace the current data or append to it?", "Replace", "Append");
+            }
         }
-        if (replace != null) {
+        if (newDB != null && newDB) {
+            newDatabase();
+        } else if (replace != null) {
             try {
                 Database d = new Database();
                 d.connectDatabase();
@@ -563,22 +585,33 @@ public class MainController {
      * which is accessed every time the database is connected to
      * @throws IOException
      */
-    public void changeDatabase() throws IOException{
+    public void changeDatabase() throws IOException, SQLException{
         String filepath = null;
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select location to save csv file");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Database Files", "*.db"),
-                new FileChooser.ExtensionFilter("All Files", "*.*"));
-        File selectedFile = fileChooser.showSaveDialog(new Stage());
-        filepath = selectedFile.getAbsolutePath();
+        filepath = getPathToFile("Database", "db");
+        if (!(filepath == null)) {
+            //Changes the database to the selected path
+            Database d = new Database();
+            d.setDatabasePath(filepath);
+            d.closeConnection();
+        }
 
-        //Changes the database to the selected path
-        Database d = new Database();
-        d.setDatabasePath(filepath);
 
         //Refresh all GUI
+        tableTabController.refreshTableData();
     }
+    /**
+     * Creates a new database
+     * @throws IOException
+     */
+    public void newDatabase() throws IOException, NullPointerException, SQLException {
+            String filepath = getFileSavePath("Database", "db");
+            if (!(filepath == null)) {
+                Database d = new Database();
+                d.setDatabasePath(filepath);
+                d.closeConnection();
+            }
 
+    }
 
 }
 
