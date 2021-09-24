@@ -28,6 +28,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.sql.Array;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -542,7 +543,7 @@ public class MainController {
     /**
      * Opens a file explorer for the user to select csv file to import then loads it
      */
-    public void importCsv() throws SQLException, IOException {
+    public void importCsv() throws SQLException, IOException, CsvValidationException, ParseException {
         String filepath = getPathToFile("CSV", "csv");
         Boolean replace = null;
         Boolean newDB = null;
@@ -556,7 +557,7 @@ public class MainController {
             }
         }
         if (newDB != null && newDB) {
-            newDatabase();
+            newDatabase(filepath);
         } else if (replace != null) {
             try {
                 Database d = new Database();
@@ -603,13 +604,16 @@ public class MainController {
      * Creates a new database
      * @throws IOException
      */
-    public void newDatabase() throws IOException, NullPointerException, SQLException {
-            String filepath = getFileSavePath("Database", "db");
-            if (!(filepath == null)) {
-                Database d = new Database();
-                d.setDatabasePath(filepath);
-                d.closeConnection();
-            }
+    public void newDatabase(String csvPath) throws IOException, NullPointerException, SQLException {
+        String filepath = getFileSavePath("Database", "db");
+        if (!(filepath == null)) {
+            Database d = new Database();
+            d.setDatabasePath(filepath);
+            d.closeConnection();
+        }
+
+        //Refresh all GUI
+        tableTabController.refreshTableData();
 
     }
 
