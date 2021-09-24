@@ -246,7 +246,7 @@ public class InputValidator {
 
 
    public static boolean isValidRecord(List<String> record) throws IOException, CsvValidationException {
-      if (recordEntryFeedbackLong(record).get(0) == "1") {
+      if (recordEntryFeedbackLong(record).get(16) == "1") {
          return true;
       }
       return false;
