@@ -542,13 +542,22 @@ public class MainController {
     /**
      * Opens a file explorer for the user to select csv file to import then loads it
      */
-    public void importCsv(){
+    public void importCsv() throws SQLException, IOException {
         String filepath = getPathToFile("CSV", "csv");
         Boolean replace = null;
+        Boolean newDB = null;
+
+
+
         if (filepath != null) {
-            replace = PopupWindow.displayTwoButtonPopup("Replace Data?", "Do you want to replace the current data?", "Yes", "No");
+            newDB = PopupWindow.displayTwoButtonPopup("Create New Database?", "Do you want to store this data in a new database?", "New Database", "Existing Database");
+            if (newDB != null && !newDB) {
+                replace = PopupWindow.displayTwoButtonPopup("Replace data?", "Do you want to replace the current data or append to it?", "Replace", "Append");
+            }
         }
-        if (replace != null) {
+        if (newDB != null && newDB) {
+            newDatabase();
+        } else if (replace != null) {
             try {
                 Database d = new Database();
                 d.connectDatabase();
