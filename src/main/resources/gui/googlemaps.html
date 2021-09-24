@@ -71,9 +71,10 @@
             }
         }
 
-        document.plotPoint = function plotPoint(lat, long, caseNumber, primaryDescription, secondaryDescription, locationDescription) {
+        document.plotPoint = function plotPoint(lat, long, caseNumber, date, primaryDescription, secondaryDescription, locationDescription) {
 
             var infoWindowContent = "<p>" + "Case Number: " + caseNumber + "<br />" + "<br />" +
+                "Date and Time: " + date + "<br />" + "<br />" +
                 "Primary Description: " + primaryDescription + "<br />" + "<br />" +
                 "Secondary Description: " + secondaryDescription + "<br />" + "<br />" +
                 "Location Description: " + locationDescription + "<br />" +

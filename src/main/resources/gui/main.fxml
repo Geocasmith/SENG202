@@ -38,8 +38,8 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Analysis">
             <items>
-              <MenuItem mnemonicParsing="false" text="Distance" />
-                  <MenuItem mnemonicParsing="false" text="Time" />
+              <MenuItem mnemonicParsing="false" text="Distance" onAction="#analyseCrimeLocationDifference"/>
+                  <MenuItem mnemonicParsing="false" text="Time" onAction="#analyseCrimeTimeDifference"/>
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="Sort">

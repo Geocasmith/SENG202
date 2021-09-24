@@ -32,7 +32,7 @@ public class MapTabController {
         String newLocationMarker;
         for (Record record : records) {
             newLocationMarker = "document.plotPoint(" + record.getLatitude() + ", " + record.getLongitude() + ", '" +
-                    record.getCaseNumber() + "', '" + record.getPrimaryDescription() + "', '" + record.getSecondaryDescription() +
+                    record.getCaseNumber() + "', '" + record.getDate() + "', '" + record.getPrimaryDescription() + "', '" + record.getSecondaryDescription() +
                     "', '" + record.getLocationDescription() + "')";
             webEngine.executeScript(newLocationMarker);
         }

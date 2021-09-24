@@ -1,11 +1,14 @@
 package gui;
 
+import backend.DataAnalyser;
 import backend.DataManipulator;
 import backend.InputValidator;
 import backend.Record;
 import backend.database.Database;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -22,6 +25,7 @@ import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -60,15 +64,78 @@ public class TableTabController {
 
     private List<TextField> textFieldsAdd = new ArrayList<TextField>();
     private MainController parentController;
+    private DataAnalyser dataAnalyser = new DataAnalyser();
 
 
     @FXML
     private void initialize() throws CsvValidationException, SQLException, IOException {
-        tableSetup();
+        setupTable();
+        setupContextMenu();
         textFieldsAdd = Arrays.asList(addCaseNumberField, addDateField, addBlockField, addIUCRField,
                 addPrimaryDescField, addSecondaryDescField, addLocationDescField, addArrestField, addDomesticField,
                 addBeatField, addWardField, addFBICDField, addXCoordField, addYCoordField, addLatitudeField,
                 addLongitudeField);
+
+
+    }
+
+    /**
+     * Creates a context menu for the table view, contains an edit and delete option, along with an analyse submenu
+     * with time and distance options
+     */
+    private void setupContextMenu() {
+
+        // Create menus
+        ContextMenu tableContextMenu = new ContextMenu();
+        Menu analyseMenu = new Menu("Analyse");
+
+        // Create menu items
+        MenuItem editMenuItem = new MenuItem("Edit");
+        MenuItem deleteMenuItem = new MenuItem("Delete");
+        MenuItem timeMenuItem = new MenuItem("Time");
+        MenuItem distanceMenuItem = new MenuItem("Distance");
+
+        // Add click event handlers to the menu items
+        editMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    editRow();
+                } catch (IOException e) {
+                } catch (SQLException e) {
+                }
+            }
+        });
+
+        deleteMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    deleteSelectedRows();
+                } catch (SQLException e) {
+                }
+            }
+        });
+
+        timeMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                analyseCrimeTimeDifference();
+            }
+        });
+
+        distanceMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                analyseCrimeLocationDifference();
+            }
+        });
+
+        // Add menu items to the relevant menus
+        analyseMenu.getItems().addAll(timeMenuItem, distanceMenuItem);
+        tableContextMenu.getItems().addAll(editMenuItem, deleteMenuItem, analyseMenu);
+
+        mainTableView.setContextMenu(tableContextMenu);
     }
 
     /**
@@ -200,7 +267,7 @@ public class TableTabController {
      * Allows for the selection of many rows at once.
      * Creates all columns necessary for viewing crime data.
      */
-    public void tableSetup() throws CsvValidationException, IOException, SQLException {
+    public void setupTable() throws CsvValidationException, IOException, SQLException {
         mainTableView.setEditable(false); // for now, until this can be linked up to the database
         mainTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -370,5 +437,41 @@ public class TableTabController {
      */
     public void refreshTableData() throws SQLException, IOException {
         parentController.applyFilters();
+    }
+
+    public void analyseCrimeLocationDifference() {
+        if (getNumSelectedRows() == 2) {
+            Record crime1 = getSelectedRows().get(0);
+            Record crime2 = getSelectedRows().get(1);
+            PopupWindow.displayPopup("Crime Location Difference", "These crimes occurred " + dataAnalyser.calculateLocationDifferenceMeters(crime1, crime2) + " meters apart");
+        } else {
+            PopupWindow.displayPopup("Error", "You must have exactly two records selected to use this feature");
+        }
+    }
+
+    public void analyseCrimeTimeDifference() {
+        if (getNumSelectedRows() == 2) {
+            Record crime1 = getSelectedRows().get(0);
+            Record crime2 = getSelectedRows().get(1);
+            Duration timeDifference = dataAnalyser.calculateTimeDifference(crime1, crime2);
+            int timeDifferenceInt = 0;
+            String timeUnit = "";
+            if (timeDifference.getSeconds() < Duration.ofHours(2).getSeconds()) {
+                timeDifferenceInt = (int) (timeDifference.getSeconds() / Duration.ofMinutes(1).getSeconds());
+                timeUnit = "minutes";
+            } else if (timeDifference.getSeconds() < Duration.ofDays(2).getSeconds()) {
+                timeDifferenceInt = (int) (timeDifference.getSeconds() / Duration.ofHours(1).getSeconds());
+                timeUnit = "hours";
+            } else if (timeDifference.getSeconds() < Duration.ofDays(30).getSeconds()) {
+                timeDifferenceInt = (int) (timeDifference.getSeconds() / Duration.ofDays(1).getSeconds());
+                timeUnit = "days";
+            } else {
+                timeDifferenceInt = (int) (timeDifference.getSeconds() / Duration.ofDays(30).getSeconds());
+                timeUnit = "months";
+            }
+            PopupWindow.displayPopup("Crime Location Difference", "These crimes occurred " + timeDifferenceInt + " " + timeUnit + " apart");
+        } else {
+            PopupWindow.displayPopup("Error", "You must have exactly two records selected to use this feature");
+        }
     }
 }

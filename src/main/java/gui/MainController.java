@@ -184,9 +184,6 @@ public class MainController {
 
         // Set values for location description combo box
         locationDescriptionComboBox.getItems().addAll(locationDescriptions);
-
-
-
     }
 
     /**
@@ -621,7 +618,14 @@ public class MainController {
                 d.setDatabasePath(filepath);
                 d.closeConnection();
             }
+    }
 
+    public void analyseCrimeLocationDifference() {
+        tableTabController.analyseCrimeLocationDifference();
+    }
+
+    public void analyseCrimeTimeDifference() {
+        tableTabController.analyseCrimeTimeDifference();
     }
 
 }
