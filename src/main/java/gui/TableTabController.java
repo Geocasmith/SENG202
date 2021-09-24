@@ -12,7 +12,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -21,7 +20,6 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -35,35 +33,15 @@ public class TableTabController {
     @FXML private BorderPane tableTab;
     @FXML private TableView<Record> mainTableView;
     @FXML private FlowPane mainTableTogglePane;
-    @FXML private FlowPane mainTableAddPane;
     @FXML private ToggleButton toggleAllColumnsButton;
-    @FXML private Button addRecordButton;
-    @FXML private Label addRecordLabel;
-    @FXML private TextField addCaseNumberField;
-    @FXML private TextField addDateField;
-    @FXML private TextField addBlockField;
-    @FXML private TextField addIUCRField;
-    @FXML private TextField addPrimaryDescField;
-    @FXML private TextField addSecondaryDescField;
-    @FXML private TextField addLocationDescField;
-    @FXML private TextField addArrestField;
-    @FXML private TextField addDomesticField;
-    @FXML private TextField addBeatField;
-    @FXML private TextField addWardField;
-    @FXML private TextField addFBICDField;
-    @FXML private TextField addXCoordField;
-    @FXML private TextField addYCoordField;
-    @FXML private TextField addLatitudeField;
-    @FXML private TextField addLongitudeField;
     @FXML private Button addRowButton;
     @FXML private Button deleteRowsButton;
     @FXML private Button editRowButton;
     @FXML private Accordion tableAccordion;
     @FXML private TitledPane toggleColumnsAccordionTab;
-    @FXML private TitledPane addAccordionTab;
 
-    private List<TextField> textFieldsAdd = new ArrayList<TextField>();
-    private MainController parentController;
+    private List<TextField> textFieldsAdd = new ArrayList<>();
+    private MainController parentController; // allows access to the currently active mainController
     private DataAnalyser dataAnalyser = new DataAnalyser();
 
 
@@ -71,12 +49,6 @@ public class TableTabController {
     private void initialize() throws CsvValidationException, SQLException, IOException {
         setupTable();
         setupContextMenu();
-        textFieldsAdd = Arrays.asList(addCaseNumberField, addDateField, addBlockField, addIUCRField,
-                addPrimaryDescField, addSecondaryDescField, addLocationDescField, addArrestField, addDomesticField,
-                addBeatField, addWardField, addFBICDField, addXCoordField, addYCoordField, addLatitudeField,
-                addLongitudeField);
-
-
     }
 
     /**
@@ -159,13 +131,13 @@ public class TableTabController {
      */
     public void addTableColCheck(String displayName, TableColumn col) {
         CheckBox chk = new CheckBox(displayName);
-        chk.selectedProperty().bindBidirectional(col.visibleProperty());
+        chk.selectedProperty().bindBidirectional(col.visibleProperty()); // ties checkbox to column visibility
         mainTableTogglePane.getChildren().add(chk);
     }
 
     /**
      * Runs through any checkboxes in the checkbox area, and sets their selected attribute to that of the
-     * toggle button.
+     * toggle button. Relies on the binding established in addTableColCheck.
      */
     public void toggleAllTableCols() {
         for (Node node : mainTableTogglePane.getChildren()){
@@ -173,76 +145,6 @@ public class TableTabController {
                 ((CheckBox) node).setSelected(toggleAllColumnsButton.isSelected());
             }
         }
-    }
-
-    /**
-     * Marks all EMPTY (not invalid!) fields with a red outline.
-     */
-    public void checkRequiredFields() {
-        for (Node vbox : mainTableAddPane.getChildren()){
-            if (vbox instanceof VBox) { // only look at vboxes, which contain a textfield + label
-                TextField field = (TextField) ((VBox) vbox).getChildren().get(0);
-                Label label = (Label) ((VBox) vbox).getChildren().get(1);
-
-                // label text is faster than looking at the list of field's classes
-                if (Objects.equals(label.getText(), "* Required") && field.getText().isEmpty()) {
-                    if (field.getStyleClass().contains("defaulttextfield")) {
-                        field.getStyleClass().remove("defaulttextfield");
-                    }
-                    field.getStyleClass().add("required");
-                } // the style changes are this clumsy because of a bug with javafx updating styles - not my problem!
-                else if (field.getStyleClass().contains("required")) {
-                    field.getStyleClass().remove("required");
-                    field.getStyleClass().add("defaulttextfield");
-                }
-            }
-        }
-    }
-
-    /**
-     * Runs through the text fields and "lines them up" with the attributes of a Record object to create one, which
-     * can then be passed to the database.
-     *
-     * Gives the user feedback on their provided record. Messages for success, missing fields, invalid record.
-     * Validation is currently checking if required fields are filled in and whether an exception is encountered
-     * trying to create the record.
-     *
-     * @return A record object if the input is complete and valid, else null.
-     */
-    public Record getRecordFromTextFields() throws IOException, CsvValidationException {
-        List<String> recStrings = new ArrayList<String>();
-        int emptyFields = 0;
-
-        for (Node vbox : mainTableAddPane.getChildren()){
-            if (vbox instanceof VBox) { // only look at vboxes, which contain a textfield + label
-                TextField field = (TextField) ((VBox) vbox).getChildren().get(0);
-                Label label = (Label) ((VBox) vbox).getChildren().get(1);
-
-                // label text is faster than looking at the list of field's classes
-                if (Objects.equals(label.getText(), "* Required") && field.getText().isEmpty()) {
-                    emptyFields++;
-                }
-                recStrings.add(field.getText());
-            }
-        }
-
-        checkRequiredFields();
-
-        //if (emptyFields > 0) {
-           // mainTableAddRecordLabel.setText(String.format("%d required field(s) are empty.", emptyFields));
-      //  }
-        //else { // create the record
-            if (InputValidator.isValidRecord(recStrings)) {
-                Record rec = new Record(recStrings);
-                addRecordLabel.setText((InputValidator.recordEntryFeedbackLong(recStrings).get(17)));
-                return rec;
-            } else {
-                addRecordLabel.setText((InputValidator.recordEntryFeedbackLong(recStrings).get(17)));
-
-            }
-        //}
-        // returns null if the record can't be created (missing/invalid fields)
-        return null;
     }
 
     /**
@@ -268,8 +170,8 @@ public class TableTabController {
      * Creates all columns necessary for viewing crime data.
      */
     public void setupTable() throws CsvValidationException, IOException, SQLException {
-        mainTableView.setEditable(false); // for now, until this can be linked up to the database
-        mainTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        mainTableView.setEditable(false); // stops user editing things in the table (should use the edit button)
+        mainTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // allows multiple selected records
 
         // create all the columns
         addTableCol("Case Number", "caseNumber");
@@ -289,15 +191,7 @@ public class TableTabController {
         addTableCol("Latitude", "latitude");
         addTableCol("Longitude", "longitude");
 
-        // Test code
-
-        ArrayList<Record> allRecords = DataManipulator.getAllRecords();
-        for (Record r : allRecords) {
-
-            mainTableView.getItems().add(r);
-        }
-
-        // Setup double click event to open the edit window when a row is double clicked
+        // Setup double click event to open the edit window when a row is double-clicked
         mainTableView.setRowFactory( tv -> {
             TableRow<Record> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
@@ -310,7 +204,7 @@ public class TableTabController {
                     }
                 } else if (event.getClickCount() == 1 && (! row.isEmpty()) ) {
                     Record rowData = row.getItem();
-                    parentController.updateLatLong(rowData);
+                    parentController.updateLatLong(rowData); // copies lat & long of selected record to filter sidebar
                 }
             });
             return row ;
@@ -318,7 +212,8 @@ public class TableTabController {
     }
 
     /**
-     * Deletes the selected rows from the database.
+     * Deletes the selected rows from the database. Requires confirmation from the user.
+     * No table refresh required, as rows are deleted from the database and table simultaneously.
      */
     @FXML
     private void deleteSelectedRows() throws SQLException {
@@ -339,7 +234,8 @@ public class TableTabController {
     }
 
     /**
-     * If only one row is selected, then call setupEditRow, else show an error somewhere.
+     * Attempts to let the user edit a row.
+     * If only one row is selected, then call setupEditRow, else show an error message.
      */
     @FXML
     private void editRow() throws IOException, SQLException {
@@ -355,12 +251,13 @@ public class TableTabController {
      * Opens the "edit" window, but configured to add rows instead of edit them.
      */
     @FXML
-    private void addRow() throws SQLException, IOException {
-        setupEditRow(null);
+    private void addRow() throws IOException {
+        setupEditRow(null); // no record is passed in
     }
 
     /**
      * Opens a new window with the record's data filled in, which the user can use to edit (or view) it with.
+     * This window must be closed to return to the rest of the application.
      */
     private void setupEditRow(Record rec) throws IOException {
         Stage popupEdit = new Stage();
@@ -372,21 +269,14 @@ public class TableTabController {
         popupEdit.setScene(new Scene(loader.load()));
         editRecordWindowController controller = loader.getController();
         controller.initData(rec);
-        controller.setParentController(this);
+        controller.setParentController(this); // gives it access to the table controller (and thus main controller)
         popupEdit.setResizable(false);
         popupEdit.showAndWait();
-
-    }
-
-    /**
-     * Clears the text from the feedback label in the "add record" accordion tab.
-     */
-    public void clearAddFeedbackLabel() {
-        addRecordLabel.setText("");
     }
 
     /**
      * Adds all record objects in an arraylist to the main viewing table.
+     * Does not add anything to the database.
      * @param records An ArrayList of record objects to be displayed in the table
      */
     public void addRecordsToTable(ArrayList<Record> records) {
@@ -397,6 +287,7 @@ public class TableTabController {
 
     /**
      * Adds a record object to the main viewing table.
+     * Does not add anything to the database.
      * @param rec A record object to be displayed in the table
      */
     public void addRecordsToTable(Record rec) {
@@ -405,6 +296,7 @@ public class TableTabController {
 
     /**
      * Sets the record objects displayed in table to those contained in an arraylist.
+     * Does not alter the database.
      * @param records An ArrayList of record objects to be displayed in the table
      */
     public void setTableRecords(ArrayList<Record> records) {
@@ -413,7 +305,7 @@ public class TableTabController {
     }
 
     /**
-     * Returns an arraylist of all of the record objects in the table.
+     * Returns an arraylist of all the record objects in the table.
      * @return an ArrayList of all record objects in the table.
      */
     public ArrayList<Record> getDisplayedRecords() {
@@ -434,21 +326,32 @@ public class TableTabController {
 
     /**
      * Heavy-handed method of refreshing the table's data - reloads everything from the database with filters applied.
+     * This is required to view new or changed records, but not to see records deleted.
      */
     public void refreshTableData() throws SQLException, IOException {
         parentController.applyFilters();
     }
 
+    /**
+     * Shows a popup with the difference in location between two crimes if two were selected,
+     * else shows an error message.
+     */
     public void analyseCrimeLocationDifference() {
         if (getNumSelectedRows() == 2) {
             Record crime1 = getSelectedRows().get(0);
             Record crime2 = getSelectedRows().get(1);
-            PopupWindow.displayPopup("Crime Location Difference", "These crimes occurred " + dataAnalyser.calculateLocationDifferenceMeters(crime1, crime2) + " meters apart");
+            PopupWindow.displayPopup("Crime Location Difference", "These crimes occurred " +
+                    dataAnalyser.calculateLocationDifferenceMeters(crime1, crime2) + " meters apart.");
         } else {
-            PopupWindow.displayPopup("Error", "You must have exactly two records selected to use this feature");
+            PopupWindow.displayPopup("Error", "You must have exactly two records selected to use this feature.\n" +
+                    "Hold CTRL or SHIFT to select multiple records.");
         }
     }
 
+    /**
+     * Shows a popup with the difference in time between two crimes if two were selected,
+     * else shows an error message.
+     */
     public void analyseCrimeTimeDifference() {
         if (getNumSelectedRows() == 2) {
             Record crime1 = getSelectedRows().get(0);
@@ -471,7 +374,8 @@ public class TableTabController {
             }
             PopupWindow.displayPopup("Crime Location Difference", "These crimes occurred " + timeDifferenceInt + " " + timeUnit + " apart");
         } else {
-            PopupWindow.displayPopup("Error", "You must have exactly two records selected to use this feature");
+            PopupWindow.displayPopup("Error", "You must have exactly two records selected to use this feature.\n" +
+                    "Hold CTRL or SHIFT to select multiple records.");
         }
     }
 }
