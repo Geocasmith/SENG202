@@ -102,17 +102,26 @@ public class MainController {
     }
 
 
+    /**
+     * Runs the setup methods for the graph and filter panes, and sets the table tab's parent controller to the
+     * maincontroller
+     * @throws SQLException
+     * @throws IOException
+     * @throws CsvValidationException
+     * @throws URISyntaxException
+     */
     @FXML
     private void initialize() throws SQLException, IOException, CsvValidationException, URISyntaxException {
         filterSetup();
         graphSetup();
         tableTabController.setParentController(this);
-        // Example link opener code
-//        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-//            Desktop.getDesktop().browse(new URI("hello"));
-//        }
     }
 
+    /**
+     * Checks that the user is connected to the internet, if not, then displays a error message and goes back to the
+     * table tab, if they are, then it displays either the first 1000 records in the table, or all records in the table,
+     * if there are less than 1000
+     */
     @FXML
     private void refreshMarkers() {
         boolean connected;
@@ -131,10 +140,10 @@ public class MainController {
             mainTabPane.getSelectionModel().select(tableTabPane);
         } else {
             ArrayList<Record> displayedRecords = tableTabController.getDisplayedRecords();
-            if (displayedRecords.size() < 1001) {
+            if (displayedRecords.size() < 1000) {
                 mapTabController.updateMarkers(displayedRecords);
             } else {
-                mapTabController.updateMarkers(new ArrayList<Record>(displayedRecords.subList(0, 1000)));
+                mapTabController.updateMarkers(new ArrayList<Record>(displayedRecords.subList(0, 999)));
             }
 
         }
@@ -183,13 +192,14 @@ public class MainController {
     /**
      * Sets up combo boxes in the graph pane
      */
-    public void graphSetup() throws SQLException {
+    public void graphSetup() {
         graphTypeComboBox.getItems().addAll( "", "All Crimes", "Crimes Per Ward", "Crimes Per Beat", "Crimes Per Type");
         graphTypeComboBox.getSelectionModel().select("");
     }
 
     /**
-     *
+     * Clears the checks in the graph filter combo box, then checks what graphing option has been selected and
+     * displays the relevant objects, and loads the crime types/wards/beats into the graph filter combo box
      * @throws SQLException
      */
     public void showGraphOptions() throws SQLException {
@@ -240,8 +250,15 @@ public class MainController {
         }
     }
 
+    /**
+     * Displays the graph pane on the sidebar if the user has clicked on the graph tab, otherwise it displays the filter
+     * pane
+     */
     public void showGraphPane() {
         graphTabCount++;
+
+        /* Checks if the count is an odd number because clicking off of the graph tab still registers the graph tab
+           as selected and this method gets around that bug */
         if (graphTabCount % 2 == 1) {
             sidebarAccordion.setExpandedPane(graphPane);
         } else {
@@ -250,6 +267,11 @@ public class MainController {
 
     }
 
+    /**
+     * Checks that there is enough data in the table to create a graph, then checks if the user has selected the "All
+     * Crimes" option. If so, it generates the graph. Then checks that the user has selected a valid number of crime
+     * type/ward/beat options. If so, it creates a list of the checked options and then creates the requested graph
+     */
     public void generateGraph() {
         ArrayList<Record> currentRecords = tableTabController.getDisplayedRecords();
         if (currentRecords.size() == 0) {
@@ -261,9 +283,12 @@ public class MainController {
         } else {
             if (graphFilterComboBox.getCheckModel().getCheckedItems().size() > 5) {
                 PopupWindow.displayPopup("Error", "You must select 5 or less options to graph");
+
             } else if (graphFilterComboBox.getCheckModel().getCheckedItems().size() < 1) {
                 PopupWindow.displayPopup("Error", "You must select at least one option to graph");
+
             } else {
+
                 if (graphTypeComboBox.getValue().equals("Crimes Per Ward")) {
                     ArrayList<Integer> checkedWards = new ArrayList<>();
                     ObservableList<Integer> checkedIndices = (ObservableList<Integer>) graphFilterComboBox.getCheckModel().getCheckedIndices();
@@ -509,6 +534,13 @@ public class MainController {
         return filepath;
     }
 
+    /**
+     * Opens the file explorer for the user to select a location to save the selected file, then returns the selected
+     * location.
+     * @param fileType The type of file to be saved (CSV or Database)
+     * @param fileExtension The extension of the file to be saved (.csv or .db)
+     * @return The file path to the location the user selects
+     */
     public String getFileSavePath(String fileType, String fileExtension) {
         String filepath = null;
 
@@ -694,10 +726,16 @@ public class MainController {
         return !substr.equals(extension);
     }
 
+    /**
+     * Forwards the request to analyse the crime locations to the table tab controller
+     */
     public void analyseCrimeLocationDifference() {
         tableTabController.analyseCrimeLocationDifference();
     }
 
+    /**
+     * Forwards the request to analyse the crime times to the table tab controller
+     */
     public void analyseCrimeTimeDifference() {
         tableTabController.analyseCrimeTimeDifference();
     }

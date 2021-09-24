@@ -86,42 +86,41 @@ public class GraphCreator {
     }
 
     /**
-     *
-     * @param times An ArrayList of LocalDateTime Objects
-     * @param periodInSeconds
-     * @param formatter
-     * @param series
-     * @param requiredDuration
-     * @param lowerBound
-     * @param maxUpperBound
+     * Runs through all the time periods contained between lower bound and max upper bound, counts the number of crimes
+     * in that time period and adds the count to the series, with the lower bound as the key.
+     * @param periodInSeconds The time period the time objects need to be rounded to
+     * @param formatter The relevant datetime formatter
+     * @param series The XYChart.Series object for the times to be added to
+     * @param requiredDuration The time period the time objects need to be rounded to in a string form
+     * @param lowerBound The earliest time object in the data set
+     * @param maxUpperBound The last time object in the data set
      */
     private void sortCrimesByTimePeriod(ArrayList<LocalDateTime> times, Duration periodInSeconds, DateTimeFormatter formatter, XYChart.Series series, String requiredDuration, LocalDateTime lowerBound, LocalDateTime maxUpperBound) {
         int i = 0;
         int count;
-        ArrayList<LocalDateTime> outputTimes = new ArrayList<>();
-        LinkedHashMap outputHashMap = new LinkedHashMap();
         LocalDateTime upperBound = lowerBound;
+
         while (Duration.between(maxUpperBound, upperBound).getSeconds() < 0) {
             upperBound = roundDateTime(lowerBound.plusSeconds(periodInSeconds.getSeconds() + 50000), requiredDuration);
             count = 0;
+
             while (i < times.size() && Duration.between(times.get(i), upperBound).getSeconds() > 0) {
                 count++;
                 i++;
             }
-            outputTimes.add(lowerBound);
-            outputHashMap.put(lowerBound, count);
-            lowerBound = upperBound;
-        }
-        outputTimes.add(lowerBound);
-        outputHashMap.put(lowerBound, 0);
 
-        for (LocalDateTime t: outputTimes) {
-            series.getData().add(new XYChart.Data(t.format(formatter), outputHashMap.get(t)));
+            lowerBound = upperBound;
+            series.getData().add(new XYChart.Data(lowerBound.format(formatter), count));
         }
+
+        series.getData().add(new XYChart.Data(lowerBound.format(formatter), 0));
+
     }
 
     /**
-     *
+     * Creates a new XYChart.Series, then creates an ArrayList of LocalDateTimes for all the given crimes, which is then
+     * sorted, and used to calculate the graph x-axis spacing. Then the crimes are placed on the XYChart.Series to
+     * be placed on the graph
      * @param data An ArrayList of the crime records wanted to graph
      * @return An XYChart.Series object containing all the data points as a <String, Integer> pair, where the String is
      *         the date and time in string form and the Integer is the number of crimes that occurred in the calculated
@@ -147,18 +146,23 @@ public class GraphCreator {
         DateTimeFormatter formatter = (DateTimeFormatter) calculations.get(1);
         String requiredDuration = (String) calculations.get(0);
 
-        sortCrimesByTimePeriod(times, periodInSeconds, formatter, series, requiredDuration, times.get(0), times.get(times.size()-1));
+        sortCrimesByTimePeriod(times, periodInSeconds, formatter, series, requiredDuration, times.get(0),
+                times.get(times.size()-1));
 
         return new ArrayList<>(Arrays.asList(requiredDuration, series));
     }
 
     /**
-     *
+     * Creates a new XYChart.Series for each ward the user has selected, then creates an ArrayList of LocalDateTimes
+     * for each crime in each of those wards, along with an ArrayList of LocalDateTimes for all the wards selected,
+     * which are both then sorted, and the overall list of times is used to calculate the graph x-axis spacing, and then
+     * the crimes in each of the wards are rounded to that spacing, and then added to the ArrayList of XYChart.Series to
+     * be placed on the graph
      * @param data An ArrayList of the crime records wanted to graph
      * @param wards An ArrayList of integers which contains the wards that need to be graphed
-     * @return An XYChart.Series object containing all the data points as a <String, Integer> pair, where the String is
-     *         the date and time in string form and the Integer is the number of crimes that occurred in the calculated
-     *         timeframe
+     * @return An ArrayList of XYChart.Series objects containing all the data points as a <String, Integer> pair, where
+     *         the String is the date and time in string form and the Integer is the number of crimes that occurred in
+     *         the calculated timeframe
      */
     public ArrayList<Object> createCrimesPerWardOverTimeGraph(ArrayList<Record> data, ArrayList<Integer> wards) {
 
@@ -196,19 +200,25 @@ public class GraphCreator {
         String requiredDuration = (String) calculations.get(0);
 
         for (int ward : wards) {
-            sortCrimesByTimePeriod(timesList.get(wards.indexOf(ward)), periodInSeconds, formatter, seriesList.get(wards.indexOf(ward)), requiredDuration, overallTime.get(0), overallTime.get(overallTime.size()-1));
+            sortCrimesByTimePeriod(timesList.get(wards.indexOf(ward)), periodInSeconds, formatter,
+                    seriesList.get(wards.indexOf(ward)), requiredDuration, overallTime.get(0),
+                    overallTime.get(overallTime.size()-1));
         }
 
         return new ArrayList<>(Arrays.asList(requiredDuration, seriesList));
     }
 
     /**
-     *
+     * Creates a new XYChart.Series for each crime type the user has selected, then creates an ArrayList of LocalDateTimes
+     * for each crime in each of those crime types, along with an ArrayList of LocalDateTimes for all the crime types selected,
+     * which are both then sorted, and the overall list of times is used to calculate the graph x-axis spacing, and then
+     * the crimes of each crime type are rounded to that spacing, and then added to the ArrayList of XYChart.Series to
+     * be placed on a graph
      * @param data An ArrayList of the crime records wanted to graph
      * @param crimeTypes An ArrayList of Strings which contains the types of crimes that need to be graphed
-     * @return An XYChart.Series object containing all the data points as a <String, Integer> pair, where the String is
-     *         the date and time in string form and the Integer is the number of crimes that occurred in the calculated
-     *         timeframe
+     * @return An ArrayList of XYChart.Series objects containing all the data points as a <String, Integer> pair, where
+     *         the String is the date and time in string form and the Integer is the number of crimes that occurred in
+     *         the calculated timeframe
      */
     public ArrayList<Object> createCrimesPerTypeOverTimeGraph(ArrayList<Record> data, ArrayList<String> crimeTypes) {
 
@@ -246,19 +256,25 @@ public class GraphCreator {
         String requiredDuration = (String) calculations.get(0);
 
         for (String crimeType: crimeTypes) {
-            sortCrimesByTimePeriod(timesList.get(crimeTypes.indexOf(crimeType)), periodInSeconds, formatter, seriesList.get(crimeTypes.indexOf(crimeType)), requiredDuration, overallTime.get(0), overallTime.get(overallTime.size()-1));
+            sortCrimesByTimePeriod(timesList.get(crimeTypes.indexOf(crimeType)), periodInSeconds, formatter,
+                    seriesList.get(crimeTypes.indexOf(crimeType)), requiredDuration, overallTime.get(0),
+                    overallTime.get(overallTime.size()-1));
         }
 
         return new ArrayList<>(Arrays.asList(requiredDuration, seriesList));
     }
 
     /**
-     *
+     * Creates a new XYChart.Series for each beat the user has selected, then creates an ArrayList of LocalDateTimes
+     * for each crime in each of those beats, along with an ArrayList of LocalDateTimes for all the beats selected,
+     * which are both then sorted, and the overall list of times is used to calculate the graph x-axis spacing, and then
+     * the crimes in each of the beats are rounded to that spacing, and then added to the ArrayList of XYChart.Series to
+     * be placed on a graph
      * @param data An ArrayList of the crime records wanted to graph
      * @param crimeBeats An ArrayList of integers which contains the beats that need to be graphed
-     * @return An XYChart.Series object containing all the data points as a <String, Integer> pair, where the String is
-     *         the date and time in string form and the Integer is the number of crimes that occurred in the calculated
-     *         timeframe
+     * @return An ArrayList of XYChart.Series objects containing all the data points as a <String, Integer> pair, where
+     *         the String is the date and time in string form and the Integer is the number of crimes that occurred in
+     *         the calculated timeframe
      */
     public ArrayList<Object> createCrimesPerBeatOverTimeGraph(ArrayList<Record> data, ArrayList<Integer> crimeBeats) {
 
@@ -295,7 +311,9 @@ public class GraphCreator {
             DateTimeFormatter formatter = (DateTimeFormatter) calculations.get(1);
             requiredDuration = (String) calculations.get(0);
             for (Integer crimeBeat: crimeBeats) {
-                sortCrimesByTimePeriod(timesList.get(crimeBeats.indexOf(crimeBeat)), periodInSeconds, formatter, seriesList.get(crimeBeats.indexOf(crimeBeat)), requiredDuration, overallTime.get(0), overallTime.get(overallTime.size()-1));
+                sortCrimesByTimePeriod(timesList.get(crimeBeats.indexOf(crimeBeat)), periodInSeconds, formatter,
+                        seriesList.get(crimeBeats.indexOf(crimeBeat)), requiredDuration, overallTime.get(0),
+                        overallTime.get(overallTime.size()-1));
             }
         }
         return new ArrayList<>(Arrays.asList(requiredDuration, seriesList));
