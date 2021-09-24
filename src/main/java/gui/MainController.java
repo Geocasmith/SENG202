@@ -563,14 +563,20 @@ public class MainController {
                 d.connectDatabase();
 
                 ArrayList<ArrayList<List<String>>> dataValidation = DataManipulator.getRowsfromCsv(filepath);
-                System.out.println(dataValidation.get(1).size());
+
                 if (!replace) {
                     d.insertRows(dataValidation.get(0));
 
-                    displayInvalid(dataValidation.get(0));
+                    if(dataValidation.get(1).size()!=0){
+                        displayInvalid(dataValidation.get(1));
+                    }
+
                 } else {
                     d.replaceRows(dataValidation.get(0));
-                    displayInvalid(dataValidation.get(0));
+
+                    if(dataValidation.get(1).size()!=0){
+                        displayInvalid(dataValidation.get(1));
+                    }
                 }
                 tableTabController.setTableRecords(d.getAll());
                 d.closeConnection();
@@ -585,15 +591,13 @@ public class MainController {
         }
 
     }
+
+    /**
+     * Creates a pop up window which displays the number of invalid rows
+     * @param invalid
+     */
     public void displayInvalid(ArrayList<List<String>> invalid){
-        String invalidRows = "";
-        for(List<String> invalidLine : invalid){
-            for(String invalidText : invalidLine){
-                invalidRows+=invalidText+" ";
-            }
-            invalidRows+='\n';
-        }
-        System.out.println("SIZE "+invalid.size());
+        String invalidRows = invalid.size()+" rows could not be imported because their format is invalid";
         PopupWindow.displayPopup("Invalid Rows", invalidRows);
 
     }
