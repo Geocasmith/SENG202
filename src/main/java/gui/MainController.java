@@ -546,7 +546,7 @@ public class MainController {
         String filepath = getPathToFile("CSV", "csv");
         Boolean replace = null;
         if (filepath != null) {
-            replace = PopupWindow.displayYesNoPopup("Replace Data?", "Do you want to replace the current data?");
+            replace = PopupWindow.displayTwoButtonPopup("Replace Data?", "Do you want to replace the current data?", "Yes", "No");
         }
         if (replace != null) {
             try {
