@@ -247,7 +247,10 @@ public class MainController {
 
     public void generateGraph() {
         ArrayList<Record> currentRecords = tableTabController.getDisplayedRecords();
-        if (graphTypeComboBox.getValue().equals("All Crimes")) {
+        if (currentRecords.size() == 0) {
+            PopupWindow.displayPopup("Error", "You must have data in the table to create a graph.\n" +
+                                                           "Try clearing the filter or importing some data");
+        } else if (graphTypeComboBox.getValue().equals("All Crimes")) {
             graphTabController.createCrimesOverTimeGraph(currentRecords);
 
         } else {
