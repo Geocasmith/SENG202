@@ -538,7 +538,7 @@ public class MainController {
     public void changeDatabase() throws IOException{
         String filepath = null;
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select location to save csv file");
+        fileChooser.setTitle("Select location to open database");
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Database Files", "*.db"),
                 new FileChooser.ExtensionFilter("All Files", "*.*"));
         File selectedFile = fileChooser.showSaveDialog(new Stage());
@@ -549,8 +549,31 @@ public class MainController {
         d.setDatabasePath(filepath);
 
         //Refresh all GUI
+        //refreshtabledata in tablecontroller
     }
+    /**
+     * Creates a new database
+     * @throws IOException
+     */
+    public void newDatabase() throws IOException, NullPointerException{
+        try{
+            String filepath = null;
 
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Select location to create the database");
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Database Files", "*.db"),
+                    new FileChooser.ExtensionFilter("All Files", "*.*"));
+            File selectedFile = fileChooser.showSaveDialog(new Stage());
+            filepath = selectedFile.getAbsolutePath();
+
+            CsvWriter.write(filepath, tableTabController.getDisplayedRecords());
+
+            Database d = new Database();
+            d.setDatabasePath(filepath);
+        }catch (Exception e){
+            System.out.println("Path selected is null, error: "+e);
+        }
+    }
 
 }
 
