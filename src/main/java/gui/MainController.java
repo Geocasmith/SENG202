@@ -579,10 +579,13 @@ public class MainController {
     public void changeDatabase() throws IOException, SQLException{
         String filepath = null;
         filepath = getPathToFile("Database", "db");
+        if (!(filepath == null)) {
+            //Changes the database to the selected path
+            Database d = new Database();
+            d.setDatabasePath(filepath);
+            d.closeConnection();
+        }
 
-        //Changes the database to the selected path
-        Database d = new Database();
-        d.setDatabasePath(filepath);
 
         //Refresh all GUI
         tableTabController.refreshTableData();
@@ -591,16 +594,14 @@ public class MainController {
      * Creates a new database
      * @throws IOException
      */
-    public void newDatabase() throws IOException, NullPointerException{
-        try{
+    public void newDatabase() throws IOException, NullPointerException, SQLException {
             String filepath = getFileSavePath("Database", "db");
+            if (!(filepath == null)) {
+                Database d = new Database();
+                d.setDatabasePath(filepath);
+                d.closeConnection();
+            }
 
-            Database d = new Database();
-            d.setDatabasePath(filepath);
-            d.closeConnection();
-        }catch (Exception e){
-            System.out.println("Path selected is null, error: "+e);
-        }
     }
 
 }
