@@ -456,6 +456,7 @@ public class MainController {
         String lon;
         lat = filterLatTextField.getText();
         lon = filterLongTextField.getText();
+        // Checks that both lat and long field are valid
         if ( !(lat.equals("") && lon.equals("")) && !(lat.equals(null) && lon.equals(null)) && (InputValidator.hasValidDouble(lat) && InputValidator.hasValidDouble(lon))) {
             radiusSlider.setDisable(false);
         } else {
@@ -490,14 +491,16 @@ public class MainController {
     }
 
     /**
-     * Opens file explorer for user to select a csv file to import
+     * Opens file explorer for user to select a file
+     * @param fileType  Type of file
+     * @param fileExtension Extension of file
      * @return path to csv file
      */
-    public String getPathToCsv() {
+    public String getPathToFile(String fileType, String fileExtension) {
         String filepath = null;
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select csv file");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"),
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(fileType + " Files", "*."+fileExtension),
                                                  new FileChooser.ExtensionFilter("All Files", "*.*"));
         File selectedFile = fileChooser.showOpenDialog(new Stage());
         if (selectedFile != null) {
@@ -530,7 +533,7 @@ public class MainController {
     }
 
     public void importCsv(){
-        String filepath = getPathToCsv();
+        String filepath = getPathToFile("CSV", "csv");
         Boolean replace = null;
         if (filepath != null) {
             replace = PopupWindow.displayYesNoPopup("Replace Data?", "Do you want to replace the current data?");
@@ -563,20 +566,16 @@ public class MainController {
      * which is accessed every time the database is connected to
      * @throws IOException
      */
-    public void changeDatabase() throws IOException{
+    public void changeDatabase() throws IOException, SQLException{
         String filepath = null;
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select location to save csv file");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Database Files", "*.db"),
-                new FileChooser.ExtensionFilter("All Files", "*.*"));
-        File selectedFile = fileChooser.showSaveDialog(new Stage());
-        filepath = selectedFile.getAbsolutePath();
+        filepath = getPathToFile("Database", "db");
 
         //Changes the database to the selected path
         Database d = new Database();
         d.setDatabasePath(filepath);
 
         //Refresh all GUI
+        tableTabController.refreshTableData();
     }
 
 
