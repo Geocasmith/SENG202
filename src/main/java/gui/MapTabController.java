@@ -31,7 +31,9 @@ public class MapTabController {
     public void plotMultiplePoints(ArrayList<Record> records) {
         String newLocationMarker;
         for (Record record : records) {
-            newLocationMarker = "document.plotPoint(" + record.getLatitude() + ", " + record.getLongitude() + ")";
+            newLocationMarker = "document.plotPoint(" + record.getLatitude() + ", " + record.getLongitude() + ", '" +
+                    record.getCaseNumber() + "', '" + record.getPrimaryDescription() + "', '" + record.getSecondaryDescription() +
+                    "', '" + record.getLocationDescription() + "')";
             webEngine.executeScript(newLocationMarker);
         }
 
