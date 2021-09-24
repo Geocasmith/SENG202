@@ -531,7 +531,7 @@ public class MainController {
      * this to the CsvWriter along with the currently displayed records.
      * @throws IOException
      */
-    public void exportCsv() throws NullPointerException{
+    public void exportCsv() throws IOException, NullPointerException{
         try{
             String filepath = getFileSavePath("CSV", "csv");
             CsvWriter.write(filepath, tableTabController.getDisplayedRecords());
@@ -549,18 +549,18 @@ public class MainController {
         Boolean newDB = null;
 
 
-        // If User Selected file
+
         if (filepath != null) {
             newDB = PopupWindow.displayTwoButtonPopup("Create New Database?", "Do you want to store this data in a new database?", "New Database", "Existing Database");
             if (newDB != null && !newDB) {
                 replace = PopupWindow.displayTwoButtonPopup("Replace data?", "Do you want to replace the current data or append to it?", "Replace", "Append");
             }
         }
-        // If user selected new database
         if (newDB != null && newDB) {
-            newDatabase(filepath);
-        // if user selected existing database
-        } else if (replace != null && newDB != null) {
+            newDatabase();
+            replace = false;
+        }
+        if (replace != null) {
             try {
                 Database d = new Database();
                 d.connectDatabase();
@@ -569,9 +569,8 @@ public class MainController {
                 } else {
                     d.replaceRows(CsvReader.read(filepath));
                 }
+                tableTabController.setTableRecords(d.getAll());
                 d.closeConnection();
-                // Refresh GUI
-                tableTabController.refreshTableData();
                 filterSetup();
 
             } catch (Exception e) {
@@ -607,16 +606,21 @@ public class MainController {
      * Creates a new database
      * @throws IOException
      */
-    public void newDatabase(String csvPath) throws IOException, NullPointerException, SQLException {
-        String filepath = getFileSavePath("Database", "db");
-        if (!(filepath == null)) {
-            Database d = new Database();
-            d.setDatabasePath(filepath);
-            d.closeConnection();
-        }
+    public void newDatabase() throws IOException, NullPointerException, SQLException {
+            String filepath = getFileSavePath("Database", "db");
 
-        //Refresh all GUI
-        tableTabController.refreshTableData();
+            try{
+                File file = new File(filepath);
+                file.createNewFile();
+            }catch(Exception e){
+                PopupWindow.displayPopup("Error", "You must");
+            }
+
+            if (!(filepath == null)) {
+                Database d = new Database();
+                d.setDatabasePath(filepath);
+                d.closeConnection();
+            }
 
     }
 

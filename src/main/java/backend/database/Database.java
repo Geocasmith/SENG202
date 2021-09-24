@@ -498,7 +498,7 @@ public class Database {
         return getRecord(rs);
     }
     /**
-     * Generates an arraylist of records from a given resultset
+     * Generates an arraylist of records from a given resultset. If given a radius it will return records in the area
      *
      * @param rs Resultset passed in from other methods
      * @return Arraylist of Records
@@ -611,6 +611,10 @@ public class Database {
         ResultSet rs = s1.executeQuery();
         return getRecord(rs);
     }
+
+//    public ArrayList<Record> getRecordsinRadius(ArrayList<Record> records, int radius, String lat, String lon){
+//
+//    }
 
     /**
      * Reads column values from the provided ResultSet object
