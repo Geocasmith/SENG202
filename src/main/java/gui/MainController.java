@@ -21,6 +21,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.FileAlreadyExistsException;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -512,11 +513,11 @@ public class MainController {
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(fileType + " Files", "*."+fileExtension),
                 new FileChooser.ExtensionFilter("All Files", "*.*"));
         File selectedFile = fileChooser.showSaveDialog(new Stage());
-        filepath = selectedFile.getAbsolutePath();
-        System.out.println(filepath);
+        if (selectedFile != null) {
+            filepath = selectedFile.getAbsolutePath();
+        }
 
         return filepath;
-
     }
 
     /**
@@ -528,8 +529,11 @@ public class MainController {
         try{
             String filepath = addExtension(getFileSavePath("CSV", "csv"),".csv");
             CsvWriter.write(filepath, tableTabController.getDisplayedRecords());
-        }catch (Exception e){
-            System.out.println("Path selected is null, error: "+e);
+        }catch (NullPointerException e){
+            // the user closed the file chooser
+        } catch (Exception e) {
+            // something unknown happened
+            System.out.println("Unknown error exporting csv, error: "+e);
         }
     }
 
@@ -539,60 +543,55 @@ public class MainController {
     public void importCsv() throws SQLException, IOException {
         String filepath = getPathToFile("CSV", "csv");
 
-        //If user imports incorrect filetype it will do nothing and display a pop up
-        if(matchFileType(filepath,".csv")){
-            PopupWindow.displayPopup("Error", "Selected file is not a CSV file");
-            return;
-        }
-
-        Boolean replace = null;
-        Boolean newDB = null;
-
-
-
         if (filepath != null) {
+            //If user imports incorrect filetype it will do nothing and display a pop up
+            if (matchFileType(filepath, ".csv")) {
+                PopupWindow.displayPopup("Error", "Selected file is not a CSV file");
+                return;
+            }
+
+            Boolean replace = null;
+            Boolean newDB = null;
+
+
             newDB = PopupWindow.displayTwoButtonPopup("Create New Database?", "Do you want to store this data in a new database?", "New Database", "Existing Database");
             if (newDB != null && !newDB) {
                 replace = PopupWindow.displayTwoButtonPopup("Replace data?", "Do you want to replace the current data or append to it?", "Replace", "Append");
             }
-        }
-        if (newDB != null && newDB) {
-            newDatabase();
-            replace = false;
-        }
-        if (replace != null) {
-            try {
-                Database d = new Database();
-                d.connectDatabase();
-
-                ArrayList<ArrayList<List<String>>> dataValidation = DataManipulator.getRowsfromCsv(filepath);
-
-                if (!replace) {
-                    d.insertRows(dataValidation.get(0));
-
-                    if(dataValidation.get(1).size()!=0){
-                        displayInvalid(dataValidation.get(1));
-                    }
-
-                } else {
-                    d.replaceRows(dataValidation.get(0));
-
-                    if(dataValidation.get(1).size()!=0){
-                        displayInvalid(dataValidation.get(1));
-                    }
-                }
-                tableTabController.setTableRecords(d.getAll());
-                d.closeConnection();
-                filterSetup();
-
-            } catch (Exception e) {
-                System.out.println("Error " + e);
+            if (newDB != null && newDB) {
+                newDatabase();
+                replace = false;
             }
+            if (replace != null) {
+                try {
+                    Database d = new Database();
+                    d.connectDatabase();
 
+                    ArrayList<ArrayList<List<String>>> dataValidation = DataManipulator.getRowsfromCsv(filepath);
 
+                    if (!replace) {
+                        d.insertRows(dataValidation.get(0));
 
+                        if (dataValidation.get(1).size() != 0) {
+                            displayInvalid(dataValidation.get(1));
+                        }
+
+                    } else {
+                        d.replaceRows(dataValidation.get(0));
+
+                        if (dataValidation.get(1).size() != 0) {
+                            displayInvalid(dataValidation.get(1));
+                        }
+                    }
+                    tableTabController.setTableRecords(d.getAll());
+                    d.closeConnection();
+                    filterSetup();
+
+                } catch (Exception e) {
+                    System.out.println("Error " + e);
+                } // TODO this is printing an error when you import csv, click new database, then close the file picker
+            } // TODO the specific error is "Error java.lang.ArrayIndexOutOfBoundsException: Index 1 out of bounds for length 1"
         }
-
     }
 
     /**
@@ -636,23 +635,27 @@ public class MainController {
      * Creates a new database
      * @throws IOException
      */
-    public void newDatabase() throws IOException, NullPointerException, SQLException {
-            String filepath = addExtension(getFileSavePath("Database", "db"),".db");
+    public void newDatabase() throws NullPointerException, SQLException {
+        String filepath = getFileSavePath("Database", "db");
 
+        if (!(filepath == null)) {
+            filepath = addExtension(filepath,".db");
             try{
                 File file = new File(filepath);
                 file.createNewFile();
-            }catch(Exception e){
+            } catch(FileAlreadyExistsException e){
                 PopupWindow.displayPopup("Error", "File already exists");
+            } catch (Exception e) {
+                // something else went wrong
+                PopupWindow.displayPopup("Error", "Unknown error");
             }
 
-            if (!(filepath == null)) {
                 Database d = new Database();
 
 
                 d.setDatabasePath(filepath);
                 d.closeConnection();
-            }
+        }
     }
 
     /**
