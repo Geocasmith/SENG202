@@ -4,17 +4,12 @@ import backend.*;
 import backend.Record;
 import backend.database.Database;
 import com.opencsv.exceptions.CsvValidationException;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
@@ -26,9 +21,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.sql.Array;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -542,6 +535,13 @@ public class MainController {
      */
     public void importCsv() throws SQLException, IOException {
         String filepath = getPathToFile("CSV", "csv");
+
+        //If user imports incorrect filetype it will do nothing and display a pop up
+        if(matchFileType(filepath,".csv")){
+            PopupWindow.displayPopup("Error", "Selected file is not a CSV file");
+            return;
+        }
+
         Boolean replace = null;
         Boolean newDB = null;
 
@@ -613,6 +613,14 @@ public class MainController {
         if (!(filepath == null)) {
             //Changes the database to the selected path
             Database d = new Database();
+
+            //If user imports incorrect filetype it will do nothing and display a pop up
+            if(matchFileType(filepath,".db")){
+                PopupWindow.displayPopup("Error", "Selected file is not a database file");
+                d.closeConnection();
+                return;
+            }
+
             d.setDatabasePath(filepath);
             d.closeConnection();
         }
@@ -637,6 +645,8 @@ public class MainController {
 
             if (!(filepath == null)) {
                 Database d = new Database();
+
+
                 d.setDatabasePath(filepath);
                 d.closeConnection();
             }
@@ -659,7 +669,19 @@ public class MainController {
         }else{
             return path+=extension;
         }
+    }
 
+    /**
+     * Checks if the inputted filepath's extension matches the required extension, this stops the user from
+     * importing data from incorrect file types
+     * @param path file path
+     * @param extension correct extension
+     * @return true if file type incorrect
+     */
+    public Boolean matchFileType(String path, String extension){
+        String substr = path.substring(path.length() - extension.length());
+
+        return !substr.equals(extension);
     }
 
     public void analyseCrimeLocationDifference() {
