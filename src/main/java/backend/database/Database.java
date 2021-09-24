@@ -100,7 +100,9 @@ public class Database {
      * @throws SQLException
      */
     public void insertRows(ArrayList<List<String>> inputs) throws SQLException, ParseException {
-
+        if(inputs==null){
+            return;
+        }
 
         //Creates the statement to be run
         connection.setAutoCommit(false);
