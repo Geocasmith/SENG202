@@ -530,7 +530,7 @@ public class MainController {
      */
     public void exportCsv() throws IOException, NullPointerException{
         try{
-            String filepath = getFileSavePath("CSV", "csv");
+            String filepath = addExtension(getFileSavePath("CSV", "csv"),".csv");
             CsvWriter.write(filepath, tableTabController.getDisplayedRecords());
         }catch (Exception e){
             System.out.println("Path selected is null, error: "+e);
@@ -626,7 +626,7 @@ public class MainController {
      * @throws IOException
      */
     public void newDatabase() throws IOException, NullPointerException, SQLException {
-            String filepath = getFileSavePath("Database", "db");
+            String filepath = addExtension(getFileSavePath("Database", "db"),".db");
 
             try{
                 File file = new File(filepath);
@@ -640,6 +640,26 @@ public class MainController {
                 d.setDatabasePath(filepath);
                 d.closeConnection();
             }
+    }
+
+    /**
+     * Helper method which checks the filepath to check if it has the correct extension and adds it if it does not
+     * This stops the user from exporting to a file without an extension if they dont
+     * type the extension in the file name.
+     * @param path file path
+     * @param extension correct extension
+     * @return filepath or filepath with appended extension
+     */
+    public String addExtension(String path, String extension){
+        String substr = path.substring(path.length() - extension.length());
+
+        //If the correct extension exists return path otherwise append the extension and return
+        if(substr.equals(extension)){
+            return path;
+        }else{
+            return path+=extension;
+        }
+
     }
 
     public void analyseCrimeLocationDifference() {
