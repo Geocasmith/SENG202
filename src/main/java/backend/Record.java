@@ -292,37 +292,11 @@ public class Record {
     }
 
     /**
-     * Support function for toList(). Returns null if o is null, else o.toString().
-     * @param o
-     * @return
-     */
-    private String parsePossibleNullToString(Object o) {
-        if (o == null) {
-            return null;
-        }
-        else {
-            return o.toString();
-        }
-    }
-
-    /**
      * Returns the record object as a list of strings. It's not pretty, but it is useful for iterating over the
      * record object.
      * @return
      */
     public List<String> toList() {
-//        List<String> result = Arrays.asList(
-//            this.getCaseNumber(), this.getDate(), this.getBlock(), this.getIucr(),
-//            this.getPrimaryDescription(), this.getSecondaryDescription(), this.getLocationDescription(),
-//            this.getArrest(), this.getDomestic(), Integer.toString(this.getBeat()),
-//            Integer.toString(this.getWard()), this.getFbicd(),
-//            String.valueOf(this.getXcoord()), String.valueOf(this.getYcoord())
-//            );
-//        String test = parsePossibleNullToString(this.getLatitude());
-//        result.add(parsePossibleNullToString(this.getLatitude()));
-//        result.add(parsePossibleNullToString(this.getLongitude()));
-
-
         return Arrays.asList(
         this.getCaseNumber(), this.getDate(), this.getBlock(), this.getIucr(),
                 this.getPrimaryDescription(), this.getSecondaryDescription(), this.getLocationDescription(),
@@ -331,7 +305,5 @@ public class Record {
                 String.valueOf(this.getXcoord()), String.valueOf(this.getYcoord()), String.valueOf(this.getLatitude()),
                 String.valueOf(this.getLongitude())
                 );
-
-//        return result;
     }
 }
