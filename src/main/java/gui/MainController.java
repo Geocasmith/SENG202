@@ -167,6 +167,9 @@ public class MainController {
         // Remove duplicate values
         locationDescriptions = new ArrayList<>(new HashSet<>(locationDescriptions));
 
+        // Disable slider
+        radiusSlider.setDisable(true);
+
         // Get Crime types
         List<String> crimeTypes = new ArrayList<String>();
         crimeTypes = InputValidator.getSetOfPrimaryDescriptions();
@@ -435,6 +438,30 @@ public class MainController {
         
     }
 
+    /**
+     *  Updates latitude and longitude field in filter sidebar to lat and long of record object
+     * @param record Record selected
+     */
+    public void updateLatLong(Record record) {
+        filterLatTextField.setText(record.getLatitude().toString());
+        filterLongTextField.setText(record.getLongitude().toString());
+        checkSliderUnlock();
+    }
+
+    /**
+     * Enables slider if lat and long are valid in the filter
+     */
+    public void checkSliderUnlock () {
+        String lat;
+        String lon;
+        lat = filterLatTextField.getText();
+        lon = filterLongTextField.getText();
+        if ( !(lat.equals("") && lon.equals("")) && !(lat.equals(null) && lon.equals(null)) && (InputValidator.hasValidDouble(lat) && InputValidator.hasValidDouble(lon))) {
+            radiusSlider.setDisable(false);
+        } else {
+            radiusSlider.setDisable(true);
+        }
+    }
 
 
 
@@ -451,6 +478,7 @@ public class MainController {
         filterLatTextField.setText("");
         filterLongTextField.setText("");
         radiusSlider.setValue(0);
+        radiusSlider.setDisable(true);
         radiusLabel.setText("0 km");
         arrestComboBox.getSelectionModel().select("");
         domesticComboBox.getSelectionModel().select("");
