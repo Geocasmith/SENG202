@@ -31,24 +31,12 @@
                   <MenuItem mnemonicParsing="false" onAction="#exportCsv" text="Export CSV" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
           <Menu mnemonicParsing="false" text="Analysis">
             <items>
               <MenuItem mnemonicParsing="false" text="Distance" onAction="#analyseCrimeLocationDifference"/>
                   <MenuItem mnemonicParsing="false" text="Time" onAction="#analyseCrimeTimeDifference"/>
             </items>
           </Menu>
-            <Menu mnemonicParsing="false" text="Sort">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="Case#" />
-                  <MenuItem mnemonicParsing="false" text="Date" />
-                  <MenuItem mnemonicParsing="false" text="Type" />
-               </items>
-            </Menu>
         </menus>
       </MenuBar>
    </top>

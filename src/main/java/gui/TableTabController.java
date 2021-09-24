@@ -218,7 +218,11 @@ public class TableTabController {
     @FXML
     private void deleteSelectedRows() throws SQLException {
         int num = getNumSelectedRows();
-        if (PopupWindow.displayTwoButtonPopup("Confirm Action", "You are about to delete " +
+        if (num == 0) {
+            PopupWindow.displayPopup("Error", "You must have data in the table to delete records.\n" +
+                    "Try clearing the filter or importing some data.");
+
+        } else if (PopupWindow.displayTwoButtonPopup("Confirm Action", "You are about to delete " +
                 num + " rows. This action cannot be undone.\nAre you sure you want" +
                 " to do this?", "Yes", "No")) {
             Database d = new Database();
@@ -243,7 +247,7 @@ public class TableTabController {
             setupEditRow(getSelectedRows().get(0));
         }
         else {
-            PopupWindow.displayPopup("Error", "You must have only one row selected to edit a record.");
+            PopupWindow.displayPopup("Error", "You must have exactly one row selected to edit a record.");
         }
     }
 
