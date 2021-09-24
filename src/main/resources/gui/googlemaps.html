@@ -21,6 +21,7 @@
         var map;
         var marker;
         var markers = [];
+        var infowindow = null;
         function initialize() {
             var latlng = new google.maps.LatLng(41.85001, -87.6782);
             var myOptions = {
@@ -70,11 +71,25 @@
             }
         }
 
-        document.plotPoint = function plotPoint(lat, long) {
+        document.plotPoint = function plotPoint(lat, long, caseNumber, primaryDescription, secondaryDescription, locationDescription) {
+
+            var infoWindowContent = "<p>" + "Case Number: " + caseNumber + "<br />" + "<br />" +
+                "Primary Description: " + primaryDescription + "<br />" + "<br />" +
+                "Secondary Description: " + secondaryDescription + "<br />" + "<br />" +
+                "Location Description: " + locationDescription + "<br />" +
+                "</p>";
+
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(lat, long),
                 map: map,
                 'optimized': true
+            });
+            marker.addListener('click', function() {
+                if (infowindow) infowindow.close();
+                infowindow = new google.maps.InfoWindow({
+                    content: infoWindowContent
+                });
+                infowindow.open(map, this)
             });
             markers.push(marker);
         }

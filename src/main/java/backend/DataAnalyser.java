@@ -14,9 +14,7 @@ DataAnalyser {
     ArrayList<String> crimeTypes = new ArrayList<>();
     ArrayList<Integer> crimeBeats = new ArrayList<>();
 
-    public DataAnalyser() {
-
-    }
+    public DataAnalyser() {}
 
     /**
      *
@@ -38,8 +36,6 @@ DataAnalyser {
         Collections.sort(crimeWards);
         Collections.sort(crimeBeats);
     }
-
-
 
     /**
      * Calculates the absolute value of the time difference between the crimes
