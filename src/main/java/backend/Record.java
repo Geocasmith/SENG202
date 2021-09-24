@@ -4,6 +4,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+ * This is the class used to hold crime records in the application.
+ * It is also used for display in the main TableView.
+ *
+ * Record is constructed using a list of Strings.
+ * A Record object can be converted into one comma separated String or a list of Strings
+ * using the provided methods.
+ */
 public class Record {
     private String caseNumber;
     private LocalDateTime date;
@@ -23,16 +31,16 @@ public class Record {
     private Double longitude;
     public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a", Locale.ENGLISH);
     /**
-     * List of strings that will be counted as "true" when parsing fields.
+     * List of strings that will be counted as "true" when parsing arrest and domestic fields.
      * Strings in lower case; use a case-insensitive check.
-     */
+     */ // these are here to make it more forgiving for users to enter data if they are not used to Y/N
     public static final List<String> trueStrings = Arrays.asList("y", "true", "yes", "1");
     /**
-     * List of strings that will be counted as "false" when parsing fields.
+     * List of strings that will be counted as "false" when parsing arrest and domestic fields.
      * Strings in lower case; use a case-insensitive check.
      */
     public static final List<String> falseStrings = Arrays.asList("n", "false", "no", "0");
-    public static final String TRUE = "Y";
+    public static final String TRUE = "Y"; // for output display of arrest and domestic fields
     public static final String FALSE = "N";
 
     /**
@@ -42,7 +50,6 @@ public class Record {
      */
     public Record(List<String> data) {
         caseNumber = data.get(0);
-
         date = LocalDateTime.parse(data.get(1).toUpperCase(), formatter);
         block = data.get(2);
         iucr = data.get(3);
@@ -253,8 +260,8 @@ public class Record {
     }
 
     /**
-     * Returns a string containing all of the data in the record.
-     * @return a string with all of the data in the record, separated by commas
+     * Returns a string containing all the data in the record.
+     * @return a string with all the data in the record, separated by commas
      */
     public String toString() {
         String output = String.format("%s, %s, %s, %s, %s, %s, %s, %s, %s, %d, %d, %s, %d, %s, %s, %s",
@@ -266,11 +273,11 @@ public class Record {
     }
 
     /**
-     * Returns a string containing all of the data in the record, in the specified format.
+     * Returns a string containing all the data in the record, in the specified format.
      * Can be modified to support additional formats with different formatStrings.
      * @param formatString a string specifying the format of the returned string.
      *                     Options are: "labels" (shows labels for data).
-     * @return a string with all of the data in the record, separated by commas and in the specified format
+     * @return a string with all the data in the record, separated by commas and in the specified format
      */
     public String toString(String formatString) {
         String output;
@@ -284,7 +291,7 @@ public class Record {
                         this.secondaryDescription, this.locationDescription, this.arrest, this.domestic, this.beat,
                         this.ward, this.fbicd, this.xcoord, this.ycoord, this.latitude, this.longitude);
                 break;
-            default:
+            default: // default to regular behaviour if formatString isn't valid
                 output = this.toString();
                 break;
         }
@@ -292,8 +299,8 @@ public class Record {
     }
 
     /**
-     * Returns the record object as a list of strings. It's not pretty, but it is useful for iterating over the
-     * record object.
+     * Returns the record object as a list of strings.
+     * Can be used to iterate over the object easily in a loop.
      * @return
      */
     public List<String> toList() {
