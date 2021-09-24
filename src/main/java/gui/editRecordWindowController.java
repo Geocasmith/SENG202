@@ -16,12 +16,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.Array;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class editRecordWindowController {
 
@@ -37,24 +36,23 @@ public class editRecordWindowController {
      */
     private boolean edit;
 
-    private TableTabController parentController;
+    private TableTabController parentController; // gives access to table methods, and thus main controller methods
 
     private static final List<String> textFieldNames = Arrays.asList("Case number", "Date", "Block", "IUCR",
             "Primary description", "Secondary description", "Location description", "Arrest", "Domestic", "Beat",
             "Ward", "FBICD", "X-Coordinate", "Y-Coordinate", "Latitude", "Longitude");
     private List<TextField> textFields = new ArrayList<>();
-    private List<String> recStrings = new ArrayList<>();
-    private boolean edited = false; // was a record changed - used to prompt for a table refresh
+    private boolean edited = false; // was a record changed? - used to prompt for a table refresh on close
 
     /**
      * Fills in the textfields with the record being edited, OR sets up the window as an "add" window instead.
-     * If the user is editing, they cannot change the case number of a record. They must create a new one.
+     * If the user is editing, they cannot change the case number of a record; they must create a new one.
      * @param record the record object to be edited. If null, treated as an adding form.
      */
     public void initData(Record record) {
         if (record != null) {
             edit = true;
-            recStrings = record.toList();
+            List<String> recStrings = record.toList();
             for (int i = 0; i < textFieldNames.size(); i++) {
                 textFields.get(i).setText(recStrings.get(i));
             }
@@ -67,12 +65,16 @@ public class editRecordWindowController {
         }
     }
 
-    @FXML
-    private void initialize()  {
+
+    /**
+     * Creates the textfields and their layout, marks relevant ones as required,
+     * and sets the padding on buttonPane.
+     */
+    @FXML private void initialize()  {
         buttonPane.setPadding(new Insets(0, 0, 15, 10)); // scenebuilder wasn't making this work so it goes here
         for (int i = 0; i < textFieldNames.size(); i++) {
             Label fieldTitleLabel = new Label(textFieldNames.get(i));
-            VBox vbox = new VBox();
+            VBox vbox = new VBox(); // used to keep textfield and label together and on same line
             vbox.setPrefHeight(Region.USE_COMPUTED_SIZE);
             vbox.setPrefWidth(Region.USE_COMPUTED_SIZE);
             vbox.setPadding(new Insets(10));
@@ -80,7 +82,7 @@ public class editRecordWindowController {
             field.setPromptText(textFieldNames.get(i));
             Label reqLabel = new Label();
             if (i < 12) {
-                reqLabel.setText("* Required");
+                reqLabel.setText("* Required"); // only coordinates and lat/long are optional
             }
             vbox.getChildren().addAll(fieldTitleLabel, field, reqLabel);
             textFields.add(field);
@@ -89,7 +91,8 @@ public class editRecordWindowController {
     }
 
     /**
-     * Closes the window and, if the user has edited or added data, prompts them to refresh the table.
+     * Closes the window and, if the user has edited or added data,
+     * prompts them to refresh the table to view their changes.
      */
     @FXML private void closeWindow() throws SQLException, IOException {
         if (edited) {
@@ -99,7 +102,6 @@ public class editRecordWindowController {
                 parentController.refreshTableData();
             }
         }
-
         ((Stage) closeButton.getScene().getWindow()).close();
     }
 
@@ -114,17 +116,19 @@ public class editRecordWindowController {
         // check outlines for textfields on both valid and invalid attempts
         for (int i = 0; i < 16; i++) { // there is 1 value for each textfield
             TextField field = textFields.get(i);
-            if (feedback.get(i) == "0") {
-                field.pseudoClassStateChanged(PseudoClass.getPseudoClass("textfield-required"), true);
-            }
-            else {
-                field.pseudoClassStateChanged(PseudoClass.getPseudoClass("textfield-required"), false);
-            }
+            field.pseudoClassStateChanged(PseudoClass.getPseudoClass("textfield-required"), Objects.equals(feedback.get(i), "0"));
+            // although the line is long, pseudoclasses are better than regular css classes for this!
         }
 
         return feedback;
     }
 
+    /**
+     * Attempts to either add or save the changes to the record specified by the user.
+     * Calls validateRecord on the record.
+     * If the user is adding a record, the casenumber is checked for uniqueness in the database.
+     * Provides popup success/fail messages based on the outcome.
+     */
     @FXML private void saveRecord() {
         try {
             ArrayList<String> data = new ArrayList<>();
@@ -133,7 +137,7 @@ public class editRecordWindowController {
             }
             List<String> feedback = validateRecord(data);
 
-            if (feedback.get(16) == "1") { // 16 is where the overall valid status is stored
+            if (Objects.equals(feedback.get(16), "1")) { // 16 is where the overall valid status is stored
                 Database d = new Database();
 
                 if (edit) {
@@ -143,6 +147,8 @@ public class editRecordWindowController {
                     if (d.searchDB("ID", data.get(0)).size() > 0) {
                         PopupWindow.displayPopup("Error", "That case number is already used in the " +
                                 "database.\nCase numbers must be unique.");
+                        textFields.get(0).pseudoClassStateChanged(PseudoClass.getPseudoClass("textfield-required"), true);
+                        // marks casenumber as invalid if it is already in use
                     }
                     else {
                         d.manualAdd(new Record(data));
@@ -152,7 +158,7 @@ public class editRecordWindowController {
                 this.edited = true;
                 d.closeConnection();
 
-            } else {
+            } else { // 17 is where the feedback message is held
                 PopupWindow.displayPopup("Error", feedback.get(17));
             }
         }
@@ -163,6 +169,10 @@ public class editRecordWindowController {
         }
     }
 
+    /**
+     * Sets the parent controller of this window, so that it can access the rest of the application.
+     * @param tableTabController the tableTabController that the window wants to access
+     */
     public void setParentController(TableTabController tableTabController) {
         parentController = tableTabController;
     }
