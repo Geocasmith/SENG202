@@ -1,4 +1,4 @@
-package backend.database;
+package backend;
 
 import backend.Database;
 import backend.Record;
