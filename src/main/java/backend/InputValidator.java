@@ -6,54 +6,52 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * This class holds static methods for validating Record objects and their fields.
+ */
 public class InputValidator {
 
    private static Set<List<String>> crimeDescription;
-   private static int LONGITUDEUPPERBOUND = 180;
-   private static int LONGITUDELOWERBOUND = -180;
-   private static int LATITUDEUPPERBOUND = 90;
-   private static int LATITUDELOWERBOUND = -90;
+
+   // these are declared here rather than in the method for ease of access
+   private static final int LONGITUDEUPPERBOUND = 180;
+   private static final int LONGITUDELOWERBOUND = -180;
+   private static final int LATITUDEUPPERBOUND = 90;
+   private static final int LATITUDELOWERBOUND = -90;
 
    /**
     * Initializes set of valid crime descriptions (Primary, Secondary and IUCR information from
     * a given CSV file
     * @param filename (file where crime descriptions live)
+    * @return //TODO
     * @throws CsvValidationException
     * @throws IOException
     */
    public static Set<List<String>>  initializeCrimeDescriptions(String filename) throws CsvValidationException, IOException {
       Set<List<String>> descriptions = new HashSet<>();
-      CsvReader reader = new CsvReader();
       ArrayList<List<String>> readData;
-      readData = reader.read(filename);
-      for (List<String> row : readData) {
-         descriptions.add(row);
-      }
+      readData = CsvReader.read(filename);
+      descriptions.addAll(readData);
       return descriptions;
 
    }
 
    /**
     * Checks the given List of Strings has valid crime descriptions
-    * @param candidateCrimeDescriptions
-    * @return
+    * @param candidateCrimeDescriptions //TODO
+    * @return boolean value if the crime descriptions are valid
     */
    public static boolean hasValidCrimeDescriptions(List<String> candidateCrimeDescriptions) throws CsvValidationException, IOException {
       crimeDescription = initializeCrimeDescriptions("Crime_Descriptions_Data_Source.csv");
-
-      if (crimeDescription.contains(candidateCrimeDescriptions)) {
-         return true;
-      }
-      return false;
+      return crimeDescription.contains(candidateCrimeDescriptions);
    }
 
    /**
-    * Checks if the given coordinate is valid based on the lower range and upper range parameters provided
-    * @param gpsCoordinate
-    * @param lowerRange
-    * @param upperRange
+    * Checks if the given coordinate lies within or is equal to the lower and upper range parameters provided.
+    * @param gpsCoordinate the coordinate, which is one number as a String, e.g. "-47.123456"
+    * @param lowerRange a float specifying the lower bound (inclusive)
+    * @param upperRange a float specifying the upper bound (inclusive)
     * @return true or false depending on the validity of the coordinate
-    * @throws IOException
     */
    public static boolean hasGpsCoordinate(String gpsCoordinate, float lowerRange, float upperRange) {
       if (gpsCoordinate.isEmpty()) {
@@ -77,12 +75,12 @@ public class InputValidator {
    /**
     * Checks whether the string provided is a valid integer value.
     * @param data the String to be checked
-    * @param empty whether or not the number can empty
+    * @param emptyAllowed whether the number can be empty
     * @return true or false
     */
-   public static boolean hasValidInt(String data, boolean empty)
+   public static boolean hasValidInt(String data, boolean emptyAllowed)
    {
-      if (empty && data.isEmpty()) {
+      if (emptyAllowed && data.isEmpty()) {
          return true;
       }
       else {
@@ -120,14 +118,25 @@ public class InputValidator {
    {
       return (Record.trueStrings.contains(domestic.toLowerCase()) ||
               Record.falseStrings.contains(domestic.toLowerCase()) ||
-              domestic == "null");
+              domestic.equals("null"));
    }
 
+   /**
+    * Identifies whether each field in a record is valid, whether the record overall is valid, and provides an error
+    * message if applicable.
+    * @param record a list of strings representing a Record object. This can be generated with the toList() method
+    *               of the Record class.
+    * @return a list consisting of 16 values (1 = valid, 0 = invalid) corresponding to each field of a Record object
+    *         in the order produced by toList(), with an additional 1/0 field for overall validity, and the last entry
+    *         is an error message or empty.
+    * @throws CsvValidationException
+    * @throws IOException
+    */
    public static ArrayList<String> recordEntryFeedbackLong(List<String> record) throws CsvValidationException, IOException {
       // will have 1 = good, 0 = bad for all rows and then a 1 or 0 at the end along with the first error message
       ArrayList<String> result = new ArrayList<>(Arrays.asList("1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1"));
       ArrayList<String> dataFieldFeedBack = new ArrayList<>();
-      String errMsg = "";
+      String errMsg;
       String isValid = "1";
 
       if (!hasValidCaseNumber(record.get(0))) {
@@ -237,19 +246,16 @@ public class InputValidator {
    }
 
    /**
-    * Calls several methods of InputValidator class on the record parameter to make sure that the given record
-    * is a valid record
-    * @param record
+    * Identifies whether a given record is valid using recordEntryFeedbackLong.
+    * Provides no feedback other than true/false.
+    * @param record a list of strings representing a Record object. This can be generated with the toList() method
+    *               of the Record class.
     * @return boolean value depending on the validity of the record
     * @throws IOException
+    * @throws CsvValidationException
     */
-
-
    public static boolean isValidRecord(List<String> record) throws IOException, CsvValidationException {
-      if (recordEntryFeedbackLong(record).get(16) == "1") {
-         return true;
-      }
-      return false;
+      return Objects.equals(recordEntryFeedbackLong(record).get(16), "1");
    }
 
 
@@ -259,7 +265,7 @@ public class InputValidator {
     * @throws CsvValidationException
     * @throws IOException
     */
-   public static void printCrimeDescriptions() throws CsvValidationException, IOException {
+   public static void printCrimeDescriptions() throws CsvValidationException, IOException { //TODO this isn't used
       crimeDescription = initializeCrimeDescriptions("Crime_Descriptions_Data_Source.csv");
 
       for (List<String> row : crimeDescription)
@@ -270,15 +276,14 @@ public class InputValidator {
 
 
    /**
-    * Checks if case number has a valid length (eight), The first two starting characters are letters
-    * and the rest of the characters are digits (No special character is allowed)
-    * @param caseNumber
-    * @return
+    * Checks if case number has a valid length (eight), the first two starting characters are letters
+    * and the rest of the characters are digits (no special characters are allowed).
+    * @param caseNumber the case number to validate
+    * @return boolean value whether the case number is valid
     */
    public static boolean hasValidCaseNumber(String caseNumber) {
       if ( caseNumber.length() == 8 ) {
          if (Character.isAlphabetic(caseNumber.charAt(0)) && Character.isAlphabetic(caseNumber.charAt(1))) {
-            String substring = caseNumber.substring(2);
             int count = 0;
             for (int i = 2; i <= 7; i ++) {
                if (Character.isDigit(caseNumber.charAt(i))) {
@@ -293,10 +298,9 @@ public class InputValidator {
 
 
    /**
-    * Checks input for valid Date and Time format
-    * @param dateAndTime
-    * @return true or false depending on validity of the passed parameter
-    * @throws IOException
+    * Checks whether the provided string is a valid date/time based on the format defined in the Record class.
+    * @param dateAndTime a candidate date and time String
+    * @return true or false depending on validity of data and time string.
     */
    public static boolean hasValidDateAndTimeFormat(String dateAndTime) {
       try {
@@ -341,8 +345,8 @@ public class InputValidator {
 
    /**
     * Filters and returns set of Secondary descriptions that relate to the passed primary description parameter
-    * @param primaryDescription
-    * @return
+    * @param primaryDescription a crime's primary description string, which usually identifies the type of crime
+    * @return //TODO
     * @throws CsvValidationException
     * @throws IOException
     */
@@ -383,9 +387,9 @@ public class InputValidator {
 
    /**
     * Given the primary description and secondary description for a crime, it returns the associated FBICD value
-    * @param primaryDescription
-    * @param secondaryDescription
-    * @return
+    * @param primaryDescription a crime's primary description string, which usually identifies the type of crime
+    * @param secondaryDescription a crime's secondary description, usually further specifying the type of crime
+    * @return //TODO
     * @throws CsvValidationException
     * @throws IOException
     */
