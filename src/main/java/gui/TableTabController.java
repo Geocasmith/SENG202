@@ -1,8 +1,6 @@
 package gui;
 
 import backend.DataAnalyser;
-import backend.DataManipulator;
-import backend.InputValidator;
 import backend.Record;
 import backend.database.Database;
 import com.opencsv.exceptions.CsvValidationException;
@@ -17,7 +15,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -25,9 +22,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class TableTabController {
     @FXML private BorderPane tableTab;
@@ -271,7 +266,7 @@ public class TableTabController {
         );
         popupEdit.setTitle("Edit Record");
         popupEdit.setScene(new Scene(loader.load()));
-        editRecordWindowController controller = loader.getController();
+        EditRecordWindowController controller = loader.getController();
         controller.initData(rec);
         controller.setParentController(this); // gives it access to the table controller (and thus main controller)
         popupEdit.setResizable(false);
