@@ -31,8 +31,6 @@ import java.util.List;
 
 public class MainController {
 
-    @FXML
-    AnalysisTabController analysisTab = new AnalysisTabController();
 
     @FXML
     private MapTabController mapTabController;
@@ -45,6 +43,9 @@ public class MainController {
 
     @FXML
     private GraphTabController graphTabController;
+
+    @FXML
+    private AnalysisTabController analysisTabController;
 
     // Filter Sidebar Elements
     @FXML
@@ -100,6 +101,7 @@ public class MainController {
     private Label graphOptionLabel;
 
     private int graphTabCount = 0;
+    private int analysisTabCount = 0;
 
 
 
@@ -502,7 +504,7 @@ public class MainController {
             refreshMarkers();
             dataAnalyser.updateRecords(records);
             updateGraphOptions();
-
+            updateAnalysis();
 
         } else {
             filterErrorLabel.setVisible(true);
@@ -767,12 +769,8 @@ public class MainController {
         }
     }
 
-    public void analysisSetUp() throws SQLException {
-
-        AnalysisTabController analysisTab = new AnalysisTabController();
-        ArrayList<Record> displayedRecords = tableTabController.getDisplayedRecords();
-        analysisTab.start(displayedRecords);
-
+    public void analysisSetUp() {
+        updateAnalysis();
     }
 
     /**
@@ -800,6 +798,17 @@ public class MainController {
      */
     public void analyseCrimeTimeDifference() {
         tableTabController.analyseCrimeTimeDifference();
+    }
+
+    public void updateAnalysis() {
+        analysisTabController.updateAnalysis(tableTabController.getDisplayedRecords());
+    }
+
+    public void analysisTabClick() {
+        analysisTabCount++;
+        if (analysisTabCount % 2 == 1) {
+            updateAnalysis();
+        }
     }
 
 }

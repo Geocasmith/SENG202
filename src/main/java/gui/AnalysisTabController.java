@@ -1,10 +1,8 @@
 package gui;
 
-import backend.DataAnalyser;
+import backend.*;
 import backend.Record;
-import backend.TypeFrequencyPair;
 import backend.database.Database;
-import backend.DataManipulator;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -44,21 +42,15 @@ public class AnalysisTabController {
     @FXML private TableColumn<TypeFrequencyPair, String> bottomBlockCol;
     @FXML private TableColumn<TypeFrequencyPair, String> bottomBlockFrequencyCol;
     int displayLimit;
+    private DataAnalyser dataAnalyser = new DataAnalyser();
 
 
 
-    class frequecyComparatorDescending implements Comparator<TypeFrequencyPair> {
-        @Override
-        public int compare(TypeFrequencyPair a, TypeFrequencyPair b) {
-            return a.getFrequency() > b.getFrequency() ? -1 : a.getFrequency() == b.getFrequency() ? 0 : 1;
-        }
-    }
 
-    public class frequecyComparatorAscending implements Comparator<TypeFrequencyPair> {
-        @Override
-        public int compare(TypeFrequencyPair a, TypeFrequencyPair b) {
-            return a.getFrequency() < b.getFrequency() ? -1 : a.getFrequency() == b.getFrequency() ? 0 : 1;
-        }
+
+
+    @FXML
+    void initialize() {
     }
 
 
@@ -66,60 +58,58 @@ public class AnalysisTabController {
      * Comparator for TypeFrequency pair objects (Compares on basis of frequency in an ascending order)
      */
 
-  public void start(ArrayList<Record> currentRecord) throws SQLException {
-
-      Database db = new Database();
-      db.connectDatabase();
-      DataAnalyser dataAnalyser = new DataAnalyser();
-
-      if (currentRecord.size() > 10) {
-          displayLimit = 10;
-      }
-      else {
-          displayLimit = currentRecord.size();
-      }
-      populateTopCrimesTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 4)));
-      populateLowCrimesTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 4)));
-      populateTopBlocksTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 2)));
-      populateLowBlocksTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 2)));
-
-  }
+    public void updateAnalysis(ArrayList<Record> currentRecord) {
 
 
 
-    public void populateTopCrimesTable(ArrayList<TypeFrequencyPair> crimeFrequencyPair) throws SQLException {
-        Collections.sort(crimeFrequencyPair, new AnalysisTabController.frequecyComparatorDescending());
+        if (currentRecord.size() > 10) {
+            displayLimit = 10;
+        }
+        else {
+            displayLimit = currentRecord.size();
+        }
+        populateTopCrimesTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 4)));
+        populateLowCrimesTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 4)));
+        populateTopBlocksTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 2)));
+        populateLowBlocksTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 2)));
+    }
+
+
+
+    public void populateTopCrimesTable(ArrayList<TypeFrequencyPair> crimeFrequencyPair) {
+        Collections.sort(crimeFrequencyPair, new FrequencyComparatorDescending());
         topCrimeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         topCrimeFrequencyCol.setCellValueFactory(new PropertyValueFactory<>("frequency"));
+        topCrimeTable.getItems().clear();
 
-        for (int i = 0; i < displayLimit; i ++) {
+        for (int i = 0; i < displayLimit; i++) {
             topCrimeTable.getItems().add(crimeFrequencyPair.get(i));
-            System.out.println(crimeFrequencyPair.get(i).getType());
         }
 
 
 
     }
 
-    public void populateLowCrimesTable(ArrayList<TypeFrequencyPair> crimeFrequencyPair) throws SQLException {
-        Collections.sort(crimeFrequencyPair, new AnalysisTabController.frequecyComparatorAscending());
-
+    public void populateLowCrimesTable(ArrayList<TypeFrequencyPair> crimeFrequencyPair) {
+        Collections.sort(crimeFrequencyPair, new FrequencyComparatorAscending());
         bottomCrimeCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("type"));
         bottomCrimeFrequencyCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("frequency"));
-        for (int i = 0; i < displayLimit; i ++) {
+        bottomCrimeTable.getItems().clear();
+
+        for (int i = 0; i < displayLimit; i++) {
             bottomCrimeTable.getItems().add(crimeFrequencyPair.get(i));
-            System.out.println(crimeFrequencyPair.get(i).getType());
         }
 
 
     }
 
-    public void populateTopBlocksTable(ArrayList<TypeFrequencyPair> blocksFrequencyPair) throws SQLException {
-        Collections.sort(blocksFrequencyPair, new AnalysisTabController.frequecyComparatorDescending());
+    public void populateTopBlocksTable(ArrayList<TypeFrequencyPair> blocksFrequencyPair) {
+        Collections.sort(blocksFrequencyPair, new FrequencyComparatorDescending());
         topBlockCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("type"));
         topBlockFrequencyCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("frequency"));
+        topBlockTable.getItems().clear();
 
-        for (int i = 0; i < displayLimit; i ++) {
+        for (int i = 0; i < displayLimit; i++) {
             topBlockTable.getItems().add(blocksFrequencyPair.get(i));
         }
 
@@ -128,11 +118,13 @@ public class AnalysisTabController {
 
     }
 
-    public void populateLowBlocksTable(ArrayList<TypeFrequencyPair> blocksFrequencyPair) throws SQLException {
-        Collections.sort(blocksFrequencyPair, new AnalysisTabController.frequecyComparatorAscending());
+    public void populateLowBlocksTable(ArrayList<TypeFrequencyPair> blocksFrequencyPair) {
+        Collections.sort(blocksFrequencyPair, new FrequencyComparatorAscending());
         bottomBlockCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("type"));
         bottomBlockFrequencyCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("frequency"));
-        for (int i = 0; i < displayLimit; i ++) {
+        bottomBlockTable.getItems().clear();
+
+        for (int i = 0; i < displayLimit; i++) {
             bottomBlockTable.getItems().add(blocksFrequencyPair.get(i));
         }
 

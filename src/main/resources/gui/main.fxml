@@ -63,6 +63,11 @@
                 <fx:include fx:id="browserTab" source="browserTab.fxml" />
                </content>
             </Tab>
+            <Tab onSelectionChanged="#analysisTabClick" text="Analysis">
+                <content>
+                    <fx:include fx:id="analysisTab" source="analysisTab.fxml" />
+                </content>
+            </Tab>
         </tabs>
       </TabPane>
    </center>

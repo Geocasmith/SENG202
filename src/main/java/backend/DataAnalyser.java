@@ -103,36 +103,13 @@ DataAnalyser {
     }
 
     /**
-     * Comparator for TypeFrequency pair objects (Compares on basis of frequency in a descending order)
-     */
-
-    class frequecyComparatorDescending implements Comparator<TypeFrequencyPair> {
-        @Override
-        public int compare(TypeFrequencyPair a, TypeFrequencyPair b) {
-            return a.getFrequency() > b.getFrequency() ? -1 : a.getFrequency() == b.getFrequency() ? 0 : 1;
-        }
-    }
-
-
-    /**
-     * Comparator for TypeFrequency pair objects (Compares on basis of frequency in an ascending order)
-     */
-
-    class frequecyComparatorAscending implements Comparator<TypeFrequencyPair> {
-        @Override
-        public int compare(TypeFrequencyPair a, TypeFrequencyPair b) {
-            return a.getFrequency() > b.getFrequency() ? -1 : a.getFrequency() == b.getFrequency() ? 0 : 1;
-        }
-    }
-
-    /**
      * Takes a data column and returns list of data column items together with their appearance frequency
      * @param column represents the data column
      * @return List of TypeFrequency pair objects
      * @throws SQLException
      */
 
-    public ArrayList<TypeFrequencyPair> getTypeFrequencyDescending(ArrayList<Object> column) throws SQLException {
+    public ArrayList<TypeFrequencyPair> getTypeFrequencyDescending(ArrayList<Object> column) {
         ArrayList<TypeFrequencyPair> res = new ArrayList<TypeFrequencyPair>();
         int frequency;
         HashSet h = new HashSet();
@@ -148,7 +125,7 @@ DataAnalyser {
             }
         }
         // Sort descending (Based in frequency)
-        Collections.sort(res, new frequecyComparatorDescending());
+        Collections.sort(res, new FrequencyComparatorDescending());
         return res;
     }
 
