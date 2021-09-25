@@ -608,7 +608,7 @@ public class Database {
             SQLString += "AND (DOMESTIC='" + domestic + "')";
         }
         if(caseNumber!=null) {
-            SQLString += "AND (ID='" + caseNumber + "')";
+            SQLString += "AND (ID LIKE '%" + caseNumber + "%')";
         }
 
         // System.out.println(SQLString);
