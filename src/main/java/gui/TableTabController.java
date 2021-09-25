@@ -344,8 +344,15 @@ public class TableTabController {
         if (getNumSelectedRows() == 2) {
             Record crime1 = getSelectedRows().get(0);
             Record crime2 = getSelectedRows().get(1);
-            PopupWindow.displayPopup("Crime Location Difference", "These crimes occurred " +
-                    dataAnalyser.calculateLocationDifferenceMeters(crime1, crime2) + " meters apart.");
+            int locationDifference = dataAnalyser.calculateLocationDifferenceMeters(crime1, crime2);
+            if (locationDifference == -1) {
+                PopupWindow.displayPopup("Error", "One or more of the selected records is missing location data.\n" +
+                        "Try selecting a different record");
+            } else {
+                PopupWindow.displayPopup("Crime Location Difference", "These crimes occurred " +
+                        locationDifference + " meters apart.");
+            }
+
         } else {
             PopupWindow.displayPopup("Error", "You must have exactly two records selected to use this feature.\n" +
                     "Hold CTRL or SHIFT to select multiple records.");

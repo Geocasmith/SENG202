@@ -21,6 +21,9 @@ public class GraphTabController {
     @FXML
     private BorderPane graphBorderPane;
 
+    /**
+     * Disable graph animations to stop axis getting bunched up
+     */
     @FXML
     private void initialize() {
         xAxis.setAnimated(false);
@@ -29,7 +32,12 @@ public class GraphTabController {
     }
 
 
-
+    /**
+     * Gets the graph time period and ArrayList of XYChart.Series containing the graph data from the graphCreator, then
+     * sets the title and axis labels, updates the legend, clears the old data and displays the new data
+     * @param currentRecords A list of the records currently displayed in the table
+     * @param crimeTypes A list of crime types the user wants to graph
+     */
     public void createCrimesPerTypeOverTimeGraph(ArrayList<Record> currentRecords, ArrayList<String> crimeTypes) {
         ArrayList<Record> filteredRecords = new ArrayList<>();
         for (Record record : currentRecords) {
@@ -54,6 +62,13 @@ public class GraphTabController {
 
         graphBorderPane.setCenter(lineChart);
     }
+
+    /**
+     * Gets the graph time period and ArrayList of XYChart.Series containing the graph data from the graphCreator, then
+     * sets the title and axis labels, updates the legend, clears the old data and displays the new data
+     * @param currentRecords A list of the records currently displayed in the table
+     * @param crimeBeats A list of the crime beats the user wants to graph
+     */
     public void createCrimesPerBeatOverTimeGraph(ArrayList<Record> currentRecords, ArrayList<Integer> crimeBeats) {
         ArrayList<Record> filteredRecords = new ArrayList<>();
         for (Record record : currentRecords) {
@@ -79,6 +94,12 @@ public class GraphTabController {
         graphBorderPane.setCenter(lineChart);
     }
 
+    /**
+     * Gets the graph time period and ArrayList of XYChart.Series containing the graph data from the graphCreator, then
+     * sets the title and axis labels, updates the legend, clears the old data and displays the new data
+     * @param currentRecords A list of the records currently displayed in the table
+     * @param crimeWards A list of the crime wards the user wants to graph
+     */
     public void createCrimesPerWardOverTimeGraph(ArrayList<Record> currentRecords, ArrayList<Integer> crimeWards) {
         ArrayList<Record> filteredRecords = new ArrayList<>();
         for (Record record : currentRecords) {
@@ -105,6 +126,11 @@ public class GraphTabController {
 
     }
 
+    /**
+     * Gets the graph time period and XYChart.Series containing the graph data from the graphCreator, then sets
+     * the title and axis labels, removes the legend, clears the old data and displays the new data
+     * @param currentRecords A list of the records currently displayed in the table
+     */
     public void createCrimesOverTimeGraph(ArrayList<Record> currentRecords) {
         ArrayList<Object> returnedInfo = graphCreator.createCrimesOverTimeGraph(currentRecords);
 

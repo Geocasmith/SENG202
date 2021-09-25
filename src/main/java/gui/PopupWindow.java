@@ -13,6 +13,11 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class PopupWindow {
 
+    /**
+     * Displays a popup box with a message and an OK button
+     * @param title A title to display on the popup
+     * @param message A message to display on the popup
+     */
     public static void displayPopup(String title, String message) {
         Stage popupWindow = new Stage();
 
@@ -39,6 +44,15 @@ public class PopupWindow {
 
     }
 
+    /**
+     * Displays a popup box with two buttons and a message, populated with the given data, returns true or false
+     * depending on which button the user clicks
+     * @param title A title to display on the popup
+     * @param message A message to display on the popup
+     * @param button1Text Text to display on the first button
+     * @param button2Text Text to display on the second button
+     * @return A Boolean depending on which button the user presses, true for button 1, false for button 2
+     */
     public static Boolean displayTwoButtonPopup(String title, String message, String button1Text, String button2Text) {
         Stage popupWindow = new Stage();
 
@@ -52,21 +66,21 @@ public class PopupWindow {
 
         final Boolean[] returnValue = {false};
 
-        Button yesButton = new Button(button1Text);
-        yesButton.setOnAction(e -> {
+        Button button1 = new Button(button1Text);
+        button1.setOnAction(e -> {
             popupWindow.close();
             returnValue[0] = true;
         });
 
-        Button noButton = new Button(button2Text);
-        noButton.setOnAction(e -> {
+        Button button2 = new Button(button2Text);
+        button2.setOnAction(e -> {
             popupWindow.close();
             returnValue[0] = false;
         });
 
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(20));
-        layout.getChildren().addAll(label, yesButton, noButton);
+        layout.getChildren().addAll(label, button1, button2);
         layout.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(layout);
