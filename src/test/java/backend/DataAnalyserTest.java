@@ -65,7 +65,7 @@ public class DataAnalyserTest {
         ArrayList<Object> testcol = new ArrayList<Object>(Arrays.asList("WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION", "NARCOTICS",
                 "CRIMINAL SEXUAL ASSAULT", "PUBLIC INDECENCY", "NARCOTICS", "NARCOTICS", "NARCOTICS"));
         res= dataAnalyser.getTypeFrequencyDescending(testcol);
-        assertEquals(4, res.get(0).getFrequency());
+        assertEquals(3, res.get(0).getFrequency());
 
     }
 }
