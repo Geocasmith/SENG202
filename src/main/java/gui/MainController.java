@@ -32,6 +32,9 @@ import java.util.List;
 public class MainController {
 
     @FXML
+    AnalysisTabController analysisTab = new AnalysisTabController();
+
+    @FXML
     private MapTabController mapTabController;
 
     @FXML
@@ -48,6 +51,8 @@ public class MainController {
     private TitledPane filterPane;
     @FXML
     private TitledPane graphPane;
+    @FXML
+    private TitledPane analysisTabPane;
     @FXML
     private TabPane mainTabPane;
     @FXML
@@ -114,6 +119,7 @@ public class MainController {
     private void initialize() throws SQLException, IOException, CsvValidationException, URISyntaxException {
         filterSetup();
         graphSetup();
+        //analysisSetUp();
         tableTabController.setParentController(this);
         dataAnalyser = new DataAnalyser(tableTabController.getDisplayedRecords());
     }
@@ -744,6 +750,14 @@ public class MainController {
         }else{
             return path+=extension;
         }
+    }
+
+    public void analysisSetUp() throws SQLException {
+
+        AnalysisTabController analysisTab = new AnalysisTabController();
+        ArrayList<Record> displayedRecords = tableTabController.getDisplayedRecords();
+        analysisTab.start(displayedRecords);
+
     }
 
     /**

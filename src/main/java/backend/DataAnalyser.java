@@ -2,9 +2,7 @@ package backend;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 
 public class
 DataAnalyser {
@@ -107,9 +105,10 @@ DataAnalyser {
     /**
      * Comparator for TypeFrequency pair objects (Compares on basis of frequency in a descending order)
      */
-    class frequecyComparatorDescending implements Comparator<TypeFrequencyPair> {
+
+    class frequecyComparatorDescending implements Comparator<TypeFrequencypair> {
         @Override
-        public int compare(TypeFrequencyPair a, TypeFrequencyPair b) {
+        public int compare(TypeFrequencypair a, TypeFrequencypair b) {
             return a.getFrequency() > b.getFrequency() ? -1 : a.getFrequency() == b.getFrequency() ? 0 : 1;
         }
     }
@@ -118,9 +117,10 @@ DataAnalyser {
     /**
      * Comparator for TypeFrequency pair objects (Compares on basis of frequency in an ascending order)
      */
-    class frequecyComparatorAscending implements Comparator<TypeFrequencyPair> {
+
+    class frequecyComparatorAscending implements Comparator<TypeFrequencypair> {
         @Override
-        public int compare(TypeFrequencyPair a, TypeFrequencyPair b) {
+        public int compare(TypeFrequencypair a, TypeFrequencypair b) {
             return a.getFrequency() > b.getFrequency() ? -1 : a.getFrequency() == b.getFrequency() ? 0 : 1;
         }
     }
@@ -131,14 +131,17 @@ DataAnalyser {
      * @return List of TypeFrequency pair objects
      * @throws SQLException
      */
-    public ArrayList<TypeFrequencyPair> getTypeFrequency(ArrayList<Object> column) throws SQLException {
-        ArrayList<TypeFrequencyPair> res = new ArrayList<TypeFrequencyPair>();
+
+    public ArrayList<TypeFrequencypair> getTypeFrequencyDescending(ArrayList<Object> column) throws SQLException {
+        ArrayList<TypeFrequencypair> res = new ArrayList<TypeFrequencypair>();
         int frequency;
-        for (Object r : column) {
-            TypeFrequencyPair pair = new TypeFrequencyPair();
+        HashSet h = new HashSet();
+        h.addAll(column);
+        for (Object r : h) {
+            TypeFrequencypair pair = new TypeFrequencypair();
             frequency = Collections.frequency(column, r);
             // Add to list if items appears in list
-            if (frequency > 0) {
+            if(frequency > 0) {
                 pair.setType((String) r);
                 pair.setFrequency(frequency);
                 res.add(pair);

@@ -1,7 +1,10 @@
 package backend;
 
 import backend.database.Database;
+import com.opencsv.exceptions.CsvException;
+import com.opencsv.exceptions.CsvMalformedLineException;
 import com.opencsv.exceptions.CsvValidationException;
+import gui.PopupWindow;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -90,7 +93,7 @@ private ArrayList<Record> currentData;
      * @param col int
      * @return extractedCol
      */
-    public ArrayList<Object> extractCol(int col)
+    public static ArrayList<Object> extractCol(ArrayList<Record> currentData, int col)
     {
         int colSize = currentData.size();
         ArrayList<Object> extractedCol = new ArrayList<>();
@@ -196,8 +199,8 @@ private ArrayList<Record> currentData;
     public ArrayList<ArrayList<Object>> getCurrentDataToGraph(int col1, int col2)
     {
         ArrayList<ArrayList<Object> > dataToGraph = new ArrayList<ArrayList<Object>>();
-        dataToGraph.add(extractCol(col1));
-        dataToGraph.add(extractCol(col2));
+        //dataToGraph.add(extractCol(col1));
+        //dataToGraph.add(extractCol(col2));
         return dataToGraph;
 
     }
@@ -280,10 +283,10 @@ private ArrayList<Record> currentData;
             result.add(invalidRows);
 
             return result;
-        } catch (CsvValidationException e) {
-            e.printStackTrace();
+        } catch (CsvException e) {
+            PopupWindow.displayPopup("Error", e.getMessage());
         } catch (IOException exception) {
-            exception.printStackTrace();
+            PopupWindow.displayPopup("Error", exception.getMessage());
         }
        return null;
     }

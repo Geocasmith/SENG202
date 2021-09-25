@@ -391,7 +391,7 @@ public class Database {
      * @throws SQLException
      */
 
-    public ArrayList<Object> extractCol(String columnName) throws SQLException {
+    public static ArrayList<Object> extractCol(String columnName) throws SQLException {
         connection.setAutoCommit(false);
         PreparedStatement s1 = connection.prepareStatement("select " + columnName + " from CRIMES");
         ResultSet rs = s1.executeQuery();
@@ -468,7 +468,7 @@ public class Database {
      * @return
      * @throws SQLException
      */
-    public ArrayList<Record> getAll() throws SQLException {
+    public static ArrayList<Record> getAll() throws SQLException {
         connection.setAutoCommit(false);
         PreparedStatement s1 = connection.prepareStatement("SELECT * FROM CRIMES;");
         ResultSet rs = s1.executeQuery();
@@ -506,7 +506,7 @@ public class Database {
      * @return Arraylist of Records
      * @throws SQLException
      */
-    public ArrayList<Record> getRecord(ResultSet rs) throws SQLException {
+    public static ArrayList<Record> getRecord(ResultSet rs) throws SQLException {
         ArrayList<Record> records = new ArrayList<Record>();
 
         while (rs.next()) {
@@ -626,7 +626,7 @@ public class Database {
      * @return colValues ArrayList<Object> generated from reading ResultSet object
      * @throws SQLException
      */
-    public ArrayList<Object> readColumnValues(ResultSet rs, String column) throws SQLException {
+    public static ArrayList<Object> readColumnValues(ResultSet rs, String column) throws SQLException {
         ArrayList<Object> colValues = new ArrayList<>();
 
         while (rs.next()) {
