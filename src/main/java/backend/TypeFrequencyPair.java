@@ -1,13 +1,13 @@
 package backend;
 
-public class TypeFrequencypair {
+public class TypeFrequencyPair {
     private int frequency;
     private String type;
 
-    public TypeFrequencypair() {
+    public TypeFrequencyPair() {
     }
 
-    public TypeFrequencypair(String type, int frequency) {
+    public TypeFrequencyPair(String type, int frequency) {
         this.type = type;
         this.frequency = frequency;
     }
