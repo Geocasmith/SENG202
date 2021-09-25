@@ -52,7 +52,7 @@ public class MainController {
     @FXML
     private TitledPane graphPane;
     @FXML
-    private TitledPane analysisTabPane;
+    private TextField filterCaseNumberTextField;
     @FXML
     private TabPane mainTabPane;
     @FXML
@@ -372,6 +372,7 @@ public class MainController {
      */
     public void applyFilters() throws SQLException {
         // Initialize variables for filter
+        String caseNumber = null;
         Date startDate = null;
         Date endDate = null;
         ArrayList<String> crimeTypes = new ArrayList<String>();
@@ -384,6 +385,12 @@ public class MainController {
         String arrest = null;
         String domestic = null;
         Boolean validFilter = true;
+        String text = "";
+
+        text = filterCaseNumberTextField.getText();
+        if (text != "") {
+            caseNumber = text;
+        }
 
         // Get local start data and convert to date
         Instant instant;
@@ -427,7 +434,6 @@ public class MainController {
 
         // Get values for each text field as long as they aren't empty
         // Wards
-        String text = "";
         text = filterWardTextField.getText();
         if (!(text.equals(""))) {
             wards = text;
@@ -489,7 +495,7 @@ public class MainController {
         if (validFilter) {
             filterErrorLabel.setVisible(false);
             Database d = new Database();
-            ArrayList<Record> records = d.getFilter(startDate, endDate, crimeTypes, locationDescriptions, wards, beats, lat, lon, radius, arrest, domestic);
+            ArrayList<Record> records = d.getFilter(caseNumber, startDate, endDate, crimeTypes, locationDescriptions, wards, beats, lat, lon, radius, arrest, domestic);
             d.closeConnection();
             // Set table to records
             tableTabController.setTableRecords(records);
@@ -540,6 +546,7 @@ public class MainController {
         filterEndDate.setValue(null);
         crimeTypeComboBox.getCheckModel().clearChecks();
         locationDescriptionComboBox.getCheckModel().clearChecks();
+        filterCaseNumberTextField.setText("");
         filterWardTextField.setText("");
         filterBeatsTextField.setText("");
         filterLatTextField.setText("");

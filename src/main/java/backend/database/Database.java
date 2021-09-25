@@ -538,7 +538,7 @@ public class Database {
     }
 
     //Test with different filters
-    public ArrayList<Record> getFilter(Date startDate, Date endDate,ArrayList<String> crimeTypes,ArrayList<String> locDes,String ward,String beat,String lat,String lon,int radius,String arrest,String domestic) throws SQLException {
+    public ArrayList<Record> getFilter(String caseNumber, Date startDate, Date endDate,ArrayList<String> crimeTypes,ArrayList<String> locDes,String ward,String beat,String lat,String lon,int radius,String arrest,String domestic) throws SQLException {
         connection.setAutoCommit(false);
         String SQLString = "SELECT * FROM CRIMES where (UNIXTIME >= 0) ";
         double radiusInDegrees = radius*(1/110.54);
@@ -607,8 +607,11 @@ public class Database {
         if(domestic!=null) {
             SQLString += "AND (DOMESTIC='" + domestic + "')";
         }
+        if(caseNumber!=null) {
+            SQLString += "AND (ID='" + caseNumber + "')";
+        }
 
-        System.out.println(SQLString);
+        // System.out.println(SQLString);
         PreparedStatement s1 = connection.prepareStatement(SQLString);
         ResultSet rs = s1.executeQuery();
         return getRecord(rs);

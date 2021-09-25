@@ -33,8 +33,8 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Analysis">
             <items>
-              <MenuItem mnemonicParsing="false" text="Distance" onAction="#analyseCrimeLocationDifference"/>
-                  <MenuItem mnemonicParsing="false" text="Time" onAction="#analyseCrimeTimeDifference"/>
+              <MenuItem mnemonicParsing="false" onAction="#analyseCrimeLocationDifference" text="Distance" />
+                  <MenuItem mnemonicParsing="false" onAction="#analyseCrimeTimeDifference" text="Time" />
             </items>
           </Menu>
         </menus>
@@ -78,42 +78,47 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <Label alignment="CENTER" layoutY="60.0" prefWidth="200.0" text="From" />
-                        <DatePicker fx:id="filterStartDate" layoutX="13.0" layoutY="77.0" />
-                        <Label alignment="CENTER" layoutY="102.0" prefWidth="200.0" text="To" textAlignment="CENTER">
+                        <Separator layoutY="34.0" prefWidth="200.0" />
+                        <Separator layoutX="194.0" orientation="VERTICAL" prefHeight="3000.0" prefWidth="12.0" />
+                        <Separator layoutY="96.0" prefWidth="200.0" />
+                        <Label alignment="CENTER" layoutX="-1.0" layoutY="34.0" prefHeight="17.0" prefWidth="200.0" text="Case Number">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="filterCaseNumberTextField" layoutX="64.0" layoutY="60.0" prefHeight="25.0" prefWidth="70.0" promptText="Case Number" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <Label alignment="CENTER" layoutY="123.0" prefWidth="200.0" text="From" />
+                        <DatePicker fx:id="filterStartDate" layoutX="13.0" layoutY="140.0" />
+                        <Label alignment="CENTER" layoutY="165.0" prefWidth="200.0" text="To" textAlignment="CENTER">
                            <padding>
                               <Insets bottom="5.0" top="5.0" />
                            </padding>
                         </Label>
-                        <DatePicker fx:id="filterEndDate" layoutX="13.0" layoutY="129.0" />
-                        <Button layoutX="47.0" layoutY="692.0" mnemonicParsing="false" onAction="#applyFilters" prefHeight="25.0" prefWidth="107.0" styleClass="applyFilterButton" text="Apply Filter" textAlignment="CENTER" AnchorPane.bottomAnchor="29.0" />
-                        <Separator layoutX="194.0" orientation="VERTICAL" prefHeight="3000.0" prefWidth="12.0" />
-                        <Button layoutY="670.0" mnemonicParsing="false" onAction="#clearFilters" prefWidth="200.0" styleClass="clearFilterButton" text="Clear Filter" AnchorPane.bottomAnchor="59.0" />
-                        <Label alignment="CENTER" layoutY="35.0" prefHeight="17.0" prefWidth="200.0" text="Date Range">
+                        <DatePicker fx:id="filterEndDate" layoutX="13.0" layoutY="192.0" />
+                        <Label alignment="CENTER" layoutY="98.0" prefHeight="17.0" prefWidth="200.0" text="Date Range">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Separator layoutY="34.0" prefWidth="200.0" />
-                        <Separator layoutX="1.0" layoutY="169.0" prefWidth="200.0" />
-                        <TextField fx:id="filterWardTextField" layoutX="26.0" layoutY="311.0" prefHeight="25.0" prefWidth="70.0" promptText="Ward" />
-                        <TextField fx:id="filterBeatsTextField" layoutX="104.0" layoutY="311.0" prefHeight="25.0" prefWidth="70.0" promptText="Beat" />
-                        <Label alignment="CENTER" layoutY="171.0" prefHeight="17.0" prefWidth="200.0" text="Crime Types">
+                        <Separator layoutX="1.0" layoutY="232.0" prefWidth="200.0" />
+                        <TextField fx:id="filterWardTextField" layoutX="26.0" layoutY="374.0" prefHeight="25.0" prefWidth="70.0" promptText="Ward" />
+                        <TextField fx:id="filterBeatsTextField" layoutX="104.0" layoutY="374.0" prefHeight="25.0" prefWidth="70.0" promptText="Beat" />
+                        <Label alignment="CENTER" layoutY="234.0" prefHeight="17.0" prefWidth="200.0" text="Crime Types">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <CheckComboBox fx:id="crimeTypeComboBox" layoutX="10.0" layoutY="203.0" title="Select Crime Types" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-                        <Separator layoutY="240.0" prefWidth="200.0" />
-                        <Label alignment="CENTER" layoutY="242.0" prefHeight="17.0" prefWidth="200.0" text="Location">
+                        <CheckComboBox fx:id="crimeTypeComboBox" layoutX="40.0" layoutY="266.0" title="Select Crime Types" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <Separator layoutY="303.0" prefWidth="200.0" />
+                        <Label alignment="CENTER" layoutY="305.0" prefHeight="17.0" prefWidth="200.0" text="Location">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="filterLatTextField" layoutX="26.0" layoutY="355.0" onAction="#checkSliderUnlock" onKeyTyped="#checkSliderUnlock" prefHeight="25.0" prefWidth="70.0" promptText="Lat" />
-                        <TextField fx:id="filterLongTextField" layoutX="104.0" layoutY="355.0" onAction="#checkSliderUnlock" onKeyTyped="#checkSliderUnlock" prefHeight="25.0" prefWidth="70.0" promptText="Long" />
-                        <Slider fx:id="radiusSlider" blockIncrement="5.0" layoutX="27.0" layoutY="402.0" onMouseDragged="#updateRadiusText" prefHeight="14.0" prefWidth="125.0" />
-                        <Label alignment="CENTER" layoutX="-4.0" layoutY="380.0" prefHeight="17.0" prefWidth="200.0" text="Radius">
+                        <TextField fx:id="filterLatTextField" layoutX="26.0" layoutY="418.0" onAction="#checkSliderUnlock" onKeyTyped="#checkSliderUnlock" prefHeight="25.0" prefWidth="70.0" promptText="Lat" />
+                        <TextField fx:id="filterLongTextField" layoutX="104.0" layoutY="418.0" onAction="#checkSliderUnlock" onKeyTyped="#checkSliderUnlock" prefHeight="25.0" prefWidth="70.0" promptText="Long" />
+                        <Slider fx:id="radiusSlider" blockIncrement="5.0" layoutX="27.0" layoutY="465.0" onMouseDragged="#updateRadiusText" prefHeight="14.0" prefWidth="125.0" />
+                        <Label alignment="CENTER" layoutX="-4.0" layoutY="443.0" prefHeight="17.0" prefWidth="200.0" text="Radius">
                            <opaqueInsets>
                               <Insets top="5.0" />
                            </opaqueInsets>
@@ -121,17 +126,17 @@
                               <Insets top="5.0" />
                            </padding>
                         </Label>
-                        <Separator layoutY="425.0" prefWidth="200.0" />
-                        <Label alignment="CENTER" layoutY="427.0" prefHeight="17.0" prefWidth="200.0" text="Other">
+                        <Separator layoutY="488.0" prefWidth="200.0" />
+                        <Label alignment="CENTER" layoutY="490.0" prefHeight="17.0" prefWidth="200.0" text="Other">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Label alignment="CENTER" layoutX="1.0" layoutY="452.0" prefHeight="17.0" prefWidth="100.0" text="Arrest made" />
-                        <Label alignment="CENTER" layoutX="102.0" layoutY="452.0" prefHeight="17.0" prefWidth="100.0" text="Domestic" />
-                        <ComboBox fx:id="arrestComboBox" layoutX="21.0" layoutY="475.0" prefWidth="60.0" />
-                        <ComboBox fx:id="domesticComboBox" layoutX="122.0" layoutY="475.0" prefWidth="60.0" />
-                        <Label fx:id="radiusLabel" layoutX="150.0" layoutY="399.0" text="0 km">
+                        <Label alignment="CENTER" layoutX="1.0" layoutY="515.0" prefHeight="17.0" prefWidth="100.0" text="Arrest made" />
+                        <Label alignment="CENTER" layoutX="102.0" layoutY="515.0" prefHeight="17.0" prefWidth="100.0" text="Domestic" />
+                        <ComboBox fx:id="arrestComboBox" layoutX="21.0" layoutY="538.0" prefWidth="60.0" />
+                        <ComboBox fx:id="domesticComboBox" layoutX="122.0" layoutY="538.0" prefWidth="60.0" />
+                        <Label fx:id="radiusLabel" layoutX="150.0" layoutY="462.0" text="0 km">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -139,8 +144,10 @@
                               <Insets left="4.0" />
                            </padding>
                         </Label>
-                        <CheckComboBox fx:id="locationDescriptionComboBox" layoutX="26.0" layoutY="276.0" title="Location Descriptions" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <CheckComboBox fx:id="locationDescriptionComboBox" layoutX="40.0" layoutY="339.0" title="Location Descriptions" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                         <Label fx:id="filterErrorLabel" alignment="CENTER" contentDisplay="CENTER" layoutY="591.0" prefHeight="34.0" prefWidth="200.0" text="Error Text" textAlignment="CENTER" textFill="#fc0606" visible="false" wrapText="true" />
+                        <Button layoutY="670.0" mnemonicParsing="false" onAction="#clearFilters" prefWidth="200.0" styleClass="clearFilterButton" text="Clear Filter" AnchorPane.bottomAnchor="59.0" />
+                        <Button layoutX="47.0" layoutY="692.0" mnemonicParsing="false" onAction="#applyFilters" prefHeight="25.0" prefWidth="107.0" styleClass="applyFilterButton" text="Apply Filter" textAlignment="CENTER" AnchorPane.bottomAnchor="29.0" />
                      </children>
                   </AnchorPane>
                </content>
@@ -158,7 +165,7 @@
                         <Separator layoutX="1.0" layoutY="135.0" prefHeight="0.0" prefWidth="200.0" />
                         <Separator layoutX="194.0" orientation="VERTICAL" prefHeight="3000.0" prefWidth="12.0" />
                         <CheckComboBox fx:id="graphFilterComboBox" layoutX="26.0" layoutY="190.0" prefHeight="25.0" prefWidth="150.0" visible="false" />
-                        <Button fx:id="generateGraphButton" layoutX="49.0" layoutY="234.0" mnemonicParsing="false" onAction="#generateGraph" text="Generate Graph" disable="true" />
+                        <Button fx:id="generateGraphButton" disable="true" layoutX="49.0" layoutY="234.0" mnemonicParsing="false" onAction="#generateGraph" text="Generate Graph" />
                         <Label layoutX="41.0" layoutY="69.0" text="Select a type of graph" />
                         <Label fx:id="graphOptionLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="7.0" layoutY="159.0" prefHeight="17.0" prefWidth="187.0" text="Select" textAlignment="CENTER" visible="false" wrapText="true" />
                         <Label alignment="CENTER" layoutX="10.0" layoutY="602.0" prefHeight="108.0" prefWidth="179.0" text="Note: The graph takes data from the table, meaning all filters applied to the table are applied to the graph. Clear the filters before graphing if you don't want this functionality." wrapText="true" />
