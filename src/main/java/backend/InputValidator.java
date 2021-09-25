@@ -371,8 +371,8 @@ public class InputValidator {
 
    /**
     * Given the primary description and secondary description for a crime, it returns the associated IUCR value
-    * @param primaryDescription
-    * @param secondaryDescription
+    * @param primaryDescription  a crime's primary description string, which usually identifies the type of crime
+    * @param secondaryDescription a crime's secondary description, usually further specifying the type of crime
     * @return
     * @throws CsvValidationException
     * @throws IOException

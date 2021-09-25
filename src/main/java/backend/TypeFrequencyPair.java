@@ -1,7 +1,11 @@
 package backend;
 
+/**
+ * This class is used to encapsulate data that has type and frequency
+ */
+
 public class TypeFrequencyPair {
-    private int frequency;
+    private long frequency;
     private String type;
 
     public TypeFrequencyPair() {
@@ -12,7 +16,7 @@ public class TypeFrequencyPair {
         this.frequency = frequency;
     }
 
-    public int getFrequency() {
+    public long getFrequency() {
         return frequency;
     }
     public String getType() {
@@ -23,7 +27,7 @@ public class TypeFrequencyPair {
         this.type = type;
     }
 
-    public void setFrequency(int frequency) {
+    public void setFrequency(long frequency) {
         this.frequency = frequency;
     }
 }

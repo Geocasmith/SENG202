@@ -45,16 +45,21 @@ public class AnalysisTabController {
     }
 
 
-
+    /**
+     * Populates the top crime table with list of TypeFrequency objects that is passed to it
+     * @param crimeFrequencyPair TypeFrequency pair object
+     */
     public void populateTopCrimesTable(ArrayList<TypeFrequencyPair> crimeFrequencyPair) {
-
-
+        // Sort descending
         Collections.sort(crimeFrequencyPair, new FrequencyComparatorDescending());
+        //Table column set up
         topCrimeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         topCrimeFrequencyCol.setCellValueFactory(new PropertyValueFactory<>("frequency"));
+        //table set up
         topCrimeTable.getItems().clear();
         displayLimit = Math.min(crimeFrequencyPair.size(), 10);
 
+        //Populate table
         for (int i = 0; i < displayLimit; i++) {
             topCrimeTable.getItems().add(crimeFrequencyPair.get(i));
         }
@@ -63,13 +68,22 @@ public class AnalysisTabController {
 
     }
 
+    /**
+     * Populates the bottom crime table with list of TypeFrequency objects that is passed to it
+     * @param crimeFrequencyPair
+     */
+
     public void populateLowCrimesTable(ArrayList<TypeFrequencyPair> crimeFrequencyPair) {
 
         Collections.sort(crimeFrequencyPair, new FrequencyComparatorAscending());
+        // Table column setup
         bottomCrimeCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("type"));
         bottomCrimeFrequencyCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("frequency"));
+        //table set up
         bottomCrimeTable.getItems().clear();
         displayLimit = Math.min(crimeFrequencyPair.size(), 10);
+
+        // populate table
 
         for (int i = 0; i < displayLimit; i++) {
             bottomCrimeTable.getItems().add(crimeFrequencyPair.get(i));
@@ -78,11 +92,19 @@ public class AnalysisTabController {
 
     }
 
+    /**
+     * Populates the top block table with list of TypeFrequency objects that is passed to it
+     * @param blocksFrequencyPair
+     */
+
     public void populateTopBlocksTable(ArrayList<TypeFrequencyPair> blocksFrequencyPair) {
 
         Collections.sort(blocksFrequencyPair, new FrequencyComparatorDescending());
+        // Set up table columns
         topBlockCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("type"));
         topBlockFrequencyCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("frequency"));
+
+        // Set up table
         topBlockTable.getItems().clear();
         displayLimit = Math.min(blocksFrequencyPair.size(), 10);
 
@@ -90,18 +112,22 @@ public class AnalysisTabController {
             topBlockTable.getItems().add(blocksFrequencyPair.get(i));
         }
 
-
-
-
-
     }
+
+    /**
+     * Populates the bottom block table with list of TypeFrequency objects that is passed to it
+     * @param blocksFrequencyPair
+     */
 
     public void populateLowBlocksTable(ArrayList<TypeFrequencyPair> blocksFrequencyPair) {
 
 
         Collections.sort(blocksFrequencyPair, new FrequencyComparatorAscending());
+        // Set up table columns
         bottomBlockCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("type"));
         bottomBlockFrequencyCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("frequency"));
+
+        // Set up table
         bottomBlockTable.getItems().clear();
 
         displayLimit = Math.min(blocksFrequencyPair.size(), 10);

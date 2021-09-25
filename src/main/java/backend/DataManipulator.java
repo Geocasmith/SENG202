@@ -232,14 +232,14 @@ private ArrayList<Record> currentData;
             return true;
         }catch (Exception e)
         {
-            //Display Error Message?
+            PopupWindow.displayPopup("Error", e.getMessage());
         }
         return false;
     }
 
     /**
-     * Reads and returns valid and invalid rows from CSV
-     * @param filepath
+     * Reads and returns valid and invalid rows from csv in double dimensional array list object
+     * @param filepath contains the string representation of the file path
      * @return
      * @throws IOException
      * @throws CsvValidationException
@@ -253,7 +253,10 @@ private ArrayList<Record> currentData;
             ArrayList<List<String>> validRows = new ArrayList<List<String>>();
             ArrayList<List<String>> invalidRows = new ArrayList<List<String>>();
             csvValues = CsvReader.read(filepath);
+            // Loop through all values read
             for (List<String> rec : csvValues) {
+
+                // Check if row is valid
                 if (InputValidator.isValidRecord(rec, false)){
                     validRows.add(rec);
                 }

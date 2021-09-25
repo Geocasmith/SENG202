@@ -108,24 +108,24 @@ DataAnalyser {
      * @return List of TypeFrequency pair objects
      * @throws SQLException
      */
-
     public ArrayList<TypeFrequencyPair> getTypeFrequencyDescending(ArrayList<Object> column) {
+
         ArrayList<TypeFrequencyPair> res = new ArrayList<TypeFrequencyPair>();
-        int frequency;
-        HashSet h = new HashSet();
-        h.addAll(column);
-        for (Object r : h) {
+        long frequency;
+        HashSet types = new HashSet();
+        types.addAll(column);
+        Map<Object, Long> resultMap = new HashMap<>();
+        column.forEach(e -> resultMap.merge(e, 1L, Long::sum));
+
+        for (Object type : types) {
             TypeFrequencyPair pair = new TypeFrequencyPair();
-            frequency = Collections.frequency(column, r);
+            frequency = resultMap.get(type);
             // Add to list if items appears in list
-            if(frequency > 0) {
-                pair.setType((String) r);
-                pair.setFrequency(frequency);
-                res.add(pair);
-            }
+            pair.setType((String) type);
+            pair.setFrequency(frequency);
+            res.add(pair);
+
         }
-        // Sort descending (Based in frequency)
-        Collections.sort(res, new FrequencyComparatorDescending());
         return res;
     }
 
