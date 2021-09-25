@@ -728,8 +728,12 @@ public class MainController {
 
 
     }
+
     /**
-     * Creates a new database
+     * Prompts the user to select a location to save the new database file, then creates a database file there
+     * @return Boolean true/false if the database was created successfully
+     * @throws NullPointerException
+     * @throws SQLException
      * @throws IOException
      */
     public Boolean newDatabase() throws NullPointerException, SQLException, IOException {
