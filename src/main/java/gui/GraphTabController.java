@@ -11,12 +11,12 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 
 public class GraphTabController {
-    GraphCreator graphCreator = new GraphCreator();
+    private GraphCreator graphCreator = new GraphCreator();
 
-    CategoryAxis xAxis = new CategoryAxis();
-    NumberAxis yAxis = new NumberAxis();
+    private CategoryAxis xAxis = new CategoryAxis();
+    private NumberAxis yAxis = new NumberAxis();
 
-    LineChart lineChart = new LineChart(xAxis, yAxis);
+    private LineChart lineChart = new LineChart(xAxis, yAxis);
 
     @FXML
     private BorderPane graphBorderPane;

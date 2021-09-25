@@ -25,7 +25,7 @@ public class AnalysisTabController {
     @FXML private TableColumn<TypeFrequencyPair, String> bottomCrimeFrequencyCol;
     @FXML private TableColumn<TypeFrequencyPair, String> bottomBlockCol;
     @FXML private TableColumn<TypeFrequencyPair, String> bottomBlockFrequencyCol;
-    int displayLimit;
+    private int displayLimit;
     private DataAnalyser dataAnalyser = new DataAnalyser();
 
 
@@ -33,7 +33,7 @@ public class AnalysisTabController {
      * Initialises FXML properties
      */
     @FXML
-    void initialize() {
+    private void initialize() {
     }
 
     public void updateAnalysis(ArrayList<Record> currentRecord) {
@@ -53,12 +53,7 @@ public class AnalysisTabController {
         topCrimeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         topCrimeFrequencyCol.setCellValueFactory(new PropertyValueFactory<>("frequency"));
         topCrimeTable.getItems().clear();
-        if (crimeFrequencyPair.size() > 10) {
-            displayLimit = 10;
-        }
-        else {
-            displayLimit = crimeFrequencyPair.size();
-        }
+        displayLimit = Math.min(crimeFrequencyPair.size(), 10);
 
         for (int i = 0; i < displayLimit; i++) {
             topCrimeTable.getItems().add(crimeFrequencyPair.get(i));
@@ -74,12 +69,7 @@ public class AnalysisTabController {
         bottomCrimeCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("type"));
         bottomCrimeFrequencyCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("frequency"));
         bottomCrimeTable.getItems().clear();
-        if (crimeFrequencyPair.size() > 10) {
-            displayLimit = 10;
-        }
-        else {
-            displayLimit = crimeFrequencyPair.size();
-        }
+        displayLimit = Math.min(crimeFrequencyPair.size(), 10);
 
         for (int i = 0; i < displayLimit; i++) {
             bottomCrimeTable.getItems().add(crimeFrequencyPair.get(i));
@@ -94,12 +84,7 @@ public class AnalysisTabController {
         topBlockCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("type"));
         topBlockFrequencyCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("frequency"));
         topBlockTable.getItems().clear();
-        if (blocksFrequencyPair.size() > 10) {
-            displayLimit = 10;
-        }
-        else {
-            displayLimit = blocksFrequencyPair.size();
-        }
+        displayLimit = Math.min(blocksFrequencyPair.size(), 10);
 
         for (int i = 0; i < displayLimit; i++) {
             topBlockTable.getItems().add(blocksFrequencyPair.get(i));
@@ -119,12 +104,7 @@ public class AnalysisTabController {
         bottomBlockFrequencyCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("frequency"));
         bottomBlockTable.getItems().clear();
 
-        if (blocksFrequencyPair.size() > 10) {
-            displayLimit = 10;
-        }
-        else {
-            displayLimit = blocksFrequencyPair.size();
-        }
+        displayLimit = Math.min(blocksFrequencyPair.size(), 10);
 
         for (int i = 0; i < displayLimit; i++) {
             bottomBlockTable.getItems().add(blocksFrequencyPair.get(i));

@@ -43,29 +43,7 @@ public class EditRecordWindowController {
             "Ward", "FBICD", "X-Coordinate", "Y-Coordinate", "Latitude", "Longitude");
     private List<TextField> textFields = new ArrayList<>();
     private boolean edited = false; // was a record changed? - used to prompt for a table refresh on close
-
-    /**
-     * Fills in the textfields with the record being edited, OR sets up the window as an "add" window instead.
-     * If the user is editing, they cannot change the case number of a record; they must create a new one.
-     * @param record the record object to be edited. If null, treated as an adding form.
-     */
-    public void initData(Record record) {
-        if (record != null) {
-            edit = true;
-            List<String> recStrings = record.toList();
-            for (int i = 0; i < textFieldNames.size(); i++) {
-                textFields.get(i).setText(recStrings.get(i));
-            }
-            textFields.get(0).setDisable(true); // disables editing, focus, and click for casenum
-        }
-        else {
-            edit = false;
-            titleLabel.setText("Add Record");
-            saveButton.setText("Add record");
-        }
-    }
-
-
+    
     /**
      * Creates the textfields and their layout, marks relevant ones as required,
      * and sets the padding on buttonPane.
@@ -87,6 +65,27 @@ public class EditRecordWindowController {
             vbox.getChildren().addAll(fieldTitleLabel, field, reqLabel);
             textFields.add(field);
             fieldPane.getChildren().add(vbox);
+        }
+    }
+
+    /**
+     * Fills in the textfields with the record being edited, OR sets up the window as an "add" window instead.
+     * If the user is editing, they cannot change the case number of a record; they must create a new one.
+     * @param record the record object to be edited. If null, treated as an adding form.
+     */
+    public void initData(Record record) {
+        if (record != null) {
+            edit = true;
+            List<String> recStrings = record.toList();
+            for (int i = 0; i < textFieldNames.size(); i++) {
+                textFields.get(i).setText(recStrings.get(i));
+            }
+            textFields.get(0).setDisable(true); // disables editing, focus, and click for casenum
+        }
+        else {
+            edit = false;
+            titleLabel.setText("Add Record");
+            saveButton.setText("Add record");
         }
     }
 

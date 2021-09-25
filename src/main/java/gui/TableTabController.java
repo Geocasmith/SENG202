@@ -164,7 +164,7 @@ public class TableTabController {
      * Allows for the selection of many rows at once.
      * Creates all columns necessary for viewing crime data.
      */
-    public void setupTable() throws CsvValidationException, IOException, SQLException {
+    private void setupTable() throws CsvValidationException, IOException, SQLException {
         mainTableView.setEditable(false); // stops user editing things in the table (should use the edit button)
         mainTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // allows multiple selected records
 
@@ -258,7 +258,7 @@ public class TableTabController {
      * Opens a new window with the record's data filled in, which the user can use to edit (or view) it with.
      * This window must be closed to return to the rest of the application.
      */
-    private void setupEditRow(Record rec) throws IOException {
+    private void setupEditRow(Record record) throws IOException {
         Stage popupEdit = new Stage();
         popupEdit.initModality(Modality.APPLICATION_MODAL);
         FXMLLoader loader = new FXMLLoader(
@@ -267,7 +267,7 @@ public class TableTabController {
         popupEdit.setTitle("Edit Record");
         popupEdit.setScene(new Scene(loader.load()));
         EditRecordWindowController controller = loader.getController();
-        controller.initData(rec);
+        controller.initData(record);
         controller.setParentController(this); // gives it access to the table controller (and thus main controller)
         popupEdit.setResizable(false);
         popupEdit.showAndWait();

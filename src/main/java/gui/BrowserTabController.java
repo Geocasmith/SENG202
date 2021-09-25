@@ -19,13 +19,13 @@ public class BrowserTabController {
     @FXML
     private Button webBrowserBackButton;
     @FXML
+    private Button webBrowserResetButton;
+    @FXML
+    private Button webBrowserSearchButton;
+    @FXML
     private RadioButton govWebsitesRadioButton;
     @FXML
     private RadioButton newsWebsitesRadioButton;
-    @FXML
-    private Button webBrowserHomeButton;
-    @FXML
-    private Button webBrowserSearchButton;
 
     private WebEngine browserWebEngine;
 
@@ -33,7 +33,7 @@ public class BrowserTabController {
      * Starts up the retrieves the webEngine to allow other methods to access it
      */
     @FXML
-    void initialize() {
+    private void initialize() {
         browserWebEngine= browserWebView.getEngine();
 
     }
