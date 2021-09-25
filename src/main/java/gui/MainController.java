@@ -800,10 +800,17 @@ public class MainController {
         tableTabController.analyseCrimeTimeDifference();
     }
 
+    /**
+     * Passes the analysis update request to the analysis tab controller
+     */
     public void updateAnalysis() {
         analysisTabController.updateAnalysis(tableTabController.getDisplayedRecords());
     }
 
+    /**
+     * Keeps track of the number of times the analysis tab has been clicked on/off of, and updates the tables if the tab
+     * has just been clicked on to
+     */
     public void analysisTabClick() {
         analysisTabCount++;
         if (analysisTabCount % 2 == 1) {

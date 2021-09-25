@@ -45,18 +45,12 @@ public class AnalysisTabController {
     private DataAnalyser dataAnalyser = new DataAnalyser();
 
 
-
-
-
-
+    /**
+     * Initialises FXML properties
+     */
     @FXML
     void initialize() {
     }
-
-
-    /**
-     * Comparator for TypeFrequency pair objects (Compares on basis of frequency in an ascending order)
-     */
 
     public void updateAnalysis(ArrayList<Record> currentRecord) {
 
