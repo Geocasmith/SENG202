@@ -2,7 +2,9 @@ package backend;
 
 
 import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvValidationException;
+import gui.PopupWindow;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -13,17 +15,25 @@ import java.util.List;
 public class CsvReader {
 
     public static ArrayList<List<String>> read(String path) throws CsvValidationException, IOException {
+        try {
+            ArrayList<List<String>> csvValues = new ArrayList<List<String>>();
+            FileReader fr = new FileReader(path);
+            CSVReader csvR = new CSVReader(fr);
 
-        ArrayList<List<String>>csvValues = new ArrayList<List<String>>();
-        FileReader fr = new FileReader(path);
-        CSVReader csvR = new CSVReader(fr);
-
-        String[] nextRecord;
-        csvR.readNext();
-        while ((nextRecord = csvR.readNext()) != null) {
-            List<String>  next = (List<String>) Arrays.asList(nextRecord);
-            csvValues.add(next);
+            String[] nextRecord;
+            csvR.readNext();
+            while ((nextRecord = csvR.readNext()) != null) {
+                List<String> next = (List<String>) Arrays.asList(nextRecord);
+                csvValues.add(next);
+            }
+            return csvValues;
+        } catch (CsvException e) {
+            PopupWindow.displayPopup("Error", e.getMessage());
+        } catch (IOException e) {
+            PopupWindow.displayPopup("Error", e.getMessage());
         }
-    return csvValues;
+
+
+        return null;
     }
 }
