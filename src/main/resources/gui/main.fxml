@@ -154,7 +154,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <ComboBox fx:id="graphTypeComboBox" layoutX="26.0" layoutY="96.0" onAction="#showGraphOptions" prefWidth="150.0" />
+                        <ComboBox fx:id="graphTypeComboBox" layoutX="26.0" layoutY="96.0" onAction="#updateGraphOptions" prefWidth="150.0" />
                         <Separator layoutX="1.0" layoutY="135.0" prefHeight="0.0" prefWidth="200.0" />
                         <Separator layoutX="194.0" orientation="VERTICAL" prefHeight="3000.0" prefWidth="12.0" />
                         <CheckComboBox fx:id="graphFilterComboBox" layoutX="26.0" layoutY="190.0" prefHeight="25.0" prefWidth="150.0" visible="false" />

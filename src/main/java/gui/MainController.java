@@ -38,7 +38,7 @@ public class MainController {
     private TableTabController tableTabController;
 
     @FXML
-    private DataAnalyser dataAnalyser = new DataAnalyser(DataManipulator.getAllRecords());
+    private DataAnalyser dataAnalyser;
 
     @FXML
     private GraphTabController graphTabController;
@@ -115,6 +115,7 @@ public class MainController {
         filterSetup();
         graphSetup();
         tableTabController.setParentController(this);
+        dataAnalyser = new DataAnalyser(tableTabController.getDisplayedRecords());
     }
 
     /**
@@ -202,46 +203,74 @@ public class MainController {
      * displays the relevant objects, and loads the crime types/wards/beats into the graph filter combo box
      * @throws SQLException
      */
-    public void showGraphOptions() throws SQLException {
+    public void updateGraphOptions() throws SQLException {
         graphFilterComboBox.getCheckModel().clearChecks();
 
         if (graphTypeComboBox.getValue().equals("All Crimes")) {
-            graphOptionLabel.setVisible(false);
-            graphFilterComboBox.setVisible(false);
-            generateGraphButton.setDisable(false);
+            if (tableTabController.getDisplayedRecords().size() == 0) {
+                PopupWindow.displayPopup("Error", "You must have data in the table to create a graph.\n" +
+                        "Try clearing the filter or importing some data.");
+                graphTypeComboBox.getSelectionModel().select(0);
+            } else {
+                graphOptionLabel.setVisible(false);
+                graphFilterComboBox.setVisible(false);
+                generateGraphButton.setDisable(false);
+            }
+
 
         } else if (graphTypeComboBox.getValue().equals("Crimes Per Ward")) {
-            graphOptionLabel.setText("Select which wards to graph");
-            graphOptionLabel.setVisible(true);
-            graphFilterComboBox.setVisible(true);
-            generateGraphButton.setDisable(false);
 
-            dataAnalyser = new DataAnalyser(DataManipulator.getAllRecords());
+
             ArrayList<Integer> crimeWards = dataAnalyser.getCrimeWards();
-            graphFilterComboBox.getItems().clear();
-            graphFilterComboBox.getItems().addAll(crimeWards);
+            if (crimeWards.size() == 0) {
+                PopupWindow.displayPopup("Error", "You must have data in the table to create a graph.\n" +
+                        "Try clearing the filter or importing some data.");
+                graphTypeComboBox.getSelectionModel().select(0);
+            } else {
+                graphOptionLabel.setText("Select which wards to graph");
+                graphOptionLabel.setVisible(true);
+                graphFilterComboBox.setVisible(true);
+                generateGraphButton.setDisable(false);
+                graphFilterComboBox.getItems().clear();
+                graphFilterComboBox.getItems().addAll(crimeWards);
+            }
+
 
         } else if (graphTypeComboBox.getValue().equals("Crimes Per Beat")) {
-            graphOptionLabel.setText("Select which beats to graph");
-            graphOptionLabel.setVisible(true);
-            graphFilterComboBox.setVisible(true);
-            generateGraphButton.setDisable(false);
 
-            dataAnalyser = new DataAnalyser(DataManipulator.getAllRecords());
+
             ArrayList<Integer> crimeBeats = dataAnalyser.getCrimeBeats();
-            graphFilterComboBox.getItems().clear();
-            graphFilterComboBox.getItems().addAll(crimeBeats);
+            if (crimeBeats.size() == 0) {
+                PopupWindow.displayPopup("Error", "You must have data in the table to create a graph.\n" +
+                        "Try clearing the filter or importing some data.");
+                graphTypeComboBox.getSelectionModel().select(0);
+            } else {
+                graphOptionLabel.setText("Select which beats to graph");
+                graphOptionLabel.setVisible(true);
+                graphFilterComboBox.setVisible(true);
+                generateGraphButton.setDisable(false);
+                graphFilterComboBox.getItems().clear();
+                graphFilterComboBox.getItems().addAll(crimeBeats);
+            }
+
 
         } else if (graphTypeComboBox.getValue().equals("Crimes Per Type")) {
-            graphOptionLabel.setText("Select which crime types to graph");
-            graphOptionLabel.setVisible(true);
-            graphFilterComboBox.setVisible(true);
-            generateGraphButton.setDisable(false);
 
-            dataAnalyser = new DataAnalyser(DataManipulator.getAllRecords());
+
             ArrayList<String> crimeTypes = dataAnalyser.getCrimeTypes();
-            graphFilterComboBox.getItems().clear();
-            graphFilterComboBox.getItems().addAll(crimeTypes);
+            if (crimeTypes.size() == 0) {
+                PopupWindow.displayPopup("Error", "You must have data in the table to create a graph.\n" +
+                        "Try clearing the filter or importing some data.");
+                graphTypeComboBox.getSelectionModel().select(0);
+            } else {
+                graphOptionLabel.setText("Select which crime types to graph");
+                graphOptionLabel.setVisible(true);
+                graphFilterComboBox.setVisible(true);
+                generateGraphButton.setDisable(false);
+                graphFilterComboBox.getItems().clear();
+                graphFilterComboBox.getItems().addAll(crimeTypes);
+            }
+
 
         } else {
             graphOptionLabel.setVisible(false);
@@ -332,7 +361,7 @@ public class MainController {
     /**
      * Applies all currently selected filters
      */
-    public void applyFilters() throws SQLException, IOException {
+    public void applyFilters() throws SQLException {
         // Initialize variables for filter
         Date startDate = null;
         Date endDate = null;
@@ -456,6 +485,10 @@ public class MainController {
             // Set table to records
             tableTabController.setTableRecords(records);
             refreshMarkers();
+            dataAnalyser.updateRecords(records);
+            updateGraphOptions();
+
+
         } else {
             filterErrorLabel.setVisible(true);
         }

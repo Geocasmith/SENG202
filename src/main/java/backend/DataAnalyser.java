@@ -17,10 +17,22 @@ DataAnalyser {
     public DataAnalyser() {}
 
     /**
-     *
-     * @param records
+     * Calls the updateRecords method to initialise the lists of crime types, wards and beats
+     * @param records a list of all the crime records currently shown in the table
      */
     public DataAnalyser(ArrayList<Record> records) {
+        updateRecords(records);
+    }
+
+    /**
+     * Adds all the crime types, wards and beats to the relevant arraylists and then sorts them
+     * @param records a list of all the crime records currently shown in the table
+     */
+    public void updateRecords(ArrayList<Record> records) {
+        crimeTypes.clear();
+        crimeWards.clear();
+        crimeBeats.clear();
+
         for (Record record : records) {
             if (!crimeWards.contains(record.getWard())) {
                 crimeWards.add(record.getWard());
@@ -58,7 +70,8 @@ DataAnalyser {
     }
 
     /**
-     * Uses the Haversine formula to calculate the difference between the two crimes in meters
+     * Uses the Haversine formula to calculate the difference between the two crimes in meters, allowing for the
+     * curvature of the earth
      * @param record1 the first crime record
      * @param record2 the second crime record
      * @return an integer distance between the two crimes in meters, or -1 if either
@@ -95,7 +108,6 @@ DataAnalyser {
     /**
      * Comparator for TypeFrequency pair objects (Compares on basis of frequency in a descending order)
      */
-
     class frequecyComparatorDescending implements Comparator<TypeFrequencypair> {
         @Override
         public int compare(TypeFrequencypair a, TypeFrequencypair b) {
@@ -107,7 +119,6 @@ DataAnalyser {
     /**
      * Comparator for TypeFrequency pair objects (Compares on basis of frequency in an ascending order)
      */
-
     class frequecyComparatorAscending implements Comparator<TypeFrequencypair> {
         @Override
         public int compare(TypeFrequencypair a, TypeFrequencypair b) {
@@ -121,7 +132,6 @@ DataAnalyser {
      * @return res  List of TypeFrequency pair objects
      * @throws SQLException
      */
-
     public ArrayList<TypeFrequencypair> getTypeFrequency(ArrayList<Object> column) throws SQLException {
         ArrayList<TypeFrequencypair> res = new ArrayList<TypeFrequencypair>();
         int frequency;
