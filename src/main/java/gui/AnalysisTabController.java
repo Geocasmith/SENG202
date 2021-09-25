@@ -1,9 +1,8 @@
 package gui;
 
-
-import backend.*;
+import backend.DataAnalyser;
 import backend.Record;
-import backend.TypeFrequencypair;
+import backend.TypeFrequencyPair;
 import backend.database.Database;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.collections.FXCollections;
@@ -29,34 +28,34 @@ import java.util.*;
 
 public class AnalysisTabController {
     @FXML private GridPane grid;
-    @FXML private TableView<TypeFrequencypair> topCrimeTable;
-    @FXML private TableView<TypeFrequencypair> bottomCrimeTable;
-    @FXML private TableView<TypeFrequencypair> bottomBlockTable;
-    @FXML private TableView<TypeFrequencypair> topBlockTable;
+    @FXML private TableView<TypeFrequencyPair> topCrimeTable;
+    @FXML private TableView<TypeFrequencyPair> bottomCrimeTable;
+    @FXML private TableView<TypeFrequencyPair> bottomBlockTable;
+    @FXML private TableView<TypeFrequencyPair> topBlockTable;
 
-    @FXML private TableColumn<TypeFrequencypair, String> topCrimeCol = new TableColumn<>();
-    @FXML private TableColumn<TypeFrequencypair, String> topCrimeFrequencyCol;
-    @FXML private TableColumn<TypeFrequencypair, String> topBlockCol;
-    @FXML private TableColumn<TypeFrequencypair, String> topBlockFrequencyCol;
+    @FXML private TableColumn<TypeFrequencyPair, String> topCrimeCol = new TableColumn<>();
+    @FXML private TableColumn<TypeFrequencyPair, String> topCrimeFrequencyCol;
+    @FXML private TableColumn<TypeFrequencyPair, String> topBlockCol;
+    @FXML private TableColumn<TypeFrequencyPair, String> topBlockFrequencyCol;
 
-    @FXML private TableColumn<TypeFrequencypair, String> bottomCrimeCol;
-    @FXML private TableColumn<TypeFrequencypair, String> bottomCrimeFrequencyCol;
-    @FXML private TableColumn<TypeFrequencypair, String> bottomBlockCol;
-    @FXML private TableColumn<TypeFrequencypair, String> bottomBlockFrequencyCol;
+    @FXML private TableColumn<TypeFrequencyPair, String> bottomCrimeCol;
+    @FXML private TableColumn<TypeFrequencyPair, String> bottomCrimeFrequencyCol;
+    @FXML private TableColumn<TypeFrequencyPair, String> bottomBlockCol;
+    @FXML private TableColumn<TypeFrequencyPair, String> bottomBlockFrequencyCol;
     int displayLimit;
 
 
 
-    class frequecyComparatorDescending implements Comparator<TypeFrequencypair> {
+    class frequecyComparatorDescending implements Comparator<TypeFrequencyPair> {
         @Override
-        public int compare(TypeFrequencypair a, TypeFrequencypair b) {
+        public int compare(TypeFrequencyPair a, TypeFrequencyPair b) {
             return a.getFrequency() > b.getFrequency() ? -1 : a.getFrequency() == b.getFrequency() ? 0 : 1;
         }
     }
 
-    public class frequecyComparatorAscending implements Comparator<TypeFrequencypair> {
+    public class frequecyComparatorAscending implements Comparator<TypeFrequencyPair> {
         @Override
-        public int compare(TypeFrequencypair a, TypeFrequencypair b) {
+        public int compare(TypeFrequencyPair a, TypeFrequencyPair b) {
             return a.getFrequency() < b.getFrequency() ? -1 : a.getFrequency() == b.getFrequency() ? 0 : 1;
         }
     }
@@ -87,7 +86,7 @@ public class AnalysisTabController {
 
 
 
-    public void populateTopCrimesTable(ArrayList<TypeFrequencypair> crimeFrequencyPair) throws SQLException {
+    public void populateTopCrimesTable(ArrayList<TypeFrequencyPair> crimeFrequencyPair) throws SQLException {
         Collections.sort(crimeFrequencyPair, new AnalysisTabController.frequecyComparatorDescending());
         topCrimeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         topCrimeFrequencyCol.setCellValueFactory(new PropertyValueFactory<>("frequency"));
@@ -101,11 +100,11 @@ public class AnalysisTabController {
 
     }
 
-    public void populateLowCrimesTable(ArrayList<TypeFrequencypair> crimeFrequencyPair) throws SQLException {
+    public void populateLowCrimesTable(ArrayList<TypeFrequencyPair> crimeFrequencyPair) throws SQLException {
         Collections.sort(crimeFrequencyPair, new AnalysisTabController.frequecyComparatorAscending());
 
-        bottomCrimeCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencypair, String>("type"));
-        bottomCrimeFrequencyCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencypair, String>("frequency"));
+        bottomCrimeCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("type"));
+        bottomCrimeFrequencyCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("frequency"));
         for (int i = 0; i < displayLimit; i ++) {
             bottomCrimeTable.getItems().add(crimeFrequencyPair.get(i));
             System.out.println(crimeFrequencyPair.get(i).getType());
@@ -114,10 +113,10 @@ public class AnalysisTabController {
 
     }
 
-    public void populateTopBlocksTable(ArrayList<TypeFrequencypair> blocksFrequencyPair) throws SQLException {
+    public void populateTopBlocksTable(ArrayList<TypeFrequencyPair> blocksFrequencyPair) throws SQLException {
         Collections.sort(blocksFrequencyPair, new AnalysisTabController.frequecyComparatorDescending());
-        topBlockCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencypair, String>("type"));
-        topBlockFrequencyCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencypair, String>("frequency"));
+        topBlockCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("type"));
+        topBlockFrequencyCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("frequency"));
 
         for (int i = 0; i < displayLimit; i ++) {
             topBlockTable.getItems().add(blocksFrequencyPair.get(i));
@@ -128,10 +127,10 @@ public class AnalysisTabController {
 
     }
 
-    public void populateLowBlocksTable(ArrayList<TypeFrequencypair> blocksFrequencyPair) throws SQLException {
+    public void populateLowBlocksTable(ArrayList<TypeFrequencyPair> blocksFrequencyPair) throws SQLException {
         Collections.sort(blocksFrequencyPair, new AnalysisTabController.frequecyComparatorAscending());
-        bottomBlockCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencypair, String>("type"));
-        bottomBlockFrequencyCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencypair, String>("frequency"));
+        bottomBlockCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("type"));
+        bottomBlockFrequencyCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("frequency"));
         for (int i = 0; i < displayLimit; i ++) {
             bottomBlockTable.getItems().add(blocksFrequencyPair.get(i));
         }
