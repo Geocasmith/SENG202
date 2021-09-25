@@ -15,20 +15,21 @@ public class MapTabController {
 
     private WebEngine webEngine;
 
+    /**
+     * Loads the Google Maps html file with the webengine
+     */
     @FXML
     void initialize() {
         webEngine= webView.getEngine();
         webEngine.load(getClass().getResource("googlemaps.html").toString());
     }
 
-    public void plotOnePoint(ActionEvent actionEvent) {
-        String rand = "document.plotPoint(" + 41.748486365 + ", " + -87.602675062 + ")";
-        webEngine.executeScript(rand);
-        rand = "document.plotPoint(" + 41.87154041 + ", " + -87.705838807 + ")";
-        webEngine.executeScript(rand);
-    }
-
-    public void plotMultiplePoints(ArrayList<Record> records) {
+    /**
+     * Plots each of the records on the map, and gives them an infoWindow with their case number, date, and their
+     * primary, secondary and location descriptions
+     * @param records An ArrayList of crime records to be plotted
+     */
+    public void plotPoints(ArrayList<Record> records) {
         String newLocationMarker;
         for (Record record : records) {
             newLocationMarker = "document.plotPoint(" + record.getLatitude() + ", " + record.getLongitude() + ", '" +
@@ -40,11 +41,18 @@ public class MapTabController {
 
     }
 
+    /**
+     * Clears existing markers then plots the given crime records
+     * @param records An ArrayList of crime records to be plotted
+     */
     public void updateMarkers(ArrayList<Record> records) {
         clearMarkers();
-        plotMultiplePoints(records);
+        plotPoints(records);
     }
 
+    /**
+     * Clears all the existing markers from the map
+     */
     public void clearMarkers() {
         webEngine.executeScript("document.deletePoints()");
     }
