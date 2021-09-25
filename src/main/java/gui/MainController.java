@@ -121,47 +121,14 @@ public class MainController {
     private void initialize() throws SQLException, IOException, CsvValidationException, URISyntaxException {
         filterSetup();
         graphSetup();
-        //analysisSetUp();
+
         tableTabController.setParentController(this);
         dataAnalyser = new DataAnalyser(tableTabController.getDisplayedRecords());
-        Database d = new Database();
-        tableTabController.setTableRecords(d.getAll());
-        d.closeConnection();
+//        Database d = new Database();
+//        tableTabController.setTableRecords(d.getAll());
+//        d.closeConnection();
+        analysisSetUp();
     }
-
-    /**
-     * Checks that the user is connected to the internet, if not, then displays a error message and goes back to the
-     * table tab, if they are, then it displays either the first 1000 records in the table, or all records in the table,
-     * if there are less than 1000
-     */
-    @FXML
-    private void refreshMarkers() {
-        boolean connected;
-        try {
-            URL url = new URL("http://www.google.com");
-            URLConnection connection = url.openConnection();
-            connection.connect();
-            connected = true;
-        } catch (MalformedURLException e) {
-            connected = false;
-        } catch (IOException e) {
-            connected = false;
-        }
-        if (!connected) {
-            PopupWindow.displayPopup("Error", "You must be connected to the internet to use this feature");
-            mainTabPane.getSelectionModel().select(tableTabPane);
-        } else {
-            ArrayList<Record> displayedRecords = tableTabController.getDisplayedRecords();
-            if (displayedRecords.size() < 1000) {
-                mapTabController.updateMarkers(displayedRecords);
-            } else {
-                mapTabController.updateMarkers(new ArrayList<Record>(displayedRecords.subList(0, 999)));
-            }
-
-        }
-
-    }
-
 
     /**
      * Sets up combo boxes in filter pane
@@ -208,6 +175,47 @@ public class MainController {
         graphTypeComboBox.getItems().addAll( "", "All Crimes", "Crimes Per Ward", "Crimes Per Beat", "Crimes Per Type");
         graphTypeComboBox.getSelectionModel().select("");
     }
+
+    /**
+     * Updates the tables in the analysis tab
+     */
+    private void analysisSetUp() {
+        updateAnalysis();
+    }
+
+    /**
+     * Checks that the user is connected to the internet, if not, then displays a error message and goes back to the
+     * table tab, if they are, then it displays either the first 1000 records in the table, or all records in the table,
+     * if there are less than 1000
+     */
+    @FXML
+    private void refreshMarkers() {
+        boolean connected;
+        try {
+            URL url = new URL("http://www.google.com");
+            URLConnection connection = url.openConnection();
+            connection.connect();
+            connected = true;
+        } catch (MalformedURLException e) {
+            connected = false;
+        } catch (IOException e) {
+            connected = false;
+        }
+        if (!connected) {
+            PopupWindow.displayPopup("Error", "You must be connected to the internet to use this feature");
+            mainTabPane.getSelectionModel().select(tableTabPane);
+        } else {
+            ArrayList<Record> displayedRecords = tableTabController.getDisplayedRecords();
+            if (displayedRecords.size() < 1000) {
+                mapTabController.updateMarkers(displayedRecords);
+            } else {
+                mapTabController.updateMarkers(new ArrayList<Record>(displayedRecords.subList(0, 999)));
+            }
+
+        }
+
+    }
+
 
     /**
      * Clears the checks in the graph filter combo box, then checks what graphing option has been selected and
@@ -670,9 +678,12 @@ public class MainController {
                             displayInvalid(dataValidation.get(1));
                         }
                     }
-                    tableTabController.setTableRecords(d.getAll());
+                    ArrayList<Record> records = d.getAll();
+                    tableTabController.setTableRecords(records);
                     d.closeConnection();
                     filterSetup();
+                    dataAnalyser.updateRecords(records);
+                    updateGraphOptions();
 
                 } catch (Exception e) {
                     System.out.println("Error " + e);
@@ -769,10 +780,6 @@ public class MainController {
         }
     }
 
-    public void analysisSetUp() {
-        updateAnalysis();
-    }
-
     /**
      * Checks if the inputted filepath's extension matches the required extension, this stops the user from
      * importing data from incorrect file types
@@ -803,7 +810,7 @@ public class MainController {
     /**
      * Passes the analysis update request to the analysis tab controller
      */
-    public void updateAnalysis() {
+    private void updateAnalysis() {
         analysisTabController.updateAnalysis(tableTabController.getDisplayedRecords());
     }
 
