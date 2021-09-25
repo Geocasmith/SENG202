@@ -132,7 +132,7 @@ public class InputValidator {
     * @throws CsvValidationException
     * @throws IOException
     */
-   public static ArrayList<String> recordEntryFeedbackLong(List<String> record) throws CsvValidationException, IOException {
+   public static ArrayList<String> recordEntryFeedbackLong(List<String> record, boolean notImport) throws CsvValidationException, IOException {
       // will have 1 = good, 0 = bad for all rows and then a 1 or 0 at the end along with the first error message
       ArrayList<String> result = new ArrayList<>(Arrays.asList("1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1"));
       ArrayList<String> dataFieldFeedBack = new ArrayList<>();
@@ -162,16 +162,20 @@ public class InputValidator {
       }
 
       // check IUCR, primary and secondary descriptions, and FBICD
-      List<String> crimeDes = Arrays.asList(record.get(3), record.get(4), record.get(5), record.get(11));
-      if (!hasValidCrimeDescriptions(crimeDes)) {
-         result.set(3, "0");
-         result.set(4, "0");
-         result.set(5, "0");
-         result.set(11, "0");
-         isValid = "0";
-         errMsg = "Invalid crime description, FBICD and/or IUCR. These fields need to correspond to one another.";
-         dataFieldFeedBack.add(errMsg);
+      if (notImport) {
+         List<String> crimeDes = Arrays.asList(record.get(3), record.get(4), record.get(5), record.get(11));
+         if (!hasValidCrimeDescriptions(crimeDes)) {
+            result.set(3, "0");
+            result.set(4, "0");
+            result.set(5, "0");
+            result.set(11, "0");
+            isValid = "0";
+            errMsg = "Invalid crime description, FBICD and/or IUCR. These fields need to correspond to one another.";
+            dataFieldFeedBack.add(errMsg);
+         }
+
       }
+
 
       // location description is not validated, only required
       if (record.get(6) == null || record.get(6).isEmpty()) {
@@ -254,8 +258,8 @@ public class InputValidator {
     * @throws IOException
     * @throws CsvValidationException
     */
-   public static boolean isValidRecord(List<String> record) throws IOException, CsvValidationException {
-      return Objects.equals(recordEntryFeedbackLong(record).get(16), "1");
+   public static boolean isValidRecord(List<String> record, boolean notImport) throws IOException, CsvValidationException {
+      return Objects.equals(recordEntryFeedbackLong(record, notImport).get(16), "1");
    }
 
 

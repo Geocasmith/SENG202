@@ -272,7 +272,7 @@ private ArrayList<Record> currentData;
             ArrayList<List<String>> invalidRows = new ArrayList<List<String>>();
             csvValues = CsvReader.read(filepath);
             for (List<String> rec : csvValues) {
-                if (InputValidator.isValidRecord(rec)){
+                if (InputValidator.isValidRecord(rec, false)){
                     validRows.add(rec);
                 }
                 else {

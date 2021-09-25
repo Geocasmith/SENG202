@@ -102,10 +102,10 @@ class InputValidatorTest {
     void validTest() throws CsvValidationException, IOException {
         // valid
         List<String> testData1 = Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "0", "1", "334", "7", "6", "1183633", "1851786", "41.748486365", "-87.602675062");
-        assertTrue(InputValidator.isValidRecord(testData1));
+        assertTrue(InputValidator.isValidRecord(testData1, true));
         // invalid
         List<String> testData2 = Arrays.asList("NHJ73465", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "absolutely", "N", "severely", "7", "6", "", "", "", "");
-        assertFalse(InputValidator.isValidRecord(testData2));
+        assertFalse(InputValidator.isValidRecord(testData2, true));
     }
 
     @Test // this test runs on lists of strings, not record objects, because user input is in that format
@@ -124,10 +124,10 @@ class InputValidatorTest {
         List<String> desiredList3 = Arrays.asList("0", "1", "1", "1", "1", "1", "1", "0", "1", "0", "1", "1", "1", "1", "1", "1", "0", "Invalid case number. The case number should be two letters followed by six digits.");
         List<String> desiredList4 = Arrays.asList("0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "Invalid case number. The case number should be two letters followed by six digits.");
 
-        assertEquals(desiredList1, InputValidator.recordEntryFeedbackLong(testData1));
-        assertEquals(desiredList2, InputValidator.recordEntryFeedbackLong(testData2));
-        assertEquals(desiredList3, InputValidator.recordEntryFeedbackLong(testData3));
-        assertEquals(desiredList4, InputValidator.recordEntryFeedbackLong(testData4));
+        assertEquals(desiredList1, InputValidator.recordEntryFeedbackLong(testData1, true));
+        assertEquals(desiredList2, InputValidator.recordEntryFeedbackLong(testData2, true));
+        assertEquals(desiredList3, InputValidator.recordEntryFeedbackLong(testData3, true));
+        assertEquals(desiredList4, InputValidator.recordEntryFeedbackLong(testData4, true));
     }
 
 
