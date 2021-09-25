@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 public class
 DataAnalyser {
@@ -108,9 +107,9 @@ DataAnalyser {
     /**
      * Comparator for TypeFrequency pair objects (Compares on basis of frequency in a descending order)
      */
-    class frequecyComparatorDescending implements Comparator<TypeFrequencypair> {
+    class frequecyComparatorDescending implements Comparator<TypeFrequencyPair> {
         @Override
-        public int compare(TypeFrequencypair a, TypeFrequencypair b) {
+        public int compare(TypeFrequencyPair a, TypeFrequencyPair b) {
             return a.getFrequency() > b.getFrequency() ? -1 : a.getFrequency() == b.getFrequency() ? 0 : 1;
         }
     }
@@ -119,9 +118,9 @@ DataAnalyser {
     /**
      * Comparator for TypeFrequency pair objects (Compares on basis of frequency in an ascending order)
      */
-    class frequecyComparatorAscending implements Comparator<TypeFrequencypair> {
+    class frequecyComparatorAscending implements Comparator<TypeFrequencyPair> {
         @Override
-        public int compare(TypeFrequencypair a, TypeFrequencypair b) {
+        public int compare(TypeFrequencyPair a, TypeFrequencyPair b) {
             return a.getFrequency() > b.getFrequency() ? -1 : a.getFrequency() == b.getFrequency() ? 0 : 1;
         }
     }
@@ -129,14 +128,14 @@ DataAnalyser {
     /**
      * Takes a data column and returns list of data column items together with their appearance frequency
      * @param column represents the data column
-     * @return res  List of TypeFrequency pair objects
+     * @return List of TypeFrequency pair objects
      * @throws SQLException
      */
-    public ArrayList<TypeFrequencypair> getTypeFrequency(ArrayList<Object> column) throws SQLException {
-        ArrayList<TypeFrequencypair> res = new ArrayList<TypeFrequencypair>();
+    public ArrayList<TypeFrequencyPair> getTypeFrequency(ArrayList<Object> column) throws SQLException {
+        ArrayList<TypeFrequencyPair> res = new ArrayList<TypeFrequencyPair>();
         int frequency;
         for (Object r : column) {
-            TypeFrequencypair pair = new TypeFrequencypair();
+            TypeFrequencyPair pair = new TypeFrequencyPair();
             frequency = Collections.frequency(column, r);
             // Add to list if items appears in list
             if (frequency > 0) {

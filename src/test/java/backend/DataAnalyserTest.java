@@ -62,7 +62,7 @@ public class DataAnalyserTest {
     void getTypeFrequencyTest() throws SQLException {
         Database db = new Database();
         DataAnalyser dataAnalyser = new DataAnalyser(db.getAll());
-        ArrayList<TypeFrequencypair> res = new ArrayList<>();
+        ArrayList<TypeFrequencyPair> res = new ArrayList<>();
         ArrayList<Object> testcol = new ArrayList<Object>(Arrays.asList("WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION", "NARCOTICS",
                 "CRIMINAL SEXUAL ASSAULT", "PUBLIC INDECENCY", "NARCOTICS", "NARCOTICS", "NARCOTICS"));
         res= dataAnalyser.getTypeFrequency(testcol);
