@@ -122,6 +122,9 @@ public class MainController {
         //analysisSetUp();
         tableTabController.setParentController(this);
         dataAnalyser = new DataAnalyser(tableTabController.getDisplayedRecords());
+        Database d = new Database();
+        tableTabController.setTableRecords(d.getAll());
+        d.closeConnection();
     }
 
     /**
@@ -700,8 +703,8 @@ public class MainController {
 
             d.setDatabasePath(filepath);
             d.closeConnection();
-            
-            //Refresh all GUI
+
+            //Refresh GUI
             tableTabController.refreshTableData();
         }
 
@@ -712,7 +715,7 @@ public class MainController {
      * Creates a new database
      * @throws IOException
      */
-    public void newDatabase() throws NullPointerException, SQLException {
+    public void newDatabase() throws NullPointerException, SQLException, IOException {
         String filepath = getFileSavePath("Database", "db");
 
         if (!(filepath == null)) {
@@ -727,11 +730,14 @@ public class MainController {
                 PopupWindow.displayPopup("Error", "Unknown error");
             }
 
-                Database d = new Database();
+            // Set new database path
+            Database d = new Database();
+            d.setDatabasePath(filepath);
 
 
-                d.setDatabasePath(filepath);
-                d.closeConnection();
+            //Refresh GUI
+            tableTabController.setTableRecords(d.getAll());
+            d.closeConnection();
         }
     }
 
