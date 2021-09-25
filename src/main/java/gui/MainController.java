@@ -647,6 +647,7 @@ public class MainController {
 
             Boolean replace = null;
             Boolean newDB = null;
+            Boolean newDBSuccess = false;
 
 
             newDB = PopupWindow.displayTwoButtonPopup("Create New Database?", "Do you want to store this data in a new database?", "New Database", "Existing Database");
@@ -654,10 +655,10 @@ public class MainController {
                 replace = PopupWindow.displayTwoButtonPopup("Replace data?", "Do you want to replace the current data or append to it?", "Replace", "Append");
             }
             if (newDB != null && newDB) {
-                newDatabase();
+                newDBSuccess = newDatabase();
                 replace = false;
             }
-            if (replace != null) {
+            if (replace != null && newDBSuccess) {
                 try {
                     Database d = new Database();
                     d.connectDatabase();
@@ -667,16 +668,12 @@ public class MainController {
                     if (!replace) {
                         d.insertRows(dataValidation.get(0));
 
-                        if (dataValidation.get(1).size() != 0) {
-                            displayInvalid(dataValidation.get(1));
-                        }
-
                     } else {
                         d.replaceRows(dataValidation.get(0));
 
-                        if (dataValidation.get(1).size() != 0) {
-                            displayInvalid(dataValidation.get(1));
-                        }
+                    }
+                    if (dataValidation.get(1).size() != 0) {
+                        displayInvalid(dataValidation.get(1));
                     }
                     ArrayList<Record> records = d.getAll();
                     tableTabController.setTableRecords(records);
@@ -735,14 +732,24 @@ public class MainController {
      * Creates a new database
      * @throws IOException
      */
-    public void newDatabase() throws NullPointerException, SQLException, IOException {
+    public Boolean newDatabase() throws NullPointerException, SQLException, IOException {
         String filepath = getFileSavePath("Database", "db");
 
         if (!(filepath == null)) {
-            filepath = addExtension(filepath,".db");
+
             try{
+                filepath = addExtension(filepath,".db");
                 File file = new File(filepath);
                 file.createNewFile();
+                // Set new database path
+                Database d = new Database();
+                d.setDatabasePath(filepath);
+
+
+                //Refresh GUI
+                tableTabController.setTableRecords(d.getAll());
+                d.closeConnection();
+                return true;
             } catch(FileAlreadyExistsException e){
                 PopupWindow.displayPopup("Error", "File already exists");
             } catch (Exception e) {
@@ -750,15 +757,9 @@ public class MainController {
                 PopupWindow.displayPopup("Error", "Unknown error");
             }
 
-            // Set new database path
-            Database d = new Database();
-            d.setDatabasePath(filepath);
 
-
-            //Refresh GUI
-            tableTabController.setTableRecords(d.getAll());
-            d.closeConnection();
         }
+        return false;
     }
 
     /**
