@@ -110,7 +110,6 @@ public class InputValidator {
 
    /**
     * Checks whether the string is a true, false, or null value for a field as specified in the Record class.
-    * TODO: check how the user might add null values
     * @param domestic a String representing a potential boolean value
     * @return boolean true/false whether the string is valid or not
     */
@@ -127,8 +126,9 @@ public class InputValidator {
     * @param record a list of strings representing a Record object. This can be generated with the toList() method
     *               of the Record class.
     * @return a list consisting of 16 values (1 = valid, 0 = invalid) corresponding to each field of a Record object
-    *         in the order produced by toList(), with an additional 1/0 field for overall validity, and the last entry
-    *         is an error message or empty.
+    *         in the order produced by toList(), with an additional 1/0 field for overall validity, and an error
+    *         message ONLY IF there was an error - field is not included (i.e. not a blank field) if data is valid. The
+    *         message corresponds to the first invalid field.
     * @throws CsvValidationException
     * @throws IOException
     */
@@ -153,7 +153,7 @@ public class InputValidator {
          dataFieldFeedBack.add(errMsg);
       }
 
-      // block is not validated
+      // block is not validated, only required
       if (record.get(2) == null || record.get(2).isEmpty()) {
          result.set(2, "0");
          isValid = "0";
@@ -173,7 +173,7 @@ public class InputValidator {
          dataFieldFeedBack.add(errMsg);
       }
 
-      // location description is not validated
+      // location description is not validated, only required
       if (record.get(6) == null || record.get(6).isEmpty()) {
          result.set(6, "0");
          isValid = "0";
