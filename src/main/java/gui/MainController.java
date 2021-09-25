@@ -647,7 +647,7 @@ public class MainController {
 
             Boolean replace = null;
             Boolean newDB = null;
-            Boolean newDBSuccess = false;
+            Boolean newDBSuccess = true;
 
 
             newDB = PopupWindow.displayTwoButtonPopup("Create New Database?", "Do you want to store this data in a new database?", "New Database", "Existing Database");
@@ -768,7 +768,7 @@ public class MainController {
 
     /**
      * Helper method which checks the filepath to check if it has the correct extension and adds it if it does not
-     * This stops the user from exporting to a file without an extension if they dont
+     * This stops the user from exporting to a file without an extension if they don't
      * type the extension in the file name.
      * @param path file path
      * @param extension correct extension
