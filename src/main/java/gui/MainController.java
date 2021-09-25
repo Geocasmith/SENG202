@@ -687,7 +687,7 @@ public class MainController {
     public void changeDatabase() throws IOException, SQLException{
         String filepath = null;
         filepath = getPathToFile("Database", "db");
-        if (!(filepath == null)) {
+        if (filepath != null) {
             //Changes the database to the selected path
             Database d = new Database();
 
@@ -700,11 +700,13 @@ public class MainController {
 
             d.setDatabasePath(filepath);
             d.closeConnection();
+            
+            //Refresh all GUI
+            tableTabController.refreshTableData();
         }
 
 
-        //Refresh all GUI
-        tableTabController.refreshTableData();
+
     }
     /**
      * Creates a new database
