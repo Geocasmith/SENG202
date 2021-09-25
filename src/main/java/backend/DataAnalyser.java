@@ -106,9 +106,9 @@ DataAnalyser {
      * Comparator for TypeFrequency pair objects (Compares on basis of frequency in a descending order)
      */
 
-    class frequecyComparatorDescending implements Comparator<TypeFrequencypair> {
+    class frequecyComparatorDescending implements Comparator<TypeFrequencyPair> {
         @Override
-        public int compare(TypeFrequencypair a, TypeFrequencypair b) {
+        public int compare(TypeFrequencyPair a, TypeFrequencyPair b) {
             return a.getFrequency() > b.getFrequency() ? -1 : a.getFrequency() == b.getFrequency() ? 0 : 1;
         }
     }
@@ -118,9 +118,9 @@ DataAnalyser {
      * Comparator for TypeFrequency pair objects (Compares on basis of frequency in an ascending order)
      */
 
-    class frequecyComparatorAscending implements Comparator<TypeFrequencypair> {
+    class frequecyComparatorAscending implements Comparator<TypeFrequencyPair> {
         @Override
-        public int compare(TypeFrequencypair a, TypeFrequencypair b) {
+        public int compare(TypeFrequencyPair a, TypeFrequencyPair b) {
             return a.getFrequency() > b.getFrequency() ? -1 : a.getFrequency() == b.getFrequency() ? 0 : 1;
         }
     }
@@ -132,13 +132,13 @@ DataAnalyser {
      * @throws SQLException
      */
 
-    public ArrayList<TypeFrequencypair> getTypeFrequencyDescending(ArrayList<Object> column) throws SQLException {
-        ArrayList<TypeFrequencypair> res = new ArrayList<TypeFrequencypair>();
+    public ArrayList<TypeFrequencyPair> getTypeFrequencyDescending(ArrayList<Object> column) throws SQLException {
+        ArrayList<TypeFrequencyPair> res = new ArrayList<TypeFrequencyPair>();
         int frequency;
         HashSet h = new HashSet();
         h.addAll(column);
         for (Object r : h) {
-            TypeFrequencypair pair = new TypeFrequencypair();
+            TypeFrequencyPair pair = new TypeFrequencyPair();
             frequency = Collections.frequency(column, r);
             // Add to list if items appears in list
             if(frequency > 0) {
