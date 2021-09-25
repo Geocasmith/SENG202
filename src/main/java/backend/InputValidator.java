@@ -14,10 +14,10 @@ public class InputValidator {
    private static Set<List<String>> crimeDescription;
 
    // these are declared here rather than in the method for ease of access
-   private static final int LONGITUDEUPPERBOUND = 180;
-   private static final int LONGITUDELOWERBOUND = -180;
-   private static final int LATITUDEUPPERBOUND = 90;
-   private static final int LATITUDELOWERBOUND = -90;
+   private static final int longitudeUpperBound = 180;
+   private static final int longitudeLowerBound = -180;
+   private static final int latitudeUpperBound = 90;
+   private static final int latitudeLowerBound = -90;
 
    /**
     * Initializes set of valid crime descriptions (Primary, Secondary and IUCR information from
@@ -228,14 +228,14 @@ public class InputValidator {
          dataFieldFeedBack.add(errMsg);
       }
 
-      if (!hasGpsCoordinate(record.get(14), LATITUDELOWERBOUND, LATITUDEUPPERBOUND)) {
+      if (!hasGpsCoordinate(record.get(14), latitudeLowerBound, latitudeUpperBound)) {
          result.set(14, "0");
          isValid = "0";
          errMsg ="Invalid latitude value. Latitude should be between 90 and -90 or empty.";
          dataFieldFeedBack.add(errMsg);
       }
 
-      if (!hasGpsCoordinate(record.get(15), LONGITUDELOWERBOUND, LONGITUDEUPPERBOUND)) {
+      if (!hasGpsCoordinate(record.get(15), longitudeLowerBound, longitudeUpperBound)) {
          result.set(15, "0");
          isValid = "0";
          errMsg = "Invalid longitude value. Longitude should be between 180 and -180 or empty.";

@@ -1,5 +1,4 @@
 package backend;
-import backend.database.Database;
 import com.opencsv.exceptions.CsvValidationException;
 
 import java.io.IOException;

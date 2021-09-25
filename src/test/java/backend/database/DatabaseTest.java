@@ -1,5 +1,6 @@
 package backend.database;
 
+import backend.Database;
 import backend.Record;
 import com.opencsv.exceptions.CsvValidationException;
 import org.junit.jupiter.api.Test;

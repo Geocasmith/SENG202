@@ -159,12 +159,12 @@ public class GraphCreator {
      * the crimes in each of the wards are rounded to that spacing, and then added to the ArrayList of XYChart.Series to
      * be placed on the graph
      * @param data An ArrayList of the crime records wanted to graph
-     * @param wards An ArrayList of integers which contains the wards that need to be graphed
+     * @param crimeWards An ArrayList of integers which contains the wards that need to be graphed
      * @return An ArrayList of XYChart.Series objects containing all the data points as a <String, Integer> pair, where
      *         the String is the date and time in string form and the Integer is the number of crimes that occurred in
      *         the calculated timeframe
      */
-    public ArrayList<Object> createCrimesPerWardOverTimeGraph(ArrayList<Record> data, ArrayList<Integer> wards) {
+    public ArrayList<Object> createCrimesPerWardOverTimeGraph(ArrayList<Record> data, ArrayList<Integer> crimeWards) {
 
         ArrayList<XYChart.Series> seriesList = new ArrayList<>();
         ArrayList<ArrayList<LocalDateTime>> timesList = new ArrayList<>();
@@ -172,7 +172,7 @@ public class GraphCreator {
 
         XYChart.Series series;
         // Fill arraylists with a series and list of times for each ward
-        for (int ward: wards) {
+        for (int ward: crimeWards) {
             series = new XYChart.Series();
             series.setName(String.format("Ward: %d", ward));
             seriesList.add(series);
@@ -182,8 +182,8 @@ public class GraphCreator {
 
         // Populate
         for (Record r: data) {
-            if (wards.contains(r.getWard())) {
-                timesList.get(wards.indexOf(r.getWard())).add(r.getDateAsObject());
+            if (crimeWards.contains(r.getWard())) {
+                timesList.get(crimeWards.indexOf(r.getWard())).add(r.getDateAsObject());
                 overallTime.add(r.getDateAsObject());
             }
         }
@@ -199,9 +199,9 @@ public class GraphCreator {
         DateTimeFormatter formatter = (DateTimeFormatter) calculations.get(1);
         String requiredDuration = (String) calculations.get(0);
 
-        for (int ward : wards) {
-            sortCrimesByTimePeriod(timesList.get(wards.indexOf(ward)), periodInSeconds, formatter,
-                    seriesList.get(wards.indexOf(ward)), requiredDuration, overallTime.get(0),
+        for (int ward : crimeWards) {
+            sortCrimesByTimePeriod(timesList.get(crimeWards.indexOf(ward)), periodInSeconds, formatter,
+                    seriesList.get(crimeWards.indexOf(ward)), requiredDuration, overallTime.get(0),
                     overallTime.get(overallTime.size()-1));
         }
 

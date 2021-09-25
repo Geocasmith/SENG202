@@ -1,8 +1,6 @@
 package backend;
 
-import backend.database.Database;
 import com.opencsv.exceptions.CsvException;
-import com.opencsv.exceptions.CsvMalformedLineException;
 import com.opencsv.exceptions.CsvValidationException;
 import gui.PopupWindow;
 
@@ -187,22 +185,6 @@ private ArrayList<Record> currentData;
                 break;
         }
     return extractedCol;
-    }
-
-
-    /**
-     * Calls extractCol DataManipulator class method to extract column values from CurrentData record object
-     * @param col1 represents column number of the first column to be extracted
-     * @param col2 represents column number of the second column to be extracted
-     * @return dataToGraph Array<ArrayList<Object>> type that contain list of extracted column values
-     */
-    public ArrayList<ArrayList<Object>> getCurrentDataToGraph(int col1, int col2)
-    {
-        ArrayList<ArrayList<Object> > dataToGraph = new ArrayList<ArrayList<Object>>();
-        //dataToGraph.add(extractCol(col1));
-        //dataToGraph.add(extractCol(col2));
-        return dataToGraph;
-
     }
 
     /**

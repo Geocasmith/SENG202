@@ -2,7 +2,7 @@ package gui;
 
 import backend.InputValidator;
 import backend.Record;
-import backend.database.Database;
+import backend.Database;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
