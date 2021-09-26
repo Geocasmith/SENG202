@@ -17,7 +17,7 @@ public class MapTabController {
      * Loads the Google Maps html file with the webengine
      */
     @FXML
-    void initialize() {
+    private void initialize() {
         webEngine= webView.getEngine();
         webEngine.load(getClass().getResource("googlemaps.html").toString());
     }

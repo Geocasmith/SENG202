@@ -241,7 +241,8 @@ private ArrayList<Record> currentData;
     /**
      * Reads and returns valid and invalid rows from csv in double dimensional array list object
      * @param filepath contains the string representation of the file path
-     * @return
+     * @return An ArrayList containing two objects, the first is a list containing a list of valid records and a list of
+     *         invalid records, and the second is a boolean stating whether the file is valid
      * @throws IOException
      * @throws CsvValidationException
      */
@@ -270,12 +271,9 @@ private ArrayList<Record> currentData;
             result.add(invalidRows);
 
             return new ArrayList<>(Arrays.asList(result, true));
-        } catch (CsvException | IOException e) {
-            PopupWindow.displayPopup("Error", e.getMessage());
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (CsvException | IOException | ArrayIndexOutOfBoundsException e) {
             return new ArrayList<>(Arrays.asList(new ArrayList<ArrayList<List<String>>>(), false));
         }
-       return new ArrayList<>(Arrays.asList(new ArrayList<ArrayList<List<String>>>(), false));
     }
 
 }

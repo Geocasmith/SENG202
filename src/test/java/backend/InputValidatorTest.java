@@ -1,6 +1,7 @@
 package backend;
 
 import com.opencsv.exceptions.CsvValidationException;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -24,9 +25,9 @@ class InputValidatorTest {
         assertTrue(InputValidator.hasValidCrimeDescriptions(crimeDesc));
         crimeDesc = new ArrayList<String>(Arrays.asList("2095", "NARCOTICS", "HOME INVASION", "18"));
         assertFalse(InputValidator.hasValidCrimeDescriptions(crimeDesc));
-        crimeDesc = new ArrayList<String>(Arrays.asList("880", "THEFT", "PURSE-SNATCHING", "6"));
+        crimeDesc = new ArrayList<String>(Arrays.asList("0880", "THEFT", "PURSE-SNATCHING", "06"));
         assertTrue(InputValidator.hasValidCrimeDescriptions(crimeDesc));
-        crimeDesc = new ArrayList<String>(Arrays.asList("880", "THEFT", "PURSE-SNATCHING", "7"));
+        crimeDesc = new ArrayList<String>(Arrays.asList("0880", "THEFT", "PURSE-SNATCHING", "07"));
         assertFalse(InputValidator.hasValidCrimeDescriptions(crimeDesc));
     }
 
@@ -56,10 +57,11 @@ class InputValidatorTest {
         for (List<String> descriptions : InputValidator.getCrimeDescriptions()) {
             primaryDes.add(descriptions.get(1));
         }
-        ArrayList<String> testStringArray = new ArrayList<String>();
-        for (String primaryDescription : primaryDes) {
-            testStringArray.add(primaryDescription);
-        }
+        ArrayList<String> testStringArray = new ArrayList<>();
+        testStringArray.addAll(primaryDes);
+        Collections.sort(testStringArray);
+        Collections.sort(primaryDescriptionList);
+
         assertEquals(testStringArray, primaryDescriptionList);
     }
 
@@ -92,10 +94,10 @@ class InputValidatorTest {
     @Test
     void validTest() throws CsvValidationException, IOException {
         // valid
-        List<String> testData1 = Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "0", "1", "334", "7", "6", "1183633", "1851786", "41.748486365", "-87.602675062");
+        List<String> testData1 = Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "0820", "THEFT", "$500 AND UNDER", "APARTMENT", "0", "1", "334", "7", "06", "1183633", "1851786", "41.748486365", "-87.602675062");
         assertTrue(InputValidator.isValidRecord(testData1, true));
         // invalid
-        List<String> testData2 = Arrays.asList("NHJ73465", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "absolutely", "N", "severely", "7", "6", "", "", "", "");
+        List<String> testData2 = Arrays.asList("NHJ73465", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "0820", "THEFT", "$500 AND UNDER", "APARTMENT", "absolutely", "N", "severely", "7", "06", "", "", "", "");
         assertFalse(InputValidator.isValidRecord(testData2, true));
     }
 
@@ -103,11 +105,11 @@ class InputValidatorTest {
     @Test // this test runs on lists of strings, not record objects, because user input is in that format
     void feedbackTest() throws CsvValidationException, IOException {
         // all valid
-        List<String> testData1 = Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "0", "1", "334", "7", "6", "1183633", "1851786", "41.748486365", "-87.602675062");
+        List<String> testData1 = Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "0820", "THEFT", "$500 AND UNDER", "APARTMENT", "0", "1", "334", "7", "06", "1183633", "1851786", "41.748486365", "-87.602675062");
         // no location data, still valid
-        List<String> testData2 = Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "Y", "faLse", "334", "7", "6", "", "", "", "");
+        List<String> testData2 = Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "0820", "THEFT", "$500 AND UNDER", "APARTMENT", "Y", "faLse", "334", "7", "06", "", "", "", "");
         // no location data; invalid case number, arrest, and beat fields
-        List<String> testData3 = Arrays.asList("NHJ73465", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "absolutely", "N", "severely", "7", "6", "", "", "", "");
+        List<String> testData3 = Arrays.asList("NHJ73465", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "0820", "THEFT", "$500 AND UNDER", "APARTMENT", "absolutely", "N", "severely", "7", "06", "", "", "", "");
         // everything is invalid
         List<String> testData4 = Arrays.asList("NHJ73465", "Tuesday Morning", "", "asdf", "wearing too much red", "and those shoes!", "", "absolutely", "not a chance", "severely", "asdf", "b5w6w$@#%", "VA@W#%a", "VA$%V", "w45b7", "112435");
 

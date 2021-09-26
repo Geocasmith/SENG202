@@ -157,6 +157,7 @@ public class InputValidator {
          dataFieldFeedBack.add(errMsg);
       }
 
+
       // check IUCR, primary and secondary descriptions, and FBICD
       if (notImport) {
          List<String> crimeDes = Arrays.asList(record.get(3), record.get(4), record.get(5), record.get(11));
