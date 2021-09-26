@@ -7,13 +7,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class GraphCreator {
-    private static final DateTimeFormatter hourFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a", Locale.ENGLISH);
+    private static final DateTimeFormatter minuteHourFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a", Locale.ENGLISH);
     private static final DateTimeFormatter dayWeekFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.ENGLISH);
     private static final DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MM/yyyy", Locale.ENGLISH);
     private static final DateTimeFormatter yearFormatter = DateTimeFormatter.ofPattern("yyyy", Locale.ENGLISH);
 
     private static final DataAnalyser dataAnalyser = new DataAnalyser();
 
+    private static final int oneMinuteInSeconds = 60;
     private static final int oneHourInSeconds = 3600;
     private static final int oneDayInSeconds = 86400;
     private static final int oneWeekInSeconds = 604800;
@@ -27,24 +28,26 @@ public class GraphCreator {
      * @return A LocalDateTime object that has been rounded to the given duration
      */
     private LocalDateTime roundDateTime(LocalDateTime timeToRound, String requiredDuration) {
-        if (Objects.equals(requiredDuration, "Hours")) {
-            timeToRound.withMinute(0).withSecond(0);
-        } else if (Objects.equals(requiredDuration, "Days")) {
-            timeToRound.withHour(0);
-        } else if (Objects.equals(requiredDuration, "Weeks")) {
+        if (requiredDuration.equals("Minutes")) {
+            timeToRound = timeToRound.withSecond(0);
+        } else if (requiredDuration.equals("Hours")) {
+            timeToRound = timeToRound.withMinute(0).withSecond(0);
+        } else if (requiredDuration.equals("Days")) {
+            timeToRound = timeToRound.withHour(0);
+        } else if (requiredDuration.equals("Weeks")) {
             if (timeToRound.getDayOfMonth() <= 7) {
-                timeToRound.withDayOfMonth(1);
-            } else if (timeToRound.getDayOfMonth() <=14) {
-                timeToRound.withDayOfMonth(7);
-            } else if (timeToRound.getDayOfMonth() <=21) {
-                timeToRound.withDayOfMonth(14);
+                timeToRound = timeToRound.withDayOfMonth(1);
+            } else if (timeToRound.getDayOfMonth() <= 14) {
+                timeToRound = timeToRound.withDayOfMonth(7);
+            } else if (timeToRound.getDayOfMonth() <= 21) {
+                timeToRound = timeToRound.withDayOfMonth(14);
             } else {
-                timeToRound.withDayOfMonth(21);
+                timeToRound = timeToRound.withDayOfMonth(21);
             }
-        } else if (Objects.equals(requiredDuration, "Months")) {
-            timeToRound.withDayOfMonth(1);
-        } else if (Objects.equals(requiredDuration, "Years")) {
-            timeToRound.withMonth(1);
+        } else if (requiredDuration.equals("Months")) {
+            timeToRound = timeToRound.withDayOfMonth(1);
+        } else if (requiredDuration.equals("Years")) {
+            timeToRound = timeToRound.withMonth(1);
         }
         return timeToRound;
     }
@@ -61,9 +64,14 @@ public class GraphCreator {
         Duration periodInSeconds;
         DateTimeFormatter formatter;
         String requiredDuration;
-        if (width.getSeconds() < oneDayInSeconds) {
+        if (width.getSeconds() < oneHourInSeconds) {
+            requiredDuration = "Minutes";
+            formatter = minuteHourFormatter;
+            periodInSeconds = Duration.ofSeconds(oneMinuteInSeconds);
+        }
+        else if (width.getSeconds() < oneDayInSeconds) {
             requiredDuration = "Hours";
-            formatter = hourFormatter;
+            formatter = minuteHourFormatter;
             periodInSeconds = Duration.ofSeconds(oneHourInSeconds);
         } else if (width.getSeconds() < oneMonthInSeconds) {
             requiredDuration = "Days";
@@ -98,22 +106,28 @@ public class GraphCreator {
     private void sortCrimesByTimePeriod(ArrayList<LocalDateTime> times, Duration periodInSeconds, DateTimeFormatter formatter, XYChart.Series series, String requiredDuration, LocalDateTime lowerBound, LocalDateTime maxUpperBound) {
         int i = 0;
         int count;
+
         LocalDateTime upperBound = lowerBound;
+        lowerBound = roundDateTime(lowerBound, requiredDuration);
+        if (Duration.between(maxUpperBound, upperBound).getSeconds() == 0) {
+            series.getData().add(new XYChart.Data(lowerBound.format(formatter), 1));
+        } else {
+            while (Duration.between(maxUpperBound, upperBound).getSeconds() < 0) {
 
-        while (Duration.between(maxUpperBound, upperBound).getSeconds() < 0) {
-            upperBound = roundDateTime(lowerBound.plusSeconds(periodInSeconds.getSeconds() + 50000), requiredDuration);
-            count = 0;
+                upperBound = roundDateTime(lowerBound.plusSeconds((int) (1.5 * periodInSeconds.getSeconds())), requiredDuration);
+                count = 0;
 
-            while (i < times.size() && Duration.between(times.get(i), upperBound).getSeconds() > 0) {
-                count++;
-                i++;
+                while (i < times.size() && Duration.between(times.get(i), upperBound).getSeconds() > 0) {
+                    count++;
+                    i++;
+                }
+
+                lowerBound = upperBound;
+                series.getData().add(new XYChart.Data(lowerBound.format(formatter), count));
             }
-
-            lowerBound = upperBound;
-            series.getData().add(new XYChart.Data(lowerBound.format(formatter), count));
         }
 
-        series.getData().add(new XYChart.Data(lowerBound.format(formatter), 0));
+
 
     }
 
