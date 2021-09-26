@@ -6,6 +6,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MapTabController {
     @FXML
@@ -19,7 +20,7 @@ public class MapTabController {
     @FXML
     private void initialize() {
         webEngine= webView.getEngine();
-        webEngine.load(getClass().getResource("googlemaps.html").toString());
+        webEngine.load(Objects.requireNonNull(getClass().getResource("googlemaps.html")).toString());
     }
 
     /**

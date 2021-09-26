@@ -235,7 +235,7 @@ public class EditRecordWindowController {
                     }
                 }
                 this.edited = true;
-                d.closeConnection();
+                d.disconnectDatabase();
 
             } else { // 17 is where the feedback message is held
                 PopupWindow.displayPopup("Error", feedback.get(17));

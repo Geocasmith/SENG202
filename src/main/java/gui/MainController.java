@@ -26,9 +26,9 @@ public class MainController {
 
     @FXML private MapTabController mapTabController;
     @FXML private TableTabController tableTabController;
-    @FXML private DataAnalyser dataAnalyser;
     @FXML private GraphTabController graphTabController;
     @FXML private AnalysisTabController analysisTabController;
+    @FXML private DataAnalyser dataAnalyser;
 
     // Filter Sidebar Elements
     @FXML private TitledPane filterPane;
@@ -51,7 +51,6 @@ public class MainController {
     @FXML private TextField filterLongTextField;
     @FXML private Label filterErrorLabel;
 
-
     // Graph Sidebar Elements
     @FXML private ComboBox graphTypeComboBox;
     @FXML private Button generateGraphButton;
@@ -61,11 +60,8 @@ public class MainController {
     private int graphTabCount = 0;
     private int analysisTabCount = 0;
 
-
-
     public MainController() throws SQLException {
     }
-
 
     /**
      * Runs the setup methods for the graph and filter panes, and sets the table tab's parent controller to the
@@ -77,11 +73,10 @@ public class MainController {
         graphSetup();
 
         tableTabController.setParentController(this);
-
-        Database d = new Database();
-        ArrayList<Record> allRecords = d.getAll();
+        Database db = new Database();
+        ArrayList<Record> allRecords = db.getAll();
+        db.disconnectDatabase();
         tableTabController.setTableRecords(allRecords);
-        d.closeConnection();
         dataAnalyser = new DataAnalyser(allRecords);
         analysisSetUp();
         updateGraphOptions();
@@ -102,8 +97,9 @@ public class MainController {
         domesticComboBox.getSelectionModel().select("");
 
         Database d = new Database();
+        d.connectDatabase();
         ArrayList<String> locationDescriptions  = (ArrayList<String>)(ArrayList<?>)(d.extractCol("LOCATIONDESCRIPTION"));
-        d.closeConnection();
+        d.disconnectDatabase();
         // Remove duplicate values
         locationDescriptions = new ArrayList<>(new HashSet<>(locationDescriptions));
 
@@ -153,17 +149,20 @@ public class MainController {
             URLConnection connection = url.openConnection();
             connection.connect();
             connected = true;
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             connected = false;
         }
         if (!connected) {
             PopupWindow.displayPopup("Error", "You must be connected to the internet to use this feature");
             mainTabPane.getSelectionModel().select(tableTabPane);
-        } else {
+        }
+        else {
             ArrayList<Record> displayedRecords = tableTabController.getDisplayedRecords();
             if (displayedRecords.size() < 1000) {
                 mapTabController.updateMarkers(displayedRecords);
-            } else {
+            }
+            else {
                 mapTabController.updateMarkers(new ArrayList<>(displayedRecords.subList(0, 999)));
             }
 
@@ -184,7 +183,8 @@ public class MainController {
                 PopupWindow.displayPopup("Error", "You must have data in the table to create a graph.\n" +
                         "Try clearing the filter or importing some data.");
                 graphTypeComboBox.getSelectionModel().select(0);
-            } else {
+            }
+            else {
                 graphOptionLabel.setVisible(false);
                 graphFilterComboBox.setVisible(false);
                 generateGraphButton.setDisable(false);
@@ -199,7 +199,8 @@ public class MainController {
                 PopupWindow.displayPopup("Error", "You must have data in the table to create a graph.\n" +
                         "Try clearing the filter or importing some data.");
                 graphTypeComboBox.getSelectionModel().select(0);
-            } else {
+            }
+            else {
                 graphOptionLabel.setText("Select which wards to graph");
                 graphOptionLabel.setVisible(true);
                 graphFilterComboBox.setVisible(true);
@@ -208,9 +209,7 @@ public class MainController {
                 graphFilterComboBox.getItems().addAll(crimeWards);
             }
 
-
         } else if (graphTypeComboBox.getValue().equals("Crimes Per Beat")) {
-
 
             ArrayList<Integer> crimeBeats = dataAnalyser.getCrimeBeats();
             if (crimeBeats.size() == 0) {
@@ -226,10 +225,7 @@ public class MainController {
                 graphFilterComboBox.getItems().addAll(crimeBeats);
             }
 
-
         } else if (graphTypeComboBox.getValue().equals("Crimes Per Type")) {
-
-
             ArrayList<String> crimeTypes = dataAnalyser.getCrimeTypes();
             if (crimeTypes.size() == 0) {
                 PopupWindow.displayPopup("Error", "You must have data in the table to create a graph.\n" +
@@ -243,7 +239,6 @@ public class MainController {
                 graphFilterComboBox.getItems().clear();
                 graphFilterComboBox.getItems().addAll(crimeTypes);
             }
-
 
         } else {
             graphOptionLabel.setVisible(false);
@@ -266,7 +261,6 @@ public class MainController {
         } else {
             sidebarAccordion.setExpandedPane(filterPane);
         }
-
     }
 
     /**
@@ -317,7 +311,6 @@ public class MainController {
                         checkedTypes.add((String) graphFilterComboBox.getCheckModel().getItem(index));
                     }
                     graphTabController.createCrimesPerTypeOverTimeGraph(currentRecords, checkedTypes);
-
                 }
             }
         }
@@ -348,7 +341,7 @@ public class MainController {
         int radius;
         String arrest = null;
         String domestic = null;
-        Boolean validFilter = true;
+        boolean validFilter = true;
         String text;
 
         text = filterCaseNumberTextField.getText();
@@ -379,7 +372,6 @@ public class MainController {
                 validFilter = false;
             }
         }
-
 
         // Get names of all checked items in crime type CheckComboBox
         IndexedCheckModel checkModel = crimeTypeComboBox.getCheckModel();
@@ -441,8 +433,6 @@ public class MainController {
             }
         }
 
-
-
         // Get value for radius
         radius = (int) Math.round(radiusSlider.getValue());
         radius *= 100;
@@ -460,15 +450,16 @@ public class MainController {
         if (validFilter) {
             filterErrorLabel.setVisible(false);
             Database d = new Database();
-            ArrayList<Record> records = d.getFilter(caseNumber, startDate, endDate, crimeTypes, locationDescriptions, wards, beats, lat, lon, radius, arrest, domestic);
-            d.closeConnection();
+            ArrayList<Record> records = d.getFilter(caseNumber, startDate, endDate, crimeTypes, locationDescriptions,
+                    wards, beats, lat, lon, radius, arrest, domestic);
+            d.disconnectDatabase();
             // Set table to records
             tableTabController.setTableRecords(records);
             refreshMarkers();
             dataAnalyser.updateRecords(records);
+            graphTypeComboBox.getSelectionModel().select(0);
             updateGraphOptions();
             updateAnalysis();
-
         } else {
             filterErrorLabel.setVisible(true);
         }
@@ -489,15 +480,12 @@ public class MainController {
      * Enables slider if lat and long are valid in the filter
      */
     public void checkSliderUnlock () {
-        String lat;
-        String lon;
-        lat = filterLatTextField.getText();
-        lon = filterLongTextField.getText();
+        String lat = filterLatTextField.getText();
+        String lon = filterLongTextField.getText();
+
         // Checks that both lat and long field are valid
-        radiusSlider.setDisable(lat.equals("") && lon.equals("") || lat.equals(null) && lon.equals(null) || (!InputValidator.hasValidDouble(lat) || !InputValidator.hasValidDouble(lon)));
+        radiusSlider.setDisable(lat.equals("") || lon.equals("") || !InputValidator.hasValidDouble(lat) || !InputValidator.hasValidDouble(lon));
     }
-
-
 
     /**
      * Sets all filter parameters back to default
@@ -517,9 +505,9 @@ public class MainController {
         radiusLabel.setText("0 m");
         arrestComboBox.getSelectionModel().select("");
         domesticComboBox.getSelectionModel().select("");
-        Database d = new Database();
-        tableTabController.setTableRecords(d.getAll());
-        d.closeConnection();
+        Database db = new Database();
+        tableTabController.setTableRecords(db.getAll());
+        db.disconnectDatabase();
         filterErrorLabel.setVisible(false);
         refreshMarkers();
         updateGraphOptions();
@@ -580,7 +568,7 @@ public class MainController {
             // the user closed the file chooser
         } catch (Exception e) {
             // something unknown happened
-            System.out.println("Unknown error exporting csv, error: "+e);
+            PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
         }
     }
 
@@ -593,12 +581,13 @@ public class MainController {
         if (filepath != null) {
             //If user imports incorrect filetype it will do nothing and display a pop-up
             if (matchFileType(filepath, ".csv")) {
-                PopupWindow.displayPopup("Error", "Selected file is not a CSV file");
+                PopupWindow.displayPopup("Error", "An unknown error occurred when exporting CSV.\n" +
+                        "Please try again");
                 return;
             }
 
+            Boolean newDB;
             Boolean replace = null;
-            Boolean newDB = null;
             Boolean newDBSuccess = true;
             Boolean csvSuccess = false;
             ArrayList<ArrayList<List<String>>> dataValidation = new ArrayList<>();
@@ -608,9 +597,8 @@ public class MainController {
                 dataValidation = (ArrayList<ArrayList<List<String>>>) csvRows.get(0);
                 csvSuccess = (Boolean) csvRows.get(1);
             } catch (Exception e) {
-                PopupWindow.displayPopup("Error", "Unknown error when importing CSV.\n" +
+                PopupWindow.displayPopup("Error", "An unknown error occurred when importing CSV.\n" +
                                                                "Please try again");
-                System.out.println(e);
             }
 
             if (!csvSuccess) {
@@ -619,23 +607,20 @@ public class MainController {
                 return;
             }
 
-
-
-
             newDB = PopupWindow.displayTwoButtonPopup("Create New Database?", "Do you want to store this data in a new database?", "New Database", "Existing Database");
             if (newDB != null && !newDB) {
                 replace = PopupWindow.displayTwoButtonPopup("Replace data?", "Do you want to replace the current data or append to it?", "Replace", "Append");
             }
+
             if (newDB != null && newDB) {
                 newDBSuccess = newDatabase();
                 replace = false;
             }
+
             if (replace != null && newDBSuccess) {
                 try {
                     Database d = new Database();
                     d.connectDatabase();
-
-
 
                     if (!replace) {
                         d.insertRows(dataValidation.get(0));
@@ -643,18 +628,22 @@ public class MainController {
                     } else {
                         d.replaceRows(dataValidation.get(0));
                     }
+                    d.disconnectDatabase();
+
                     if (dataValidation.get(1).size() != 0) {
                         displayInvalid(dataValidation.get(1));
                     }
-                    ArrayList<Record> records = d.getAll();
+                    Database db = new Database();
+                    ArrayList<Record> records = db.getAll();
+                    db.disconnectDatabase();
                     tableTabController.setTableRecords(records);
-                    d.closeConnection();
+
                     filterSetup();
                     dataAnalyser.updateRecords(records);
                     updateGraphOptions();
 
                 } catch (Exception e) {
-                    System.out.println("Error " + e);
+                    PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
                 }
             }
         }
@@ -669,13 +658,14 @@ public class MainController {
         PopupWindow.displayPopup("Invalid Rows", invalidRows);
 
     }
+
     /**
      * Opens the file explorer for the user to select a save location and then passes
      * this to the database path method which will change the static variable path in database
      * which is accessed every time the database is connected to
      */
     public void changeDatabase() throws IOException, SQLException{
-        String filepath = null;
+        String filepath;
         filepath = getPathToFile("Database", "db");
         if (filepath != null) {
             //Changes the database to the selected path
@@ -684,19 +674,16 @@ public class MainController {
             //If user imports incorrect filetype it will do nothing and display a pop-up
             if(matchFileType(filepath,".db")){
                 PopupWindow.displayPopup("Error", "Selected file is not a database file");
-                d.closeConnection();
+                d.disconnectDatabase();
                 return;
             }
 
             d.setDatabasePath(filepath);
-            d.closeConnection();
+            d.disconnectDatabase();
 
             //Refresh GUI
             tableTabController.refreshTableData();
         }
-
-
-
     }
 
     /**
@@ -707,28 +694,31 @@ public class MainController {
         String filepath = getFileSavePath("Database", "db");
 
         if (!(filepath == null)) {
-
             try{
                 filepath = addExtension(filepath,".db");
                 File file = new File(filepath);
-                file.createNewFile();
-                // Set new database path
-                Database d = new Database();
-                d.setDatabasePath(filepath);
 
+                if (file.createNewFile()) {
+                    // Set new database path
+                    Database d = new Database();
+                    d.setDatabasePath(filepath);
+                    d.disconnectDatabase();
 
-                //Refresh GUI
-                tableTabController.setTableRecords(d.getAll());
-                d.closeConnection();
-                return true;
-            } catch(FileAlreadyExistsException e){
+                    //Refresh GUI
+                    Database db = new Database();
+                    tableTabController.setTableRecords(db.getAll());
+                    db.disconnectDatabase();
+
+                    return true;
+                }
+            }
+            catch(FileAlreadyExistsException e){
                 PopupWindow.displayPopup("Error", "File already exists");
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 // something else went wrong
                 PopupWindow.displayPopup("Error", "Unknown error");
             }
-
-
         }
         return false;
     }
@@ -745,10 +735,11 @@ public class MainController {
         String substr = path.substring(path.length() - extension.length());
 
         //If the correct extension exists return path otherwise append the extension and return
-        if(substr.equals(extension)){
+        if(substr.equals(extension)) {
             return path;
-        }else{
-            return path+=extension;
+        }
+        else {
+            return path + extension;
         }
     }
 
@@ -761,7 +752,6 @@ public class MainController {
      */
     public Boolean matchFileType(String path, String extension){
         String substr = path.substring(path.length() - extension.length());
-
         return !substr.equals(extension);
     }
 
@@ -796,7 +786,6 @@ public class MainController {
             updateAnalysis();
         }
     }
-
 }
 
 

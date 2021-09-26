@@ -264,12 +264,11 @@ public class Record {
      * @return a string with all the data in the record, separated by commas
      */
     public String toString() {
-        String output = String.format("%s, %s, %s, %s, %s, %s, %s, %s, %s, %d, %d, %s, %d, %s, %s, %s",
+        return String.format("%s, %s, %s, %s, %s, %s, %s, %s, %s, %d, %d, %s, %d, %s, %s, %s",
                 this.caseNumber, this.date.format(formatter), this.block, this.iucr, this.primaryDescription,
                 this.secondaryDescription, this.locationDescription, this.arrest,
                 this.domestic, this.beat, this.ward, this.fbicd, this.xcoord, this.ycoord,
                 this.latitude, this.longitude);
-        return output;
     }
 
     /**
@@ -281,19 +280,17 @@ public class Record {
      */
     public String toString(String formatString) {
         String output;
-        switch (formatString){
-            case "labels":
-                output = String.format("Case Number: %s, Date: %s, Block: %s, IUCR: %s, Primary Description: %s, " +
-                                "Secondary Description: %s, Location Description: %s, Arrest: %s, Domestic: %s, " +
-                                "Beat: %d, Ward: %d, FBICD: %s, X Coordinate: %d, Y Coordinate: %s, Latitude: %s, " +
-                                "Longitude: %s",
-                        this.caseNumber, this.date.format(formatter), this.block, this.iucr, this.primaryDescription,
-                        this.secondaryDescription, this.locationDescription, this.arrest, this.domestic, this.beat,
-                        this.ward, this.fbicd, this.xcoord, this.ycoord, this.latitude, this.longitude);
-                break;
-            default: // default to regular behaviour if formatString isn't valid
-                output = this.toString();
-                break;
+        // default to regular behaviour if formatString isn't valid
+        if ("labels".equals(formatString)) {
+            output = String.format("Case Number: %s, Date: %s, Block: %s, IUCR: %s, Primary Description: %s, " +
+                            "Secondary Description: %s, Location Description: %s, Arrest: %s, Domestic: %s, " +
+                            "Beat: %d, Ward: %d, FBICD: %s, X Coordinate: %d, Y Coordinate: %s, Latitude: %s, " +
+                            "Longitude: %s",
+                    this.caseNumber, this.date.format(formatter), this.block, this.iucr, this.primaryDescription,
+                    this.secondaryDescription, this.locationDescription, this.arrest, this.domestic, this.beat,
+                    this.ward, this.fbicd, this.xcoord, this.ycoord, this.latitude, this.longitude);
+        } else {
+            output = this.toString();
         }
         return output;
     }
@@ -301,7 +298,7 @@ public class Record {
     /**
      * Returns the record object as a list of strings.
      * Can be used to iterate over the object easily in a loop.
-     * @return
+     * @return The record in list form
      */
     public List<String> toList() {
         return Arrays.asList(

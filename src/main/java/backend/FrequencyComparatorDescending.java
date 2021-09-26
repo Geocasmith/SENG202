@@ -10,10 +10,15 @@ public class FrequencyComparatorDescending implements Comparator<TypeFrequencyPa
      * Compares TypeFrequencyPair object a and b passed as parameters
      * @param a TypeFrequencyPair object
      * @param b TypeFrequencyPair object
-     * @return true if a < b or false other wise
+     * @return true if a < b or false otherwise
      */
     @Override
     public int compare(TypeFrequencyPair a, TypeFrequencyPair b) {
-        return a.getFrequency() > b.getFrequency() ? -1 : a.getFrequency() == b.getFrequency() ? 0 : 1;
+        int compareResult;
+        compareResult = Long.compare(b.getFrequency(), a.getFrequency());
+        if (compareResult == 0) {
+            compareResult = a.getType().compareTo(b.getType());
+        }
+        return compareResult;
     }
 }

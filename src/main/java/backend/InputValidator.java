@@ -19,19 +19,18 @@ public class InputValidator {
    private static final int latitudeUpperBound = 90;
    private static final int latitudeLowerBound = -90;
 
+   private static final String crimeDescriptionsLocation = "Files/Crime_Descriptions_Data_Source.csv";
+
    /**
     * Initializes set of valid crime descriptions (Primary, Secondary and IUCR information from
     * a given CSV file
-    * @param filename (file where crime descriptions live)
     * @return Set of String descriptions of a crime (IUCR, Primary Description, Secondary Description
     * and FBICD)
     */
-   public static Set<List<String>>  initializeCrimeDescriptions(String filename) throws CsvValidationException, IOException {
-      Set<List<String>> descriptions = new HashSet<>();
+   public static Set<List<String>> initializeCrimeDescriptions() throws CsvValidationException, IOException {
       ArrayList<List<String>> readData;
-      readData = CsvReader.read(filename);
-      descriptions.addAll(readData);
-      return descriptions;
+      readData = CsvReader.read(crimeDescriptionsLocation);
+      return new HashSet<>(readData);
 
    }
 
@@ -42,7 +41,7 @@ public class InputValidator {
     * @return boolean value if the crime descriptions are valid
     */
    public static boolean hasValidCrimeDescriptions(List<String> candidateCrimeDescriptions) throws CsvValidationException, IOException {
-      crimeDescription = initializeCrimeDescriptions("Crime_Descriptions_Data_Source.csv");
+      crimeDescription = initializeCrimeDescriptions();
       return crimeDescription.contains(candidateCrimeDescriptions);
    }
 
@@ -265,7 +264,7 @@ public class InputValidator {
     * Prints valid list of crime descriptions
     */
    public static void printCrimeDescriptions() throws CsvValidationException, IOException { //TODO this isn't used
-      crimeDescription = initializeCrimeDescriptions("Crime_Descriptions_Data_Source.csv");
+      crimeDescription = initializeCrimeDescriptions();
 
       for (List<String> row : crimeDescription)
       {
@@ -316,7 +315,7 @@ public class InputValidator {
     * @return Set of list of Crime Description
     */
    public static Set<List<String>> getCrimeDescriptions() throws CsvValidationException, IOException {
-      crimeDescription = initializeCrimeDescriptions("Crime_Descriptions_Data_Source.csv");
+      crimeDescription = initializeCrimeDescriptions();
       return crimeDescription;
    }
 
@@ -327,7 +326,7 @@ public class InputValidator {
     * @return Set of Strings (Primary Description)
     */
    public static List<String> getSetOfPrimaryDescriptions() throws CsvValidationException, IOException {
-      crimeDescription = initializeCrimeDescriptions("Crime_Descriptions_Data_Source.csv");
+      crimeDescription = initializeCrimeDescriptions();
       Set<String> primaryDes = new HashSet<>();
       for (List<String> descriptions : crimeDescription) {
          primaryDes.add(descriptions.get(1));
@@ -344,7 +343,7 @@ public class InputValidator {
     * @return Set of Strings secondary descriptions if any or null if empty
     */
    public static Set<String> getSetOfSecondaryDescriptions(String primaryDescription) throws CsvValidationException, IOException {
-      crimeDescription = initializeCrimeDescriptions("Crime_Descriptions_Data_Source.csv");
+      crimeDescription = initializeCrimeDescriptions();
       Set<String> secondaryDescription = new HashSet<>();
       if (getSetOfPrimaryDescriptions().contains(primaryDescription)) {
          for (List<String> descriptions : crimeDescription) {
@@ -365,7 +364,7 @@ public class InputValidator {
     * @return returns String (IUCR) of a crime type, if crime type does not exists it returns null
     */
    public static String getIucr(String primaryDescription, String secondaryDescription) throws CsvValidationException, IOException {
-      crimeDescription = initializeCrimeDescriptions("Crime_Descriptions_Data_Source.csv");
+      crimeDescription = initializeCrimeDescriptions();
       if (getSetOfPrimaryDescriptions().contains(primaryDescription)) {
          for (List<String> descriptions : crimeDescription) {
             if (descriptions.get(1).equalsIgnoreCase(primaryDescription) && (descriptions.get(2).equalsIgnoreCase(secondaryDescription))) {
@@ -383,7 +382,7 @@ public class InputValidator {
     * @return returns String (FBICD) of a crime type, if crime type does not exists it returns null
     */
    public static String getFbicd(String primaryDescription, String secondaryDescription) throws CsvValidationException, IOException {
-      crimeDescription = initializeCrimeDescriptions("Crime_Descriptions_Data_Source.csv");
+      crimeDescription = initializeCrimeDescriptions();
       if (getSetOfPrimaryDescriptions().contains(primaryDescription)) {
          for (List<String> descriptions : crimeDescription) {
             if (descriptions.get(1).equalsIgnoreCase(primaryDescription) && (descriptions.get(2).equalsIgnoreCase(secondaryDescription))) {

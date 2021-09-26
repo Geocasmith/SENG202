@@ -112,8 +112,7 @@ DataAnalyser {
 
         ArrayList<TypeFrequencyPair> res = new ArrayList<>();
         long frequency;
-        HashSet types = new HashSet();
-        types.addAll(column);
+        HashSet types = new HashSet(column);
         Map<Object, Long> resultMap = new HashMap<>();
         column.forEach(e -> resultMap.merge(e, 1L, Long::sum));
 
@@ -124,7 +123,6 @@ DataAnalyser {
             pair.setType((String) type);
             pair.setFrequency(frequency);
             res.add(pair);
-
         }
         return res;
     }

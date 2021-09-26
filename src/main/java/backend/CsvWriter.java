@@ -5,7 +5,6 @@ import com.opencsv.CSVWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import static java.lang.String.valueOf;
 
@@ -18,7 +17,6 @@ public class CsvWriter {
      * @param fileName Name of the CSV file to be written
      * @param data data to be recorded into the CSV file
      */
-
     public static void write(String fileName, ArrayList<Record> data) throws IOException {
         CSVWriter writer = new CSVWriter(new FileWriter(fileName));
 
@@ -40,6 +38,4 @@ public class CsvWriter {
         }
         writer.close();
     }
-
-
 }

@@ -18,10 +18,6 @@ public class MainGUI extends Application {
         primaryStage.setMinHeight(840);
         primaryStage.setMinWidth(1020);
         primaryStage.show();
-
-
-
-
     }
 
     public static void main(String[] args) {
