@@ -51,7 +51,6 @@ public class MainController {
     @FXML private TextField filterLongTextField;
     @FXML private Label filterErrorLabel;
 
-
     // Graph Sidebar Elements
     @FXML private ComboBox graphTypeComboBox;
     @FXML private Button generateGraphButton;
@@ -61,11 +60,8 @@ public class MainController {
     private int graphTabCount = 0;
     private int analysisTabCount = 0;
 
-
-
     public MainController() throws SQLException {
     }
-
 
     /**
      * Runs the setup methods for the graph and filter panes, and sets the table tab's parent controller to the
@@ -153,24 +149,24 @@ public class MainController {
             URLConnection connection = url.openConnection();
             connection.connect();
             connected = true;
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             connected = false;
         }
         if (!connected) {
             PopupWindow.displayPopup("Error", "You must be connected to the internet to use this feature");
             mainTabPane.getSelectionModel().select(tableTabPane);
-        } else {
+        }
+        else {
             ArrayList<Record> displayedRecords = tableTabController.getDisplayedRecords();
             if (displayedRecords.size() < 1000) {
                 mapTabController.updateMarkers(displayedRecords);
-            } else {
+            }
+            else {
                 mapTabController.updateMarkers(new ArrayList<>(displayedRecords.subList(0, 999)));
             }
-
         }
-
     }
-
 
     /**
      * Clears the checks in the graph filter combo box, then checks what graphing option has been selected and
@@ -184,22 +180,21 @@ public class MainController {
                 PopupWindow.displayPopup("Error", "You must have data in the table to create a graph.\n" +
                         "Try clearing the filter or importing some data.");
                 graphTypeComboBox.getSelectionModel().select(0);
-            } else {
+            }
+            else {
                 graphOptionLabel.setVisible(false);
                 graphFilterComboBox.setVisible(false);
                 generateGraphButton.setDisable(false);
             }
 
-
         } else if (graphTypeComboBox.getValue().equals("Crimes Per Ward")) {
-
-
             ArrayList<Integer> crimeWards = dataAnalyser.getCrimeWards();
             if (crimeWards.size() == 0) {
                 PopupWindow.displayPopup("Error", "You must have data in the table to create a graph.\n" +
                         "Try clearing the filter or importing some data.");
                 graphTypeComboBox.getSelectionModel().select(0);
-            } else {
+            }
+            else {
                 graphOptionLabel.setText("Select which wards to graph");
                 graphOptionLabel.setVisible(true);
                 graphFilterComboBox.setVisible(true);
@@ -208,9 +203,7 @@ public class MainController {
                 graphFilterComboBox.getItems().addAll(crimeWards);
             }
 
-
         } else if (graphTypeComboBox.getValue().equals("Crimes Per Beat")) {
-
 
             ArrayList<Integer> crimeBeats = dataAnalyser.getCrimeBeats();
             if (crimeBeats.size() == 0) {
@@ -226,10 +219,7 @@ public class MainController {
                 graphFilterComboBox.getItems().addAll(crimeBeats);
             }
 
-
         } else if (graphTypeComboBox.getValue().equals("Crimes Per Type")) {
-
-
             ArrayList<String> crimeTypes = dataAnalyser.getCrimeTypes();
             if (crimeTypes.size() == 0) {
                 PopupWindow.displayPopup("Error", "You must have data in the table to create a graph.\n" +
@@ -243,7 +233,6 @@ public class MainController {
                 graphFilterComboBox.getItems().clear();
                 graphFilterComboBox.getItems().addAll(crimeTypes);
             }
-
 
         } else {
             graphOptionLabel.setVisible(false);
@@ -266,7 +255,6 @@ public class MainController {
         } else {
             sidebarAccordion.setExpandedPane(filterPane);
         }
-
     }
 
     /**
@@ -317,7 +305,6 @@ public class MainController {
                         checkedTypes.add((String) graphFilterComboBox.getCheckModel().getItem(index));
                     }
                     graphTabController.createCrimesPerTypeOverTimeGraph(currentRecords, checkedTypes);
-
                 }
             }
         }
@@ -380,7 +367,6 @@ public class MainController {
             }
         }
 
-
         // Get names of all checked items in crime type CheckComboBox
         IndexedCheckModel checkModel = crimeTypeComboBox.getCheckModel();
         ObservableList<Integer> checkedItems = checkModel.getCheckedIndices();
@@ -441,8 +427,6 @@ public class MainController {
             }
         }
 
-
-
         // Get value for radius
         radius = (int) Math.round(radiusSlider.getValue());
         radius *= 100;
@@ -470,8 +454,6 @@ public class MainController {
             graphTypeComboBox.getSelectionModel().select(0);
             updateGraphOptions();
             updateAnalysis();
-
-
         } else {
             filterErrorLabel.setVisible(true);
         }
@@ -498,8 +480,6 @@ public class MainController {
         // Checks that both lat and long field are valid
         radiusSlider.setDisable(lat.equals("") || lon.equals("") || !InputValidator.hasValidDouble(lat) || !InputValidator.hasValidDouble(lon));
     }
-
-
 
     /**
      * Sets all filter parameters back to default
@@ -621,23 +601,20 @@ public class MainController {
                 return;
             }
 
-
-
-
             newDB = PopupWindow.displayTwoButtonPopup("Create New Database?", "Do you want to store this data in a new database?", "New Database", "Existing Database");
             if (newDB != null && !newDB) {
                 replace = PopupWindow.displayTwoButtonPopup("Replace data?", "Do you want to replace the current data or append to it?", "Replace", "Append");
             }
+
             if (newDB != null && newDB) {
                 newDBSuccess = newDatabase();
                 replace = false;
             }
+
             if (replace != null && newDBSuccess) {
                 try {
                     Database d = new Database();
                     d.connectDatabase();
-
-
 
                     if (!replace) {
                         d.insertRows(dataValidation.get(0));
@@ -675,6 +652,7 @@ public class MainController {
         PopupWindow.displayPopup("Invalid Rows", invalidRows);
 
     }
+
     /**
      * Opens the file explorer for the user to select a save location and then passes
      * this to the database path method which will change the static variable path in database
@@ -700,9 +678,6 @@ public class MainController {
             //Refresh GUI
             tableTabController.refreshTableData();
         }
-
-
-
     }
 
     /**
@@ -713,33 +688,30 @@ public class MainController {
         String filepath = getFileSavePath("Database", "db");
 
         if (!(filepath == null)) {
-
             try{
                 filepath = addExtension(filepath,".db");
                 File file = new File(filepath);
+
                 if (file.createNewFile()) {
                     // Set new database path
                     Database d = new Database();
                     d.setDatabasePath(filepath);
                     d.closeConnection();
 
-
                     //Refresh GUI
                     Database db = new Database();
                     tableTabController.setTableRecords(db.getAll());
                     db.closeConnection();
-
                     return true;
                 }
-
-            } catch(FileAlreadyExistsException e){
+            }
+            catch(FileAlreadyExistsException e){
                 PopupWindow.displayPopup("Error", "File already exists");
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 // something else went wrong
                 PopupWindow.displayPopup("Error", "Unknown error");
             }
-
-
         }
         return false;
     }
@@ -756,9 +728,10 @@ public class MainController {
         String substr = path.substring(path.length() - extension.length());
 
         //If the correct extension exists return path otherwise append the extension and return
-        if(substr.equals(extension)){
+        if(substr.equals(extension)) {
             return path;
-        }else{
+        }
+        else {
             return path + extension;
         }
     }
@@ -772,7 +745,6 @@ public class MainController {
      */
     public Boolean matchFileType(String path, String extension){
         String substr = path.substring(path.length() - extension.length());
-
         return !substr.equals(extension);
     }
 
@@ -807,7 +779,6 @@ public class MainController {
             updateAnalysis();
         }
     }
-
 }
 
 
