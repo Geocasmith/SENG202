@@ -603,7 +603,7 @@ public class Database {
         ArrayList<Record> resultRecords = new ArrayList<>();
 
 
-        if (lat != null&&lon != null) {
+        if (lat != null&&lon != null && radius != 0) {
 
             double latDouble = Double.parseDouble(lat);
             double lonDouble = Double.parseDouble(lon);
