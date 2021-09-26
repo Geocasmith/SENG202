@@ -122,11 +122,14 @@ public class MainController {
         graphSetup();
 
         tableTabController.setParentController(this);
-        dataAnalyser = new DataAnalyser(tableTabController.getDisplayedRecords());
+
         Database d = new Database();
-        tableTabController.setTableRecords(d.getAll());
+        ArrayList<Record> allRecords = d.getAll();
+        tableTabController.setTableRecords(allRecords);
         d.closeConnection();
+        dataAnalyser = new DataAnalyser(allRecords);
         analysisSetUp();
+        updateGraphOptions();
     }
 
     /**
