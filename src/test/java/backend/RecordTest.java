@@ -10,9 +10,9 @@ public class RecordTest {
     Record testRec1, testRec2;
 
     @BeforeEach
-    /**
-     * Creates a record with no location data (x coordinates, y coordinates, latitude, longitude),
-     * and one with all fields filled in.
+    /*
+      Creates a record with no location data (x coordinates, y coordinates, latitude, longitude),
+      and one with all fields filled in.
      */
     public void createTestRecords() {
         List<String> data = Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "Y", "faLse", "334", "7", "6", "", "", "", "");
@@ -23,8 +23,8 @@ public class RecordTest {
 
 
     @Test
-    /**
-     * Check that the getlocation method correctly returns the location.
+    /*
+      Check that the getLocation method correctly returns the location.
      */
     public void locationTest() {
         assertEquals(testRec2.getLocation(), "(41.748486365, -87.602675062)");
@@ -32,8 +32,8 @@ public class RecordTest {
 
 
     @Test
-    /**
-     * Checks that getLocation returns null properly.
+    /*
+      Checks that getLocation returns null properly.
      */
     public void nullLocationTest() {
         assertNull(testRec1.getLocation());
@@ -41,8 +41,8 @@ public class RecordTest {
 
 
     @Test
-    /**
-     * Checks that values are passed in correctly and that the toString() method works with the "labels" option.
+    /*
+      Checks that values are passed in correctly and that the toString() method works with the "labels" option.
      */
     public void toStringLabelsTest() {
         String desiredString2 = "Case Number: JE163990, Date: 11/23/2020 03:05:00 PM, Block: 073XX S SOUTH SHORE DR, IUCR: 820, Primary Description: THEFT, Secondary Description: $500 AND UNDER, Location Description: APARTMENT, Arrest: Y, Domestic: N, Beat: 334, Ward: 7, FBICD: 6, X Coordinate: -1, Y Coordinate: -1, Latitude: null, Longitude: null";
@@ -53,8 +53,8 @@ public class RecordTest {
 
 
     @Test
-    /**
-     * Checks that toString() can work with bad or no format string, ie. it defaults to the behaviour of toString().
+    /*
+      Checks that toString() can work with bad or no format string, i.e. it defaults to the behaviour of toString().
      */
     public void toStringBadFormatTest() {
         String desiredString2 = "JE163990, 11/23/2020 03:05:00 PM, 073XX S SOUTH SHORE DR, 820, THEFT, $500 AND UNDER, APARTMENT, Y, N, 334, 7, 6, -1, -1, null, null";
@@ -65,8 +65,8 @@ public class RecordTest {
 
 
     @Test
-    /**
-     * Checks that values are passed in correctly and that the toString() method works with no options.
+    /*
+      Checks that values are passed in correctly and that the toString() method works with no options.
      */
     public void toStringNoLabelsTest() {
         String desiredString2 = "JE163990, 11/23/2020 03:05:00 PM, 073XX S SOUTH SHORE DR, 820, THEFT, $500 AND UNDER, APARTMENT, Y, N, 334, 7, 6, -1, -1, null, null";
@@ -77,8 +77,8 @@ public class RecordTest {
 
 
     @Test
-    /**
-     * Checks that the correct list is created when asked for.
+    /*
+      Checks that the correct list is created when asked for.
      */
     public void toListTest() {
         List<String> desiredList1 = Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "Y", "N", "334", "7", "6", "-1", "-1", "null", "null");
