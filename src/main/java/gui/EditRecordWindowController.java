@@ -86,24 +86,19 @@ public class EditRecordWindowController {
                     Set<String> des = new HashSet<>();
                     des = InputValidator.getSetOfSecondaryDescriptions(textFields.get(4).getText());
 
-                    TextFields.bindAutoCompletion(textFields.get(5), des);
-                    textFields.get(4).requestFocus();
-                    textFields.get(5).requestFocus();
+                    TextFields.bindAutoCompletion(textFields.get(5), des).getCompletionTarget();
+
+
                     textFields.get(5).textProperty().addListener(new ChangeListener<>() {
                         @Override
                         public void changed(ObservableValue<? extends String> observable,
                                             String oldValue, String newValue) {
                             try {
                                 textFields.get(3).setText(InputValidator.getIucr(textFields.get(4).getText(), textFields.get(5).getText()));
+                                textFields.get(11).setText(InputValidator.getFbicd(textFields.get(4).getText(), textFields.get(5).getText()));
                             }  catch (IOException | CsvValidationException e) {
                                 PopupWindow.displayPopup("Error", e.getMessage());
                             }
-                            try {
-                                textFields.get(11).setText(InputValidator.getFbicd(textFields.get(4).getText(), textFields.get(5).getText()));
-                            } catch (IOException | CsvValidationException e) {
-                                PopupWindow.displayPopup("Error", e.getMessage());
-                            }
-
 
                         }
                     });
@@ -128,11 +123,13 @@ public class EditRecordWindowController {
             public void changed(ObservableValue<? extends String> observable,
                                 String oldValue, String newValue) {
                 textFields.get(5).clear();
-
-
+                textFields.get(3).clear();
+                textFields.get(11).clear();
 
             }
         });
+
+
 
 
 
