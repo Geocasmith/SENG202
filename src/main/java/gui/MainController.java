@@ -373,7 +373,7 @@ public class MainController {
      */
     public void updateRadiusText() {
         String radius = String.valueOf(Math.round(radiusSlider.getValue()));
-        radiusLabel.setText(radius + " km");
+        radiusLabel.setText(radius + " m");
     }
 
     /**
@@ -562,7 +562,7 @@ public class MainController {
         filterLongTextField.setText("");
         radiusSlider.setValue(0);
         radiusSlider.setDisable(true);
-        radiusLabel.setText("0 km");
+        radiusLabel.setText("0 m");
         arrestComboBox.getSelectionModel().select("");
         domesticComboBox.getSelectionModel().select("");
         Database d = new Database();

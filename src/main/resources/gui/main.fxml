@@ -122,7 +122,7 @@
                         </Label>
                         <TextField fx:id="filterLatTextField" layoutX="26.0" layoutY="418.0" onAction="#checkSliderUnlock" onKeyTyped="#checkSliderUnlock" prefHeight="25.0" prefWidth="70.0" promptText="Lat" />
                         <TextField fx:id="filterLongTextField" layoutX="104.0" layoutY="418.0" onAction="#checkSliderUnlock" onKeyTyped="#checkSliderUnlock" prefHeight="25.0" prefWidth="70.0" promptText="Long" />
-                        <Slider fx:id="radiusSlider" blockIncrement="5.0" layoutX="27.0" layoutY="465.0" onKeyReleased="#updateRadiusText" onMouseDragged="#updateRadiusText" prefHeight="14.0" prefWidth="125.0" />
+                        <Slider fx:id="radiusSlider" blockIncrement="100.0" layoutX="11.0" layoutY="465.0" majorTickUnit="1000.0" max="10000.0" minorTickCount="5" onKeyReleased="#updateRadiusText" onMouseDragged="#updateRadiusText" prefHeight="14.0" prefWidth="125.0" snapToTicks="true" />
                         <Label alignment="CENTER" layoutX="-4.0" layoutY="443.0" prefHeight="17.0" prefWidth="200.0" text="Radius">
                            <opaqueInsets>
                               <Insets top="5.0" />
@@ -141,7 +141,7 @@
                         <Label alignment="CENTER" layoutX="102.0" layoutY="515.0" prefHeight="17.0" prefWidth="100.0" text="Domestic" />
                         <ComboBox fx:id="arrestComboBox" layoutX="21.0" layoutY="538.0" prefWidth="60.0" />
                         <ComboBox fx:id="domesticComboBox" layoutX="122.0" layoutY="538.0" prefWidth="60.0" />
-                        <Label fx:id="radiusLabel" layoutX="150.0" layoutY="462.0" text="0 km">
+                        <Label fx:id="radiusLabel" layoutX="136.0" layoutY="462.0" prefHeight="20.0" prefWidth="58.0" text="0 m">
                            <font>
                               <Font size="14.0" />
                            </font>
