@@ -18,9 +18,6 @@ class InputValidatorTest {
             "CRIMINAL TRESPASS", "GAMBLING", "OTHER OFFENSE", "CONCEALED CARRY LICENSE VIOLATION",
             "OTHER NARCOTIC VIOLATION", "NON-CRIMINAL", "PUBLIC PEACE VIOLATION", "BURGLARY", "KIDNAPPING"));
 
-
-
-
     @Test
     void hasValidCrimeDescriptions() throws CsvValidationException, IOException {
         List<String> crimeDesc = new ArrayList<String>(Arrays.asList("2095", "NARCOTICS", "ATTEMPT POSSESSION NARCOTICS", "18"));
@@ -31,8 +28,6 @@ class InputValidatorTest {
         assertTrue(InputValidator.hasValidCrimeDescriptions(crimeDesc));
         crimeDesc = new ArrayList<String>(Arrays.asList("880", "THEFT", "PURSE-SNATCHING", "7"));
         assertFalse(InputValidator.hasValidCrimeDescriptions(crimeDesc));
-
-
     }
 
 
@@ -42,12 +37,11 @@ class InputValidatorTest {
         assertFalse(InputValidator.hasValidCaseNumber("D0022222"));
         assertFalse(InputValidator.hasValidCaseNumber("DJt00002"));
         assertFalse(InputValidator.hasValidCaseNumber("ABCDEFGH"));
-
     }
 
 
     @Test
-    void hasValidDateAndTimeFormatTest() throws IOException {
+    void hasValidDateAndTimeFormatTest() {
         assertTrue(InputValidator.hasValidDateAndTimeFormat("06/15/2021 09:30:00 AM"));
         assertFalse(InputValidator.hasValidDateAndTimeFormat("06/15/2021 09:3ss0:00 AM"));
         assertFalse(InputValidator.hasValidDateAndTimeFormat("06/15/2021"));
@@ -77,26 +71,23 @@ class InputValidatorTest {
                 "POSSESSION - EXPLOSIVE / INCENDIARY DEVICE", "BY EXPLOSIVE",
                 "ATTEMPT ARSON", "POSSESSION - CHEMICAL / DRY-ICE DEVICE");
         assertEquals(secDes, InputValidator.getSetOfSecondaryDescriptions("ARSON"));
-
     }
+
 
     @Test
     void getIUCRTest() throws CsvValidationException, IOException {
-
         assertEquals("1025", InputValidator.getIucr("ARSON", "AGGRAVATED"));
         assertEquals("041A", InputValidator.getIucr("BATTERY", "AGGRAVATED - HANDGUN"));
-
-
     }
+
 
     @Test
     void getFbicdTest() throws CsvValidationException, IOException {
 
         assertEquals("04B", InputValidator.getFbicd("BATTERY", "AGGRAVATED - HANDGUN"));
         assertEquals("15", InputValidator.getFbicd("CONCEALED CARRY LICENSE VIOLATION", "ARMED WHILE UNDER THE INFLUENCE"));
-
-
     }
+
 
     @Test
     void validTest() throws CsvValidationException, IOException {
@@ -107,6 +98,7 @@ class InputValidatorTest {
         List<String> testData2 = Arrays.asList("NHJ73465", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "absolutely", "N", "severely", "7", "6", "", "", "", "");
         assertFalse(InputValidator.isValidRecord(testData2, true));
     }
+
 
     @Test // this test runs on lists of strings, not record objects, because user input is in that format
     void feedbackTest() throws CsvValidationException, IOException {
@@ -129,6 +121,4 @@ class InputValidatorTest {
         assertEquals(desiredList3, InputValidator.recordEntryFeedbackLong(testData3, true));
         assertEquals(desiredList4, InputValidator.recordEntryFeedbackLong(testData4, true));
     }
-
-
 }

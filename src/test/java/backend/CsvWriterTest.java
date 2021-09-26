@@ -11,8 +11,9 @@ import java.util.List;
  * Test class for CsvWriter
  */
 class CsvWriterTest {
+
     /**
-     *
+     * Gets the CSV reader to read a fle and then write it to a file.
      * @throws IOException
      * @throws CsvValidationException
      */
@@ -28,21 +29,5 @@ class CsvWriterTest {
         }
         CsvWriter testWrite = new CsvWriter();
         testWrite.write("./Files/Test.csv", recordsList);
-
-
     }
-////Read empty, write empty, read incorrect format, read wrong file type
-//    @Test
-//    public void readWriteTest() throws IOException, CsvValidationException, SQLException, ParseException {
-//        CsvReader cs = new CsvReader();
-//        Database d = new Database();
-//        d.connectDatabase("crimeRecords");
-//        //d.insertRows(cs.read("./Files/Test.csv"));
-//
-//
-//
-//
-//
-//
-//    }
 }

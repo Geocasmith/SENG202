@@ -21,6 +21,7 @@ public class RecordTest {
         testRec2 = new Record(data);
     }
 
+
     @Test
     /**
      * Check that the getlocation method correctly returns the location.
@@ -29,6 +30,7 @@ public class RecordTest {
         assertEquals(testRec2.getLocation(), "(41.748486365, -87.602675062)");
     }
 
+
     @Test
     /**
      * Checks that getLocation returns null properly.
@@ -36,6 +38,7 @@ public class RecordTest {
     public void nullLocationTest() {
         assertNull(testRec1.getLocation());
     }
+
 
     @Test
     /**
@@ -48,6 +51,7 @@ public class RecordTest {
         assertEquals(desiredString3, testRec2.toString("labels"));
     }
 
+
     @Test
     /**
      * Checks that toString() can work with bad or no format string, ie. it defaults to the behaviour of toString().
@@ -59,6 +63,7 @@ public class RecordTest {
         assertEquals(desiredString3, testRec2.toString("1475hv0917"));
     }
 
+
     @Test
     /**
      * Checks that values are passed in correctly and that the toString() method works with no options.
@@ -69,6 +74,7 @@ public class RecordTest {
         String desiredString3 = "JE163990, 11/23/2020 03:05:00 PM, 073XX S SOUTH SHORE DR, 820, THEFT, $500 AND UNDER, APARTMENT, N, Y, 334, 7, 6, 1183633, 1851786, 41.748486365, -87.602675062";
         assertEquals(desiredString3, testRec2.toString());
     }
+
 
     @Test
     /**

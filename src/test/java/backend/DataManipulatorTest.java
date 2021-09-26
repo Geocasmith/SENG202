@@ -1,16 +1,12 @@
 package backend;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class DataManipulatorTest {
-    Record testRecord1, testRecord2;
+    Record testRecord1;
     ArrayList<String> data;
     DataManipulator dataManipulatorInstance;
     ArrayList<Record> recordsList = new ArrayList<>();
@@ -29,8 +25,9 @@ public class DataManipulatorTest {
         data = new ArrayList<>(Arrays.asList("JE1639901", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "N", "N", "334", "7", "6", "", "", "", ""));
         testRecord1 = new Record(data);
         assertTrue(dataManipulatorInstance.addLine(2,testRecord1));
-
     }
+
+
     @Test
     public void getDataToGraphTest()
     {
@@ -47,10 +44,5 @@ public class DataManipulatorTest {
         dataCol2.add("820");
         dataToGraphTest.add(dataCol1);
         dataToGraphTest.add(dataCol2);
-        //assertEquals(dataToGraphTest, dataManipulatorInstance.getCurrentDataToGraph(0, 3));
-
-
     }
-
-
 }
