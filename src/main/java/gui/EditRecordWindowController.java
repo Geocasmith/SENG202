@@ -123,8 +123,7 @@ public class EditRecordWindowController {
             public void changed(ObservableValue<? extends String> observable,
                                 String oldValue, String newValue) {
                 textFields.get(5).clear();
-                textFields.get(3).clear();
-                textFields.get(11).clear();
+
 
             }
         });
