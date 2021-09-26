@@ -201,7 +201,7 @@ public class TableTabController {
             }
             mainTableView.getItems().removeAll(selectedRows);
             mainTableView.getSelectionModel().clearSelection();
-            d.closeConnection();
+            d.disconnectDatabase();
             PopupWindow.displayPopup("Success", num + " rows successfully deleted.");
         }
     }

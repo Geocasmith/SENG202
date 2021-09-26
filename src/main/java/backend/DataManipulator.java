@@ -196,7 +196,7 @@ private ArrayList<Record> currentData;
     public static ArrayList<Record> getAllRecords() throws SQLException {
         Database db = new Database();
         ArrayList<Record> currentRecords = db.getAll();
-        db.closeConnection();
+        db.disconnectDatabase();
         return currentRecords;
     }
 
@@ -213,7 +213,7 @@ private ArrayList<Record> currentData;
         db.connectDatabase();
         dataToGraph.add(db.extractCol(col1));
         dataToGraph.add(db.extractCol(col2));
-        db.closeConnection();
+        db.disconnectDatabase();
         return dataToGraph;
 
     }

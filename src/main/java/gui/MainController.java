@@ -79,7 +79,7 @@ public class MainController {
         tableTabController.setParentController(this);
         Database db = new Database();
         ArrayList<Record> allRecords = db.getAll();
-        db.closeConnection();
+        db.disconnectDatabase();
         tableTabController.setTableRecords(allRecords);
         dataAnalyser = new DataAnalyser(allRecords);
         analysisSetUp();
@@ -103,7 +103,7 @@ public class MainController {
         Database d = new Database();
         d.connectDatabase();
         ArrayList<String> locationDescriptions  = (ArrayList<String>)(ArrayList<?>)(d.extractCol("LOCATIONDESCRIPTION"));
-        d.closeConnection();
+        d.disconnectDatabase();
         // Remove duplicate values
         locationDescriptions = new ArrayList<>(new HashSet<>(locationDescriptions));
 
@@ -462,7 +462,7 @@ public class MainController {
             Database d = new Database();
             ArrayList<Record> records = d.getFilter(caseNumber, startDate, endDate, crimeTypes, locationDescriptions,
                     wards, beats, lat, lon, radius, arrest, domestic);
-            d.closeConnection();
+            d.disconnectDatabase();
             // Set table to records
             tableTabController.setTableRecords(records);
             refreshMarkers();
@@ -521,7 +521,7 @@ public class MainController {
         domesticComboBox.getSelectionModel().select("");
         Database db = new Database();
         tableTabController.setTableRecords(db.getAll());
-        db.closeConnection();
+        db.disconnectDatabase();
         filterErrorLabel.setVisible(false);
         refreshMarkers();
         updateGraphOptions();
@@ -645,14 +645,14 @@ public class MainController {
                     } else {
                         d.replaceRows(dataValidation.get(0));
                     }
-                    d.closeConnection();
+                    d.disconnectDatabase();
 
                     if (dataValidation.get(1).size() != 0) {
                         displayInvalid(dataValidation.get(1));
                     }
                     Database db = new Database();
                     ArrayList<Record> records = db.getAll();
-                    db.closeConnection();
+                    db.disconnectDatabase();
                     tableTabController.setTableRecords(records);
 
                     filterSetup();
@@ -690,12 +690,12 @@ public class MainController {
             //If user imports incorrect filetype it will do nothing and display a pop-up
             if(matchFileType(filepath,".db")){
                 PopupWindow.displayPopup("Error", "Selected file is not a database file");
-                d.closeConnection();
+                d.disconnectDatabase();
                 return;
             }
 
             d.setDatabasePath(filepath);
-            d.closeConnection();
+            d.disconnectDatabase();
 
             //Refresh GUI
             tableTabController.refreshTableData();
@@ -721,13 +721,13 @@ public class MainController {
                     // Set new database path
                     Database d = new Database();
                     d.setDatabasePath(filepath);
-                    d.closeConnection();
+                    d.disconnectDatabase();
 
 
                     //Refresh GUI
                     Database db = new Database();
                     tableTabController.setTableRecords(db.getAll());
-                    db.closeConnection();
+                    db.disconnectDatabase();
 
                     return true;
                 }
