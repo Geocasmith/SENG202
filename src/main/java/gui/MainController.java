@@ -2,7 +2,6 @@ package gui;
 
 import backend.*;
 import backend.Record;
-import backend.Database;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -124,9 +123,9 @@ public class MainController {
 
         tableTabController.setParentController(this);
         dataAnalyser = new DataAnalyser(tableTabController.getDisplayedRecords());
-//        Database d = new Database();
-//        tableTabController.setTableRecords(d.getAll());
-//        d.closeConnection();
+        Database d = new Database();
+        tableTabController.setTableRecords(d.getAll());
+        d.closeConnection();
         analysisSetUp();
     }
 
@@ -571,6 +570,8 @@ public class MainController {
         d.closeConnection();
         filterErrorLabel.setVisible(false);
         refreshMarkers();
+        updateGraphOptions();
+        updateAnalysis();
     }
 
     /**

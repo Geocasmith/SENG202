@@ -3,11 +3,8 @@ package gui;
 import backend.GraphCreator;
 import backend.Record;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
-
 import java.util.ArrayList;
 
 public class GraphTabController {

@@ -1,13 +1,11 @@
 package gui;
 
 import backend.Record;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MapTabController {
     @FXML

@@ -9,8 +9,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 public class PopupWindow {
 
     /**
