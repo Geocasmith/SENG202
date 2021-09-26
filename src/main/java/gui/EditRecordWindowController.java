@@ -39,8 +39,8 @@ public class EditRecordWindowController {
 
     private TableTabController parentController; // gives access to table methods, and thus main controller methods
 
-    private static final List<String> textFieldNames = Arrays.asList("Case number", "Date", "Block", "Primary description",
-            "Secondary description", "IUCR", "FBICD", "Location description", "Arrest", "Domestic",
+    private static final List<String> textFieldNames = Arrays.asList("Case number", "Date", "Block", "IUCR",
+            "Primary description", "Secondary description", "Location description", "Arrest", "Domestic", "FBICD",
             "Beat", "Ward", "X-Coordinate", "Y-Coordinate", "Latitude", "Longitude");
     private List<TextField> textFields = new ArrayList<>();
     private boolean edited = false; // was a record changed? - used to prompt for a table refresh on close
@@ -65,7 +65,7 @@ public class EditRecordWindowController {
             if (i < 12) {
                 reqLabel.setText("* Required"); // only coordinates and lat/long are optional
                 if (i == 1) { reqLabel.setText("* Required" + "\n"  + "mm/dd/yyyy hh:mm:ss am/pm"); }
-                if (i == 8 || i == 9) { reqLabel.setText("* Required (y/n)"); }
+                if (i == 7 || i == 8) { reqLabel.setText("* Required (y/n)"); }
             }
 
 
@@ -76,28 +76,28 @@ public class EditRecordWindowController {
 
 
         // Binds primary description text field to set of primary descriptions
-        TextFields.bindAutoCompletion(textFields.get(3),InputValidator.getSetOfPrimaryDescriptions());
+        TextFields.bindAutoCompletion(textFields.get(4),InputValidator.getSetOfPrimaryDescriptions());
 
-        // Binds primary description text field to set of available set secondary descriptions
-        textFields.get(4).setOnMouseClicked(new EventHandler<MouseEvent>() {
+        // Binds Secondary description text field to set of available set secondary descriptions
+        textFields.get(5).setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
                     Set<String> des = new HashSet<>();
-                    des = InputValidator.getSetOfSecondaryDescriptions(textFields.get(3).getText());
+                    des = InputValidator.getSetOfSecondaryDescriptions(textFields.get(4).getText());
 
-                    TextFields.bindAutoCompletion(textFields.get(4), des);
-                    textFields.get(4).textProperty().addListener(new ChangeListener<>() {
+                    TextFields.bindAutoCompletion(textFields.get(5), des);
+                    textFields.get(5).textProperty().addListener(new ChangeListener<>() {
                         @Override
                         public void changed(ObservableValue<? extends String> observable,
                                             String oldValue, String newValue) {
                             try {
-                                textFields.get(5).setText(InputValidator.getIucr(textFields.get(3).getText(), textFields.get(4).getText()));
+                                textFields.get(3).setText(InputValidator.getIucr(textFields.get(4).getText(), textFields.get(5).getText()));
                             }  catch (IOException | CsvValidationException e) {
                                 PopupWindow.displayPopup("Error", e.getMessage());
                             }
                             try {
-                                textFields.get(6).setText(InputValidator.getFbicd(textFields.get(3).getText(), textFields.get(4).getText()));
+                                textFields.get(9).setText(InputValidator.getFbicd(textFields.get(4).getText(), textFields.get(5).getText()));
                             } catch (IOException | CsvValidationException e) {
                                 PopupWindow.displayPopup("Error", e.getMessage());
                             }
@@ -107,7 +107,7 @@ public class EditRecordWindowController {
                     });
 
                 } catch (NullPointerException | IOException | CsvValidationException e) {
-                    textFields.get(3).requestFocus();
+                    textFields.get(4).requestFocus();
                     PopupWindow.displayPopup("Error", "Enter Primary description first");
 
                 }
@@ -121,13 +121,13 @@ public class EditRecordWindowController {
         /* Resets associated text fields of IUCR, FBICD, Secondary description whenever change is made to
            the primary description text field
          */
-        textFields.get(3).textProperty().addListener(new ChangeListener<String>() {
+        textFields.get(4).textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable,
                                 String oldValue, String newValue) {
-                textFields.get(4).clear();
                 textFields.get(5).clear();
-                textFields.get(6).clear();
+                textFields.get(3).clear();
+                textFields.get(9).clear();
 
             }
         });
@@ -138,7 +138,8 @@ public class EditRecordWindowController {
         ArrayList<String> locationDescriptions  = (ArrayList<String>)(ArrayList<?>)(db.extractCol("LOCATIONDESCRIPTION"));
         locationDescriptions = new ArrayList<>(new HashSet<>(locationDescriptions));
         Collections.sort(locationDescriptions);
-        TextFields.bindAutoCompletion(textFields.get(7),locationDescriptions);
+        TextFields.bindAutoCompletion(textFields.get(6),locationDescriptions);
+
 
 
 
@@ -157,6 +158,7 @@ public class EditRecordWindowController {
         if (record != null) {
             edit = true;
             List<String> recStrings = record.toList();
+
             for (int i = 0; i < textFieldNames.size(); i++) {
                 textFields.get(i).setText(recStrings.get(i));
             }
