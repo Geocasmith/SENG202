@@ -60,6 +60,7 @@ public class TableTabController {
                 try {
                     editRow();
                 } catch (IOException | SQLException e) {
+                    PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
                 }
             }
         });
@@ -70,6 +71,7 @@ public class TableTabController {
                 try {
                     deleteSelectedRows();
                 } catch (SQLException e) {
+                    PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
                 }
             }
         });
@@ -185,7 +187,7 @@ public class TableTabController {
                     try {
                         setupEditRow(rowData);
                     } catch (IOException e) {
-                        
+                        PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
                     }
                 } else if (event.getClickCount() == 1 && (! row.isEmpty()) ) {
                     Record rowData = row.getItem();
