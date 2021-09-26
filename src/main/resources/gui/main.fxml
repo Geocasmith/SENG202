@@ -93,13 +93,13 @@
                         </Label>
                         <TextField fx:id="filterCaseNumberTextField" layoutX="64.0" layoutY="60.0" prefHeight="25.0" prefWidth="70.0" promptText="Case Number" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                         <Label alignment="CENTER" layoutY="123.0" prefWidth="200.0" text="From" />
-                        <DatePicker fx:id="filterStartDate" layoutX="13.0" layoutY="140.0" />
+                        <DatePicker fx:id="filterStartDate" layoutX="18.0" layoutY="140.0" prefHeight="26.0" prefWidth="160.0" />
                         <Label alignment="CENTER" layoutY="165.0" prefWidth="200.0" text="To" textAlignment="CENTER">
                            <padding>
                               <Insets bottom="5.0" top="5.0" />
                            </padding>
                         </Label>
-                        <DatePicker fx:id="filterEndDate" layoutX="13.0" layoutY="192.0" />
+                        <DatePicker fx:id="filterEndDate" layoutX="18.0" layoutY="192.0" prefHeight="26.0" prefWidth="160.0" />
                         <Label alignment="CENTER" layoutY="98.0" prefHeight="17.0" prefWidth="200.0" text="Date Range">
                            <font>
                               <Font size="16.0" />
@@ -108,12 +108,12 @@
                         <Separator layoutX="1.0" layoutY="232.0" prefWidth="200.0" />
                         <TextField fx:id="filterWardTextField" layoutX="26.0" layoutY="374.0" prefHeight="25.0" prefWidth="70.0" promptText="Ward" />
                         <TextField fx:id="filterBeatsTextField" layoutX="104.0" layoutY="374.0" prefHeight="25.0" prefWidth="70.0" promptText="Beat" />
-                        <Label alignment="CENTER" layoutY="234.0" prefHeight="17.0" prefWidth="200.0" text="Crime Types">
+                        <Label alignment="CENTER" layoutY="234.0" prefHeight="17.0" prefWidth="200.0" text="Crime Type">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <CheckComboBox fx:id="crimeTypeComboBox" layoutX="40.0" layoutY="266.0" title="Select Crime Types" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <CheckComboBox fx:id="crimeTypeComboBox" layoutX="40.0" layoutY="266.0" title="" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                         <Separator layoutY="303.0" prefWidth="200.0" />
                         <Label alignment="CENTER" layoutY="305.0" prefHeight="17.0" prefWidth="200.0" text="Location">
                            <font>
@@ -142,14 +142,14 @@
                         <ComboBox fx:id="arrestComboBox" layoutX="21.0" layoutY="538.0" prefWidth="60.0" />
                         <ComboBox fx:id="domesticComboBox" layoutX="122.0" layoutY="538.0" prefWidth="60.0" />
                         <Label fx:id="radiusLabel" layoutX="136.0" layoutY="462.0" prefHeight="20.0" prefWidth="58.0" text="0 m">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
                            <padding>
                               <Insets left="4.0" />
                            </padding>
+                           <font>
+                              <Font size="12.0" />
+                           </font>
                         </Label>
-                        <CheckComboBox fx:id="locationDescriptionComboBox" layoutX="40.0" layoutY="339.0" title="Location Descriptions" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <CheckComboBox fx:id="locationDescriptionComboBox" layoutX="40.0" layoutY="339.0" prefWidth="172.0" title="" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                         <Label fx:id="filterErrorLabel" alignment="CENTER" contentDisplay="CENTER" layoutY="591.0" prefHeight="34.0" prefWidth="200.0" text="Error Text" textAlignment="CENTER" textFill="#fc0606" visible="false" wrapText="true" />
                         <Button layoutY="670.0" mnemonicParsing="false" onAction="#clearFilters" prefWidth="200.0" styleClass="clearFilterButton" text="Clear Filter" AnchorPane.bottomAnchor="59.0" />
                         <Button layoutX="47.0" layoutY="692.0" mnemonicParsing="false" onAction="#applyFilters" prefHeight="25.0" prefWidth="107.0" styleClass="applyFilterButton" text="Apply Filter" textAlignment="CENTER" AnchorPane.bottomAnchor="29.0" />
@@ -170,10 +170,10 @@
                         <Separator layoutX="1.0" layoutY="135.0" prefHeight="0.0" prefWidth="200.0" />
                         <Separator layoutX="194.0" orientation="VERTICAL" prefHeight="3000.0" prefWidth="12.0" />
                         <CheckComboBox fx:id="graphFilterComboBox" layoutX="26.0" layoutY="190.0" prefHeight="25.0" prefWidth="150.0" visible="false" />
-                        <Button fx:id="generateGraphButton" disable="true" layoutX="49.0" layoutY="234.0" mnemonicParsing="false" onAction="#generateGraph" text="Generate Graph" />
-                        <Label layoutX="41.0" layoutY="69.0" text="Select a type of graph" />
-                        <Label fx:id="graphOptionLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="7.0" layoutY="159.0" prefHeight="17.0" prefWidth="187.0" text="Select" textAlignment="CENTER" visible="false" wrapText="true" />
-                        <Label alignment="CENTER" layoutX="10.0" layoutY="602.0" prefHeight="108.0" prefWidth="179.0" text="Note: The graph takes data from the table, meaning all filters applied to the table are applied to the graph. Clear the filters before graphing if you don't want this functionality." wrapText="true" />
+                        <Button fx:id="generateGraphButton" disable="true" layoutX="38.0" layoutY="234.0" mnemonicParsing="false" onAction="#generateGraph" text="Generate Graph" />
+                        <Label layoutX="32.0" layoutY="67.0" text="Select a type of graph" />
+                        <Label fx:id="graphOptionLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="147.0" prefHeight="34.0" prefWidth="187.0" text="Select" textAlignment="CENTER" visible="false" wrapText="true" />
+                        <Label alignment="CENTER" layoutX="10.0" layoutY="587.0" prefHeight="123.0" prefWidth="179.0" text="Note: The graph takes data from the table, meaning all filters applied to the table are applied to the graph. Clear the filters before graphing if you don't want this functionality." wrapText="true" />
                      </children>
                   </AnchorPane>
                </content>

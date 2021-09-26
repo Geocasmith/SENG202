@@ -159,11 +159,11 @@ public class MainController {
         }
         else {
             ArrayList<Record> displayedRecords = tableTabController.getDisplayedRecords();
-            if (displayedRecords.size() < 1000) {
+            if (displayedRecords.size() < 500) {
                 mapTabController.updateMarkers(displayedRecords);
             }
             else {
-                mapTabController.updateMarkers(new ArrayList<>(displayedRecords.subList(0, 999)));
+                mapTabController.updateMarkers(new ArrayList<>(displayedRecords.subList(0, 499)));
             }
 
         }
