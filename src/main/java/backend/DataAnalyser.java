@@ -69,20 +69,14 @@ DataAnalyser {
     /**
      * Uses the Haversine formula to calculate the difference between the two crimes in meters, allowing for the
      * curvature of the earth
-     * @param record1 the first crime record
-     * @param record2 the second crime record
+     * @param record1Lat the first crime record's latitude
+     * @param record1Long the second crime record's longitude
+     * @param record2Lat the first crime record's latitude
+     * @param record2Long the second crime record's longitude
      * @return an integer distance between the two crimes in meters, or -1 if either
      *         of the records are missing location data
      */
-    public int calculateLocationDifferenceMeters(Record record1, Record record2) {
-        if (record1.getLocation() == null || record2.getLocation() == null) {
-            return -1;
-        }
-
-        double record1Lat = record1.getLatitude();
-        double record1Long = record1.getLongitude();
-        double record2Lat = record2.getLatitude();
-        double record2Long = record2.getLongitude();
+    public int calculateLocationDifferenceMeters(double record1Lat, double record1Long, double record2Lat, double record2Long) {
 
         double earthRadius = 6371;
 
@@ -101,6 +95,14 @@ DataAnalyser {
         // Convert to meters and round to the nearest integer
         return (int) Math.round(result * 1000.0);
     }
+
+    public int calculateLocationDifferenceMeters(Record record1, Record record2) {
+        if (record1.getLocation() == null || record2.getLocation() == null) {
+            return -1;
+        }
+        return calculateLocationDifferenceMeters(record1.getLatitude(), record1.getLongitude(), record2.getLatitude(), record2.getLongitude());
+    }
+
 
     /**
      * Takes a data column and returns list of data column items together with their appearance frequency

@@ -23,6 +23,7 @@ public class Database {
     private static Connection connection;
     private static String databasePath = "./Files/crimeRecords.db"; //default path
     private static boolean notEmpty = false;
+    private DataAnalyser dataAnalyser = new DataAnalyser();
     private static List<String> columns = Arrays.asList("IUCR TEXT", "PRIMARYDESCRIPTION TEXT", "SECONDARYDESCRIPTION TEXT",
             "LOCATIONDESCRIPTION TEXT", "ARREST TEXT", "DOMESTIC TEXT", "BEAT INTEGER", "WARD INTEGER", "FBICD TEXT",
             "XCOORDINATE INTEGER", "YCOORDINATE INTEGER", "LATITUDE REAL", "LONGITUDE REAL", "UNIXTIME REAL");
@@ -539,7 +540,6 @@ public class Database {
     public ArrayList<Record> getFilter(String caseNumber, Date startDate, Date endDate,ArrayList<String> crimeTypes,ArrayList<String> locDes,String ward,String beat,String lat,String lon,int radius,String arrest,String domestic) throws SQLException {
         connection.setAutoCommit(false);
         String SQLString = "SELECT * FROM CRIMES where (UNIXTIME >= 0) ";
-        double radiusInDegrees = radius*(1/110.54);
 
         //Cycles through Crime Type values if not empty and appends to SQL string
         if(!crimeTypes.isEmpty()){
@@ -586,19 +586,6 @@ public class Database {
         if(beat!=null) {
             SQLString += "AND (BEAT=" + beat + ")";
         }
-        if(radius==0) {
-            if (lat != null&&lon != null) {
-                SQLString += "AND (LATITUDE=" + lat + ")";
-                SQLString += "AND (LONGITUDE=" + lon + ")";
-            }
-        }else{
-            if (lat != null&&lon != null) {
-                double latDouble = Double.parseDouble(lat);
-                double lonDouble = Double.parseDouble(lon);
-                SQLString += " AND (LATITUDE BETWEEN " + (latDouble - radiusInDegrees) + " AND " + (latDouble + radiusInDegrees) + ")";
-                SQLString += " AND (LONGITUDE BETWEEN " + (lonDouble - radiusInDegrees) + " AND " + (lonDouble + radiusInDegrees) + ")";
-            }
-        }
         if(arrest!=null) {
             SQLString += "AND (ARREST='" + arrest + "')";
         }
@@ -612,7 +599,23 @@ public class Database {
         // System.out.println(SQLString);
         PreparedStatement s1 = connection.prepareStatement(SQLString);
         ResultSet rs = s1.executeQuery();
-        return getRecord(rs);
+        ArrayList<Record> recordsFromDBQuery =  getRecord(rs);
+        ArrayList<Record> resultRecords = new ArrayList<>();
+
+
+        if (lat != null&&lon != null) {
+
+            double latDouble = Double.parseDouble(lat);
+            double lonDouble = Double.parseDouble(lon);
+            for (Record record : recordsFromDBQuery) {
+                if (dataAnalyser.calculateLocationDifferenceMeters(latDouble, lonDouble, record.getLatitude(), record.getLongitude()) <= radius) {
+                    resultRecords.add(record);
+                }
+            }
+        } else {
+            resultRecords = recordsFromDBQuery;
+        }
+        return resultRecords;
     }
 
 //    public ArrayList<Record> getRecordsinRadius(ArrayList<Record> records, int radius, String lat, String lon){
