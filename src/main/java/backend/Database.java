@@ -28,7 +28,9 @@ public class Database {
             "LOCATIONDESCRIPTION TEXT", "ARREST TEXT", "DOMESTIC TEXT", "BEAT INTEGER", "WARD INTEGER", "FBICD TEXT",
             "XCOORDINATE INTEGER", "YCOORDINATE INTEGER", "LATITUDE REAL", "LONGITUDE REAL", "UNIXTIME REAL");
 
-
+    /**
+     * Database Constructor
+     */
     public Database() {
         try {
             connectDatabase();
@@ -36,12 +38,13 @@ public class Database {
             e.printStackTrace();
         }
     }
+
     public void setDatabasePath(String databasePath) {
         this.databasePath = databasePath;
     }
+
     /**
      * Gets connection to the database and then calls the create table function
-     *
      * @throws SQLException
      */
     public void connectDatabase() throws SQLException {
@@ -66,7 +69,6 @@ public class Database {
 
     /**
      * Creates java database table by executing an SQL command to create the table and then appends the rows on from the list columns
-     *
      * @throws SQLException
      */
     public void createTable() throws SQLException {
@@ -89,6 +91,7 @@ public class Database {
         state3.execute("ALTER TABLE CRIMES\n" +
                 "ADD COLUMN IUCR INTEGER;\n");
     }
+
     public void closeConnection() throws SQLException {
         connection.close();
     }

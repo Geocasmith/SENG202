@@ -4,23 +4,24 @@ import backend.InputValidator;
 import backend.Record;
 import backend.Database;
 import com.opencsv.exceptions.CsvValidationException;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.css.PseudoClass;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.controlsfx.control.textfield.TextFields;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class EditRecordWindowController {
 
@@ -38,9 +39,9 @@ public class EditRecordWindowController {
 
     private TableTabController parentController; // gives access to table methods, and thus main controller methods
 
-    private static final List<String> textFieldNames = Arrays.asList("Case number", "Date", "Block", "IUCR",
-            "Primary description", "Secondary description", "Location description", "Arrest", "Domestic", "Beat",
-            "Ward", "FBICD", "X-Coordinate", "Y-Coordinate", "Latitude", "Longitude");
+    private static final List<String> textFieldNames = Arrays.asList("Case number", "Date", "Block", "Primary description",
+            "Secondary description", "IUCR", "FBICD", "Location description", "Arrest", "Domestic",
+            "Beat", "Ward", "X-Coordinate", "Y-Coordinate", "Latitude", "Longitude");
     private List<TextField> textFields = new ArrayList<>();
     private boolean edited = false; // was a record changed? - used to prompt for a table refresh on close
     
@@ -48,7 +49,8 @@ public class EditRecordWindowController {
      * Creates the textfields and their layout, marks relevant ones as required,
      * and sets the padding on buttonPane.
      */
-    @FXML private void initialize()  {
+    @FXML private void initialize() throws IOException, CsvValidationException, SQLException {
+
         buttonPane.setPadding(new Insets(0, 0, 15, 10)); // scenebuilder wasn't making this work so it goes here
         for (int i = 0; i < textFieldNames.size(); i++) {
             Label fieldTitleLabel = new Label(textFieldNames.get(i));
@@ -58,15 +60,93 @@ public class EditRecordWindowController {
             vbox.setPadding(new Insets(10));
             TextField field = new TextField();
             field.setPromptText(textFieldNames.get(i));
+            field.setPrefSize(222, 22);
             Label reqLabel = new Label();
             if (i < 12) {
                 reqLabel.setText("* Required"); // only coordinates and lat/long are optional
+                if (i == 1) { reqLabel.setText("* Required" + "\n"  + "mm/dd/yyyy hh:mm:ss am/pm"); }
+                if (i == 8 || i == 9) { reqLabel.setText("* Required (y/n)"); }
             }
+
+
             vbox.getChildren().addAll(fieldTitleLabel, field, reqLabel);
             textFields.add(field);
             fieldPane.getChildren().add(vbox);
         }
+
+
+        // Binds primary description text field to set of primary descriptions
+        TextFields.bindAutoCompletion(textFields.get(3),InputValidator.getSetOfPrimaryDescriptions());
+
+        // Binds primary description text field to set of available set secondary descriptions
+        textFields.get(4).setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                try {
+                    Set<String> des = new HashSet<>();
+                    des = InputValidator.getSetOfSecondaryDescriptions(textFields.get(3).getText());
+
+                    TextFields.bindAutoCompletion(textFields.get(4), des);
+                    textFields.get(4).textProperty().addListener(new ChangeListener<>() {
+                        @Override
+                        public void changed(ObservableValue<? extends String> observable,
+                                            String oldValue, String newValue) {
+                            try {
+                                textFields.get(5).setText(InputValidator.getIucr(textFields.get(3).getText(), textFields.get(4).getText()));
+                            }  catch (IOException | CsvValidationException e) {
+                                PopupWindow.displayPopup("Error", e.getMessage());
+                            }
+                            try {
+                                textFields.get(6).setText(InputValidator.getFbicd(textFields.get(3).getText(), textFields.get(4).getText()));
+                            } catch (IOException | CsvValidationException e) {
+                                PopupWindow.displayPopup("Error", e.getMessage());
+                            }
+
+
+                        }
+                    });
+
+                } catch (NullPointerException | IOException | CsvValidationException e) {
+                    textFields.get(3).requestFocus();
+                    PopupWindow.displayPopup("Error", "Enter Primary description first");
+
+                }
+
+            }
+
+
+
+        });
+
+        /* Resets associated text fields of IUCR, FBICD, Secondary description whenever change is made to
+           the primary description text field
+         */
+        textFields.get(3).textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                                String oldValue, String newValue) {
+                textFields.get(4).clear();
+                textFields.get(5).clear();
+                textFields.get(6).clear();
+
+            }
+        });
+
+        // Auto Binds Location description with set of locations available in the database
+        Database db = new Database();
+        db.connectDatabase();
+        ArrayList<String> locationDescriptions  = (ArrayList<String>)(ArrayList<?>)(db.extractCol("LOCATIONDESCRIPTION"));
+        locationDescriptions = new ArrayList<>(new HashSet<>(locationDescriptions));
+        Collections.sort(locationDescriptions);
+        TextFields.bindAutoCompletion(textFields.get(7),locationDescriptions);
+
+
+
+
+
     }
+
+
 
     /**
      * Fills in the textfields with the record being edited, OR sets up the window as an "add" window instead.
