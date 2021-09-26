@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckComboBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" stylesheets="@main.css" xmlns="http://javafx.com/javafx/14" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" stylesheets="@main.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -122,7 +122,7 @@
                         </Label>
                         <TextField fx:id="filterLatTextField" layoutX="26.0" layoutY="418.0" onAction="#checkSliderUnlock" onKeyTyped="#checkSliderUnlock" prefHeight="25.0" prefWidth="70.0" promptText="Lat" />
                         <TextField fx:id="filterLongTextField" layoutX="104.0" layoutY="418.0" onAction="#checkSliderUnlock" onKeyTyped="#checkSliderUnlock" prefHeight="25.0" prefWidth="70.0" promptText="Long" />
-                        <Slider fx:id="radiusSlider" blockIncrement="5.0" layoutX="27.0" layoutY="465.0" onMouseDragged="#updateRadiusText" prefHeight="14.0" prefWidth="125.0" />
+                        <Slider fx:id="radiusSlider" blockIncrement="5.0" layoutX="27.0" layoutY="465.0" onKeyReleased="#updateRadiusText" onMouseDragged="#updateRadiusText" prefHeight="14.0" prefWidth="125.0" />
                         <Label alignment="CENTER" layoutX="-4.0" layoutY="443.0" prefHeight="17.0" prefWidth="200.0" text="Radius">
                            <opaqueInsets>
                               <Insets top="5.0" />
