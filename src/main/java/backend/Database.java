@@ -21,7 +21,7 @@ import static java.lang.String.valueOf;
  */
 public class Database {
     private static Connection connection;
-    private static String datebasePath = "./Files/crimeRecords.db"; //default path
+    private static String databasePath = "./Files/crimeRecords.db"; //default path
     private static boolean notEmpty = false;
     private static List<String> columns = Arrays.asList("IUCR TEXT", "PRIMARYDESCRIPTION TEXT", "SECONDARYDESCRIPTION TEXT",
             "LOCATIONDESCRIPTION TEXT", "ARREST TEXT", "DOMESTIC TEXT", "BEAT INTEGER", "WARD INTEGER", "FBICD TEXT",
@@ -36,7 +36,7 @@ public class Database {
         }
     }
     public void setDatabasePath(String databasePath) {
-        this.datebasePath = databasePath;
+        this.databasePath = databasePath;
     }
     /**
      * Gets connection to the database and then calls the create table function
@@ -46,7 +46,7 @@ public class Database {
     public void connectDatabase() throws SQLException {
         try {
             Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:"+datebasePath);
+            connection = DriverManager.getConnection("jdbc:sqlite:"+ databasePath);
             createTable();
         } catch (Exception e) {
             //System.out.println("Database connection failed");
