@@ -14,7 +14,7 @@ class DatabaseTest {
         Database db = new Database();
         db.connectDatabase();
         ArrayList<Object> extractedCol;
-        extractedCol = db.extractCol(2);
+        extractedCol = db.extractCol("ADDRESS");
         for (int i = 0; i < extractedCol.size(); i++) {
             continue;
         }

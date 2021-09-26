@@ -48,7 +48,7 @@ public class AnalysisTabController {
 
     /**
      * Populates the top crime table with list of TypeFrequency objects that is passed to it
-     * @param crimeFrequencyPair TypeFrequency pair object
+     * @param crimeFrequencyPair usually a list of TypeFrequency pair object
      */
     public void populateTopCrimesTable(ArrayList<TypeFrequencyPair> crimeFrequencyPair) {
         // Sort descending
@@ -71,12 +71,13 @@ public class AnalysisTabController {
 
     /**
      * Populates the bottom crime table with list of TypeFrequency objects that is passed to it
-     * @param crimeFrequencyPair
+     * @param crimeFrequencyPair usually a list of TypeFrequency pair object
      */
 
     public void populateLowCrimesTable(ArrayList<TypeFrequencyPair> crimeFrequencyPair) {
 
         Collections.sort(crimeFrequencyPair, new FrequencyComparatorAscending());
+
         // Table column setup
         bottomCrimeCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("type"));
         bottomCrimeFrequencyCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("frequency"));
@@ -95,7 +96,8 @@ public class AnalysisTabController {
 
     /**
      * Populates the top block table with list of TypeFrequency objects that is passed to it
-     * @param blocksFrequencyPair
+     * @param blocksFrequencyPair usually a list of TypeFrequency pair object containing blocks and their
+     *                            frequency
      */
 
     public void populateTopBlocksTable(ArrayList<TypeFrequencyPair> blocksFrequencyPair) {
@@ -117,7 +119,8 @@ public class AnalysisTabController {
 
     /**
      * Populates the bottom block table with list of TypeFrequency objects that is passed to it
-     * @param blocksFrequencyPair
+     * @param blocksFrequencyPair usually a list of TypeFrequency pair object containing blocks and their
+     *                            frequency
      */
 
     public void populateLowBlocksTable(ArrayList<TypeFrequencyPair> blocksFrequencyPair) {

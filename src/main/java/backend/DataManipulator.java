@@ -208,12 +208,12 @@ private ArrayList<Record> currentData;
      * @return dataToGraph Array<ArrayList<Object>> type that contain list of extracted column values
      */
 
-    public ArrayList<ArrayList<Object>> dataBaseDataToGraph(int col1, int col2) throws SQLException {
+    public ArrayList<ArrayList<Object>> dataBaseDataToGraph(String col1, String col2) throws SQLException {
         ArrayList<ArrayList<Object> > dataToGraph = new ArrayList<ArrayList<Object>>();
         Database db = new Database();
         db.connectDatabase();
-        dataToGraph.add(db.extractCol(db.getColName(col1)));
-        dataToGraph.add(db.extractCol(db.getColName(col2)));
+        dataToGraph.add(db.extractCol(col1));
+        dataToGraph.add(db.extractCol(col2));
         db.closeConnection();
         return dataToGraph;
 
