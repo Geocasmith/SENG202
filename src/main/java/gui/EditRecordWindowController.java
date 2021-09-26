@@ -105,7 +105,7 @@ public class EditRecordWindowController {
 
                 } catch (NullPointerException | IOException | CsvValidationException e) {
                     textFields.get(4).requestFocus();
-                    PopupWindow.displayPopup("Error", "Enter Primary valid description first");
+                    PopupWindow.displayPopup("Error", "Enter valid Primary Description first");
 
                 }
 
@@ -128,19 +128,7 @@ public class EditRecordWindowController {
 
             }
         });
-
-
-
-
-
-
-
-
-
-
     }
-
-
 
     /**
      * Fills in the textfields with the record being edited, OR sets up the window as an "add" window instead.
@@ -153,6 +141,7 @@ public class EditRecordWindowController {
             List<String> recStrings = record.toList();
 
             for (int i = 0; i < textFieldNames.size(); i++) {
+
                 textFields.get(i).setText(recStrings.get(i));
             }
             textFields.get(0).setDisable(true); // disables editing, focus, and click for casenum
