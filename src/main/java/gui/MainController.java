@@ -101,6 +101,7 @@ public class MainController {
         domesticComboBox.getSelectionModel().select("");
 
         Database d = new Database();
+        d.connectDatabase();
         ArrayList<String> locationDescriptions  = (ArrayList<String>)(ArrayList<?>)(d.extractCol("LOCATIONDESCRIPTION"));
         d.closeConnection();
         // Remove duplicate values
