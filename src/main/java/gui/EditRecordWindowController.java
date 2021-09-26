@@ -40,8 +40,8 @@ public class EditRecordWindowController {
     private TableTabController parentController; // gives access to table methods, and thus main controller methods
 
     private static final List<String> textFieldNames = Arrays.asList("Case number", "Date", "Block", "IUCR",
-            "Primary description", "Secondary description", "Location description", "Arrest", "Domestic", "FBICD",
-            "Beat", "Ward", "X-Coordinate", "Y-Coordinate", "Latitude", "Longitude");
+            "Primary description", "Secondary description", "Location description", "Arrest", "Domestic", "Ward",
+            "Beat", "FBICD", "X-Coordinate", "Y-Coordinate", "Latitude", "Longitude");
     private List<TextField> textFields = new ArrayList<>();
     private boolean edited = false; // was a record changed? - used to prompt for a table refresh on close
     
@@ -87,6 +87,8 @@ public class EditRecordWindowController {
                     des = InputValidator.getSetOfSecondaryDescriptions(textFields.get(4).getText());
 
                     TextFields.bindAutoCompletion(textFields.get(5), des);
+                    textFields.get(4).requestFocus();
+                    textFields.get(5).requestFocus();
                     textFields.get(5).textProperty().addListener(new ChangeListener<>() {
                         @Override
                         public void changed(ObservableValue<? extends String> observable,
@@ -97,7 +99,7 @@ public class EditRecordWindowController {
                                 PopupWindow.displayPopup("Error", e.getMessage());
                             }
                             try {
-                                textFields.get(9).setText(InputValidator.getFbicd(textFields.get(4).getText(), textFields.get(5).getText()));
+                                textFields.get(11).setText(InputValidator.getFbicd(textFields.get(4).getText(), textFields.get(5).getText()));
                             } catch (IOException | CsvValidationException e) {
                                 PopupWindow.displayPopup("Error", e.getMessage());
                             }
@@ -108,7 +110,7 @@ public class EditRecordWindowController {
 
                 } catch (NullPointerException | IOException | CsvValidationException e) {
                     textFields.get(4).requestFocus();
-                    PopupWindow.displayPopup("Error", "Enter Primary description first");
+                    PopupWindow.displayPopup("Error", "Enter Primary valid description first");
 
                 }
 
@@ -126,19 +128,13 @@ public class EditRecordWindowController {
             public void changed(ObservableValue<? extends String> observable,
                                 String oldValue, String newValue) {
                 textFields.get(5).clear();
-                textFields.get(3).clear();
-                textFields.get(9).clear();
+
+
 
             }
         });
 
-        // Auto Binds Location description with set of locations available in the database
-        Database db = new Database();
-        db.connectDatabase();
-        ArrayList<String> locationDescriptions  = (ArrayList<String>)(ArrayList<?>)(db.extractCol("LOCATIONDESCRIPTION"));
-        locationDescriptions = new ArrayList<>(new HashSet<>(locationDescriptions));
-        Collections.sort(locationDescriptions);
-        TextFields.bindAutoCompletion(textFields.get(6),locationDescriptions);
+
 
 
 
@@ -244,9 +240,8 @@ public class EditRecordWindowController {
             }
         }
         catch (Exception ex) { // this is here so that exceptions are more obvious when they occur
-            PopupWindow.displayPopup("Error", "An exception occurred while trying to save that record.");
-            ex.printStackTrace();
-            System.out.println(ex);
+            PopupWindow.displayPopup("Error", ex.getMessage());
+
         }
     }
 
