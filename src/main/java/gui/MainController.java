@@ -452,7 +452,7 @@ public class MainController {
             Database d = new Database();
             ArrayList<Record> records = d.getFilter(caseNumber, startDate, endDate, crimeTypes, locationDescriptions,
                     wards, beats, lat, lon, radius, arrest, domestic);
-            d.closeConnection();
+            d.disconnectDatabase();
             // Set table to records
             tableTabController.setTableRecords(records);
             refreshMarkers();
