@@ -11,7 +11,6 @@ import javafx.scene.layout.GridPane;
 import java.util.*;
 
 public class AnalysisTabController {
-    @FXML private GridPane grid;
     @FXML private TableView<TypeFrequencyPair> topCrimeTable;
     @FXML private TableView<TypeFrequencyPair> bottomCrimeTable;
     @FXML private TableView<TypeFrequencyPair> bottomBlockTable;

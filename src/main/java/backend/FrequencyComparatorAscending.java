@@ -15,6 +15,6 @@ public class FrequencyComparatorAscending implements Comparator<TypeFrequencyPai
      */
     @Override
     public int compare(TypeFrequencyPair a, TypeFrequencyPair b) {
-        return a.getFrequency() < b.getFrequency() ? -1 : a.getFrequency() == b.getFrequency() ? 0 : 1;
+        return Long.compare(a.getFrequency(), b.getFrequency());
     }
 }

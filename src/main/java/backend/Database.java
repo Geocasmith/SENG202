@@ -22,7 +22,6 @@ import static java.lang.String.valueOf;
 public class Database {
     private static Connection connection;
     private static String databasePath = "./Files/crimeRecords.db"; //default path
-    private static boolean notEmpty = false;
     private DataAnalyser dataAnalyser = new DataAnalyser();
     private static List<String> columns = Arrays.asList("IUCR TEXT", "PRIMARYDESCRIPTION TEXT", "SECONDARYDESCRIPTION TEXT",
             "LOCATIONDESCRIPTION TEXT", "ARREST TEXT", "DOMESTIC TEXT", "BEAT INTEGER", "WARD INTEGER", "FBICD TEXT",
@@ -328,8 +327,7 @@ public class Database {
         connection.setAutoCommit(false);
         PreparedStatement s1 = connection.prepareStatement("select " + columnName + " from CRIMES");
         ResultSet rs = s1.executeQuery();
-        ArrayList<Object> columnValues = readColumnValues(rs, columnName);
-        return columnValues;
+        return readColumnValues(rs, columnName);
     }
 
 

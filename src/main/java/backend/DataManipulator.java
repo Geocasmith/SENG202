@@ -94,7 +94,6 @@ private ArrayList<Record> currentData;
      */
     public static ArrayList<Object> extractCol(ArrayList<Record> currentData, int col)
     {
-        int colSize = currentData.size();
         ArrayList<Object> extractedCol = new ArrayList<>();
         switch (col) {
             case 0:
@@ -195,10 +194,10 @@ private ArrayList<Record> currentData;
      */
 
     public static ArrayList<Record> getAllRecords() throws SQLException {
-        Database d = new Database();
-        ArrayList<Record> records = d.getAll();
-        d.closeConnection();
-        return records;
+        Database db = new Database();
+        ArrayList<Record> currentRecords = db.getAll();
+        db.closeConnection();
+        return currentRecords;
     }
 
     /**
@@ -250,10 +249,10 @@ private ArrayList<Record> currentData;
     public static ArrayList<Object> getRowsfromCsv(String filepath) throws IOException,  CsvValidationException {
         try
         {
-            ArrayList<ArrayList<List<String>>> result = new ArrayList<ArrayList<List<String>>>();
+            ArrayList<ArrayList<List<String>>> result = new ArrayList<>();
             ArrayList<List<String>> csvValues;
-            ArrayList<List<String>> validRows = new ArrayList<List<String>>();
-            ArrayList<List<String>> invalidRows = new ArrayList<List<String>>();
+            ArrayList<List<String>> validRows = new ArrayList<>();
+            ArrayList<List<String>> invalidRows = new ArrayList<>();
             csvValues = CsvReader.read(filepath);
             // Loop through all values read
 

@@ -1,13 +1,14 @@
 package gui;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+
+import java.util.Objects;
 
 public class BrowserTabController {
     @FXML
@@ -18,10 +19,6 @@ public class BrowserTabController {
     private Button webBrowserForwardButton;
     @FXML
     private Button webBrowserBackButton;
-    @FXML
-    private Button webBrowserResetButton;
-    @FXML
-    private Button webBrowserSearchButton;
     @FXML
     private RadioButton govWebsitesRadioButton;
     @FXML
@@ -34,25 +31,21 @@ public class BrowserTabController {
      */
     @FXML
     private void initialize() {
-        browserWebEngine= browserWebView.getEngine();
+        browserWebEngine = browserWebView.getEngine();
 
     }
     /**
      * Goes to the previous page in the browsers history
      */
     public void goBack() {
-        Platform.runLater(() -> {
-            browserWebEngine.executeScript("history.back()");
-        });
+        Platform.runLater(() -> browserWebEngine.executeScript("history.back()"));
     }
 
     /**
-     * Goes to the next page in the browsers history, if any
+     * Goes to the next page in the browsers' history, if any
      */
     public void goForward() {
-        Platform.runLater(() -> {
-            browserWebEngine.executeScript("history.forward()");
-        });
+        Platform.runLater(() -> browserWebEngine.executeScript("history.forward()"));
     }
 
     /**
@@ -64,15 +57,14 @@ public class BrowserTabController {
         webBrowserForwardButton.setVisible(false);
         browserWebView.setVisible(false);
         webBrowserSearchField.setText("");
-        browserWebEngine.load(getClass().getResource("blankPage.html").toString());
+        browserWebEngine.load(Objects.requireNonNull(getClass().getResource("blankPage.html")).toString());
     }
 
     /**
      * Executes the search if the user presses enter while in the search field
-     * @param ae The enter action event
      */
     @FXML
-    public void searchFieldOnEnter(ActionEvent ae){
+    public void searchFieldOnEnter(){
         searchQuery();
     }
 

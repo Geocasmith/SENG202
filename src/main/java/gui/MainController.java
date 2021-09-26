@@ -26,9 +26,9 @@ public class MainController {
 
     @FXML private MapTabController mapTabController;
     @FXML private TableTabController tableTabController;
-    @FXML private DataAnalyser dataAnalyser;
     @FXML private GraphTabController graphTabController;
     @FXML private AnalysisTabController analysisTabController;
+    @FXML private DataAnalyser dataAnalyser;
 
     // Filter Sidebar Elements
     @FXML private TitledPane filterPane;
@@ -77,11 +77,10 @@ public class MainController {
         graphSetup();
 
         tableTabController.setParentController(this);
-
-        Database d = new Database();
-        ArrayList<Record> allRecords = d.getAll();
+        Database db = new Database();
+        ArrayList<Record> allRecords = db.getAll();
+        db.closeConnection();
         tableTabController.setTableRecords(allRecords);
-        d.closeConnection();
         dataAnalyser = new DataAnalyser(allRecords);
         analysisSetUp();
         updateGraphOptions();
@@ -348,7 +347,7 @@ public class MainController {
         int radius;
         String arrest = null;
         String domestic = null;
-        Boolean validFilter = true;
+        boolean validFilter = true;
         String text;
 
         text = filterCaseNumberTextField.getText();
@@ -460,14 +459,17 @@ public class MainController {
         if (validFilter) {
             filterErrorLabel.setVisible(false);
             Database d = new Database();
-            ArrayList<Record> records = d.getFilter(caseNumber, startDate, endDate, crimeTypes, locationDescriptions, wards, beats, lat, lon, radius, arrest, domestic);
+            ArrayList<Record> records = d.getFilter(caseNumber, startDate, endDate, crimeTypes, locationDescriptions,
+                    wards, beats, lat, lon, radius, arrest, domestic);
             d.closeConnection();
             // Set table to records
             tableTabController.setTableRecords(records);
             refreshMarkers();
             dataAnalyser.updateRecords(records);
+            graphTypeComboBox.getSelectionModel().select(0);
             updateGraphOptions();
             updateAnalysis();
+
 
         } else {
             filterErrorLabel.setVisible(true);
@@ -489,12 +491,11 @@ public class MainController {
      * Enables slider if lat and long are valid in the filter
      */
     public void checkSliderUnlock () {
-        String lat;
-        String lon;
-        lat = filterLatTextField.getText();
-        lon = filterLongTextField.getText();
+        String lat = filterLatTextField.getText();
+        String lon = filterLongTextField.getText();
+
         // Checks that both lat and long field are valid
-        radiusSlider.setDisable(lat.equals("") && lon.equals("") || lat.equals(null) && lon.equals(null) || (!InputValidator.hasValidDouble(lat) || !InputValidator.hasValidDouble(lon)));
+        radiusSlider.setDisable(lat.equals("") || lon.equals("") || !InputValidator.hasValidDouble(lat) || !InputValidator.hasValidDouble(lon));
     }
 
 
@@ -517,9 +518,9 @@ public class MainController {
         radiusLabel.setText("0 m");
         arrestComboBox.getSelectionModel().select("");
         domesticComboBox.getSelectionModel().select("");
-        Database d = new Database();
-        tableTabController.setTableRecords(d.getAll());
-        d.closeConnection();
+        Database db = new Database();
+        tableTabController.setTableRecords(db.getAll());
+        db.closeConnection();
         filterErrorLabel.setVisible(false);
         refreshMarkers();
         updateGraphOptions();
@@ -580,7 +581,7 @@ public class MainController {
             // the user closed the file chooser
         } catch (Exception e) {
             // something unknown happened
-            System.out.println("Unknown error exporting csv, error: "+e);
+            PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
         }
     }
 
@@ -593,12 +594,13 @@ public class MainController {
         if (filepath != null) {
             //If user imports incorrect filetype it will do nothing and display a pop-up
             if (matchFileType(filepath, ".csv")) {
-                PopupWindow.displayPopup("Error", "Selected file is not a CSV file");
+                PopupWindow.displayPopup("Error", "An unknown error occurred when exporting CSV.\n" +
+                        "Please try again");
                 return;
             }
 
+            Boolean newDB;
             Boolean replace = null;
-            Boolean newDB = null;
             Boolean newDBSuccess = true;
             Boolean csvSuccess = false;
             ArrayList<ArrayList<List<String>>> dataValidation = new ArrayList<>();
@@ -608,9 +610,8 @@ public class MainController {
                 dataValidation = (ArrayList<ArrayList<List<String>>>) csvRows.get(0);
                 csvSuccess = (Boolean) csvRows.get(1);
             } catch (Exception e) {
-                PopupWindow.displayPopup("Error", "Unknown error when importing CSV.\n" +
+                PopupWindow.displayPopup("Error", "An unknown error occurred when importing CSV.\n" +
                                                                "Please try again");
-                System.out.println(e);
             }
 
             if (!csvSuccess) {
@@ -643,18 +644,22 @@ public class MainController {
                     } else {
                         d.replaceRows(dataValidation.get(0));
                     }
+                    d.closeConnection();
+
                     if (dataValidation.get(1).size() != 0) {
                         displayInvalid(dataValidation.get(1));
                     }
-                    ArrayList<Record> records = d.getAll();
+                    Database db = new Database();
+                    ArrayList<Record> records = db.getAll();
+                    db.closeConnection();
                     tableTabController.setTableRecords(records);
-                    d.closeConnection();
+
                     filterSetup();
                     dataAnalyser.updateRecords(records);
                     updateGraphOptions();
 
                 } catch (Exception e) {
-                    System.out.println("Error " + e);
+                    PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
                 }
             }
         }
@@ -675,7 +680,7 @@ public class MainController {
      * which is accessed every time the database is connected to
      */
     public void changeDatabase() throws IOException, SQLException{
-        String filepath = null;
+        String filepath;
         filepath = getPathToFile("Database", "db");
         if (filepath != null) {
             //Changes the database to the selected path
@@ -711,16 +716,21 @@ public class MainController {
             try{
                 filepath = addExtension(filepath,".db");
                 File file = new File(filepath);
-                file.createNewFile();
-                // Set new database path
-                Database d = new Database();
-                d.setDatabasePath(filepath);
+                if (file.createNewFile()) {
+                    // Set new database path
+                    Database d = new Database();
+                    d.setDatabasePath(filepath);
+                    d.closeConnection();
 
 
-                //Refresh GUI
-                tableTabController.setTableRecords(d.getAll());
-                d.closeConnection();
-                return true;
+                    //Refresh GUI
+                    Database db = new Database();
+                    tableTabController.setTableRecords(db.getAll());
+                    db.closeConnection();
+
+                    return true;
+                }
+
             } catch(FileAlreadyExistsException e){
                 PopupWindow.displayPopup("Error", "File already exists");
             } catch (Exception e) {
@@ -748,7 +758,7 @@ public class MainController {
         if(substr.equals(extension)){
             return path;
         }else{
-            return path+=extension;
+            return path + extension;
         }
     }
 
