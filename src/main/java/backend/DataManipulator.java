@@ -17,9 +17,7 @@ import java.util.Objects;
  */
 
 public class DataManipulator {
-private ArrayList<Record> currentData;
-
-
+    private ArrayList<Record> currentData;
     DataManipulator(ArrayList<Record> currentData) {
     this.currentData = currentData;
 }
@@ -31,18 +29,16 @@ private ArrayList<Record> currentData;
      * @return true if Record case number is unique or false otherwise
      */
     public boolean hasUniqueCaseNumber(int line, Record data)
-{
-    for (int i = 0; i < currentData.size(); i++) {
-        if (Objects.equals(currentData.get(i).getCaseNumber(), data.getCaseNumber())) {
-            if (i != line) {
-                return false;
+    {
+        for (int i = 0; i < currentData.size(); i++) {
+            if (Objects.equals(currentData.get(i).getCaseNumber(), data.getCaseNumber())) {
+                if (i != line) {
+                    return false;
+                }
             }
-
         }
+        return true;
     }
-
-    return true;
-}
 
     /**
      *
@@ -55,28 +51,27 @@ private ArrayList<Record> currentData;
             if (hasUniqueCaseNumber(line, data)) {
                 currentData.set(line, data);
                 return true;
-
+             }
         }
-
-    }catch(Exception e){
-            //Display error message?
+        catch(Exception e) {
+            PopupWindow.displayPopup("Error", e.getMessage());
         }
-    return false;
-}
+        return false;
+    }
 
     /**
      * Adds a record into CurrentData object
-     * @param line usually an interger value representing the line number
+     * @param line usually an integer value representing the line number
      * @param data  usually list of record objects
      * @return true if the record has been added or false otherwise
      */
-    public boolean addLine(int line, Record data) {
-    if (hasUniqueCaseNumber(line, data)) {
-        currentData.add(data);
-        return true;
-    }
-
-    return false;
+    public boolean addLine(int line, Record data)
+    {
+        if (hasUniqueCaseNumber(line, data)) {
+            currentData.add(data);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -184,15 +179,13 @@ private ArrayList<Record> currentData;
             default:
                 break;
         }
-    return extractedCol;
+        return extractedCol;
     }
 
     /**
      * Gets all record objects from the database
      * @return list of Record objects extracted from the database
-     * @throws SQLException
      */
-
     public static ArrayList<Record> getAllRecords() throws SQLException {
         Database db = new Database();
         ArrayList<Record> currentRecords = db.getAll();
@@ -215,7 +208,6 @@ private ArrayList<Record> currentData;
         dataToGraph.add(db.extractCol(col2));
         db.closeConnection();
         return dataToGraph;
-
     }
 
     /**
@@ -247,17 +239,15 @@ private ArrayList<Record> currentData;
      */
 
     public static ArrayList<Object> getRowsfromCsv(String filepath) throws IOException,  CsvValidationException {
-        try
-        {
+        try {
             ArrayList<ArrayList<List<String>>> result = new ArrayList<>();
             ArrayList<List<String>> csvValues;
             ArrayList<List<String>> validRows = new ArrayList<>();
             ArrayList<List<String>> invalidRows = new ArrayList<>();
             csvValues = CsvReader.read(filepath);
+
             // Loop through all values read
-
             for (List<String> rec : csvValues) {
-
                 // Check if row is valid
                 if (InputValidator.isValidRecord(rec, false)){
                     validRows.add(rec);
@@ -274,5 +264,4 @@ private ArrayList<Record> currentData;
             return new ArrayList<>(Arrays.asList(new ArrayList<ArrayList<List<String>>>(), false));
         }
     }
-
 }
