@@ -375,7 +375,7 @@ public class MainController {
      * Updates label for radius when slider is updated
      */
     public void updateRadiusText() {
-        String radius = String.valueOf(Math.round(radiusSlider.getValue()));
+        String radius = String.valueOf(Math.round(radiusSlider.getValue())*100);
         radiusLabel.setText(radius + " m");
     }
 
@@ -493,6 +493,7 @@ public class MainController {
 
         // Get value for radius
         radius = (int) Math.round(radiusSlider.getValue());
+        radius *= 100;
 
         // Get values for domestic and arrest if one has been selected
         text = domesticComboBox.getSelectionModel().getSelectedItem().toString();
