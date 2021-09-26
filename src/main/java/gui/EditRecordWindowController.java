@@ -16,6 +16,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
 
 import javax.swing.*;
@@ -77,6 +78,7 @@ public class EditRecordWindowController {
 
         // Binds primary description text field to set of primary descriptions
         TextFields.bindAutoCompletion(textFields.get(4),InputValidator.getSetOfPrimaryDescriptions());
+        AutoCompletionBinding auto = TextFields.bindAutoCompletion(textFields.get(5), "");
 
         // Binds Secondary description text field to set of available set secondary descriptions
         textFields.get(5).setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -85,9 +87,7 @@ public class EditRecordWindowController {
                 try {
                     Set<String> des = new HashSet<>();
                     des = InputValidator.getSetOfSecondaryDescriptions(textFields.get(4).getText());
-
-                    TextFields.bindAutoCompletion(textFields.get(5), des).getCompletionTarget();
-
+                    AutoCompletionBinding auto = TextFields.bindAutoCompletion(textFields.get(5), des);
 
                     textFields.get(5).textProperty().addListener(new ChangeListener<>() {
                         @Override
@@ -96,6 +96,7 @@ public class EditRecordWindowController {
                             try {
                                 textFields.get(3).setText(InputValidator.getIucr(textFields.get(4).getText(), textFields.get(5).getText()));
                                 textFields.get(11).setText(InputValidator.getFbicd(textFields.get(4).getText(), textFields.get(5).getText()));
+                                auto.dispose();
                             }  catch (IOException | CsvValidationException e) {
                                 PopupWindow.displayPopup("Error", e.getMessage());
                             }
