@@ -1,14 +1,11 @@
 package gui;
 
-import backend.*;
 import backend.Record;
+import backend.*;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
@@ -16,8 +13,6 @@ import org.controlsfx.control.IndexedCheckModel;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.FileAlreadyExistsException;
@@ -26,78 +21,42 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.List;
 
 public class MainController {
 
-
-    @FXML
-    private MapTabController mapTabController;
-
-    @FXML
-    private TableTabController tableTabController;
-
-    @FXML
-    private DataAnalyser dataAnalyser;
-
-    @FXML
-    private GraphTabController graphTabController;
-
-    @FXML
-    private AnalysisTabController analysisTabController;
+    @FXML private MapTabController mapTabController;
+    @FXML private TableTabController tableTabController;
+    @FXML private DataAnalyser dataAnalyser;
+    @FXML private GraphTabController graphTabController;
+    @FXML private AnalysisTabController analysisTabController;
 
     // Filter Sidebar Elements
-    @FXML
-    private TitledPane filterPane;
-    @FXML
-    private TitledPane graphPane;
-    @FXML
-    private TextField filterCaseNumberTextField;
-    @FXML
-    private TabPane mainTabPane;
-    @FXML
-    private Tab graphTabPane;
-    @FXML
-    private Tab tableTabPane;
-    @FXML
-    private Accordion sidebarAccordion;
-    @FXML
-    private ComboBox arrestComboBox;
-    @FXML
-    private ComboBox domesticComboBox;
-    @FXML
-    private CheckComboBox crimeTypeComboBox;
-    @FXML
-    private CheckComboBox locationDescriptionComboBox;
-    @FXML
-    private Slider radiusSlider;
-    @FXML
-    private Label radiusLabel;
-    @FXML
-    private DatePicker filterStartDate;
-    @FXML
-    private DatePicker filterEndDate;
-    @FXML
-    private TextField filterWardTextField;
-    @FXML
-    private TextField filterBeatsTextField;
-    @FXML
-    private TextField filterLatTextField;
-    @FXML
-    private TextField filterLongTextField;
-    @FXML
-    private Label filterErrorLabel;
+    @FXML private TitledPane filterPane;
+    @FXML private TitledPane graphPane;
+    @FXML private TextField filterCaseNumberTextField;
+    @FXML private TabPane mainTabPane;
+    @FXML private Tab tableTabPane;
+    @FXML private Accordion sidebarAccordion;
+    @FXML private ComboBox arrestComboBox;
+    @FXML private ComboBox domesticComboBox;
+    @FXML private CheckComboBox crimeTypeComboBox;
+    @FXML private CheckComboBox locationDescriptionComboBox;
+    @FXML private Slider radiusSlider;
+    @FXML private Label radiusLabel;
+    @FXML private DatePicker filterStartDate;
+    @FXML private DatePicker filterEndDate;
+    @FXML private TextField filterWardTextField;
+    @FXML private TextField filterBeatsTextField;
+    @FXML private TextField filterLatTextField;
+    @FXML private TextField filterLongTextField;
+    @FXML private Label filterErrorLabel;
 
 
     // Graph Sidebar Elements
-    @FXML
-    private ComboBox graphTypeComboBox;
-    @FXML
-    private Button generateGraphButton;
-    @FXML
-    private CheckComboBox graphFilterComboBox;
-    @FXML
-    private Label graphOptionLabel;
+    @FXML private ComboBox graphTypeComboBox;
+    @FXML private Button generateGraphButton;
+    @FXML private CheckComboBox graphFilterComboBox;
+    @FXML private Label graphOptionLabel;
 
     private int graphTabCount = 0;
     private int analysisTabCount = 0;
@@ -111,13 +70,9 @@ public class MainController {
     /**
      * Runs the setup methods for the graph and filter panes, and sets the table tab's parent controller to the
      * maincontroller
-     * @throws SQLException
-     * @throws IOException
-     * @throws CsvValidationException
-     * @throws URISyntaxException
      */
     @FXML
-    private void initialize() throws SQLException, IOException, CsvValidationException, URISyntaxException {
+    private void initialize() throws SQLException, IOException, CsvValidationException {
         filterSetup();
         graphSetup();
 
@@ -136,7 +91,7 @@ public class MainController {
      * Sets up combo boxes in filter pane
      * Sets filter pane as expanded
      */
-    public void filterSetup() throws SQLException, IOException, CsvValidationException, java.io.IOException {
+    public void filterSetup() throws SQLException, CsvValidationException, java.io.IOException {
         // Sets filter pane to expanded pane
         sidebarAccordion.setExpandedPane(filterPane);
 
@@ -156,7 +111,7 @@ public class MainController {
         radiusSlider.setDisable(true);
 
         // Get Crime types
-        List<String> crimeTypes = new ArrayList<String>();
+        List<String> crimeTypes;
         crimeTypes = InputValidator.getSetOfPrimaryDescriptions();
 
         // Sort lists alphabetically
@@ -186,7 +141,7 @@ public class MainController {
     }
 
     /**
-     * Checks that the user is connected to the internet, if not, then displays a error message and goes back to the
+     * Checks that the user is connected to the internet, if not, then displays an error message and goes back to the
      * table tab, if they are, then it displays either the first 1000 records in the table, or all records in the table,
      * if there are less than 1000
      */
@@ -198,8 +153,6 @@ public class MainController {
             URLConnection connection = url.openConnection();
             connection.connect();
             connected = true;
-        } catch (MalformedURLException e) {
-            connected = false;
         } catch (IOException e) {
             connected = false;
         }
@@ -211,7 +164,7 @@ public class MainController {
             if (displayedRecords.size() < 1000) {
                 mapTabController.updateMarkers(displayedRecords);
             } else {
-                mapTabController.updateMarkers(new ArrayList<Record>(displayedRecords.subList(0, 999)));
+                mapTabController.updateMarkers(new ArrayList<>(displayedRecords.subList(0, 999)));
             }
 
         }
@@ -222,7 +175,6 @@ public class MainController {
     /**
      * Clears the checks in the graph filter combo box, then checks what graphing option has been selected and
      * displays the relevant objects, and loads the crime types/wards/beats into the graph filter combo box
-     * @throws SQLException
      */
     public void updateGraphOptions() throws SQLException {
         graphFilterComboBox.getCheckModel().clearChecks();
@@ -387,20 +339,20 @@ public class MainController {
         String caseNumber = null;
         Date startDate = null;
         Date endDate = null;
-        ArrayList<String> crimeTypes = new ArrayList<String>();
-        ArrayList<String> locationDescriptions = new ArrayList<String>();
+        ArrayList<String> crimeTypes = new ArrayList<>();
+        ArrayList<String> locationDescriptions = new ArrayList<>();
         String wards = null;
         String beats = null;
         String lat = null;
         String lon = null;
-        int radius = 0;
+        int radius;
         String arrest = null;
         String domestic = null;
         Boolean validFilter = true;
-        String text = "";
+        String text;
 
         text = filterCaseNumberTextField.getText();
-        if (text != "") {
+        if (!Objects.equals(text, "")) {
             caseNumber = text;
         }
 
@@ -497,11 +449,11 @@ public class MainController {
 
         // Get values for domestic and arrest if one has been selected
         text = domesticComboBox.getSelectionModel().getSelectedItem().toString();
-        if (text != "") {
+        if (!Objects.equals(text, "")) {
             domestic = text;
         }
         text = arrestComboBox.getSelectionModel().getSelectedItem().toString();
-        if (text != "") {
+        if (!Objects.equals(text, "")) {
             arrest = text;
         }
 
@@ -542,11 +494,7 @@ public class MainController {
         lat = filterLatTextField.getText();
         lon = filterLongTextField.getText();
         // Checks that both lat and long field are valid
-        if ( !(lat.equals("") && lon.equals("")) && !(lat.equals(null) && lon.equals(null)) && (InputValidator.hasValidDouble(lat) && InputValidator.hasValidDouble(lon))) {
-            radiusSlider.setDisable(false);
-        } else {
-            radiusSlider.setDisable(true);
-        }
+        radiusSlider.setDisable(lat.equals("") && lon.equals("") || lat.equals(null) && lon.equals(null) || (!InputValidator.hasValidDouble(lat) || !InputValidator.hasValidDouble(lon)));
     }
 
 
@@ -623,7 +571,6 @@ public class MainController {
     /**
      * Opens the file explorer for the user to select a save location and then passes
      * this to the CsvWriter along with the currently displayed records.
-     * @throws IOException
      */
     public void exportCsv() throws IOException, NullPointerException{
         try{
@@ -644,7 +591,7 @@ public class MainController {
         String filepath = getPathToFile("CSV", "csv");
 
         if (filepath != null) {
-            //If user imports incorrect filetype it will do nothing and display a pop up
+            //If user imports incorrect filetype it will do nothing and display a pop-up
             if (matchFileType(filepath, ".csv")) {
                 PopupWindow.displayPopup("Error", "Selected file is not a CSV file");
                 return;
@@ -695,8 +642,8 @@ public class MainController {
     }
 
     /**
-     * Creates a pop up window which displays the number of invalid rows
-     * @param invalid
+     * Creates a pop-up window which displays the number of invalid rows
+     * @param invalid //TODO
      */
     public void displayInvalid(ArrayList<List<String>> invalid){
         String invalidRows = invalid.size()+" rows could not be imported because their format is invalid";
@@ -707,7 +654,6 @@ public class MainController {
      * Opens the file explorer for the user to select a save location and then passes
      * this to the database path method which will change the static variable path in database
      * which is accessed every time the database is connected to
-     * @throws IOException
      */
     public void changeDatabase() throws IOException, SQLException{
         String filepath = null;
@@ -716,7 +662,7 @@ public class MainController {
             //Changes the database to the selected path
             Database d = new Database();
 
-            //If user imports incorrect filetype it will do nothing and display a pop up
+            //If user imports incorrect filetype it will do nothing and display a pop-up
             if(matchFileType(filepath,".db")){
                 PopupWindow.displayPopup("Error", "Selected file is not a database file");
                 d.closeConnection();
@@ -737,9 +683,6 @@ public class MainController {
     /**
      * Prompts the user to select a location to save the new database file, then creates a database file there
      * @return Boolean true/false if the database was created successfully
-     * @throws NullPointerException
-     * @throws SQLException
-     * @throws IOException
      */
     public Boolean newDatabase() throws NullPointerException, SQLException, IOException {
         String filepath = getFileSavePath("Database", "db");
