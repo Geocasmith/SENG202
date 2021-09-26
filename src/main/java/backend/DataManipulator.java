@@ -7,6 +7,7 @@ import gui.PopupWindow;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -245,15 +246,16 @@ private ArrayList<Record> currentData;
      * @throws CsvValidationException
      */
 
-    public static ArrayList<ArrayList<List<String>>> getRowsfromCsv(String filepath) throws IOException,  CsvValidationException {
+    public static ArrayList<Object> getRowsfromCsv(String filepath) throws IOException,  CsvValidationException {
         try
         {
             ArrayList<ArrayList<List<String>>> result = new ArrayList<ArrayList<List<String>>>();
-            ArrayList<List<String>> csvValues = new  ArrayList<List<String>>();
+            ArrayList<List<String>> csvValues;
             ArrayList<List<String>> validRows = new ArrayList<List<String>>();
             ArrayList<List<String>> invalidRows = new ArrayList<List<String>>();
             csvValues = CsvReader.read(filepath);
             // Loop through all values read
+
             for (List<String> rec : csvValues) {
 
                 // Check if row is valid
@@ -267,13 +269,13 @@ private ArrayList<Record> currentData;
             result.add(validRows);
             result.add(invalidRows);
 
-            return result;
-        } catch (CsvException e) {
+            return new ArrayList<>(Arrays.asList(result, true));
+        } catch (CsvException | IOException e) {
             PopupWindow.displayPopup("Error", e.getMessage());
-        } catch (IOException exception) {
-            PopupWindow.displayPopup("Error", exception.getMessage());
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return new ArrayList<>(Arrays.asList(new ArrayList<ArrayList<List<String>>>(), false));
         }
-       return null;
+       return new ArrayList<>(Arrays.asList(new ArrayList<ArrayList<List<String>>>(), false));
     }
 
 }

@@ -600,6 +600,26 @@ public class MainController {
             Boolean replace = null;
             Boolean newDB = null;
             Boolean newDBSuccess = true;
+            Boolean csvSuccess = false;
+            ArrayList<ArrayList<List<String>>> dataValidation = new ArrayList<>();
+
+            try {
+                ArrayList<Object> csvRows = DataManipulator.getRowsfromCsv(filepath);
+                dataValidation = (ArrayList<ArrayList<List<String>>>) csvRows.get(0);
+                csvSuccess = (Boolean) csvRows.get(1);
+            } catch (Exception e) {
+                PopupWindow.displayPopup("Error", "Unknown error when importing CSV.\n" +
+                                                               "Please try again");
+                System.out.println(e);
+            }
+
+            if (!csvSuccess) {
+                PopupWindow.displayPopup("Error", "The selected CSV is in the wrong format.\n" +
+                        "Please try again");
+                return;
+            }
+
+
 
 
             newDB = PopupWindow.displayTwoButtonPopup("Create New Database?", "Do you want to store this data in a new database?", "New Database", "Existing Database");
@@ -615,14 +635,13 @@ public class MainController {
                     Database d = new Database();
                     d.connectDatabase();
 
-                    ArrayList<ArrayList<List<String>>> dataValidation = DataManipulator.getRowsfromCsv(filepath);
+
 
                     if (!replace) {
                         d.insertRows(dataValidation.get(0));
 
                     } else {
                         d.replaceRows(dataValidation.get(0));
-
                     }
                     if (dataValidation.get(1).size() != 0) {
                         displayInvalid(dataValidation.get(1));
@@ -636,8 +655,8 @@ public class MainController {
 
                 } catch (Exception e) {
                     System.out.println("Error " + e);
-                } // TODO this is printing an error when you import csv, click new database, then close the file picker
-            } // TODO the specific error is "Error java.lang.ArrayIndexOutOfBoundsException: Index 1 out of bounds for length 1"
+                }
+            }
         }
     }
 

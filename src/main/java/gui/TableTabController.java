@@ -4,8 +4,6 @@ import backend.DataAnalyser;
 import backend.Database;
 import backend.Record;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -28,7 +26,7 @@ public class TableTabController {
     @FXML private ToggleButton toggleAllColumnsButton;
 
     private MainController parentController; // allows access to the currently active mainController
-    private DataAnalyser dataAnalyser = new DataAnalyser();
+    private final DataAnalyser dataAnalyser = new DataAnalyser();
 
 
     @FXML
@@ -54,41 +52,25 @@ public class TableTabController {
         MenuItem distanceMenuItem = new MenuItem("Distance");
 
         // Add click event handlers to the menu items
-        editMenuItem.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    editRow();
-                } catch (IOException | SQLException e) {
-                    PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
-                }
+        editMenuItem.setOnAction(actionEvent -> {
+            try {
+                editRow();
+            } catch (IOException | SQLException e) {
+                PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
             }
         });
 
-        deleteMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    deleteSelectedRows();
-                } catch (SQLException e) {
-                    PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
-                }
+        deleteMenuItem.setOnAction(actionEvent -> {
+            try {
+                deleteSelectedRows();
+            } catch (SQLException e) {
+                PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
             }
         });
 
-        timeMenuItem.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                analyseCrimeTimeDifference();
-            }
-        });
+        timeMenuItem.setOnAction(actionEvent -> analyseCrimeTimeDifference());
 
-        distanceMenuItem.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                analyseCrimeLocationDifference();
-            }
-        });
+        distanceMenuItem.setOnAction(actionEvent -> analyseCrimeLocationDifference());
 
         // Add menu items to the relevant menus
         analyseMenu.getItems().addAll(timeMenuItem, distanceMenuItem);
