@@ -41,15 +41,5 @@ public class CsvWriter {
         writer.close();
     }
 
-    public static void write(String fileName,  List<String[]> data) throws IOException {
-        CSVWriter writer = new CSVWriter(new FileWriter(fileName));
-        for (String[] datum : data)
-        {
-            writer.writeNext(datum);
-        }
 
-
-
-        writer.close();
-    }
 }
