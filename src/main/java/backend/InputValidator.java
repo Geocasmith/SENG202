@@ -23,7 +23,8 @@ public class InputValidator {
     * Initializes set of valid crime descriptions (Primary, Secondary and IUCR information from
     * a given CSV file
     * @param filename (file where crime descriptions live)
-    * @return //TODO
+    * @return Set of String descriptions of a crime (IUCR, Primary Description, Secondary Description
+    * and FBICD)
     */
    public static Set<List<String>>  initializeCrimeDescriptions(String filename) throws CsvValidationException, IOException {
       Set<List<String>> descriptions = new HashSet<>();
@@ -36,7 +37,8 @@ public class InputValidator {
 
    /**
     * Checks the given List of Strings has valid crime descriptions
-    * @param candidateCrimeDescriptions //TODO
+    * @param candidateCrimeDescriptions usually String array of crime descriptions ((IUCR, Primary Description,
+    * Secondary Description and FBICD)
     * @return boolean value if the crime descriptions are valid
     */
    public static boolean hasValidCrimeDescriptions(List<String> candidateCrimeDescriptions) throws CsvValidationException, IOException {
@@ -339,7 +341,7 @@ public class InputValidator {
    /**
     * Filters and returns set of Secondary descriptions that relate to the passed primary description parameter
     * @param primaryDescription a crime's primary description string, which usually identifies the type of crime
-    * @return //TODO
+    * @return Set of Strings secondary descriptions if any or null if empty
     */
    public static Set<String> getSetOfSecondaryDescriptions(String primaryDescription) throws CsvValidationException, IOException {
       crimeDescription = initializeCrimeDescriptions("Crime_Descriptions_Data_Source.csv");
@@ -360,7 +362,7 @@ public class InputValidator {
     * Given the primary description and secondary description for a crime, it returns the associated IUCR value
     * @param primaryDescription  a crime's primary description string, which usually identifies the type of crime
     * @param secondaryDescription a crime's secondary description, usually further specifying the type of crime
-    * @return //TODO
+    * @return returns String (IUCR) of a crime type, if crime type does not exists it returns null
     */
    public static String getIucr(String primaryDescription, String secondaryDescription) throws CsvValidationException, IOException {
       crimeDescription = initializeCrimeDescriptions("Crime_Descriptions_Data_Source.csv");
@@ -378,7 +380,7 @@ public class InputValidator {
     * Given the primary description and secondary description for a crime, it returns the associated FBICD value
     * @param primaryDescription a crime's primary description string, which usually identifies the type of crime
     * @param secondaryDescription a crime's secondary description, usually further specifying the type of crime
-    * @return //TODO
+    * @return returns String (FBICD) of a crime type, if crime type does not exists it returns null
     */
    public static String getFbicd(String primaryDescription, String secondaryDescription) throws CsvValidationException, IOException {
       crimeDescription = initializeCrimeDescriptions("Crime_Descriptions_Data_Source.csv");
