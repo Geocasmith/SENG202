@@ -1,9 +1,8 @@
 package gui;
 
 import backend.DataAnalyser;
-import backend.Record;
 import backend.Database;
-import com.opencsv.exceptions.CsvValidationException;
+import backend.Record;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,7 +12,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -25,29 +23,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TableTabController {
-    @FXML private BorderPane tableTab;
     @FXML private TableView<Record> mainTableView;
     @FXML private FlowPane mainTableTogglePane;
     @FXML private ToggleButton toggleAllColumnsButton;
-    @FXML private Button addRowButton;
-    @FXML private Button deleteRowsButton;
-    @FXML private Button editRowButton;
-    @FXML private Accordion tableAccordion;
-    @FXML private TitledPane toggleColumnsAccordionTab;
 
-    private List<TextField> textFieldsAdd = new ArrayList<>();
     private MainController parentController; // allows access to the currently active mainController
     private DataAnalyser dataAnalyser = new DataAnalyser();
 
 
     @FXML
-    private void initialize() throws CsvValidationException, SQLException, IOException {
+    private void initialize() {
         setupTable();
         setupContextMenu();
     }
 
     /**
-     * Creates a context menu for the table view, contains an edit and delete option, along with an analyse submenu
+     * Creates a context menu for the table view, contains an edit and delete option, along with an analysis submenu
      * with time and distance options
      */
     private void setupContextMenu() {
@@ -63,13 +54,13 @@ public class TableTabController {
         MenuItem distanceMenuItem = new MenuItem("Distance");
 
         // Add click event handlers to the menu items
-        editMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+        editMenuItem.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
                     editRow();
-                } catch (IOException e) {
-                } catch (SQLException e) {
+                } catch (IOException | SQLException e) {
+                    PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
                 }
             }
         });
@@ -80,18 +71,19 @@ public class TableTabController {
                 try {
                     deleteSelectedRows();
                 } catch (SQLException e) {
+                    PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
                 }
             }
         });
 
-        timeMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+        timeMenuItem.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 analyseCrimeTimeDifference();
             }
         });
 
-        distanceMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+        distanceMenuItem.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 analyseCrimeLocationDifference();
@@ -152,7 +144,7 @@ public class TableTabController {
 
     /**
      * Returns a READ ONLY (!!!) list of records the user has selected in the table view.
-     * @return
+     * @return an observable list of records that cannot be edited
      */
     private ObservableList<Record> getSelectedRows() {
         return mainTableView.getSelectionModel().getSelectedItems();
@@ -164,7 +156,7 @@ public class TableTabController {
      * Allows for the selection of many rows at once.
      * Creates all columns necessary for viewing crime data.
      */
-    private void setupTable() throws CsvValidationException, IOException, SQLException {
+    private void setupTable() {
         mainTableView.setEditable(false); // stops user editing things in the table (should use the edit button)
         mainTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // allows multiple selected records
 
@@ -195,7 +187,7 @@ public class TableTabController {
                     try {
                         setupEditRow(rowData);
                     } catch (IOException e) {
-
+                        PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
                     }
                 } else if (event.getClickCount() == 1 && (! row.isEmpty()) ) {
                     Record rowData = row.getItem();
@@ -308,16 +300,12 @@ public class TableTabController {
      * @return an ArrayList of all record objects in the table.
      */
     public ArrayList<Record> getDisplayedRecords() {
-        ArrayList<Record> currentRecords = new ArrayList<>();
-        for (Object o : mainTableView.getItems()) {
-            currentRecords.add((Record) o);
-        }
-        return currentRecords;
+        return new ArrayList<>(mainTableView.getItems());
     }
 
     /**
      * Stores a reference to the parent controller, in this case mainController.
-     * @param mainController
+     * @param mainController a reference to the main controller
      */
     public void setParentController(MainController mainController) {
         this.parentController = mainController;
@@ -363,8 +351,8 @@ public class TableTabController {
             Record crime1 = getSelectedRows().get(0);
             Record crime2 = getSelectedRows().get(1);
             Duration timeDifference = dataAnalyser.calculateTimeDifference(crime1, crime2);
-            int timeDifferenceInt = 0;
-            String timeUnit = "";
+            int timeDifferenceInt;
+            String timeUnit;
             if (timeDifference.getSeconds() < Duration.ofHours(2).getSeconds()) {
                 timeDifferenceInt = (int) (timeDifference.getSeconds() / Duration.ofMinutes(1).getSeconds());
                 timeUnit = "minutes";
