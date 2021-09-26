@@ -24,7 +24,6 @@ public class InputValidator {
    /**
     * Initializes set of valid crime descriptions (Primary, Secondary and IUCR information from
     * a given CSV file
-    * @param filename (file where crime descriptions live)
     * @return Set of String descriptions of a crime (IUCR, Primary Description, Secondary Description
     * and FBICD)
     */
