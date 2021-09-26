@@ -8,14 +8,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.time.Duration;
+import java.util.List;
 
 public class DataAnalyserTest {
-    Record testRecord1, testRecord2, testRecord3, testRecord4;
+    Record testRecord1, testRecord2, testRecord3;
     ArrayList<String> data;
     DataAnalyser dataAnalyser = new DataAnalyser();
 
     @BeforeEach
-    private void init() {
+    public void init() {
         data = new ArrayList<>(Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "N", "N", "334", "7", "6", "1183633", "1851786", "41.748486365", "-87.602675062"));
         testRecord1 = new Record(data);
         data = new ArrayList<>(Arrays.asList("JE1639090", "11/23/2020 03:25:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "N", "N", "334", "7", "6", "1155154", "1896404", "41.87154041", "-87.705838807"));
@@ -61,10 +62,10 @@ public class DataAnalyserTest {
     void getTypeFrequencyTest() throws SQLException {
         Database db = new Database();
         DataAnalyser dataAnalyser = new DataAnalyser(db.getAll());
-        ArrayList<TypeFrequencyPair> res = new ArrayList<>();
-        ArrayList<Object> testcol = new ArrayList<Object>(Arrays.asList("WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION", "NARCOTICS",
+        ArrayList<TypeFrequencyPair> res;
+        ArrayList<Object> testColumn = new ArrayList<>(Arrays.asList("WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION", "NARCOTICS",
                 "CRIMINAL SEXUAL ASSAULT", "PUBLIC INDECENCY", "NARCOTICS", "NARCOTICS", "NARCOTICS"));
-        res= dataAnalyser.getTypeFrequencyDescending(testcol);
+        res= dataAnalyser.getTypeFrequencyDescending(testColumn);
         assertEquals(3, res.get(0).getFrequency());
 
     }
@@ -73,10 +74,10 @@ public class DataAnalyserTest {
     void getTypeFrequencyTest2() throws SQLException {
         Database db = new Database();
         DataAnalyser dataAnalyser = new DataAnalyser(db.getAll());
-        ArrayList<TypeFrequencyPair> res = new ArrayList<>();
-        ArrayList<Object> testcol = new ArrayList<Object>(Arrays.asList("WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION",
+        ArrayList<TypeFrequencyPair> res;
+        ArrayList<Object> testColumn = new ArrayList<>(Arrays.asList("WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION",
                 "WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION"));
-        res= dataAnalyser.getTypeFrequencyDescending(testcol);
+        res= dataAnalyser.getTypeFrequencyDescending(testColumn);
         assertEquals(9, res.get(0).getFrequency());
 
     }
@@ -85,11 +86,10 @@ public class DataAnalyserTest {
     void getTypeFrequencyTest3() throws SQLException {
         Database db = new Database();
         DataAnalyser dataAnalyser = new DataAnalyser(db.getAll());
-        ArrayList<TypeFrequencyPair> res = new ArrayList<>();
-        ArrayList<Object> testcol = new ArrayList<Object>(Arrays.asList("Theft"));
-        res= dataAnalyser.getTypeFrequencyDescending(testcol);
+        ArrayList<TypeFrequencyPair> res;
+        ArrayList<Object> testColumn = new ArrayList<>(List.of("Theft"));
+        res= dataAnalyser.getTypeFrequencyDescending(testColumn);
 
         assertEquals(1, res.get(0).getFrequency());
-
     }
 }

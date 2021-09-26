@@ -1,5 +1,4 @@
 package backend;
-import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -108,11 +107,10 @@ DataAnalyser {
      * Takes a data column and returns list of data column items together with their appearance frequency
      * @param column represents the data column
      * @return List of TypeFrequency pair objects
-     * @throws SQLException
      */
     public ArrayList<TypeFrequencyPair> getTypeFrequencyDescending(ArrayList<Object> column) {
 
-        ArrayList<TypeFrequencyPair> res = new ArrayList<TypeFrequencyPair>();
+        ArrayList<TypeFrequencyPair> res = new ArrayList<>();
         long frequency;
         HashSet types = new HashSet();
         types.addAll(column);
