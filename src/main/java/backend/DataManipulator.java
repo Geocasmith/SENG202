@@ -26,8 +26,8 @@ private ArrayList<Record> currentData;
 
     /**
      * This method checks if a record has a unique entry
-     * @param line Integer
-     * @param data Record
+     * @param line interger value representing the line number
+     * @param data list of record objects
      * @return true if Record case number is unique or false otherwise
      */
     public boolean hasUniqueCaseNumber(int line, Record data)
@@ -46,8 +46,8 @@ private ArrayList<Record> currentData;
 
     /**
      *
-     * @param line
-     * @param data
+     * @param line usually an interger value representing the line number
+     * @param data usually list of record objects
      * @return true if data is edited or false otherwise
      */
     public boolean editLine(int line, Record data) throws IOException {
@@ -66,8 +66,8 @@ private ArrayList<Record> currentData;
 
     /**
      * Adds a record into CurrentData object
-     * @param line
-     * @param data
+     * @param line usually an interger value representing the line number
+     * @param data  usually list of record objects
      * @return true if the record has been added or false otherwise
      */
     public boolean addLine(int line, Record data) {
@@ -81,7 +81,7 @@ private ArrayList<Record> currentData;
 
     /**
      * Removes a record from list of records in currentData object
-     * @param line
+     * @param line usually an integer value indicating the line number
      */
     public void deleteLine(int line) {
         currentData.remove(line);
@@ -89,8 +89,8 @@ private ArrayList<Record> currentData;
 
     /**
      * Takes column number and extracts corresponding column values from currentData object
-     * @param col int
-     * @return extractedCol
+     * @param col int usually an interger value representing the column number
+     * @return extractedCol Array list of objects taken out from a column in the database
      */
     public static ArrayList<Object> extractCol(ArrayList<Record> currentData, int col)
     {
@@ -190,7 +190,7 @@ private ArrayList<Record> currentData;
 
     /**
      * Gets all record objects from the database
-     * @return
+     * @return list of Record objects extracted from the database
      * @throws SQLException
      */
 
@@ -221,8 +221,8 @@ private ArrayList<Record> currentData;
 
     /**
      * Saves the current data to CSV file
-     * @param fileName name of the Csv file
-     * @return
+     * @param fileName String value specifying the name of the Csv file
+     * @return boolean value (true if the file has been saved or false otherwise)
      * @throws IOException
      */
 
