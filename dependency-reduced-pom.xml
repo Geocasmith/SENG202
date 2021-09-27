@@ -23,7 +23,7 @@
         <artifactId>javafx-maven-plugin</artifactId>
         <version>0.0.2</version>
         <configuration>
-          <mainClass>seng202.Main</mainClass>
+          <mainClass>gui.Main</mainClass>
         </configuration>
       </plugin>
       <plugin>
