@@ -270,13 +270,12 @@ public class Database {
      */
     public void manualAdd(Record rec) throws SQLException, ParseException {
 
-        //Converts record to string
-        String recString = rec.toString();
+        //Converts record to list
+        List<String> recList = rec.toList();
 
-        //Creates a string array by splitting the string and adds it to an arraylist so it can be passed to insertRows(ArrayList<List<String>>) method
-        String[] column = recString.trim().split("\\s*,\\s*");
-        ArrayList<List<String>> input = new ArrayList<List<String>>();
-        input.add(List.of(column));
+        //Adds it to an arraylist so it can be passed to insertRows(ArrayList<List<String>>) method
+        ArrayList<List<String>> input = new ArrayList<>();
+        input.add(rec.toList());
 
         //Calls insertRows method on the arraylist to add the row to the database
         insertRows(input);
@@ -293,16 +292,15 @@ public class Database {
      */
     public void manualUpdate(Record rec) throws SQLException, ParseException {
 
-        //Converts record to string
-        String recString = rec.toString();
+        //Converts record to list
+        List<String> recList = rec.toList();
 
-        //Creates a string array by splitting the string and adds it to an arraylist so it can be passed to insertRows(ArrayList<List<String>>) method
-        String[] column = recString.trim().split("\\s*,\\s*");
-        ArrayList<List<String>> input = new ArrayList<List<String>>();
-        input.add(List.of(column));
+        //Adds it to an arraylist, so it can be passed to insertRows(ArrayList<List<String>>) method
+        ArrayList<List<String>> input = new ArrayList<>();
+        input.add(recList);
 
-        //Deletes outdated entry by calling delete on column[0] which is the string of the Case Number
-        manualDelete(column[0]);
+        //Deletes outdated entry by calling delete on index 0 of the list, which is the casenumber
+        manualDelete(recList.get(0));
 
         //Calls insertRows method on the arraylist to add the row to the database
         insertRows(input);
