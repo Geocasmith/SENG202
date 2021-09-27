@@ -52,10 +52,10 @@
 ## Instructions for running application from .jar file
 
 1. Unzip the project .zip file to a safe location
-2. Navigate to the "Runnable Application" folder inside the newly extracted folder
+2. Navigate to the newly extracted folder
 3. Open the folder in Terminal or Command Prompt
 4. Run the following command: `java -jar seng202_2021_team10_phase2.jar`
-5. **Note**: When running the program, ensure that the .jar file is in 
+5. **Note**: When running the program, ensure that the .jar file is in  
 the same location as the Files folder as it includes dependencies for the application
 
 ## Instructions for building program .jar file
@@ -66,6 +66,14 @@ the same location as the Files folder as it includes dependencies for the applic
 4. Run the following command: `mvn clean package`
 5. Navigate to the target folder in File Explorer
 6. SENG202Project-1.0-SNAPSHOT.jar is the newly created .jar file
+
+## App startup
+When the program is first opened, there will be no data in it.  
+Click the File menu in the top left to see the options for adding data  
+  
+The program comes with a sample crimes database and csv file in the Files folder.  
+These are called crimeRecords.db and crimeRecords.csv respectively
+
 
 
 
