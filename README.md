@@ -52,7 +52,7 @@
 ## Instructions for running application from .jar file
 
 1. Unzip the project .zip file to a safe location
-2. Navigate to the "Runnable Program" folder inside the newly extracted folder
+2. Navigate to the "Runnable Application" folder inside the newly extracted folder
 3. Open the folder in Terminal or Command Prompt
 4. Run the following command: `java -jar seng202_2021_team10_phase2.jar`
 5. **Note**: When running the program, ensure that the .jar file is in 
