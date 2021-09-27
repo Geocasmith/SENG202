@@ -37,15 +37,17 @@
 
 ### Intellij
 
-1. Click Add Configuration in the top toolbar of the screen
-2. Click the + in the top left
-3. Select Application
-4. Ensure Java 14 is selected in the top left dropdown box
-5. If not, select 14 (2) version 14.0.2
-6. Type gui.Main in the Main class text box
-7. Click Apply
-8. Click OK
-9. Click the run button in the top toolbar of the screen
+1. Import the project into Intellij as specified above
+2. Click Add Configuration in the top toolbar of the screen
+3. Click the + in the top left
+4. Select Application
+5. Ensure Java 14 is selected in the top left dropdown box
+6. If not, select 14 (2) version 14.0.2
+7. Type gui.Main in the Main class text box
+8. Click Apply
+9.  Click OK
+10. Click the run button in the top toolbar of the screen
+    
 
 ## Instructions for running application from .jar file
 
@@ -53,6 +55,8 @@
 2. Navigate to the "Runnable Program" folder inside the newly extracted folder
 3. Open the folder in Terminal or Command Prompt
 4. Run the following command: `java -jar seng202_2021_team10_phase2.jar`
+5. **Note**: When running the program, ensure that the .jar file is in 
+the same location as the Files folder as it includes dependencies for the application
 
 ## Instructions for building program .jar file
 
@@ -62,8 +66,7 @@
 4. Run the following command: `mvn clean package`
 5. Navigate to the target folder in File Explorer
 6. SENG202Project-1.0-SNAPSHOT.jar is the newly created .jar file
-**Note**: When running the program, ensure that the .jar file is in 
-the same location as the Files folder as it includes dependencies for the application
+
 
 
 
