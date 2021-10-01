@@ -61,15 +61,16 @@ public class GraphCreator {
      */
     private ArrayList<Object> calculateFormatForGraph(ArrayList<LocalDateTime> times) {
         Duration width = dataAnalyser.calculateTimeDifference(times.get(0), times.get(times.size() - 1));
+
         Duration periodInSeconds;
         DateTimeFormatter formatter;
         String requiredDuration;
-        if (width.getSeconds() < oneHourInSeconds) {
+        if (width.getSeconds() < 3 * oneHourInSeconds) {
             requiredDuration = "Minutes";
             formatter = minuteHourFormatter;
             periodInSeconds = Duration.ofSeconds(oneMinuteInSeconds);
         }
-        else if (width.getSeconds() < oneDayInSeconds) {
+        else if (width.getSeconds() < 3 * oneDayInSeconds) {
             requiredDuration = "Hours";
             formatter = minuteHourFormatter;
             periodInSeconds = Duration.ofSeconds(oneHourInSeconds);
@@ -81,7 +82,7 @@ public class GraphCreator {
             requiredDuration = "Weeks";
             formatter = dayWeekFormatter;
             periodInSeconds = Duration.ofSeconds(oneWeekInSeconds);
-        } else if (width.getSeconds() < 2 * oneYearInSeconds) {
+        } else if (width.getSeconds() < 3 * oneYearInSeconds) {
             requiredDuration = "Months";
             formatter = monthFormatter;
             periodInSeconds = Duration.ofSeconds(oneMonthInSeconds);
@@ -109,26 +110,19 @@ public class GraphCreator {
 
         LocalDateTime upperBound = lowerBound;
         lowerBound = roundDateTime(lowerBound, requiredDuration);
-        if (Duration.between(maxUpperBound, upperBound).getSeconds() == 0) {
-            series.getData().add(new XYChart.Data(lowerBound.format(formatter), 1));
-        } else {
-            while (Duration.between(maxUpperBound, upperBound).getSeconds() < 0) {
+        while (Duration.between(maxUpperBound, upperBound).getSeconds() <= 0) {
 
-                upperBound = roundDateTime(lowerBound.plusSeconds((int) (1.5 * periodInSeconds.getSeconds())), requiredDuration);
-                count = 0;
+            // 1.8 * is to make sure the new time period goes well into the next period and doesn't fall just short
+            upperBound = roundDateTime(lowerBound.plusSeconds((int) (1.8 * periodInSeconds.getSeconds())), requiredDuration);
+            count = 0;
 
-                while (i < times.size() && Duration.between(times.get(i), upperBound).getSeconds() > 0) {
-                    count++;
-                    i++;
-                }
-
-                lowerBound = upperBound;
-                series.getData().add(new XYChart.Data(lowerBound.format(formatter), count));
+            while (i < times.size() && Duration.between(times.get(i), upperBound).getSeconds() > 0) {
+                count++;
+                i++;
             }
+            series.getData().add(new XYChart.Data(lowerBound.format(formatter), count));
+            lowerBound = upperBound;
         }
-
-
-
     }
 
     /**
@@ -150,9 +144,6 @@ public class GraphCreator {
             times.add(r.getDateAsObject());
         }
         Collections.sort(times);
-//        times = new ArrayList<>(times.subList(0, 2000));
-
-
 
         ArrayList<Object> calculations = calculateFormatForGraph(times);
 
