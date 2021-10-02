@@ -85,7 +85,7 @@
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="filterCaseNumberTextField" layoutX="64.0" layoutY="60.0" prefHeight="25.0" prefWidth="70.0" promptText="Case Number" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                        <TextField fx:id="filterCaseNumberTextField" layoutX="64.0" layoutY="60.0" onAction="#applyFilters" prefHeight="25.0" prefWidth="70.0" promptText="Case Number" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                         <Label alignment="CENTER" layoutY="123.0" prefWidth="200.0" text="From" />
                         <DatePicker fx:id="filterStartDate" layoutX="18.0" layoutY="140.0" prefHeight="26.0" prefWidth="160.0" />
                         <Label alignment="CENTER" layoutY="165.0" prefWidth="200.0" text="To" textAlignment="CENTER">
@@ -100,8 +100,8 @@
                            </font>
                         </Label>
                         <Separator layoutX="1.0" layoutY="232.0" prefWidth="200.0" />
-                        <TextField fx:id="filterWardTextField" layoutX="26.0" layoutY="374.0" prefHeight="25.0" prefWidth="70.0" promptText="Ward" />
-                        <TextField fx:id="filterBeatsTextField" layoutX="104.0" layoutY="374.0" prefHeight="25.0" prefWidth="70.0" promptText="Beat" />
+                        <TextField fx:id="filterWardTextField" layoutX="26.0" layoutY="374.0" onAction="#applyFilters" prefHeight="25.0" prefWidth="70.0" promptText="Ward" />
+                        <TextField fx:id="filterBeatsTextField" layoutX="104.0" layoutY="374.0" onAction="#applyFilters" prefHeight="25.0" prefWidth="70.0" promptText="Beat" />
                         <Label alignment="CENTER" layoutY="234.0" prefHeight="17.0" prefWidth="200.0" text="Crime Type">
                            <font>
                               <Font size="16.0" />
@@ -114,9 +114,9 @@
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="filterLatTextField" layoutX="26.0" layoutY="418.0" onAction="#checkSliderUnlock" onKeyTyped="#checkSliderUnlock" prefHeight="25.0" prefWidth="70.0" promptText="Lat" />
-                        <TextField fx:id="filterLongTextField" layoutX="104.0" layoutY="418.0" onAction="#checkSliderUnlock" onKeyTyped="#checkSliderUnlock" prefHeight="25.0" prefWidth="70.0" promptText="Long" />
-                        <Slider fx:id="radiusSlider" blockIncrement="5.0" layoutX="11.0" layoutY="465.0" majorTickUnit="10.0" minorTickCount="5" onKeyReleased="#updateRadiusText" onMouseDragged="#updateRadiusText" prefHeight="14.0" prefWidth="125.0" />
+                        <TextField fx:id="filterLatTextField" layoutX="26.0" layoutY="418.0" onAction="#applyFilters" onKeyTyped="#checkSliderUnlock" prefHeight="25.0" prefWidth="70.0" promptText="Lat" />
+                        <TextField fx:id="filterLongTextField" layoutX="104.0" layoutY="418.0" onAction="#applyFilters" onKeyTyped="#checkSliderUnlock" prefHeight="25.0" prefWidth="70.0" promptText="Long" />
+                        <Slider fx:id="radiusSlider" blockIncrement="5.0" layoutX="11.0" layoutY="465.0" majorTickUnit="10.0" minorTickCount="5" onKeyReleased="#updateRadiusText" onMouseClicked="#updateRadiusText" onMouseDragged="#updateRadiusText" prefHeight="14.0" prefWidth="125.0" />
                         <Label alignment="CENTER" layoutX="-4.0" layoutY="443.0" prefHeight="17.0" prefWidth="200.0" text="Radius">
                            <opaqueInsets>
                               <Insets top="5.0" />
