@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -285,11 +284,18 @@ public class TableTabController {
 
     /**
      * Returns an arraylist of all the record objects in the table.
-     *
      * @return an ArrayList of all record objects in the table.
      */
     public ArrayList<Record> getDisplayedRecords() {
         return new ArrayList<>(mainTableView.getItems());
+    }
+
+    /**
+     * Returns the raw ObservableList object of the main table view.
+     * @return the raw ObservableList object of the main table view.
+     */
+    public ObservableList<Record> getRawDisplayedRecords() {
+        return mainTableView.getItems();
     }
 
     /**

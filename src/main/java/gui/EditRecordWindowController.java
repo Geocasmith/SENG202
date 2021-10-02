@@ -1,19 +1,17 @@
 package gui;
 
+import backend.Database;
 import backend.InputValidator;
 import backend.Record;
-import backend.Database;
 import com.google.gson.JsonArray;
 import com.opencsv.exceptions.CsvValidationException;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
 import javafx.css.PseudoClass;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
@@ -25,7 +23,6 @@ import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.*;
 
 public class EditRecordWindowController {
@@ -60,14 +57,13 @@ public class EditRecordWindowController {
             "Primary description", "Secondary description", "Location description", "Arrest", "Domestic", "Ward",
             "Beat", "FBICD", "X-Coordinate", "Y-Coordinate", "Latitude", "Longitude");
     private List<TextField> textFields = new ArrayList<>();
-    private boolean edited = false; // was a record changed? - used to prompt for a table refresh on close
-    
+    private Record editingRecord; // the record currently being edited
+
     /**
      * Creates the textfields and their layout, marks relevant ones as required,
      * and sets the padding on buttonPane.
      */
-    @FXML private void initialize() throws IOException, CsvValidationException, SQLException {
-
+    @FXML private void initialize() throws IOException, CsvValidationException {
         buttonPane.setPadding(new Insets(0, 0, 15, 10)); // scenebuilder wasn't making this work so it goes here
         for (int i = 0; i < textFieldNames.size(); i++) {
             Label fieldTitleLabel = new Label(textFieldNames.get(i));
@@ -146,6 +142,7 @@ public class EditRecordWindowController {
         if (record != null) {
 
             edit = true;
+            editingRecord = record;
             List<String> recStrings = record.toList();
 
             for (int i = 0; i < textFieldNames.size(); i++) {
@@ -222,17 +219,9 @@ public class EditRecordWindowController {
     }
 
     /**
-     * Closes the window and, if the user has edited or added data,
-     * prompts them to refresh the table to view their changes.
+     * Closes the window.
      */
-    @FXML private void closeWindow() throws SQLException, IOException {
-        if (edited) {
-            if (PopupWindow.displayTwoButtonPopup("Refresh Table", "Any changes or additions to the data will not be " +
-                    "visible unless the table is refreshed.\nThis could take some time if there are many records loaded.\n" +
-                    "Would you like to refresh the table?", "Yes", "No")) {
-                parentController.refreshTableData();
-            }
-        }
+    @FXML private void closeWindow() {
         ((Stage) closeButton.getScene().getWindow()).close();
     }
 
@@ -273,6 +262,10 @@ public class EditRecordWindowController {
 
                 if (edit) {
                     d.manualUpdate(new Record(data));
+                    int replaceIndex = parentController.getRawDisplayedRecords().indexOf(editingRecord);
+                    Record newRecord = new Record(data);
+                    parentController.getRawDisplayedRecords().set(replaceIndex, newRecord);
+                    editingRecord = newRecord; // so that any additional changes also go through
                     PopupWindow.displayPopup("Success", "The record has been updated.");
                 } else {
                     if (d.searchDB("ID", data.get(0)).size() > 0) {
@@ -283,10 +276,10 @@ public class EditRecordWindowController {
                     }
                     else {
                         d.manualAdd(new Record(data));
+                        parentController.addRecordsToTable(new Record(data));
                         PopupWindow.displayPopup("Success", "The record has been added.");
                     }
                 }
-                this.edited = true;
                 d.disconnectDatabase();
 
             } else { // 17 is where the feedback message is held
@@ -295,7 +288,6 @@ public class EditRecordWindowController {
         }
         catch (Exception ex) { // this is here so that exceptions are more obvious when they occur
             PopupWindow.displayPopup("Error", ex.getMessage());
-
         }
     }
 
