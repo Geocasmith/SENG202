@@ -49,9 +49,10 @@ public class PopupWindow {
      * @param message A message to display on the popup
      * @param button1Text Text to display on the first button
      * @param button2Text Text to display on the second button
+     * @param nullOnExit if true program will return null if the window is closed
      * @return A Boolean depending on which button the user presses, true for button 1, false for button 2
      */
-    public static Boolean displayTwoButtonPopup(String title, String message, String button1Text, String button2Text) {
+    public static Boolean displayTwoButtonPopup(String title, String message, String button1Text, String button2Text, boolean nullOnExit) {
         Stage popupWindow = new Stage();
 
         popupWindow.initModality(Modality.APPLICATION_MODAL);
@@ -62,7 +63,11 @@ public class PopupWindow {
         Label label = new Label();
         label.setText(message);
 
-        final Boolean[] returnValue = {false};
+        final Boolean[] returnValue = {null};
+
+        if (!nullOnExit) {
+            returnValue[0] = false;
+        }
 
         Button button1 = new Button(button1Text);
         button1.setOnAction(e -> {
@@ -85,5 +90,17 @@ public class PopupWindow {
         popupWindow.setScene(scene);
         popupWindow.showAndWait();
         return returnValue[0];
+    }
+
+    /**
+     * Displays a popup box with default return value as false
+     * @param title A title to display on the popup
+     * @param message A message to display on the popup
+     * @param button1Text Text to display on the first button
+     * @param button2Text Text to display on the second button
+     * @return A Boolean depending on which button the user presses, true for button 1, false for button 2
+     */
+    public static Boolean displayTwoButtonPopup(String title, String message, String button1Text, String button2Text) {
+        return displayTwoButtonPopup(title, message, button1Text, button2Text, false);
     }
 }
