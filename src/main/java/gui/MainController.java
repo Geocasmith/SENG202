@@ -19,7 +19,9 @@ import java.nio.file.FileAlreadyExistsException;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class MainController {
@@ -365,8 +367,8 @@ public class MainController {
         // Do the same for end date
         localDate = filterEndDate.getValue();
         if (localDate != null) {
-            instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
-            endDate = Date.from(instant);
+            instant = Instant.from(localDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()));
+            endDate = Date.from(instant.minus(1, ChronoUnit.SECONDS));
         }
 
         if ((startDate != null) && (endDate != null)) {
