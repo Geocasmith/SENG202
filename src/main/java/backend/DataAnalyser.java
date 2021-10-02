@@ -1,4 +1,6 @@
 package backend;
+import gui.PopupWindow;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -66,6 +68,33 @@ DataAnalyser {
     }
 
     /**
+     * Calculates the time difference between the two records, and a suitable unit and returns a string with that information
+     * @param record1 the first crime record
+     * @param record2 the second crime record
+     * @return A String detailing the time difference between the two given records
+     */
+    public String getTimeDifferenceString(Record record1, Record record2) {
+        Duration timeDifference = calculateTimeDifference(record1, record2);
+        int timeDifferenceInt;
+        String timeUnit;
+        if (timeDifference.getSeconds() < Duration.ofHours(2).getSeconds()) {
+            timeDifferenceInt = (int) (timeDifference.getSeconds() / Duration.ofMinutes(1).getSeconds());
+            timeUnit = "minutes";
+        } else if (timeDifference.getSeconds() < Duration.ofDays(2).getSeconds()) {
+            timeDifferenceInt = (int) (timeDifference.getSeconds() / Duration.ofHours(1).getSeconds());
+            timeUnit = "hours";
+        } else if (timeDifference.getSeconds() < Duration.ofDays(30).getSeconds()) {
+            timeDifferenceInt = (int) (timeDifference.getSeconds() / Duration.ofDays(1).getSeconds());
+            timeUnit = "days";
+        } else {
+            timeDifferenceInt = (int) (timeDifference.getSeconds() / Duration.ofDays(30).getSeconds());
+            timeUnit = "months";
+        }
+        return timeDifferenceInt + " " + timeUnit;
+    }
+
+
+    /**
      * Uses the Haversine formula to calculate the difference between the two crimes in meters, allowing for the
      * curvature of the earth
      * @param record1Lat the first crime record's latitude
@@ -100,6 +129,19 @@ DataAnalyser {
             return -1;
         }
         return calculateLocationDifferenceMeters(record1.getLatitude(), record1.getLongitude(), record2.getLatitude(), record2.getLongitude());
+    }
+
+    public String getLocationDifferenceString(Record record1, Record record2) {
+        int locationDifference = calculateLocationDifferenceMeters(record1, record2);
+        String locationUnit;
+        if (locationDifference < 3000) {
+            locationUnit = "meters";
+        } else {
+            locationUnit = "kilometers";
+            locationDifference = locationDifference / 1000;
+
+        }
+        return locationDifference + " " + locationUnit;
     }
 
 

@@ -21,9 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TableTabController {
-    @FXML private TableView<Record> mainTableView;
-    @FXML private FlowPane mainTableTogglePane;
-    @FXML private ToggleButton toggleAllColumnsButton;
+    @FXML
+    private TableView<Record> mainTableView;
+    @FXML
+    private FlowPane mainTableTogglePane;
+    @FXML
+    private ToggleButton toggleAllColumnsButton;
 
     private MainController parentController; // allows access to the currently active mainController
     private final DataAnalyser dataAnalyser = new DataAnalyser();
@@ -43,13 +46,11 @@ public class TableTabController {
 
         // Create menus
         ContextMenu tableContextMenu = new ContextMenu();
-        Menu analyseMenu = new Menu("Analyse");
 
         // Create menu items
         MenuItem editMenuItem = new MenuItem("Edit");
         MenuItem deleteMenuItem = new MenuItem("Delete");
-        MenuItem timeMenuItem = new MenuItem("Time");
-        MenuItem distanceMenuItem = new MenuItem("Distance");
+        MenuItem analyseMenuItem = new MenuItem("Analyse");
 
         // Add click event handlers to the menu items
         editMenuItem.setOnAction(actionEvent -> {
@@ -68,20 +69,19 @@ public class TableTabController {
             }
         });
 
-        timeMenuItem.setOnAction(actionEvent -> analyseCrimeTimeDifference());
+        analyseMenuItem.setOnAction(actionEvent -> analyseCrimeDifference());
 
-        distanceMenuItem.setOnAction(actionEvent -> analyseCrimeLocationDifference());
 
         // Add menu items to the relevant menus
-        analyseMenu.getItems().addAll(timeMenuItem, distanceMenuItem);
-        tableContextMenu.getItems().addAll(editMenuItem, deleteMenuItem, analyseMenu);
+        tableContextMenu.getItems().addAll(editMenuItem, deleteMenuItem, analyseMenuItem);
 
         mainTableView.setContextMenu(tableContextMenu);
     }
 
     /**
      * Adds a column to the main table with the mentioned display and property names, taken from the record class.
-     * @param displayName The name to be used as the column header. Can be whatever you fancy.
+     *
+     * @param displayName  The name to be used as the column header. Can be whatever you fancy.
      * @param propertyName The name of the attribute in the record class. This needs to match but doesn't seem
      *                     to be case-sensitive. This hooks up to a get[propertyName] method and uses the output
      *                     to fill in the column. Can work with at least strings and bools.
@@ -95,8 +95,9 @@ public class TableTabController {
 
     /**
      * Creates a checkbox in the panel below the main table, and binds it to its column's visibility.
+     *
      * @param displayName The String to be used as a label for the checkbox
-     * @param col The column object whose visibility will be bound by the checkbox
+     * @param col         The column object whose visibility will be bound by the checkbox
      */
     public void addTableColCheck(String displayName, TableColumn col) {
         CheckBox chk = new CheckBox(displayName);
@@ -109,7 +110,7 @@ public class TableTabController {
      * toggle button. Relies on the binding established in addTableColCheck.
      */
     public void toggleAllTableCols() {
-        for (Node node : mainTableTogglePane.getChildren()){
+        for (Node node : mainTableTogglePane.getChildren()) {
             if (node instanceof CheckBox) {
                 ((CheckBox) node).setSelected(toggleAllColumnsButton.isSelected());
             }
@@ -118,6 +119,7 @@ public class TableTabController {
 
     /**
      * Returns the number of rows the user has selected in the table view.
+     *
      * @return integer number of selected rows
      */
     private int getNumSelectedRows() {
@@ -126,6 +128,7 @@ public class TableTabController {
 
     /**
      * Returns a READ ONLY (!!!) list of records the user has selected in the table view.
+     *
      * @return an observable list of records that cannot be edited
      */
     private ObservableList<Record> getSelectedRows() {
@@ -161,22 +164,22 @@ public class TableTabController {
         addTableCol("Longitude", "longitude");
 
         // Setup double click event to open the edit window when a row is double-clicked
-        mainTableView.setRowFactory( tv -> {
+        mainTableView.setRowFactory(tv -> {
             TableRow<Record> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     Record rowData = row.getItem();
                     try {
                         setupEditRow(rowData);
                     } catch (IOException e) {
                         PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
                     }
-                } else if (event.getClickCount() == 1 && (! row.isEmpty()) ) {
+                } else if (event.getClickCount() == 1 && (!row.isEmpty())) {
                     Record rowData = row.getItem();
                     parentController.updateLatLong(rowData); // copies lat & long of selected record to filter sidebar
                 }
             });
-            return row ;
+            return row;
         });
     }
 
@@ -215,8 +218,7 @@ public class TableTabController {
     private void editRow() throws IOException, SQLException {
         if (getNumSelectedRows() == 1) {
             setupEditRow(getSelectedRows().get(0));
-        }
-        else {
+        } else {
             PopupWindow.displayPopup("Error", "You must have exactly one row selected to edit a record.");
         }
     }
@@ -251,6 +253,7 @@ public class TableTabController {
     /**
      * Adds all record objects in an arraylist to the main viewing table.
      * Does not add anything to the database.
+     *
      * @param records An ArrayList of record objects to be displayed in the table
      */
     public void addRecordsToTable(ArrayList<Record> records) {
@@ -262,6 +265,7 @@ public class TableTabController {
     /**
      * Adds a record object to the main viewing table.
      * Does not add anything to the database.
+     *
      * @param rec A record object to be displayed in the table
      */
     public void addRecordsToTable(Record rec) {
@@ -271,6 +275,7 @@ public class TableTabController {
     /**
      * Sets the record objects displayed in table to those contained in an arraylist.
      * Does not alter the database.
+     *
      * @param records An ArrayList of record objects to be displayed in the table
      */
     public void setTableRecords(ArrayList<Record> records) {
@@ -280,6 +285,7 @@ public class TableTabController {
 
     /**
      * Returns an arraylist of all the record objects in the table.
+     *
      * @return an ArrayList of all record objects in the table.
      */
     public ArrayList<Record> getDisplayedRecords() {
@@ -288,6 +294,7 @@ public class TableTabController {
 
     /**
      * Stores a reference to the parent controller, in this case mainController.
+     *
      * @param mainController a reference to the main controller
      */
     public void setParentController(MainController mainController) {
@@ -306,7 +313,7 @@ public class TableTabController {
      * Shows a popup with the difference in location between two crimes if two were selected,
      * else shows an error message.
      */
-    public void analyseCrimeLocationDifference() {
+    public void analyseCrimeDifference() {
         if (getNumSelectedRows() == 2) {
             Record crime1 = getSelectedRows().get(0);
             Record crime2 = getSelectedRows().get(1);
@@ -315,8 +322,12 @@ public class TableTabController {
                 PopupWindow.displayPopup("Error", "One or more of the selected records is missing location data.\n" +
                         "Try selecting a different record");
             } else {
-                PopupWindow.displayPopup("Crime Location Difference", "These crimes occurred " +
-                        locationDifference + " meters apart.");
+                try {
+                    analysisPopup(crime1, crime2);
+                } catch (IOException e) {
+                    PopupWindow.displayPopup("Error", "An unknown error occurred, please try again");
+                }
+
             }
 
         } else {
@@ -325,34 +336,18 @@ public class TableTabController {
         }
     }
 
-    /**
-     * Shows a popup with the difference in time between two crimes if two were selected,
-     * else shows an error message.
-     */
-    public void analyseCrimeTimeDifference() {
-        if (getNumSelectedRows() == 2) {
-            Record crime1 = getSelectedRows().get(0);
-            Record crime2 = getSelectedRows().get(1);
-            Duration timeDifference = dataAnalyser.calculateTimeDifference(crime1, crime2);
-            int timeDifferenceInt;
-            String timeUnit;
-            if (timeDifference.getSeconds() < Duration.ofHours(2).getSeconds()) {
-                timeDifferenceInt = (int) (timeDifference.getSeconds() / Duration.ofMinutes(1).getSeconds());
-                timeUnit = "minutes";
-            } else if (timeDifference.getSeconds() < Duration.ofDays(2).getSeconds()) {
-                timeDifferenceInt = (int) (timeDifference.getSeconds() / Duration.ofHours(1).getSeconds());
-                timeUnit = "hours";
-            } else if (timeDifference.getSeconds() < Duration.ofDays(30).getSeconds()) {
-                timeDifferenceInt = (int) (timeDifference.getSeconds() / Duration.ofDays(1).getSeconds());
-                timeUnit = "days";
-            } else {
-                timeDifferenceInt = (int) (timeDifference.getSeconds() / Duration.ofDays(30).getSeconds());
-                timeUnit = "months";
-            }
-            PopupWindow.displayPopup("Crime Location Difference", "These crimes occurred " + timeDifferenceInt + " " + timeUnit + " apart");
-        } else {
-            PopupWindow.displayPopup("Error", "You must have exactly two records selected to use this feature.\n" +
-                    "Hold CTRL or SHIFT to select multiple records.");
-        }
+    public void analysisPopup(Record crime1, Record crime2) throws IOException {
+        Stage popupEdit = new Stage();
+        popupEdit.initModality(Modality.APPLICATION_MODAL);
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("analysisPopup.fxml")
+        );
+        popupEdit.setScene(new Scene(loader.load()));
+        AnalysisPopupController controller = loader.getController();
+        controller.initData(crime1, crime2);
+        popupEdit.setTitle("Analyse Crimes");
+
+        popupEdit.setResizable(false);
+        popupEdit.showAndWait();
     }
 }

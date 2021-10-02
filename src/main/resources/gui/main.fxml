@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckComboBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" stylesheets="@main.css" xmlns="http://javafx.com/javafx/14" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" stylesheets="@main.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -29,12 +29,6 @@
                   <MenuItem mnemonicParsing="false" onAction="#changeDatabase" text="Select Database" />
                   <MenuItem mnemonicParsing="false" onAction="#importCsv" text="Import CSV" />
                   <MenuItem mnemonicParsing="false" onAction="#exportCsv" text="Export CSV" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Analysis">
-            <items>
-              <MenuItem mnemonicParsing="false" onAction="#analyseCrimeLocationDifference" text="Distance" />
-                  <MenuItem mnemonicParsing="false" onAction="#analyseCrimeTimeDifference" text="Time" />
             </items>
           </Menu>
         </menus>

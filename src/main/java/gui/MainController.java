@@ -760,20 +760,6 @@ public class MainController {
     }
 
     /**
-     * Forwards the request to analyse the crime locations to the table tab controller
-     */
-    public void analyseCrimeLocationDifference() {
-        tableTabController.analyseCrimeLocationDifference();
-    }
-
-    /**
-     * Forwards the request to analyse the crime times to the table tab controller
-     */
-    public void analyseCrimeTimeDifference() {
-        tableTabController.analyseCrimeTimeDifference();
-    }
-
-    /**
      * Passes the analysis update request to the analysis tab controller
      */
     private void updateAnalysis() {

@@ -1,6 +1,7 @@
 package gui;
 
 import backend.Record;
+import com.google.gson.JsonArray;
 import javafx.fxml.FXML;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -19,7 +20,7 @@ public class MapTabController {
      */
     @FXML
     private void initialize() {
-        webEngine= webView.getEngine();
+        webEngine = webView.getEngine();
         webEngine.load(Objects.requireNonNull(getClass().getResource("googlemaps.html")).toString());
     }
 
@@ -30,14 +31,27 @@ public class MapTabController {
      */
     public void plotPoints(ArrayList<Record> records) {
         String newLocationMarker;
+        JsonArray recordArray;
+
         for (Record record : records) {
-            newLocationMarker = "document.plotPoint(" + record.getLatitude() + ", " + record.getLongitude() + ", '" +
-                    record.getCaseNumber() + "', '" + record.getDate() + "', '" + record.getPrimaryDescription() + "', '" + record.getSecondaryDescription() +
-                    "', '" + record.getLocationDescription() + "')";
+            recordArray = createJsonArray(record);
+            newLocationMarker = "document.plotPoint(" + recordArray + ")";
             webEngine.executeScript(newLocationMarker);
         }
 
 
+    }
+
+    private JsonArray createJsonArray(Record record) {
+        JsonArray recordArray = new JsonArray();
+        recordArray.add(record.getLatitude());
+        recordArray.add(record.getLongitude());
+        recordArray.add(record.getCaseNumber());
+        recordArray.add(record.getDate());
+        recordArray.add(record.getPrimaryDescription());
+        recordArray.add(record.getSecondaryDescription());
+        recordArray.add(record.getLocationDescription());
+        return recordArray;
     }
 
     /**
@@ -50,9 +64,9 @@ public class MapTabController {
     }
 
     /**
-     * Clears all the existing markers from the map
+     * Clears all the existing markers and lines from the map
      */
     public void clearMarkers() {
-        webEngine.executeScript("document.deletePoints()");
+        webEngine.executeScript("document.clearMap()");
     }
 }

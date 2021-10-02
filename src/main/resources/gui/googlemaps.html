@@ -6,13 +6,14 @@
         body { height: 100%; margin: 0px; padding: 0px }
         #map_canvas { height: 100%; background-color: #666970; }
     </style>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBW-d_-W5qGFc9RBlZuvA0UyyimTnuKUfE&callback=initMap">
-    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBW-d_-W5qGFc9RBlZuvA0UyyimTnuKUfE&callback=initMap"></script>
     <script type="text/javascript">
         var map;
         var marker;
         var markers = [];
         var infowindow = null;
+        var polyline = new google.maps.Polyline();;
+        var latlngbounds = new google.maps.LatLngBounds();
         function initialize() {
             var latlng = new google.maps.LatLng(41.85001, -87.6782);
             var myOptions = {
@@ -30,19 +31,20 @@
         }
 
         // Receives information about a crime record, plots it on the map and creates in infowindow that opens when the marker is clicked
-        document.plotPoint = function plotPoint(lat, long, caseNumber, date, primaryDescription, secondaryDescription, locationDescription) {
+        document.plotPoint = function plotPoint(record) {
 
             // Format content for an infowindow
-            var infoWindowContent = "<h1 style='font-size:200%;'>" + caseNumber + "</h1>" +
-                "<p>" + "Date and Time: " + date + "<br />" + "<br />" +
-                "Primary Description: " + primaryDescription + "<br />" + "<br />" +
-                "Secondary Description: " + secondaryDescription + "<br />" + "<br />" +
-                "Location Description: " + locationDescription + "<br />" +
+            var infoWindowContent = "<h1 style='font-size:200%;'>" + record[2] + "</h1>" +
+                "<p>" + "Date and Time: " + record[3] + "<br />" + "<br />" +
+                "Primary Description: " + record[4] + "<br />" + "<br />" +
+                "Secondary Description: " + record[5] + "<br />" + "<br />" +
+                "Location Description: " + record[6] + "<br />" +
                 "</p>";
 
+            var markerPosition = new google.maps.LatLng(record[0], record[1])
             // Create a new marker at the given position
             marker = new google.maps.Marker({
-                position: new google.maps.LatLng(lat, long),
+                position: markerPosition,
                 map: map,
                 'optimized': true
             });
@@ -58,13 +60,39 @@
 
             // Add the marker to the list of markers
             markers.push(marker);
+            latlngbounds.extend(markerPosition);
+            map.fitBounds(latlngbounds);
         }
 
         // Delete all the markers on the map
-        document.deletePoints = function deletePoints() {
+        document.clearMap = function clearMap() {
             for (let i = 0; i < markers.length; i++) {
                 markers[i].setMap(null);
             }
+            polyline.setMap(null);
+            latlngbounds = new google.maps.LatLngBounds();
+
+        }
+
+        document.analysePoints = function analysePoints(record1, record2) {
+            document.plotPoint(record1);
+            document.plotPoint(record2);
+            lineCoordinates = [
+                new google.maps.LatLng(record1[0], record1[1]),
+                new google.maps.LatLng(record2[0], record2[1])
+            ];
+            polyline = new google.maps.Polyline({
+                path:lineCoordinates,
+                geodesic: true,
+                strokeColor: "#FF00F0",
+                strokeOpacity: 1.0,
+                strokeWeight: 2,
+                map: map
+            });
+            for (var i = 0; i < lineCoordinates.length; i++) {
+                latlngbounds.extend(lineCoordinates[i]);
+            }
+            map.fitBounds(latlngbounds);
         }
 
     </script>
