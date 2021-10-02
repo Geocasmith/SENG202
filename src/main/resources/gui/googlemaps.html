@@ -95,6 +95,10 @@
             map.fitBounds(latlngbounds);
         }
 
+        document.setZoom = function setZoom(zoomLevel) {
+            map.setZoom(zoomLevel)
+        }
+
     </script>
 </head>
 <body onload="initialize()">

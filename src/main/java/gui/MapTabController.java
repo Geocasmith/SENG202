@@ -34,24 +34,12 @@ public class MapTabController {
         JsonArray recordArray;
 
         for (Record record : records) {
-            recordArray = createJsonArray(record);
+            recordArray = record.getJsonArray();
             newLocationMarker = "document.plotPoint(" + recordArray + ")";
             webEngine.executeScript(newLocationMarker);
         }
 
 
-    }
-
-    private JsonArray createJsonArray(Record record) {
-        JsonArray recordArray = new JsonArray();
-        recordArray.add(record.getLatitude());
-        recordArray.add(record.getLongitude());
-        recordArray.add(record.getCaseNumber());
-        recordArray.add(record.getDate());
-        recordArray.add(record.getPrimaryDescription());
-        recordArray.add(record.getSecondaryDescription());
-        recordArray.add(record.getLocationDescription());
-        return recordArray;
     }
 
     /**

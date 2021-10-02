@@ -1,5 +1,7 @@
 package backend;
 
+import com.google.gson.JsonArray;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -309,5 +311,18 @@ public class Record {
                 String.valueOf(this.getXcoord()), String.valueOf(this.getYcoord()), String.valueOf(this.getLatitude()),
                 String.valueOf(this.getLongitude())
                 );
+    }
+
+
+    public JsonArray getJsonArray() {
+        JsonArray recordArray = new JsonArray();
+        recordArray.add(this.getLatitude());
+        recordArray.add(this.getLongitude());
+        recordArray.add(this.getCaseNumber());
+        recordArray.add(this.getDate());
+        recordArray.add(this.getPrimaryDescription());
+        recordArray.add(this.getSecondaryDescription());
+        recordArray.add(this.getLocationDescription());
+        return recordArray;
     }
 }

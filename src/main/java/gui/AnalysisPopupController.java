@@ -40,8 +40,8 @@ public class AnalysisPopupController {
     }
 
     public void initMap(Record record1, Record record2) {
-        JsonArray record1Array = createJsonArray(record1);
-        JsonArray record2Array = createJsonArray(record2);
+        JsonArray record1Array = record1.getJsonArray();
+        JsonArray record2Array = record2.getJsonArray();
         clearMap();
         runScript("document.analysePoints(" + record1Array + ", " + record2Array + ")");
 
@@ -56,18 +56,6 @@ public class AnalysisPopupController {
                         }
                     }
                 });
-    }
-
-    private JsonArray createJsonArray(Record record) {
-        JsonArray recordArray = new JsonArray();
-        recordArray.add(record.getLatitude());
-        recordArray.add(record.getLongitude());
-        recordArray.add(record.getCaseNumber());
-        recordArray.add(record.getDate());
-        recordArray.add(record.getPrimaryDescription());
-        recordArray.add(record.getSecondaryDescription());
-        recordArray.add(record.getLocationDescription());
-        return recordArray;
     }
 
     /**

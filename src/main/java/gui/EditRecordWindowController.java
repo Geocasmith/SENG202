@@ -3,18 +3,23 @@ package gui;
 import backend.InputValidator;
 import backend.Record;
 import backend.Database;
+import com.google.gson.JsonArray;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker;
 import javafx.css.PseudoClass;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
@@ -25,11 +30,23 @@ import java.util.*;
 
 public class EditRecordWindowController {
 
-    @FXML private Button closeButton;
-    @FXML private Button saveButton;
-    @FXML private FlowPane buttonPane;
-    @FXML private FlowPane fieldPane;
-    @FXML private Label titleLabel;
+    @FXML
+    private Button closeButton;
+    @FXML
+    private Button saveButton;
+    @FXML
+    private FlowPane buttonPane;
+    @FXML
+    private FlowPane fieldPane;
+    @FXML
+    private Label titleLabel;
+    @FXML
+    private BorderPane mapBorderPane;
+    @FXML
+    private WebView webView;
+    private WebEngine webEngine;
+
+    private int mapRequestCount = 0;
 
     /**
      * Defines the type of window, either edit (true) or add (false).
@@ -80,53 +97,44 @@ public class EditRecordWindowController {
         AutoCompletionBinding auto = TextFields.bindAutoCompletion(textFields.get(5), "");
 
         // Binds Secondary description text field to set of available set secondary descriptions
-        textFields.get(5).setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                try {
-                    Set<String> des = new HashSet<>();
-                    des = InputValidator.getSetOfSecondaryDescriptions(textFields.get(4).getText());
-                    AutoCompletionBinding auto = TextFields.bindAutoCompletion(textFields.get(5), des);
+        textFields.get(5).setOnMouseClicked(mouseEvent -> {
+            try {
+                Set<String> des;
+                des = InputValidator.getSetOfSecondaryDescriptions(textFields.get(4).getText());
+                AutoCompletionBinding auto1 = TextFields.bindAutoCompletion(textFields.get(5), des);
 
-                    textFields.get(5).textProperty().addListener(new ChangeListener<>() {
-                        @Override
-                        public void changed(ObservableValue<? extends String> observable,
-                                            String oldValue, String newValue) {
-                            try {
-                                textFields.get(3).setText(InputValidator.getIucr(textFields.get(4).getText(), textFields.get(5).getText()));
-                                textFields.get(11).setText(InputValidator.getFbicd(textFields.get(4).getText(), textFields.get(5).getText()));
-                                auto.dispose();
-                            }  catch (IOException | CsvValidationException e) {
-                                PopupWindow.displayPopup("Error", e.getMessage());
-                            }
+                textFields.get(5).textProperty().addListener((observable, oldValue, newValue) -> {
+                    try {
+                        textFields.get(3).setText(InputValidator.getIucr(textFields.get(4).getText(), textFields.get(5).getText()));
+                        textFields.get(11).setText(InputValidator.getFbicd(textFields.get(4).getText(), textFields.get(5).getText()));
+                        auto1.dispose();
+                    }  catch (IOException | CsvValidationException e) {
+                        PopupWindow.displayPopup("Error", e.getMessage());
+                    }
 
-                        }
-                    });
+                });
 
-                } catch (NullPointerException | IOException | CsvValidationException e) {
-                    textFields.get(4).requestFocus();
-                    PopupWindow.displayPopup("Error", "Enter valid Primary Description first");
-
-                }
+            } catch (NullPointerException | IOException | CsvValidationException e) {
+                textFields.get(4).requestFocus();
+                PopupWindow.displayPopup("Error", "Enter valid Primary Description first");
 
             }
-
-
 
         });
 
         /* Resets associated text fields of IUCR, FBICD, Secondary description whenever change is made to
            the primary description text field
          */
-        textFields.get(4).textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable,
-                                String oldValue, String newValue) {
-                textFields.get(5).clear();
+        textFields.get(4).textProperty().addListener((observable, oldValue, newValue) -> textFields.get(5).clear());
 
-
+        for (int i = 0; i < textFields.size(); i++) {
+            if (Arrays.asList(1, 4, 5, 6, 14, 15).contains(i)) {
+                textFields.get(i).textProperty().addListener((observableValue, s, t1) -> updateMap());
             }
-        });
+        }
+
+        webEngine = webView.getEngine();
+        webEngine.load(Objects.requireNonNull(getClass().getResource("googlemaps.html")).toString());
     }
 
     /**
@@ -136,19 +144,80 @@ public class EditRecordWindowController {
      */
     public void initData(Record record) {
         if (record != null) {
+
             edit = true;
             List<String> recStrings = record.toList();
 
             for (int i = 0; i < textFieldNames.size(); i++) {
-
                 textFields.get(i).setText(recStrings.get(i));
             }
             textFields.get(0).setDisable(true); // disables editing, focus, and click for casenum
+            webEngine.getLoadWorker().stateProperty().addListener(
+                    (ov, oldState, newState) -> {
+                        if (newState == Worker.State.SUCCEEDED) {
+                            updateMap();
+                        }
+                    });
+
         }
         else {
             edit = false;
             titleLabel.setText("Add Record");
             saveButton.setText("Add record");
+            updateMap();
+        }
+    }
+
+    private void updateMap() {
+        String latText = textFields.get(14).getText();
+        String lonText = textFields.get(15).getText();
+        String caseNum = textFields.get(0).getText();
+        String date = textFields.get(1).getText();
+        String primaryLocation = textFields.get(4).getText();
+        String secondaryLocation = textFields.get(5).getText();
+        String locationDescription = textFields.get(6).getText();
+        double lat = 0;
+        double lon = 0;
+        boolean notEmpty = !latText.equals("") && !lonText.equals("") && !caseNum.equals("") && !date.equals("") &&
+                !primaryLocation.equals("") && !secondaryLocation.equals("") && !locationDescription.equals("");
+        boolean validNumbers = false;
+        try {
+            lat = Double.parseDouble(latText);
+            lon = Double.parseDouble(lonText);
+            validNumbers = (lat >= -90 && lat <= 90) && (lon >= -180 && lon <= 180);
+        } catch (Exception ignored) {
+
+        }
+        if (notEmpty && validNumbers) {
+            JsonArray recordArray = new JsonArray();
+            recordArray.add(lat);
+            recordArray.add(lon);
+            recordArray.add(caseNum);
+            recordArray.add(date);
+            recordArray.add(primaryLocation);
+            recordArray.add(secondaryLocation);
+            recordArray.add(locationDescription);
+
+            mapBorderPane.setVisible(true);
+            if (mapRequestCount == 0) {
+                mapRequestCount++;
+                webEngine.getLoadWorker().stateProperty().addListener(
+                        (ov, oldState, newState) -> {
+                            if (newState == Worker.State.SUCCEEDED) {
+                                webEngine.executeScript("document.clearMap()");
+                                webEngine.executeScript("document.plotPoint(" + recordArray + ")");
+                                webEngine.executeScript("document.setZoom(12)");
+                            }
+                        });
+            } else {
+                webEngine.executeScript("document.clearMap()");
+                webEngine.executeScript("document.plotPoint(" + recordArray + ")");
+                webEngine.executeScript("document.setZoom(12)");
+            }
+
+
+        } else {
+            mapBorderPane.setVisible(false);
         }
     }
 
