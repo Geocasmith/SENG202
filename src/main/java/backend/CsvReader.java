@@ -28,9 +28,10 @@ public class CsvReader {
             }
             return csvValues;
         } catch (CsvException | IOException e) {
-            PopupWindow.displayPopup("Error", e.getMessage());
+            //PopupWindow.displayPopup("Error", e.getMessage());
         }
 
         return null;
     }
+
 }
