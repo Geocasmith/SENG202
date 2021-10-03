@@ -149,6 +149,8 @@ public class EditRecordWindowController {
                 textFields.get(i).setText(recStrings.get(i));
             }
             textFields.get(0).setDisable(true); // disables editing, focus, and click for casenum
+
+            // Makes sure javascript in webengine has loaded before trying to use the functions
             webEngine.getLoadWorker().stateProperty().addListener(
                     (ov, oldState, newState) -> {
                         if (newState == Worker.State.SUCCEEDED) {
@@ -165,7 +167,12 @@ public class EditRecordWindowController {
         }
     }
 
+    /**
+     * Gets the relevant text fields data, checks that it's valid, and plots it on the map if so. If not, hide the map
+     */
     private void updateMap() {
+
+        // Retrieve the values in the relevant text fields
         String latText = textFields.get(14).getText();
         String lonText = textFields.get(15).getText();
         String caseNum = textFields.get(0).getText();
@@ -173,11 +180,15 @@ public class EditRecordWindowController {
         String primaryLocation = textFields.get(4).getText();
         String secondaryLocation = textFields.get(5).getText();
         String locationDescription = textFields.get(6).getText();
+
+        // Check that the required fields contain valid values
         double lat = 0;
         double lon = 0;
-        boolean notEmpty = !latText.equals("") && !lonText.equals("") && !caseNum.equals("") && !date.equals("") &&
-                !primaryLocation.equals("") && !secondaryLocation.equals("") && !locationDescription.equals("");
         boolean validNumbers = false;
+        boolean latLonNotEmpty = !latText.equals("") && !lonText.equals("");
+        boolean infoWindowFieldsNotEmpty = !caseNum.equals("") && !date.equals("") && !primaryLocation.equals("") &&
+                !secondaryLocation.equals("") && !locationDescription.equals("");
+
         try {
             lat = Double.parseDouble(latText);
             lon = Double.parseDouble(lonText);
@@ -185,7 +196,9 @@ public class EditRecordWindowController {
         } catch (Exception ignored) {
 
         }
-        if (notEmpty && validNumbers) {
+
+        // If the required fields are valid then display the point on the map, display an info window with the given
+        if (latLonNotEmpty && validNumbers) {
             JsonArray recordArray = new JsonArray();
             recordArray.add(lat);
             recordArray.add(lon);
@@ -195,20 +208,30 @@ public class EditRecordWindowController {
             recordArray.add(secondaryLocation);
             recordArray.add(locationDescription);
 
+            boolean displayMarker = true;
+            boolean displayInfoWindow = true;
+
+            String script = "document.plotPoint(" + recordArray + ", " + displayInfoWindow + ", " + displayMarker + ")";
+
+
             mapBorderPane.setVisible(true);
+
+            /* If it's the first time this map has been loaded, then wait until javascript has loaded fully before trying
+               to use javascript functions, otherwise, go ahead
+             */
             if (mapRequestCount == 0) {
                 mapRequestCount++;
                 webEngine.getLoadWorker().stateProperty().addListener(
                         (ov, oldState, newState) -> {
                             if (newState == Worker.State.SUCCEEDED) {
                                 webEngine.executeScript("document.clearMap()");
-                                webEngine.executeScript("document.plotPoint(" + recordArray + ")");
+                                webEngine.executeScript(script);
                                 webEngine.executeScript("document.setZoom(12)");
                             }
                         });
             } else {
                 webEngine.executeScript("document.clearMap()");
-                webEngine.executeScript("document.plotPoint(" + recordArray + ")");
+                webEngine.executeScript(script);
                 webEngine.executeScript("document.setZoom(12)");
             }
 

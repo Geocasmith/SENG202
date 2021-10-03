@@ -313,7 +313,11 @@ public class Record {
                 );
     }
 
-
+    /**
+     * Creates a Json Array to be used to create map markers that contains the case number, latitude and longitude, date
+     * and primary, secondary and location descriptions
+     * @return a Json Array with the required data to create a map marker
+     */
     public JsonArray getJsonArray() {
         JsonArray recordArray = new JsonArray();
         recordArray.add(this.getLatitude());

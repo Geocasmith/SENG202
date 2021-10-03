@@ -3,8 +3,6 @@ package gui;
 import backend.DataAnalyser;
 import backend.Record;
 import com.google.gson.JsonArray;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -24,13 +22,21 @@ public class AnalysisPopupController {
     private WebEngine mapWebEngine;
     private DataAnalyser dataAnalyser = new DataAnalyser();
 
+    /**
+     * Initialises the webengine and loads the google maps page
+     */
     @FXML
     private void initialize() {
         mapWebEngine = mapWebView.getEngine();
-
         mapWebEngine.load(Objects.requireNonNull(getClass().getResource("googlemaps.html")).toString());
     }
 
+    /**
+     * Takes two crime records, calculates the time and location difference between them, and plots them on a map with
+     * a line between them
+     * @param record1 the first crime record
+     * @param record2 the second crime record
+     */
     public void initData(Record record1, Record record2) {
         String locationDifference = dataAnalyser.getLocationDifferenceString(record1, record2);
         String timeDifference = dataAnalyser.getTimeDifferenceString(record1, record2);
@@ -39,6 +45,11 @@ public class AnalysisPopupController {
         initMap(record1, record2);
     }
 
+    /**
+     * Takes two records and plots them on a map with a line between them
+     * @param record1 the first crime record
+     * @param record2 the second crime record
+     */
     public void initMap(Record record1, Record record2) {
         JsonArray record1Array = record1.getJsonArray();
         JsonArray record2Array = record2.getJsonArray();
@@ -47,15 +58,18 @@ public class AnalysisPopupController {
 
     }
 
+    /**
+     * Takes a string of javascript code and checks that the webengine has loaded correctly, then runs the code
+     * @param script the javascript code to run in string form
+     */
     private void runScript(String script) {
         mapWebEngine.getLoadWorker().stateProperty().addListener(
-                new ChangeListener<Worker.State>() {
-                    public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
-                        if (newState == Worker.State.SUCCEEDED) {
-                            mapWebEngine.executeScript(script);
-                        }
+                (ov, oldState, newState) -> {
+                    if (newState == Worker.State.SUCCEEDED) {
+                        mapWebEngine.executeScript(script);
                     }
                 });
+
     }
 
     /**

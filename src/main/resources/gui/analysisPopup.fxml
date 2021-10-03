@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<BorderPane prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.AnalysisPopupController">
+<BorderPane prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/14" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.AnalysisPopupController">
    <center>
       <GridPane prefHeight="164.0" prefWidth="275.0">
          <columnConstraints>
@@ -27,6 +27,9 @@
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
+               <font>
+                  <Font size="14.0" />
+               </font>
             </Label>
             <WebView fx:id="mapWebView" minHeight="-Infinity" prefHeight="145.0" prefWidth="137.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
                <cursor>

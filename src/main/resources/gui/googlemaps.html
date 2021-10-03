@@ -6,13 +6,15 @@
         body { height: 100%; margin: 0px; padding: 0px }
         #map_canvas { height: 100%; background-color: #666970; }
     </style>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBW-d_-W5qGFc9RBlZuvA0UyyimTnuKUfE&callback=initMap"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=visualization&key=AIzaSyBW-d_-W5qGFc9RBlZuvA0UyyimTnuKUfE&callback=initMap"></script>
     <script type="text/javascript">
         var map;
         var marker;
         var markers = [];
+        var heatmapData = [];
+        var heatmap = new google.maps.visualization.HeatmapLayer();
         var infowindow = null;
-        var polyline = new google.maps.Polyline();;
+        var polyline = new google.maps.Polyline();
         var latlngbounds = new google.maps.LatLngBounds();
         function initialize() {
             var latlng = new google.maps.LatLng(41.85001, -87.6782);
@@ -31,52 +33,84 @@
         }
 
         // Receives information about a crime record, plots it on the map and creates in infowindow that opens when the marker is clicked
-        document.plotPoint = function plotPoint(record) {
-
-            // Format content for an infowindow
-            var infoWindowContent = "<h1 style='font-size:200%;'>" + record[2] + "</h1>" +
-                "<p>" + "Date and Time: " + record[3] + "<br />" + "<br />" +
-                "Primary Description: " + record[4] + "<br />" + "<br />" +
-                "Secondary Description: " + record[5] + "<br />" + "<br />" +
-                "Location Description: " + record[6] + "<br />" +
-                "</p>";
+        document.plotPoint = function plotPoint(record, withInfoWindow, displayed) {
 
             var markerPosition = new google.maps.LatLng(record[0], record[1])
+            heatmapData.push(markerPosition);
             // Create a new marker at the given position
             marker = new google.maps.Marker({
                 position: markerPosition,
-                map: map,
                 'optimized': true
             });
 
-            // Add a click event listener to the marker, and assign a new infowindow to open when the marker is clicked
-            marker.addListener('click', function() {
-                if (infowindow) infowindow.close();
-                infowindow = new google.maps.InfoWindow({
-                    content: infoWindowContent
+            if (withInfoWindow) {
+                // Format content for an infowindow
+                var infoWindowContent = "<h1 style='font-size:200%;'>" + record[2] + "</h1>" +
+                    "<p>" + "Date and Time: " + record[3] + "<br />" + "<br />" +
+                    "Primary Description: " + record[4] + "<br />" + "<br />" +
+                    "Secondary Description: " + record[5] + "<br />" + "<br />" +
+                    "Location Description: " + record[6] + "<br />" +
+                    "</p>";
+
+                // Add a click event listener to the marker, and assign a new infowindow to open when the marker is clicked
+                marker.addListener('click', function() {
+                    if (infowindow) infowindow.close();
+                    infowindow = new google.maps.InfoWindow({
+                        content: infoWindowContent
+                    });
+                    infowindow.open(map, this)
                 });
-                infowindow.open(map, this)
-            });
+            }
 
             // Add the marker to the list of markers
             markers.push(marker);
-            latlngbounds.extend(markerPosition);
-            map.fitBounds(latlngbounds);
+            if (displayed) {
+                marker.setMap(map);
+                latlngbounds.extend(markerPosition);
+                map.fitBounds(latlngbounds);
+            } else {
+                marker.setMap(null);
+            }
         }
 
-        // Delete all the markers on the map
+        document.enableMarkers = function enableMarkers() {
+            for (let i = 0; i < markers.length; i++) {
+                markers[i].setMap(map);
+            }
+            heatmap.setMap(null);
+        }
+
+        document.enableHeatmap = function enableHeatmap() {
+            for (let i = 0; i < markers.length; i++) {
+                markers[i].setMap(null);
+            }
+            heatmap = new google.maps.visualization.HeatmapLayer({
+                data: heatmapData,
+                map: map
+            });
+
+        }
+
+        document.updateHeatmapDensity = function updateHeatmapDensity(density) {
+            heatmap.setOptions({radius: density})
+        }
+
+        // Clear all the markers and lines on the map
         document.clearMap = function clearMap() {
             for (let i = 0; i < markers.length; i++) {
                 markers[i].setMap(null);
             }
+            markers = [];
+            heatmapData = [];
+            heatmap.setData(heatmapData)
             polyline.setMap(null);
             latlngbounds = new google.maps.LatLngBounds();
 
         }
 
         document.analysePoints = function analysePoints(record1, record2) {
-            document.plotPoint(record1);
-            document.plotPoint(record2);
+            document.plotPoint(record1, true, true);
+            document.plotPoint(record2, true, true);
             lineCoordinates = [
                 new google.maps.LatLng(record1[0], record1[1]),
                 new google.maps.LatLng(record2[0], record2[1])
@@ -89,10 +123,6 @@
                 strokeWeight: 2,
                 map: map
             });
-            for (var i = 0; i < lineCoordinates.length; i++) {
-                latlngbounds.extend(lineCoordinates[i]);
-            }
-            map.fitBounds(latlngbounds);
         }
 
         document.setZoom = function setZoom(zoomLevel) {
