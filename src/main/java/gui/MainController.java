@@ -24,6 +24,7 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
+
 public class MainController {
 
     @FXML private MapTabController mapTabController;
@@ -352,7 +353,14 @@ public class MainController {
 
         text = filterCaseNumberTextField.getText();
         if (!Objects.equals(text, "")) {
+
             caseNumber = text;
+
+            //Does nothing if SQL injection detected
+            if(containsInjection(caseNumber)){
+                return;
+            }
+
         }
 
         // Get local start data and convert to date
@@ -729,6 +737,19 @@ public class MainController {
         return false;
     }
 
+    /**
+     * Checks and returns if characters used in SQLInjection are used.
+     * @param injection input from user
+     * @return if injection characters are used.
+     */
+    public Boolean containsInjection(String injection){
+        if(injection.matches(".*[%\'\"\\-=<>;\\(\\)].*")){
+            PopupWindow.displayPopup("Input Error", "Invalid characters in input (SQL Injection Protection)");
+
+            return true;
+        }
+        return false;
+    }
     /**
      * Helper method which checks the filepath to check if it has the correct extension and adds it if it does not
      * This stops the user from exporting to a file without an extension if they don't
