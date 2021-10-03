@@ -73,7 +73,24 @@ public class Database {
         state.execute("DELETE FROM "+tableName);
         createTable();
     }
-
+    /**
+     * Drops the table CRIMES
+     * @param tableName
+     * @throws SQLException
+     */
+    public void dropTable(String tableName) throws SQLException {
+        Statement dropTable = connection.createStatement();
+        dropTable.execute("DROP TABLE CRIMES");
+    }
+    /**
+     * Executes a custom SQL input query
+     * @param SQLQuery
+     * @throws SQLException
+     */
+    public void executeQuery(String SQLQuery) throws SQLException {
+        Statement customSQL = connection.createStatement();
+        customSQL.execute(SQLQuery);
+    }
     /**
      * Creates the main table in the database which stores the records and adds the columns listed in the columns field to it
      * @throws SQLException
@@ -94,15 +111,7 @@ public class Database {
         }
     }
 
-    /**
-     * Drops the table CRIMES
-     * @param tableName
-     * @throws SQLException
-     */
-    public void dropTable(String tableName) throws SQLException {
-        Statement dropTable = connection.createStatement();
-        dropTable.execute("DROP TABLE CRIMES");
-    }
+
 
     /**
      * Uses SQL Pragma to get the column names from the current database. It then goes through the returned column names and combines them into
@@ -129,9 +138,9 @@ public class Database {
 
         //Matches the expected and actual column names to see if table valid
         if(validColumnFormat.equals(actualColumnFormat)){
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**
