@@ -124,7 +124,7 @@ public class EditRecordWindowController {
         textFields.get(4).textProperty().addListener((observable, oldValue, newValue) -> textFields.get(5).clear());
 
         for (int i = 0; i < textFields.size(); i++) {
-            if (Arrays.asList(1, 4, 5, 6, 14, 15).contains(i)) {
+            if (Arrays.asList(0, 1, 4, 5, 6, 14, 15).contains(i)) {
                 textFields.get(i).textProperty().addListener((observableValue, s, t1) -> updateMap());
             }
         }
@@ -186,8 +186,7 @@ public class EditRecordWindowController {
         double lon = 0;
         boolean validNumbers = false;
         boolean latLonNotEmpty = !latText.equals("") && !lonText.equals("");
-        boolean infoWindowFieldsNotEmpty = !caseNum.equals("") && !date.equals("") && !primaryLocation.equals("") &&
-                !secondaryLocation.equals("") && !locationDescription.equals("");
+        boolean displayInfoWindow = !caseNum.equals("");
 
         try {
             lat = Double.parseDouble(latText);
@@ -209,7 +208,7 @@ public class EditRecordWindowController {
             recordArray.add(locationDescription);
 
             boolean displayMarker = true;
-            boolean displayInfoWindow = true;
+
 
             String script = "document.plotPoint(" + recordArray + ", " + displayInfoWindow + ", " + displayMarker + ")";
 
