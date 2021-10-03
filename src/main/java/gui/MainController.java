@@ -693,6 +693,9 @@ public class MainController {
             }
 
             d.setDatabasePath(filepath);
+            if(d.checkValidDB()){
+                PopupWindow.displayPopup("Error", "Database format invalid");
+            }
             d.disconnectDatabase();
 
             //Refresh GUI
