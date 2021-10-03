@@ -94,6 +94,45 @@ public class Database {
         }
     }
 
+    /**
+     * Drops the table CRIMES
+     * @param tableName
+     * @throws SQLException
+     */
+    public void dropTable(String tableName) throws SQLException {
+        Statement dropTable = connection.createStatement();
+        dropTable.execute("DROP TABLE CRIMES");
+    }
+
+    /**
+     * Uses SQL Pragma to get the column names from the current database. It then goes through the returned column names and combines them into
+     * a string actualColumnFormat. This string is the column names appended to each other in order from left to right. If the column names
+     * and the order are correct it will match the validColumnFormat string. If they do not match the database is invalid.
+     * Will return invalid if the table name is incorrect
+     * @throws SQLException
+     */
+    public Boolean checkValidDB() throws SQLException {
+
+        //Creates a string of the expected column names and order to match
+        String validColumnFormat = "IDDATEADDRESSIUCRPRIMARYDESCRIPTIONSECONDARYDESCRIPTIONLOCATIONDESCRIPTIONARRESTDOMESTICBEATWARDFBICDXCOORDINATEYCOORDINATELATITUDELONGITUDEUNIXTIME";
+        String actualColumnFormat = "";
+
+        //SQL Query returns column names of the DB. Will be empty if table name incorrect
+        connection.setAutoCommit(false);
+        PreparedStatement s1 = connection.prepareStatement("PRAGMA table_info('CRIMES');");
+        ResultSet rs = s1.executeQuery();
+
+        //Goes through column names in the resultset and appends them to the string actualColumnFormat
+        while (rs.next()) {
+            actualColumnFormat+=rs.getString("name");
+        }
+
+        //Matches the expected and actual column names to see if table valid
+        if(validColumnFormat.equals(actualColumnFormat)){
+            return false;
+        }
+        return true;
+    }
 
     /**
      * Gets an arrayList of string Lists and adds them to the database. Any empty values are entered as NULL type
@@ -526,7 +565,7 @@ public class Database {
         if(caseNumber!=null) {
             SQLString += "AND (ID LIKE '%" + caseNumber + "%')";
         }
-
+        System.out.println(SQLString);
         PreparedStatement s1 = connection.prepareStatement(SQLString);
         ResultSet rs = s1.executeQuery();
         ArrayList<Record> recordsFromDBQuery =  getRecord(rs);
