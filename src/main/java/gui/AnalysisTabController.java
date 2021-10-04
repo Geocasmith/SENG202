@@ -3,10 +3,12 @@ package gui;
 
 import backend.*;
 import backend.Record;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
+import javafx.util.Callback;
 
 import java.util.*;
 
@@ -25,15 +27,35 @@ public class AnalysisTabController {
     @FXML private TableColumn<TypeFrequencyPair, String> bottomCrimeFrequencyCol;
     @FXML private TableColumn<TypeFrequencyPair, String> bottomBlockCol;
     @FXML private TableColumn<TypeFrequencyPair, String> bottomBlockFrequencyCol;
-    private int displayLimit;
+    private int displayLimit = 10;
     private DataAnalyser dataAnalyser = new DataAnalyser();
+    private static final double tableHeightMultiplier = 1.03; // Makes the table slightly taller than 10 rows to get rid of the scroll bar
+
 
 
     /**
-     * Initialises FXML properties
+     * Initialises FXML properties, sets the max height of the tables to slightly over 10 rows
      */
     @FXML
     private void initialize() {
+
+        updateTableHeight(topCrimeTable);
+        updateTableHeight(bottomCrimeTable);
+        updateTableHeight(bottomBlockTable);
+        updateTableHeight(topBlockTable);
+
+    }
+
+    /**
+     * Auto adjusts the height of the given table to be slightly over the height of 10 rows, as that's the max
+     * allowed in each table
+     * @param table the TableView which needs it's height adjusted
+     */
+    private void updateTableHeight(TableView<TypeFrequencyPair> table) {
+        table.setFixedCellSize(25);
+        table.prefHeightProperty().bind(table.fixedCellSizeProperty().multiply(displayLimit + 1).multiply(tableHeightMultiplier));
+        table.minHeightProperty().bind(table.prefHeightProperty());
+        table.maxHeightProperty().bind(table.prefHeightProperty());
     }
 
     public void updateAnalysis(ArrayList<Record> currentRecord) {
@@ -42,6 +64,7 @@ public class AnalysisTabController {
         populateLowCrimesTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 4)));
         populateTopBlocksTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 2)));
         populateLowBlocksTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 2)));
+
     }
 
 
