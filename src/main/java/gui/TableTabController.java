@@ -240,7 +240,12 @@ public class TableTabController {
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("editRecordWindow.fxml")
         );
-        popupEdit.setTitle("Edit Record");
+        if (record == null) {
+            popupEdit.setTitle("Add Record");
+        }
+        else {
+            popupEdit.setTitle("Edit Record");
+        }
         popupEdit.setScene(new Scene(loader.load()));
         EditRecordWindowController controller = loader.getController();
         controller.initData(record);

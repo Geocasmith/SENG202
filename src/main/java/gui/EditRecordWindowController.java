@@ -9,13 +9,13 @@ import javafx.concurrent.Worker;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -27,20 +27,31 @@ import java.util.*;
 
 public class EditRecordWindowController {
 
-    @FXML
-    private Button closeButton;
-    @FXML
-    private Button saveButton;
-    @FXML
-    private FlowPane buttonPane;
-    @FXML
-    private FlowPane fieldPane;
-    @FXML
-    private Label titleLabel;
-    @FXML
-    private BorderPane mapBorderPane;
-    @FXML
-    private WebView webView;
+    @FXML private Button closeButton;
+    @FXML private Button saveButton;
+    @FXML private FlowPane buttonPane;
+    @FXML private FlowPane fieldPane;
+    @FXML private Label titleLabel;
+    @FXML private BorderPane mapBorderPane;
+    @FXML private WebView webView;
+
+    @FXML private TextField caseNumberField;
+    @FXML private TextField dateField;
+    @FXML private TextField blockField;
+    @FXML private TextField iucrField;
+    @FXML private TextField primaryDescriptionField;
+    @FXML private TextField secondaryDescriptionField;
+    @FXML private TextField locationDescriptionField;
+    @FXML private TextField wardField;
+    @FXML private TextField beatField;
+    @FXML private TextField fbicdField;
+    @FXML private TextField xCoordinateField;
+    @FXML private TextField yCoordinateField;
+    @FXML private TextField latitudeField;
+    @FXML private TextField longitudeField;
+    @FXML private CheckBox domesticCheckBox;
+    @FXML private CheckBox arrestCheckBox;
+
     private WebEngine webEngine;
 
     private int mapRequestCount = 0;
@@ -56,7 +67,7 @@ public class EditRecordWindowController {
     private static final List<String> textFieldNames = Arrays.asList("Case number", "Date", "Block", "IUCR",
             "Primary description", "Secondary description", "Location description", "Arrest", "Domestic", "Ward",
             "Beat", "FBICD", "X-Coordinate", "Y-Coordinate", "Latitude", "Longitude");
-    private List<TextField> textFields = new ArrayList<>();
+    private List<Node> textFields = new ArrayList<>(); // only to be used for iterating over during validation
     private Record editingRecord; // the record currently being edited
 
     /**
@@ -65,69 +76,51 @@ public class EditRecordWindowController {
      */
     @FXML private void initialize() throws IOException, CsvValidationException {
         buttonPane.setPadding(new Insets(0, 0, 15, 10)); // scenebuilder wasn't making this work so it goes here
-        for (int i = 0; i < textFieldNames.size(); i++) {
-            Label fieldTitleLabel = new Label(textFieldNames.get(i));
-            VBox vbox = new VBox(); // used to keep textfield and label together and on same line
-            vbox.setPrefHeight(Region.USE_COMPUTED_SIZE);
-            vbox.setPrefWidth(Region.USE_COMPUTED_SIZE);
-            vbox.setPadding(new Insets(10));
-            TextField field = new TextField();
-            field.setPromptText(textFieldNames.get(i));
-            field.setPrefSize(222, 22);
-            Label reqLabel = new Label();
-            if (i < 12) {
-                reqLabel.setText("* Required"); // only coordinates and lat/long are optional
-                if (i == 1) { reqLabel.setText("* Required" + "\n"  + "mm/dd/yyyy hh:mm:ss am/pm"); }
-                if (i == 7 || i == 8) { reqLabel.setText("* Required (y/n)"); }
-            }
 
-
-            vbox.getChildren().addAll(fieldTitleLabel, field, reqLabel);
-            textFields.add(field);
-            fieldPane.getChildren().add(vbox);
-        }
-
+        textFields.addAll(Arrays.asList(caseNumberField, dateField, blockField, iucrField, primaryDescriptionField,
+                secondaryDescriptionField, locationDescriptionField, arrestCheckBox, domesticCheckBox, wardField,
+                beatField, fbicdField, xCoordinateField, yCoordinateField, latitudeField, longitudeField));
 
         // Binds primary description text field to set of primary descriptions
-        TextFields.bindAutoCompletion(textFields.get(4),InputValidator.getSetOfPrimaryDescriptions());
-        AutoCompletionBinding auto = TextFields.bindAutoCompletion(textFields.get(5), "");
+        TextFields.bindAutoCompletion(primaryDescriptionField,InputValidator.getSetOfPrimaryDescriptions());
+        AutoCompletionBinding auto = TextFields.bindAutoCompletion(secondaryDescriptionField, "");
 
         // Binds Secondary description text field to set of available set secondary descriptions
-        textFields.get(5).setOnMouseClicked(mouseEvent -> {
+        secondaryDescriptionField.setOnMouseClicked(mouseEvent -> {
             try {
                 Set<String> des;
-                des = InputValidator.getSetOfSecondaryDescriptions(textFields.get(4).getText());
-                AutoCompletionBinding auto1 = TextFields.bindAutoCompletion(textFields.get(5), des);
+                des = InputValidator.getSetOfSecondaryDescriptions(primaryDescriptionField.getText());
+                AutoCompletionBinding auto1 = TextFields.bindAutoCompletion(secondaryDescriptionField, des);
 
-                textFields.get(5).textProperty().addListener((observable, oldValue, newValue) -> {
+                secondaryDescriptionField.textProperty().addListener((observable, oldValue, newValue) -> {
                     try {
-                        textFields.get(3).setText(InputValidator.getIucr(textFields.get(4).getText(), textFields.get(5).getText()));
-                        textFields.get(11).setText(InputValidator.getFbicd(textFields.get(4).getText(), textFields.get(5).getText()));
+                        iucrField.setText(InputValidator.getIucr(primaryDescriptionField.getText(), secondaryDescriptionField.getText()));
+                        fbicdField.setText(InputValidator.getFbicd(primaryDescriptionField.getText(), secondaryDescriptionField.getText()));
                         auto1.dispose();
                     }  catch (IOException | CsvValidationException e) {
                         PopupWindow.displayPopup("Error", e.getMessage());
                     }
-
                 });
-
             } catch (NullPointerException | IOException | CsvValidationException e) {
-                textFields.get(4).requestFocus();
+                primaryDescriptionField.requestFocus();
                 PopupWindow.displayPopup("Error", "Enter valid Primary Description first");
-
             }
-
         });
 
         /* Resets associated text fields of IUCR, FBICD, Secondary description whenever change is made to
            the primary description text field
          */
-        textFields.get(4).textProperty().addListener((observable, oldValue, newValue) -> textFields.get(5).clear());
+        primaryDescriptionField.textProperty().addListener((observable, oldValue, newValue) -> secondaryDescriptionField.clear());
 
-        for (int i = 0; i < textFields.size(); i++) {
-            if (Arrays.asList(0, 1, 4, 5, 6, 14, 15).contains(i)) {
-                textFields.get(i).textProperty().addListener((observableValue, s, t1) -> updateMap());
-            }
-        }
+        // update the map when any of these textfields' text changes
+        // you can live-locate where the record is when typing in the lat/long fields!
+        caseNumberField.textProperty().addListener((observableValue, s, t1) -> updateMap());
+        dateField.textProperty().addListener((observableValue, s, t1) -> updateMap());
+        primaryDescriptionField.textProperty().addListener((observableValue, s, t1) -> updateMap());
+        secondaryDescriptionField.textProperty().addListener((observableValue, s, t1) -> updateMap());
+        locationDescriptionField.textProperty().addListener((observableValue, s, t1) -> updateMap());
+        latitudeField.textProperty().addListener((observableValue, s, t1) -> updateMap());
+        longitudeField.textProperty().addListener((observableValue, s, t1) -> updateMap());
 
         webEngine = webView.getEngine();
         webEngine.load(Objects.requireNonNull(getClass().getResource("googlemaps.html")).toString());
@@ -140,15 +133,27 @@ public class EditRecordWindowController {
      */
     public void initData(Record record) {
         if (record != null) {
-
             edit = true;
             editingRecord = record;
-            List<String> recStrings = record.toList();
 
-            for (int i = 0; i < textFieldNames.size(); i++) {
-                textFields.get(i).setText(recStrings.get(i));
-            }
-            textFields.get(0).setDisable(true); // disables editing, focus, and click for casenum
+            caseNumberField.setText(record.getCaseNumber());
+            dateField.setText(record.getDate());
+            blockField.setText(record.getBlock());
+            iucrField.setText(record.getIucr());
+            primaryDescriptionField.setText(record.getPrimaryDescription());
+            secondaryDescriptionField.setText(record.getSecondaryDescription());
+            locationDescriptionField.setText(record.getLocationDescription());
+            wardField.setText(String.valueOf(record.getWard()));
+            beatField.setText(String.valueOf(record.getBeat()));
+            fbicdField.setText(record.getFbicd());
+            xCoordinateField.setText(String.valueOf(record.getXcoord()));
+            yCoordinateField.setText(String.valueOf(record.getYcoord()));
+            latitudeField.setText(String.valueOf(record.getLatitude()));
+            longitudeField.setText(String.valueOf(record.getLongitude()));
+            arrestCheckBox.setSelected(record.getArrest() == Record.TRUE);
+            domesticCheckBox.setSelected(record.getDomestic() == Record.TRUE);
+
+            caseNumberField.setDisable(true); // disables editing, focus, and click for casenum
 
             // Makes sure javascript in webengine has loaded before trying to use the functions
             webEngine.getLoadWorker().stateProperty().addListener(
@@ -157,7 +162,6 @@ public class EditRecordWindowController {
                             updateMap();
                         }
                     });
-
         }
         else {
             edit = false;
@@ -173,13 +177,13 @@ public class EditRecordWindowController {
     private void updateMap() {
 
         // Retrieve the values in the relevant text fields
-        String latText = textFields.get(14).getText();
-        String lonText = textFields.get(15).getText();
-        String caseNum = textFields.get(0).getText();
-        String date = textFields.get(1).getText();
-        String primaryLocation = textFields.get(4).getText();
-        String secondaryLocation = textFields.get(5).getText();
-        String locationDescription = textFields.get(6).getText();
+        String latText = latitudeField.getText();
+        String lonText = longitudeField.getText();
+        String caseNum = caseNumberField.getText();
+        String date = dateField.getText();
+        String primaryLocation = primaryDescriptionField.getText();
+        String secondaryLocation = secondaryDescriptionField.getText();
+        String locationDescription = locationDescriptionField.getText();
 
         // Check that the required fields contain valid values
         double lat = 0;
@@ -257,8 +261,10 @@ public class EditRecordWindowController {
 
         // check outlines for textfields on both valid and invalid attempts
         for (int i = 0; i < 16; i++) { // there is 1 value for each textfield
-            TextField field = textFields.get(i);
-            field.pseudoClassStateChanged(PseudoClass.getPseudoClass("textfield-required"), Objects.equals(feedback.get(i), "0"));
+            if (textFields.get(i) instanceof TextField) { // don't try to do this to the checkboxes
+                TextField field = (TextField) textFields.get(i);
+                field.pseudoClassStateChanged(PseudoClass.getPseudoClass("textfield-required"), Objects.equals(feedback.get(i), "0"));
+            }
             // although the line is long, pseudoclasses are better than regular css classes for this!
         }
 
@@ -273,10 +279,7 @@ public class EditRecordWindowController {
      */
     @FXML private void saveRecord() {
         try {
-            ArrayList<String> data = new ArrayList<>();
-            for (TextField field : textFields) {
-                data.add(field.getText());
-            }
+            List<String> data = getListFromTextFields();
             List<String> feedback = validateRecord(data);
 
             if (Objects.equals(feedback.get(16), "1")) { // 16 is where the overall valid status is stored
@@ -293,7 +296,7 @@ public class EditRecordWindowController {
                     if (d.searchDB("ID", data.get(0)).size() > 0) {
                         PopupWindow.displayPopup("Error", "That case number is already used in the " +
                                 "database.\nCase numbers must be unique.");
-                        textFields.get(0).pseudoClassStateChanged(PseudoClass.getPseudoClass("textfield-required"), true);
+                        caseNumberField.pseudoClassStateChanged(PseudoClass.getPseudoClass("textfield-required"), true);
                         // marks casenumber as invalid if it is already in use
                     }
                     else {
@@ -310,7 +313,23 @@ public class EditRecordWindowController {
         }
         catch (Exception ex) { // this is here so that exceptions are more obvious when they occur
             PopupWindow.displayPopup("Error", ex.getMessage());
+            ex.printStackTrace();
         }
+    }
+
+    /**
+     * Returns a list of the strings in the textfields + checkboxes that could be used to make a Record object,
+     * if valid.
+     * @return a list of strings similar to Record.toList(), taken from the textfields.
+     */
+    public List<String> getListFromTextFields() {
+        return Arrays.asList(
+                caseNumberField.getText(), dateField.getText(), blockField.getText(), iucrField.getText(),
+                primaryDescriptionField.getText(), secondaryDescriptionField.getText(), locationDescriptionField.getText(),
+                String.valueOf(arrestCheckBox.isSelected()), String.valueOf(domesticCheckBox.isSelected()),
+                wardField.getText(), beatField.getText(), fbicdField.getText(), xCoordinateField.getText(),
+                yCoordinateField.getText(), latitudeField.getText(), longitudeField.getText()
+                );
     }
 
     /**
