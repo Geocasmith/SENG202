@@ -217,22 +217,22 @@ public class AnalysisTabController {
 
         // Add click event handlers to the menu items
         showOnMap.setOnAction(actionEvent -> {
-            String block = topBlockTable.getSelectionModel().getSelectedItem().getType();
             try {
+                String block = topBlockTable.getSelectionModel().getSelectedItem().getType();
                 showOnMap(block);
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (NullPointerException | IOException e) {
+                PopupWindow.displayPopup("Error", e.getMessage());
             }
 
         });
 
         showDetails.setOnAction(actionEvent -> {
-            String block = topBlockTable.getSelectionModel().getSelectedItem().getType();
             try {
+                String block = topBlockTable.getSelectionModel().getSelectedItem().getType();
                 showBlockCrimeDetails(block);
 
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (NullPointerException | IOException e) {
+                PopupWindow.displayPopup("Error", e.getMessage());
             }
         });
 
@@ -256,17 +256,9 @@ public class AnalysisTabController {
         Stage popupMap= new Stage();
         popupMap.initModality(Modality.APPLICATION_MODAL);
 
-
-        //PopupMapController controller;
-
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("popupMapTab.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("mapTab.fxml"));
         popupMap.setScene(new Scene(loader.load()));
 
-
-
-        //controller = loader.getController();
-        //controller.plotMarkers(records, true);
         popupMap.showAndWait();
 
 
@@ -282,22 +274,30 @@ public class AnalysisTabController {
             }
         }
 
-        Stage popupMap= new Stage();
-        popupMap.initModality(Modality.APPLICATION_MODAL);
+        Stage popupCrimeDetails= new Stage();
+        popupCrimeDetails.initModality(Modality.APPLICATION_MODAL);
 
 
         CrimeDetailsController controller;
 
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("crimeDetails.fxml"));
-        popupMap.setScene(new Scene(loader.load()));
+        popupCrimeDetails.setScene(new Scene(loader.load()));
 
 
 
         controller = loader.getController();
-        controller.updateBlockDetails(records);
-        popupMap.setTitle("Crime Details in " + records.get(0).getBlock());
-        popupMap.showAndWait();
+
+        if (records.size() != 0) {
+            controller.updateBlockDetails(records);
+            popupCrimeDetails.setTitle("Crime Details in " + records.get(0).getBlock());
+            popupCrimeDetails.showAndWait();
+
+        }
+        else {
+            PopupWindow.displayPopup("No Crime to show", "There is no crime to show");
+        }
+
 
     }
 
