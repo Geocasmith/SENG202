@@ -4,16 +4,14 @@ package gui;
 
 import backend.*;
 import backend.Record;
-import javafx.beans.binding.Bindings;
+import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.*;
@@ -35,8 +33,9 @@ public class AnalysisTabController {
     @FXML private TableColumn<TypeFrequencyPair, String> bottomBlockFrequencyCol;
     private int displayLimit = 10;
     private ArrayList<Record> displayedRecords;
-    private DataAnalyser dataAnalyser = new DataAnalyser();
+    private final DataAnalyser dataAnalyser = new DataAnalyser();
     private static final double tableHeightMultiplier = 1.03; // Makes the table slightly taller than 10 rows to get rid of the scroll bar
+    private int mapOpenedCounter = 0;
 
 
 
@@ -161,7 +160,6 @@ public class AnalysisTabController {
      * @param blocksFrequencyPair usually a list of TypeFrequency pair object containing blocks and their
      *                            frequency
      */
-
     public void populateTopBlocksTable(ArrayList<TypeFrequencyPair> blocksFrequencyPair) {
 
         Collections.sort(blocksFrequencyPair, new FrequencyComparatorDescending());
@@ -184,7 +182,6 @@ public class AnalysisTabController {
      * @param blocksFrequencyPair usually a list of TypeFrequency pair object containing blocks and their
      *                            frequency
      */
-
     public void populateLowBlocksTable(ArrayList<TypeFrequencyPair> blocksFrequencyPair) {
 
 
@@ -201,8 +198,6 @@ public class AnalysisTabController {
         for (int i = 0; i < displayLimit; i++) {
             bottomBlockTable.getItems().add(blocksFrequencyPair.get(i));
         }
-
-
     }
 
 
@@ -221,9 +216,9 @@ public class AnalysisTabController {
                 String block = topBlockTable.getSelectionModel().getSelectedItem().getType();
                 showOnMap(block);
             } catch (NullPointerException | IOException e) {
-                PopupWindow.displayPopup("Error", e.getMessage());
+                PopupWindow.displayPopup("Error", "Error displaying the map, please try again.\n" +
+                        "If this problem persists, try restarting Insight.");
             }
-
         });
 
         showDetails.setOnAction(actionEvent -> {
@@ -232,7 +227,8 @@ public class AnalysisTabController {
                 showBlockCrimeDetails(block);
 
             } catch (NullPointerException | IOException e) {
-                PopupWindow.displayPopup("Error", e.getMessage());
+                PopupWindow.displayPopup("Error", "Error displaying crime details, please try again.\n" +
+                        "If this problem persists, try restarting Insight.");
             }
         });
 
@@ -246,20 +242,48 @@ public class AnalysisTabController {
     }
 
     public void showOnMap(String block) throws IOException {
-        ArrayList<Record> records = new ArrayList<>();
 
-        for (Record rec : displayedRecords) {
-            if (rec.getBlock().equalsIgnoreCase(block)) {
-                records.add(rec);
+        boolean connected = BrowserTabController.checkConnection();
+
+        if (!connected) {
+            PopupWindow.displayPopup("Error", "You must be connected to the internet to use the map.");
+        } else {
+            ArrayList<Record> records = new ArrayList<>();
+
+            for (Record rec : displayedRecords) {
+                if (rec.getBlock().equalsIgnoreCase(block)) {
+                    records.add(rec);
+                }
             }
+
+            // Only show this warning the first time the user opens the map from this screen
+            if (mapOpenedCounter == 0) {
+                mapOpenedCounter++;
+                PopupWindow.displayPopup("Note", "Crimes with incorrectly entered blocks or coordinates\n" +
+                        "may show up in odd locations on the map.");
+            }
+
+            Stage popupMap = new Stage();
+            popupMap.initModality(Modality.APPLICATION_MODAL);
+            popupMap.setTitle("Crime Occurrences in " + records.get(0).getBlock());
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("mapTab.fxml"));
+            popupMap.setScene(new Scene(loader.load()));
+            MapTabController mapTabController = loader.getController();
+
+            // Wait and make sure javascript has fully loaded before trying to plot the records
+            mapTabController.getWebEngine().getLoadWorker().stateProperty().addListener(
+                    (ov, oldState, newState) -> {
+                        if (newState == Worker.State.SUCCEEDED) {
+                            mapTabController.clearMap();
+                            mapTabController.plotMarkers(records, true);
+                        }
+                    });
+
+
+            popupMap.showAndWait();
         }
-        Stage popupMap= new Stage();
-        popupMap.initModality(Modality.APPLICATION_MODAL);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("mapTab.fxml"));
-        popupMap.setScene(new Scene(loader.load()));
-
-        popupMap.showAndWait();
 
 
 
@@ -277,19 +301,13 @@ public class AnalysisTabController {
         Stage popupCrimeDetails= new Stage();
         popupCrimeDetails.initModality(Modality.APPLICATION_MODAL);
 
-
-        CrimeDetailsController controller;
-
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("crimeDetails.fxml"));
         popupCrimeDetails.setScene(new Scene(loader.load()));
 
-
-
-        controller = loader.getController();
+        CrimeDetailsController crimeDetailsController = loader.getController();
 
         if (records.size() != 0) {
-            controller.updateBlockDetails(records);
+            crimeDetailsController.updateBlockDetails(records);
             popupCrimeDetails.setTitle("Crime Details in " + records.get(0).getBlock());
             popupCrimeDetails.showAndWait();
 

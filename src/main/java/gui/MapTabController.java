@@ -2,6 +2,7 @@ package gui;
 
 import backend.Record;
 import com.google.gson.JsonArray;
+import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
@@ -22,6 +23,8 @@ public class MapTabController {
     private Slider heatmapDensitySlider;
 
     private WebEngine webEngine;
+
+    private int mapRequestCount = 0;
 
     /**
      * Loads the Google Maps html file with the webengine and sets listeners to change the map type when the radio
@@ -61,7 +64,7 @@ public class MapTabController {
         for (Record record : records) {
             recordArray = record.getJsonArray();
             newLocationMarker = "document.plotPoint(" + recordArray + ", " + infoWindow + ", " + displayed + ")";
-            webEngine.executeScript(newLocationMarker);
+            runScript(newLocationMarker);
         }
     }
 
@@ -78,7 +81,7 @@ public class MapTabController {
      * Enables the heatmap and disables the markers
      */
     public void enableHeatmap() {
-        webEngine.executeScript("document.enableHeatmap()");
+        runScript("document.enableHeatmap()");
         updateHeatmapDensity();
     }
 
@@ -86,7 +89,7 @@ public class MapTabController {
      * Enables the markers and disables the heatmap
      */
     public void enableMarkers() {
-        webEngine.executeScript("document.enableMarkers()");
+        runScript("document.enableMarkers()");
     }
 
     /**
@@ -109,13 +112,41 @@ public class MapTabController {
      */
     public void updateHeatmapDensity() {
         int heatmapSliderValue = (int) heatmapDensitySlider.getValue();
-        webEngine.executeScript("document.updateHeatmapDensity(" + heatmapSliderValue +")");
+        runScript("document.updateHeatmapDensity(" + heatmapSliderValue +")");
     }
 
     /**
      * Clears all the existing markers and lines from the map
      */
     public void clearMap() {
-        webEngine.executeScript("document.clearMap()");
+        runScript("document.clearMap()");
+    }
+
+    /**
+     * If this is the first time the controller is running a script, then wait until the webengine has fully loaded
+     * the javascript then run the given script, otherwise, run it straight away
+     * @param script the javascript to be run.
+     */
+    public void runScript(String script) {
+        if (mapRequestCount == 0) {
+            mapRequestCount++;
+            webEngine.getLoadWorker().stateProperty().addListener(
+                    (ov, oldState, newState) -> {
+                        if (newState == Worker.State.SUCCEEDED) {
+                            webEngine.executeScript(script);
+                        }
+                    });
+        } else {
+            webEngine.executeScript(script);
+        }
+    }
+
+    /**
+     * Returns the current webengine object. Used in AnalysisTabController to add a listener to wait until
+     * the javascript has loaded correctly before trying to plot markers
+     * @return The current WebEngine object
+     */
+    public WebEngine getWebEngine() {
+        return webEngine;
     }
 }

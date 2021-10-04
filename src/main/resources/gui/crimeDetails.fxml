@@ -9,9 +9,12 @@
    <center>
       <TableView fx:id="crimeTable" prefHeight="370.0" prefWidth="515.0">
         <columns>
-          <TableColumn fx:id="crimeCol" prefWidth="308.0" text="Crime" />
-          <TableColumn fx:id="crimeFrequency" prefWidth="249.0" text="Frequency" />
+          <TableColumn fx:id="crimeCol" editable="false" sortable="false" text="Crime" />
+          <TableColumn fx:id="crimeFrequency" editable="false" maxWidth="90.0" minWidth="90.0" sortable="false" text="Frequency" />
         </columns>
+          <columnResizePolicy>
+              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+          </columnResizePolicy>
       </TableView>
    </center>
 </BorderPane>

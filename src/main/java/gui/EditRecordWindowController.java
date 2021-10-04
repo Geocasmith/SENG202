@@ -55,6 +55,7 @@ public class EditRecordWindowController {
     private WebEngine webEngine;
 
     private int mapRequestCount = 0;
+    private int windowOpenedCount = 0;
 
     /**
      * Defines the type of window, either edit (true) or add (false).
@@ -191,6 +192,7 @@ public class EditRecordWindowController {
         boolean validNumbers = false;
         boolean latLonNotEmpty = !latText.equals("") && !lonText.equals("");
         boolean displayInfoWindow = !caseNum.equals("");
+        boolean connected = BrowserTabController.checkConnection();
 
         try {
             lat = Double.parseDouble(latText);
@@ -201,7 +203,7 @@ public class EditRecordWindowController {
         }
 
         // If the required fields are valid then display the point on the map, display an info window with the given
-        if (latLonNotEmpty && validNumbers) {
+        if (latLonNotEmpty && validNumbers && connected) {
             JsonArray recordArray = new JsonArray();
             recordArray.add(lat);
             recordArray.add(lon);
@@ -240,6 +242,10 @@ public class EditRecordWindowController {
 
 
         } else {
+            if (!connected && windowOpenedCount == 0) {
+                windowOpenedCount++;
+                PopupWindow.displayPopup("Error", "You must be connected to the internet to use the map feature");
+            }
             mapBorderPane.setVisible(false);
         }
     }

@@ -190,17 +190,10 @@ public class MainController {
      */
     @FXML
     private void refreshMarkers() {
-        boolean connected;
-        try {
-            URL url = new URL("http://www.google.com");
-            URLConnection connection = url.openConnection();
-            connection.connect();
-            connected = true;
-        } catch (IOException e) {
-            connected = false;
-        }
+        boolean connected = BrowserTabController.checkConnection();
+
         if (!connected) {
-            PopupWindow.displayPopup("Error", "You must be connected to the internet to use this feature");
+            PopupWindow.displayPopup("Error", "You must be connected to the internet to use the map.");
             mainTabPane.getSelectionModel().select(tableTabPane);
         } else {
             ArrayList<Record> displayedRecords = tableTabController.getDisplayedRecords();
@@ -914,8 +907,15 @@ public class MainController {
     public void browserTabClick() {
         browserTabCount++;
         if (browserTabCount % 2 == 1) {
-            //sidebarAccordion.setPrefWidth(0);
-            sidebarAccordion.setVisible(false);
+
+            boolean connected = BrowserTabController.checkConnection();
+            if (!connected) {
+                PopupWindow.displayPopup("Error", "You must be connected to the internet to use the browser");
+                mainTabPane.getSelectionModel().select(tableTabPane);
+                browserTabCount++; // To make sure the tab count is the correct number
+            } else {
+                sidebarAccordion.setVisible(false);
+            }
         }
         if (browserTabCount % 2 == 0) {
             sidebarAccordion.setVisible(true);

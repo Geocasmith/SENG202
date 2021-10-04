@@ -8,6 +8,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Objects;
 
 public class BrowserTabController {
@@ -96,8 +99,18 @@ public class BrowserTabController {
             webBrowserForwardButton.setVisible(true);
             browserWebView.setVisible(true);
         }
+    }
 
-
-
+    public static boolean checkConnection() {
+        boolean connected;
+        try {
+            URL url = new URL("http://www.google.com");
+            URLConnection connection = url.openConnection();
+            connection.connect();
+            connected = true;
+        } catch (IOException e) {
+            connected = false;
+        }
+        return connected;
     }
 }

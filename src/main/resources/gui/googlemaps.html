@@ -16,6 +16,8 @@
         var infowindow = null;
         var polyline = new google.maps.Polyline();
         var latlngbounds = new google.maps.LatLngBounds();
+
+        // Initializes the map
         function initialize() {
             var latlng = new google.maps.LatLng(41.85001, -87.6782);
             var myOptions = {
@@ -32,11 +34,15 @@
             map = new google.maps.Map(document.getElementById("map_canvas"),myOptions);
         }
 
-        // Receives information about a crime record, plots it on the map and creates in infowindow that opens when the marker is clicked
+        // Receives information about a crime record, plots it on the map and depending on withInfoWindow and displayed,
+        // creates an infowindow that opens when the marker is clicked, shows the marker on the map, and fits the window
+        // to that area
         document.plotPoint = function plotPoint(record, withInfoWindow, displayed) {
 
+            // Creates an object representation of the records location and adds it to the list of data for the heatmap
             var markerPosition = new google.maps.LatLng(record[0], record[1])
             heatmapData.push(markerPosition);
+
             // Create a new marker at the given position
             marker = new google.maps.Marker({
                 position: markerPosition,
@@ -64,6 +70,9 @@
 
             // Add the marker to the list of markers
             markers.push(marker);
+
+            // Checks if the marker is to be displayed, if it is, it adjusts the current view to fit the new marker
+            // Otherwise, don't show the marker on the map
             if (displayed) {
                 marker.setMap(map);
                 latlngbounds.extend(markerPosition);
@@ -73,6 +82,7 @@
             }
         }
 
+        // Hides the heatmap and enables the markers
         document.enableMarkers = function enableMarkers() {
             for (let i = 0; i < markers.length; i++) {
                 markers[i].setMap(map);
@@ -80,6 +90,7 @@
             heatmap.setMap(null);
         }
 
+        // Hides all the markers on the map and enables the heatmap
         document.enableHeatmap = function enableHeatmap() {
             for (let i = 0; i < markers.length; i++) {
                 markers[i].setMap(null);
@@ -88,9 +99,12 @@
                 data: heatmapData,
                 map: map
             });
+            // Makes the heatmap look nicer by decreasing the max intensity of the points
+            heatmap.setOptions({maxIntensity: 1})
 
         }
 
+        // Updates the heatmap density to the given density
         document.updateHeatmapDensity = function updateHeatmapDensity(density) {
             heatmap.setOptions({radius: density})
         }
@@ -105,9 +119,9 @@
             heatmap.setData(heatmapData)
             polyline.setMap(null);
             latlngbounds = new google.maps.LatLngBounds();
-
         }
 
+        // Plots the two given points to analyse, and draws a line between them
         document.analysePoints = function analysePoints(record1, record2) {
             document.plotPoint(record1, true, true);
             document.plotPoint(record2, true, true);
@@ -125,6 +139,7 @@
             });
         }
 
+        // Sets the map zoom level to the given level
         document.setZoom = function setZoom(zoomLevel) {
             map.setZoom(zoomLevel)
         }

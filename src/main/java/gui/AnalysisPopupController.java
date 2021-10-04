@@ -21,6 +21,7 @@ public class AnalysisPopupController {
     private WebView mapWebView;
     private WebEngine mapWebEngine;
     private DataAnalyser dataAnalyser = new DataAnalyser();
+    private int mapRequestCount = 0;
 
     /**
      * Initialises the webengine and loads the google maps page
@@ -42,7 +43,15 @@ public class AnalysisPopupController {
         String timeDifference = dataAnalyser.getTimeDifferenceString(record1, record2);
         titleLabel.setText(String.format("Differences between case numbers %s & %s",record1.getCaseNumber(), record2.getCaseNumber()));
         infoLabel.setText("Time Difference: " + timeDifference + "\n" + "Location Difference: " + locationDifference);
-        initMap(record1, record2);
+        boolean connected = BrowserTabController.checkConnection();
+        if (!connected) {
+            PopupWindow.displayPopup("Error", "You must be connected to the internet to use the map feature");
+            mapWebView.setVisible(false);
+        } else {
+            mapWebView.setVisible(true);
+            initMap(record1, record2);
+        }
+
     }
 
     /**
@@ -63,13 +72,17 @@ public class AnalysisPopupController {
      * @param script the javascript code to run in string form
      */
     private void runScript(String script) {
-        mapWebEngine.getLoadWorker().stateProperty().addListener(
-                (ov, oldState, newState) -> {
-                    if (newState == Worker.State.SUCCEEDED) {
-                        mapWebEngine.executeScript(script);
-                    }
-                });
-
+        if (mapRequestCount == 0) {
+            mapRequestCount++;
+            mapWebEngine.getLoadWorker().stateProperty().addListener(
+                    (ov, oldState, newState) -> {
+                        if (newState == Worker.State.SUCCEEDED) {
+                            mapWebEngine.executeScript(script);
+                        }
+                    });
+        } else {
+            mapWebEngine.executeScript(script);
+        }
     }
 
     /**
