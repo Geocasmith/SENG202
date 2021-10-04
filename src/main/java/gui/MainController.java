@@ -774,7 +774,7 @@ public class MainController {
      * which is accessed every time the database is connected to
      */
     public void changeDatabase() throws IOException, SQLException {
-        Thread t = startLoadingBar();
+        //Thread t = startLoadingBar();
         String filepath;
 
         filepath = getPathToFile("Database", "db");
