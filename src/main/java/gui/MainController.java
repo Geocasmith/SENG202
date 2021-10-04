@@ -98,6 +98,7 @@ public class MainController {
 
     private int graphTabCount = 0;
     private int analysisTabCount = 0;
+    private int browserTabCount = 0;
 
     public MainController() throws SQLException {
     }
@@ -110,6 +111,9 @@ public class MainController {
     private void initialize() throws SQLException, IOException, CsvValidationException {
         filterSetup();
         graphSetup();
+
+        // set sidebarAccordian to not affect geometry when hidden
+        sidebarAccordion.managedProperty().bind(sidebarAccordion.visibleProperty());
 
         tableTabController.setParentController(this);
         Database db = new Database();
@@ -900,6 +904,21 @@ public class MainController {
         analysisTabCount++;
         if (analysisTabCount % 2 == 1) {
             updateAnalysis();
+        }
+    }
+
+    /**
+     * Keeps track of the number of times the analysis tab has been clicked on/off of, and updates the tables if the tab
+     * has just been clicked on to
+     */
+    public void browserTabClick() {
+        browserTabCount++;
+        if (browserTabCount % 2 == 1) {
+            //sidebarAccordion.setPrefWidth(0);
+            sidebarAccordion.setVisible(false);
+        }
+        if (browserTabCount % 2 == 0) {
+            sidebarAccordion.setVisible(true);
         }
     }
 }
