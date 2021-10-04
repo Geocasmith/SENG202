@@ -574,7 +574,6 @@ public class Database {
         if(caseNumber!=null) {
             SQLString += "AND (ID LIKE '%" + caseNumber + "%')";
         }
-        System.out.println(SQLString);
         PreparedStatement s1 = connection.prepareStatement(SQLString);
         ResultSet rs = s1.executeQuery();
         ArrayList<Record> recordsFromDBQuery =  getRecord(rs);
