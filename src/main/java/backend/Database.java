@@ -518,7 +518,7 @@ public class Database {
      */
     public ArrayList<Record> getFilter(String caseNumber, Date startDate, Date endDate,ArrayList<String> crimeTypes,ArrayList<String> locDes,String ward,String beat,String lat,String lon,int radius,String arrest,String domestic) throws SQLException {
         connection.setAutoCommit(false);
-        String SQLString = "SELECT * FROM CRIMES where (UNIXTIME >= 0) ";
+        String SQLString = "SELECT * FROM CRIMES where true ";
 
         //Cycles through Crime Type values if not empty and appends to SQL string
         if(!crimeTypes.isEmpty()){
@@ -574,7 +574,6 @@ public class Database {
         if(caseNumber!=null) {
             SQLString += "AND (ID LIKE '%" + caseNumber + "%')";
         }
-        System.out.println(SQLString);
         PreparedStatement s1 = connection.prepareStatement(SQLString);
         ResultSet rs = s1.executeQuery();
         ArrayList<Record> recordsFromDBQuery =  getRecord(rs);
