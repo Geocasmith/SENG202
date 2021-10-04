@@ -4,12 +4,15 @@ import backend.DataAnalyser;
 import backend.Database;
 import backend.Record;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -35,6 +38,26 @@ public class TableTabController {
     private void initialize() {
         setupTable();
         setupContextMenu();
+
+        // sets up a delete action for when the delete or backspace keys are pressed while
+        mainTableView.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                switch (keyEvent.getCode()){
+                    case DELETE: // do the same thing
+                    case BACK_SPACE:
+                        try {
+                            deleteSelectedRows();
+                        } catch (SQLException e) {
+                            PopupWindow.displayPopup("Error", e.getMessage());
+                            e.printStackTrace();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     /**
