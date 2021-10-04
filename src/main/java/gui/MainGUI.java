@@ -2,8 +2,12 @@ package gui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -12,6 +16,8 @@ public class MainGUI extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+
+
         Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
         primaryStage.setTitle("Insight");
         primaryStage.setScene(new Scene(root));

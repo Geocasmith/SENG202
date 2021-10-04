@@ -1,3 +1,4 @@
+
 package gui;
 
 
@@ -5,11 +6,16 @@ import backend.*;
 import backend.Record;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.io.IOException;
 import java.util.*;
 
 public class AnalysisTabController {
@@ -28,6 +34,7 @@ public class AnalysisTabController {
     @FXML private TableColumn<TypeFrequencyPair, String> bottomBlockCol;
     @FXML private TableColumn<TypeFrequencyPair, String> bottomBlockFrequencyCol;
     private int displayLimit = 10;
+    private ArrayList<Record> displayedRecords;
     private DataAnalyser dataAnalyser = new DataAnalyser();
     private static final double tableHeightMultiplier = 1.03; // Makes the table slightly taller than 10 rows to get rid of the scroll bar
 
@@ -43,6 +50,38 @@ public class AnalysisTabController {
         updateTableHeight(bottomCrimeTable);
         updateTableHeight(bottomBlockTable);
         updateTableHeight(topBlockTable);
+        setupContextMenu();
+
+        topBlockTable.setRowFactory(tv -> {
+            TableRow<TypeFrequencyPair> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    TypeFrequencyPair rowData = row.getItem();
+                    try {
+                        showBlockCrimeDetails(rowData.getType());
+                    } catch (IOException e) {
+                        PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
+                    }
+                }
+            });
+            return row;
+        });
+
+        bottomBlockTable.setRowFactory(tv -> {
+            TableRow<TypeFrequencyPair> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    TypeFrequencyPair rowData = row.getItem();
+                    try {
+                        showBlockCrimeDetails(rowData.getType());
+                    } catch (IOException e) {
+                        PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
+                    }
+                }
+            });
+            return row;
+        });
+
 
     }
 
@@ -64,6 +103,7 @@ public class AnalysisTabController {
         populateLowCrimesTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 4)));
         populateTopBlocksTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 2)));
         populateLowBlocksTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 2)));
+        this.displayedRecords = currentRecord;
 
     }
 
@@ -166,6 +206,103 @@ public class AnalysisTabController {
     }
 
 
+    private void setupContextMenu() {
+
+        // Create menus
+        ContextMenu tableContextMenu = new ContextMenu();
+
+        // Create menu items
+        MenuItem showOnMap = new MenuItem("Show on Map");
+        MenuItem showDetails = new MenuItem("Show Details");
+
+        // Add click event handlers to the menu items
+        showOnMap.setOnAction(actionEvent -> {
+            String block = topBlockTable.getSelectionModel().getSelectedItem().getType();
+            try {
+                showOnMap(block);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        });
+
+        showDetails.setOnAction(actionEvent -> {
+            String block = topBlockTable.getSelectionModel().getSelectedItem().getType();
+            try {
+                showBlockCrimeDetails(block);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+
+
+
+        // Add menu items to the relevant menus
+        tableContextMenu.getItems().addAll(showOnMap, showDetails);
+
+        topBlockTable.setContextMenu(tableContextMenu);
+    }
+
+    public void showOnMap(String block) throws IOException {
+        ArrayList<Record> records = new ArrayList<>();
+
+        for (Record rec : displayedRecords) {
+            if (rec.getBlock().equalsIgnoreCase(block)) {
+                records.add(rec);
+            }
+        }
+        Stage popupMap= new Stage();
+        popupMap.initModality(Modality.APPLICATION_MODAL);
+
+
+        //PopupMapController controller;
+
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("popupMapTab.fxml"));
+        popupMap.setScene(new Scene(loader.load()));
+
+
+
+        //controller = loader.getController();
+        //controller.plotMarkers(records, true);
+        popupMap.showAndWait();
+
+
+
+    }
+
+    public void showBlockCrimeDetails(String block) throws IOException {
+        ArrayList<Record> records = new ArrayList<>();
+
+        for (Record rec : displayedRecords) {
+            if (rec.getBlock().equalsIgnoreCase(block)) {
+                records.add(rec);
+            }
+        }
+
+        Stage popupMap= new Stage();
+        popupMap.initModality(Modality.APPLICATION_MODAL);
+
+
+        CrimeDetailsController controller;
+
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("crimeDetails.fxml"));
+        popupMap.setScene(new Scene(loader.load()));
+
+
+
+        controller = loader.getController();
+        controller.updateBlockDetails(records);
+        popupMap.setTitle("Crime Details in " + records.get(0).getBlock());
+        popupMap.showAndWait();
+
+    }
+
+
+
+
 
 }
-
