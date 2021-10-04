@@ -6,11 +6,17 @@ import com.opencsv.exceptions.CsvValidationException;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.IndexedCheckModel;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -19,46 +25,76 @@ import java.nio.file.FileAlreadyExistsException;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 
 
 public class MainController {
 
-    @FXML private MapTabController mapTabController;
-    @FXML private TableTabController tableTabController;
-    @FXML private GraphTabController graphTabController;
-    @FXML private AnalysisTabController analysisTabController;
-    @FXML private DataAnalyser dataAnalyser;
+    @FXML
+    private MapTabController mapTabController;
+    @FXML
+    private TableTabController tableTabController;
+    @FXML
+    private GraphTabController graphTabController;
+    @FXML
+    private AnalysisTabController analysisTabController;
+    @FXML
+    private DataAnalyser dataAnalyser;
 
     // Filter Sidebar Elements
-    @FXML private TitledPane filterPane;
-    @FXML private TitledPane graphPane;
-    @FXML private TextField filterCaseNumberTextField;
-    @FXML private TabPane mainTabPane;
-    @FXML private Tab tableTabPane;
-    @FXML private Accordion sidebarAccordion;
-    @FXML private ComboBox arrestComboBox;
-    @FXML private ComboBox domesticComboBox;
-    @FXML private CheckComboBox crimeTypeComboBox;
-    @FXML private CheckComboBox locationDescriptionComboBox;
-    @FXML private Slider radiusSlider;
-    @FXML private Label radiusLabel;
-    @FXML private DatePicker filterStartDate;
-    @FXML private DatePicker filterEndDate;
-    @FXML private TextField filterWardTextField;
-    @FXML private TextField filterBeatsTextField;
-    @FXML private TextField filterLatTextField;
-    @FXML private TextField filterLongTextField;
-    @FXML private Label filterErrorLabel;
+    @FXML
+    private TitledPane filterPane;
+    @FXML
+    private TitledPane graphPane;
+    @FXML
+    private TextField filterCaseNumberTextField;
+    @FXML
+    private TabPane mainTabPane;
+    @FXML
+    private Tab tableTabPane;
+    @FXML
+    private Accordion sidebarAccordion;
+    @FXML
+    private ComboBox arrestComboBox;
+    @FXML
+    private ComboBox domesticComboBox;
+    @FXML
+    private CheckComboBox crimeTypeComboBox;
+    @FXML
+    private CheckComboBox locationDescriptionComboBox;
+    @FXML
+    private Slider radiusSlider;
+    @FXML
+    private Label radiusLabel;
+    @FXML
+    private DatePicker filterStartDate;
+    @FXML
+    private DatePicker filterEndDate;
+    @FXML
+    private TextField filterWardTextField;
+    @FXML
+    private TextField filterBeatsTextField;
+    @FXML
+    private TextField filterLatTextField;
+    @FXML
+    private TextField filterLongTextField;
+    @FXML
+    private Label filterErrorLabel;
 
     // Graph Sidebar Elements
-    @FXML private ComboBox graphTypeComboBox;
-    @FXML private Button generateGraphButton;
-    @FXML private CheckComboBox graphFilterComboBox;
-    @FXML private Label graphOptionLabel;
+    @FXML
+    private ComboBox graphTypeComboBox;
+    @FXML
+    private Button generateGraphButton;
+    @FXML
+    private CheckComboBox graphFilterComboBox;
+    @FXML
+    private Label graphOptionLabel;
 
     private int graphTabCount = 0;
     private int analysisTabCount = 0;
@@ -105,7 +141,7 @@ public class MainController {
 
         Database d = new Database();
         d.connectDatabase();
-        ArrayList<String> locationDescriptions  = (ArrayList<String>)(ArrayList<?>)(d.extractCol("LOCATIONDESCRIPTION"));
+        ArrayList<String> locationDescriptions = (ArrayList<String>) (ArrayList<?>) (d.extractCol("LOCATIONDESCRIPTION"));
         d.disconnectDatabase();
         // Remove duplicate values
         locationDescriptions = new ArrayList<>(new HashSet<>(locationDescriptions));
@@ -132,7 +168,7 @@ public class MainController {
      * Sets up combo boxes in the graph pane
      */
     public void graphSetup() {
-        graphTypeComboBox.getItems().addAll( "", "All Crimes", "Crimes Per Ward", "Crimes Per Beat", "Crimes Per Type");
+        graphTypeComboBox.getItems().addAll("", "All Crimes", "Crimes Per Ward", "Crimes Per Beat", "Crimes Per Type");
         graphTypeComboBox.getSelectionModel().select("");
     }
 
@@ -156,20 +192,17 @@ public class MainController {
             URLConnection connection = url.openConnection();
             connection.connect();
             connected = true;
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             connected = false;
         }
         if (!connected) {
             PopupWindow.displayPopup("Error", "You must be connected to the internet to use this feature");
             mainTabPane.getSelectionModel().select(tableTabPane);
-        }
-        else {
+        } else {
             ArrayList<Record> displayedRecords = tableTabController.getDisplayedRecords();
             if (displayedRecords.size() < 500) {
                 mapTabController.updateMarkers(displayedRecords);
-            }
-            else {
+            } else {
                 mapTabController.updateMarkers(new ArrayList<>(displayedRecords.subList(0, 499)));
             }
 
@@ -190,8 +223,7 @@ public class MainController {
                 PopupWindow.displayPopup("Error", "You must have data in the table to create a graph.\n" +
                         "Try clearing the filter or importing some data.");
                 graphTypeComboBox.getSelectionModel().select(0);
-            }
-            else {
+            } else {
                 graphOptionLabel.setVisible(false);
                 graphFilterComboBox.setVisible(false);
                 generateGraphButton.setDisable(false);
@@ -206,8 +238,7 @@ public class MainController {
                 PopupWindow.displayPopup("Error", "You must have data in the table to create a graph.\n" +
                         "Try clearing the filter or importing some data.");
                 graphTypeComboBox.getSelectionModel().select(0);
-            }
-            else {
+            } else {
                 graphOptionLabel.setText("Select which wards to graph");
                 graphOptionLabel.setVisible(true);
                 graphFilterComboBox.setVisible(true);
@@ -279,7 +310,7 @@ public class MainController {
         ArrayList<Record> currentRecords = tableTabController.getDisplayedRecords();
         if (currentRecords.size() == 0) {
             PopupWindow.displayPopup("Error", "You must have data in the table to create a graph.\n" +
-                                                           "Try clearing the filter or importing some data.");
+                    "Try clearing the filter or importing some data.");
         } else if (graphTypeComboBox.getValue().equals("All Crimes")) {
             graphTabController.createCrimesOverTimeGraph(currentRecords);
 
@@ -295,8 +326,7 @@ public class MainController {
                 if (graphTypeComboBox.getValue().equals("Crimes Per Ward")) {
                     ArrayList<Integer> checkedWards = new ArrayList<>();
                     ObservableList<Integer> checkedIndices = (ObservableList<Integer>) graphFilterComboBox.getCheckModel().getCheckedIndices();
-                    for (Integer index : checkedIndices)
-                    {
+                    for (Integer index : checkedIndices) {
                         checkedWards.add((int) graphFilterComboBox.getCheckModel().getItem(index));
                     }
                     graphTabController.createCrimesPerWardOverTimeGraph(currentRecords, checkedWards);
@@ -304,8 +334,7 @@ public class MainController {
                 } else if (graphTypeComboBox.getValue().equals("Crimes Per Beat")) {
                     ArrayList<Integer> checkedBeats = new ArrayList<>();
                     ObservableList<Integer> checkedIndices = (ObservableList<Integer>) graphFilterComboBox.getCheckModel().getCheckedIndices();
-                    for (Integer index : checkedIndices)
-                    {
+                    for (Integer index : checkedIndices) {
                         checkedBeats.add((int) graphFilterComboBox.getCheckModel().getItem(index));
                     }
                     graphTabController.createCrimesPerBeatOverTimeGraph(currentRecords, checkedBeats);
@@ -313,8 +342,7 @@ public class MainController {
                 } else if (graphTypeComboBox.getValue().equals("Crimes Per Type")) {
                     ArrayList<String> checkedTypes = new ArrayList<>();
                     ObservableList<Integer> checkedIndices = (ObservableList<Integer>) graphFilterComboBox.getCheckModel().getCheckedIndices();
-                    for (Integer index : checkedIndices)
-                    {
+                    for (Integer index : checkedIndices) {
                         checkedTypes.add((String) graphFilterComboBox.getCheckModel().getItem(index));
                     }
                     graphTabController.createCrimesPerTypeOverTimeGraph(currentRecords, checkedTypes);
@@ -327,7 +355,7 @@ public class MainController {
      * Updates label for radius when slider is updated
      */
     public void updateRadiusText() {
-        String radius = String.valueOf(Math.round(radiusSlider.getValue())*100);
+        String radius = String.valueOf(Math.round(radiusSlider.getValue()) * 100);
         radiusLabel.setText(radius + " m");
     }
 
@@ -357,7 +385,7 @@ public class MainController {
             caseNumber = text;
 
             //Does nothing if SQL injection detected
-            if(containsInjection(caseNumber)){
+            if (containsInjection(caseNumber)) {
                 return;
             }
 
@@ -368,8 +396,8 @@ public class MainController {
         LocalDate localDate;
         localDate = filterStartDate.getValue();
         if (localDate != null) {
-        instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
-        startDate = Date.from(instant);
+            instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+            startDate = Date.from(instant);
         }
 
         // Do the same for end date
@@ -390,8 +418,7 @@ public class MainController {
         // Get names of all checked items in crime type CheckComboBox
         IndexedCheckModel checkModel = crimeTypeComboBox.getCheckModel();
         ObservableList<Integer> checkedItems = checkModel.getCheckedIndices();
-        for (Integer index : checkedItems)
-        {
+        for (Integer index : checkedItems) {
             crimeTypes.add(checkModel.getItem(index).toString());
         }
 
@@ -477,11 +504,12 @@ public class MainController {
         } else {
             filterErrorLabel.setVisible(true);
         }
-        
+
     }
 
     /**
-     *  Updates latitude and longitude field in filter sidebar to lat and long of record object
+     * Updates latitude and longitude field in filter sidebar to lat and long of record object
+     *
      * @param record Record selected
      */
     public void updateLatLong(Record record) {
@@ -493,7 +521,7 @@ public class MainController {
     /**
      * Enables slider if lat and long are valid in the filter
      */
-    public void checkSliderUnlock () {
+    public void checkSliderUnlock() {
         String lat = filterLatTextField.getText();
         String lon = filterLongTextField.getText();
 
@@ -530,7 +558,8 @@ public class MainController {
 
     /**
      * Opens file explorer for user to select a file
-     * @param fileType  Type of file
+     *
+     * @param fileType      Type of file
      * @param fileExtension Extension of file
      * @return path to csv file
      */
@@ -538,8 +567,8 @@ public class MainController {
         String filepath = null;
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select " + fileType + " file");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(fileType + " Files", "*."+fileExtension),
-                                                 new FileChooser.ExtensionFilter("All Files", "*.*"));
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(fileType + " Files", "*." + fileExtension),
+                new FileChooser.ExtensionFilter("All Files", "*.*"));
         File selectedFile = fileChooser.showOpenDialog(new Stage());
         if (selectedFile != null) {
             filepath = selectedFile.getAbsolutePath();
@@ -551,7 +580,8 @@ public class MainController {
     /**
      * Opens the file explorer for the user to select a location to save the selected file, then returns the selected
      * location.
-     * @param fileType The type of file to be saved (CSV or Database)
+     *
+     * @param fileType      The type of file to be saved (CSV or Database)
      * @param fileExtension The extension of the file to be saved (.csv or .db)
      * @return The file path to the location the user selects
      */
@@ -560,7 +590,7 @@ public class MainController {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select location to save " + fileType + " file");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(fileType + " Files", "*."+fileExtension),
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(fileType + " Files", "*." + fileExtension),
                 new FileChooser.ExtensionFilter("All Files", "*.*"));
         File selectedFile = fileChooser.showSaveDialog(new Stage());
         if (selectedFile != null) {
@@ -574,11 +604,11 @@ public class MainController {
      * Opens the file explorer for the user to select a save location and then passes
      * this to the CsvWriter along with the currently displayed records.
      */
-    public void exportCsv() throws IOException, NullPointerException{
-        try{
-            String filepath = addExtension(getFileSavePath("CSV", "csv"),".csv");
+    public void exportCsv() throws IOException, NullPointerException {
+        try {
+            String filepath = addExtension(getFileSavePath("CSV", "csv"), ".csv");
             CsvWriter.write(filepath, tableTabController.getDisplayedRecords());
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             // the user closed the file chooser
         } catch (Exception e) {
             // something unknown happened
@@ -586,10 +616,14 @@ public class MainController {
         }
     }
 
+
+
+
     /**
      * Opens a file explorer for the user to select csv file to import then loads it
      */
     public void importCsv() throws SQLException, IOException {
+
         String filepath = getPathToFile("CSV", "csv");
 
         if (filepath != null) {
@@ -612,7 +646,7 @@ public class MainController {
                 csvSuccess = (Boolean) csvRows.get(1);
             } catch (Exception e) {
                 PopupWindow.displayPopup("Error", "An unknown error occurred when importing CSV.\n" +
-                                                               "Please try again");
+                        "Please try again");
             }
 
             if (!csvSuccess) {
@@ -665,35 +699,98 @@ public class MainController {
 
     /**
      * Creates a pop-up window which displays the number of invalid rows
+     *
      * @param invalid //TODO
      */
-    public void displayInvalid(ArrayList<List<String>> invalid){
-        String invalidRows = invalid.size()+" rows could not be imported because their format is invalid";
+    public void displayInvalid(ArrayList<List<String>> invalid) {
+        String invalidRows = invalid.size() + " rows could not be imported because their format is invalid";
         PopupWindow.displayPopup("Invalid Rows", invalidRows);
 
     }
 
     /**
+     * Creates a thread with a loading bar in it
+     * @return
+     */
+    public Thread startLoadingBar() {
+        Runnable runnable =
+                () -> {
+                    try {
+                        startProgressBar();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                };
+
+        Thread thread = new Thread(runnable);
+        thread.start();
+        return thread;
+    }
+    public void stopLoadingBar(Thread thread){
+        thread.stop();
+    }
+    /**
+     * Initialises progress bar
+     * @throws InterruptedException
+     */
+    public void startProgressBar() throws InterruptedException {
+        //Initialises frame, panel and bar
+        JFrame frame = new JFrame();
+        JPanel panel = new JPanel();
+        JProgressBar progress = new JProgressBar(0, 100);
+        JLabel text = new JLabel("Loading");
+
+        //Customises progress bar
+        progress.setValue(0);
+        progress.setIndeterminate(true);
+
+        //Adds
+        panel.add(text);
+        panel.add(progress);
+        frame.add(panel);
+
+        //Customises frame
+        frame.setUndecorated(true);
+        frame.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+        frame.setSize(200, 50);
+        frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
+
+
+        int count = 0;
+        while (true) {
+            progress.setValue(count);
+            count += 1;
+            TimeUnit.MILLISECONDS.sleep(500);
+            if (count == 100) {
+                count = 0;
+
+            }
+        }
+    }
+    /**
      * Opens the file explorer for the user to select a save location and then passes
      * this to the database path method which will change the static variable path in database
      * which is accessed every time the database is connected to
      */
-    public void changeDatabase() throws IOException, SQLException{
+    public void changeDatabase() throws IOException, SQLException {
+        Thread t = startLoadingBar();
         String filepath;
+
         filepath = getPathToFile("Database", "db");
         if (filepath != null) {
             //Changes the database to the selected path
             Database d = new Database();
 
             //If user imports incorrect filetype it will do nothing and display a pop-up
-            if(matchFileType(filepath,".db")){
+            if (matchFileType(filepath, ".db")) {
                 PopupWindow.displayPopup("Error", "Selected file is not a database file");
                 d.disconnectDatabase();
                 return;
             }
 
             d.setDatabasePath(filepath);
-            if(d.checkValidDB()){
+            if (d.checkValidDB()) {
                 PopupWindow.displayPopup("Error", "Database format invalid");
             }
             d.disconnectDatabase();
@@ -701,18 +798,20 @@ public class MainController {
             //Refresh GUI
             tableTabController.refreshTableData();
         }
+
     }
 
     /**
      * Prompts the user to select a location to save the new database file, then creates a database file there
+     *
      * @return Boolean true/false if the database was created successfully
      */
     public Boolean newDatabase() throws NullPointerException, SQLException, IOException {
         String filepath = getFileSavePath("Database", "db");
 
         if (!(filepath == null)) {
-            try{
-                filepath = addExtension(filepath,".db");
+            try {
+                filepath = addExtension(filepath, ".db");
                 File file = new File(filepath);
 
                 if (file.createNewFile()) {
@@ -728,11 +827,9 @@ public class MainController {
 
                     return true;
                 }
-            }
-            catch(FileAlreadyExistsException e){
+            } catch (FileAlreadyExistsException e) {
                 PopupWindow.displayPopup("Error", "File already exists");
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 // something else went wrong
                 PopupWindow.displayPopup("Error", "Unknown error");
             }
@@ -742,33 +839,35 @@ public class MainController {
 
     /**
      * Checks and returns if characters used in SQLInjection are used.
+     *
      * @param injection input from user
      * @return if injection characters are used.
      */
-    public Boolean containsInjection(String injection){
-        if(injection.matches(".*[%\'\"\\-=<>;\\(\\)].*")){
+    public Boolean containsInjection(String injection) {
+        if (injection.matches(".*[%\'\"\\-=<>;\\(\\)].*")) {
             PopupWindow.displayPopup("Input Error", "Invalid characters in input (SQL Injection Protection)");
 
             return true;
         }
         return false;
     }
+
     /**
      * Helper method which checks the filepath to check if it has the correct extension and adds it if it does not
      * This stops the user from exporting to a file without an extension if they don't
      * type the extension in the file name.
-     * @param path file path
+     *
+     * @param path      file path
      * @param extension correct extension
      * @return filepath or filepath with appended extension
      */
-    public String addExtension(String path, String extension){
+    public String addExtension(String path, String extension) {
         String substr = path.substring(path.length() - extension.length());
 
         //If the correct extension exists return path otherwise append the extension and return
-        if(substr.equals(extension)) {
+        if (substr.equals(extension)) {
             return path;
-        }
-        else {
+        } else {
             return path + extension;
         }
     }
@@ -776,11 +875,12 @@ public class MainController {
     /**
      * Checks if the inputted filepath's extension matches the required extension, this stops the user from
      * importing data from incorrect file types
-     * @param path file path
+     *
+     * @param path      file path
      * @param extension correct extension
      * @return true if file type incorrect
      */
-    public Boolean matchFileType(String path, String extension){
+    public Boolean matchFileType(String path, String extension) {
         String substr = path.substring(path.length() - extension.length());
         return !substr.equals(extension);
     }
