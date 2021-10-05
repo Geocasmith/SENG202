@@ -829,8 +829,6 @@ public class MainController {
      * this to the database path method which will change the static variable path in database
      * which is accessed every time the database is connected to
      */
-    public void changeDatabase() throws IOException, SQLException {
-        Thread t = startLoadingBar();
     public void changeDatabase() throws IOException, SQLException, InterruptedException {
         Thread t = startLoadingBar();
         String filepath;

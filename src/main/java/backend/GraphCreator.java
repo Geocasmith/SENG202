@@ -232,7 +232,7 @@ public class GraphCreator {
         ArrayList<LocalDateTime> overallTime = new ArrayList<>();
 
         XYChart.Series series;
-        // Fill arraylists with a series and list of times for each ward
+        // Fill arraylists with a series and list of times for each type
         for (String crimeType: crimeTypes) {
             series = new XYChart.Series();
             series.setName(crimeType);
@@ -288,7 +288,7 @@ public class GraphCreator {
         ArrayList<LocalDateTime> overallTime = new ArrayList<>();
 
         XYChart.Series series;
-        // Fill arraylists with a series and list of times for each ward
+        // Fill arraylists with a series and list of times for each beat
         for (Integer crimeBeat: crimeBeats) {
             series = new XYChart.Series();
             series.setName(String.format("Beat: %d", crimeBeat));
