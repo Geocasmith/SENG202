@@ -339,7 +339,7 @@ public class TableTabController {
      * Heavy-handed method of refreshing the table's data - reloads everything from the database with filters applied.
      * This is required to view new or changed records, but not to see records deleted.
      */
-    public void refreshTableData() throws SQLException, IOException {
+    public void refreshTableData() throws SQLException, IOException, InterruptedException {
         parentController.applyFilters();
     }
 

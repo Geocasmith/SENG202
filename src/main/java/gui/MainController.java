@@ -4,7 +4,9 @@ import backend.Record;
 import backend.*;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -46,6 +48,9 @@ public class MainController {
     private AnalysisTabController analysisTabController;
     @FXML
     private DataAnalyser dataAnalyser;
+
+    @FXML
+    private Stage primaryStage;
 
     // Filter Sidebar Elements
     @FXML
@@ -102,6 +107,16 @@ public class MainController {
     private int browserTabCount = 0;
 
     public MainController() throws SQLException {
+    }
+
+    /**
+     * Gets and sets primary stage from the main gui
+     * This is to be used in controlling cursor and potentially other properties of the main scene
+     * @param primaryStage
+     */
+
+    public void setMyPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
     }
 
     /**
@@ -487,18 +502,46 @@ public class MainController {
         }
 
         if (validFilter) {
-            filterErrorLabel.setVisible(false);
-            Database d = new Database();
-            ArrayList<Record> records = d.getFilter(caseNumber, startDate, endDate, crimeTypes, locationDescriptions,
-                    wards, beats, lat, lon, radius, arrest, domestic);
-            d.disconnectDatabase();
-            // Set table to records
-            tableTabController.setTableRecords(records);
-            refreshMarkers();
-            dataAnalyser.updateRecords(records);
-            graphTypeComboBox.getSelectionModel().select(0);
-            updateGraphOptions();
-            updateAnalysis();
+            // Fields below are copied since accessing them inside the new task constructor requires them to be constant
+            String finalCaseNumber = caseNumber;
+            Date finalStartDate = startDate;
+            Date finalEndDate = endDate;
+            String finalArrest = arrest;
+            String finalDomestic = domestic;
+            int finalRadius = radius;
+            String finalLon = lon;
+            String finalLat = lat;
+            String finalBeats = beats;
+            String finalWards = wards;
+
+            // Sets the primary stage cursor busy
+            primaryStage.getScene().getRoot().setCursor(Cursor.WAIT);
+
+            // Creates and performs a back ground task
+            Task<Void> task = new Task<Void>() {
+                @Override
+                public Void call() throws SQLException {
+                    filterErrorLabel.setVisible(false);
+                    Database d = new Database();
+                    ArrayList<Record> records = d.getFilter(finalCaseNumber, finalStartDate, finalEndDate, crimeTypes, locationDescriptions,
+                            finalWards, finalBeats, finalLat, finalLon, finalRadius, finalArrest, finalDomestic);
+                    d.disconnectDatabase();
+                    // Set table to records
+                    tableTabController.setTableRecords(records);
+                    refreshMarkers();
+                    dataAnalyser.updateRecords(records);
+                    graphTypeComboBox.getSelectionModel().select(0);
+                    updateGraphOptions();
+                    updateAnalysis();
+
+                    return null ;
+                }
+            };
+            // Sets cursor back to active whether or not the task has been completed successfully
+            task.setOnSucceeded(e -> primaryStage.getScene().getRoot().setCursor(Cursor.DEFAULT));
+            task.setOnFailed(e -> primaryStage.getScene().getRoot().setCursor(Cursor.DEFAULT));
+            new Thread(task).start();
+
         } else {
             filterErrorLabel.setVisible(true);
         }
@@ -530,7 +573,8 @@ public class MainController {
     /**
      * Sets all filter parameters back to default
      */
-    public void clearFilters() throws SQLException {
+    public void clearFilters() throws SQLException, InterruptedException {
+
         filterStartDate.setValue(null);
         filterEndDate.setValue(null);
         crimeTypeComboBox.getCheckModel().clearChecks();
@@ -545,13 +589,29 @@ public class MainController {
         radiusLabel.setText("0 m");
         arrestComboBox.getSelectionModel().select("");
         domesticComboBox.getSelectionModel().select("");
-        Database db = new Database();
-        tableTabController.setTableRecords(db.getAll());
-        db.disconnectDatabase();
-        filterErrorLabel.setVisible(false);
-        refreshMarkers();
-        updateGraphOptions();
-        updateAnalysis();
+
+        // Sets primary stage cursor busy
+
+        primaryStage.getScene().getRoot().setCursor(Cursor.WAIT);
+
+        // Starts a new back ground task
+        Task<Void> task = new Task<Void>() {
+            @Override
+            public Void call() throws SQLException {
+                Database db = new Database();
+                tableTabController.setTableRecords(db.getAll());
+                db.disconnectDatabase();
+                filterErrorLabel.setVisible(false);
+                refreshMarkers();
+                updateGraphOptions();
+                updateAnalysis();
+                return null ;
+            }
+        };
+        // Sets cursor back to active whether or not the task has been completed successfully
+        task.setOnSucceeded(e -> primaryStage.getScene().getRoot().setCursor(Cursor.DEFAULT));
+        task.setOnFailed(e -> primaryStage.getScene().getRoot().setCursor(Cursor.DEFAULT));
+        new Thread(task).start();
     }
 
     /**
@@ -771,7 +831,10 @@ public class MainController {
      */
     public void changeDatabase() throws IOException, SQLException {
         Thread t = startLoadingBar();
+    public void changeDatabase() throws IOException, SQLException, InterruptedException {
+        Thread t = startLoadingBar();
         String filepath;
+
 
         filepath = getPathToFile("Database", "db");
         if (filepath != null) {
