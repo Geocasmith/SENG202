@@ -17,12 +17,13 @@ import java.io.IOException;
 import java.util.*;
 
 public class AnalysisTabController {
+
     @FXML private TableView<TypeFrequencyPair> topCrimeTable;
     @FXML private TableView<TypeFrequencyPair> bottomCrimeTable;
     @FXML private TableView<TypeFrequencyPair> bottomBlockTable;
     @FXML private TableView<TypeFrequencyPair> topBlockTable;
 
-    @FXML private TableColumn<TypeFrequencyPair, String> topCrimeCol = new TableColumn<>();
+    @FXML private TableColumn<TypeFrequencyPair, String> topCrimeCol;
     @FXML private TableColumn<TypeFrequencyPair, String> topCrimeFrequencyCol;
     @FXML private TableColumn<TypeFrequencyPair, String> topBlockCol;
     @FXML private TableColumn<TypeFrequencyPair, String> topBlockFrequencyCol;
@@ -39,6 +40,8 @@ public class AnalysisTabController {
 
 
 
+
+
     /**
      * Initialises FXML properties, sets the max height of the tables to slightly over 10 rows
      */
@@ -49,40 +52,39 @@ public class AnalysisTabController {
         updateTableHeight(bottomCrimeTable);
         updateTableHeight(bottomBlockTable);
         updateTableHeight(topBlockTable);
-        setupContextMenu();
 
-        topBlockTable.setRowFactory(tv -> {
-            TableRow<TypeFrequencyPair> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (!row.isEmpty())) {
-                    TypeFrequencyPair rowData = row.getItem();
-                    try {
-                        showBlockCrimeDetails(rowData.getType());
-                    } catch (IOException e) {
-                        PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
-                    }
-                }
-            });
-            return row;
-        });
+        /* Set up context menus for topBlockTable and bottomBlockTable */
+        setupTableContextMenu(topBlockTable);
+        setupTableContextMenu(bottomBlockTable);
 
-        bottomBlockTable.setRowFactory(tv -> {
-            TableRow<TypeFrequencyPair> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (!row.isEmpty())) {
-                    TypeFrequencyPair rowData = row.getItem();
-                    try {
-                        showBlockCrimeDetails(rowData.getType());
-                    } catch (IOException e) {
-                        PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
-                    }
-                }
-            });
-            return row;
-        });
 
+        /* topBlockTable row event Listener */
+        rowEventListener(topBlockTable);
+
+        /* bottomBlockTable row event listener */
+        rowEventListener(bottomBlockTable);
 
     }
+
+    /**
+     * Triggers an event in case of a double click on topBlockTable or bottomBlockTable.
+     * @param blockTable TableView usually representing topBlockTable or bottomBlockTable
+     */
+
+    private void rowEventListener(TableView<TypeFrequencyPair> blockTable) {
+        blockTable.setRowFactory(tv -> {
+            TableRow<TypeFrequencyPair> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    TypeFrequencyPair rowData = row.getItem();
+                    try { showBlockCrimeDetails(rowData.getType()); }
+                    catch (IOException e) { PopupWindow.displayPopup("Error", "Unknown error. Please try again.");}
+                }
+            });
+            return row;
+        });
+    }
+
 
     /**
      * Auto adjusts the height of the given table to be slightly over the height of 10 rows, as that's the max
@@ -96,8 +98,14 @@ public class AnalysisTabController {
         table.maxHeightProperty().bind(table.prefHeightProperty());
     }
 
-    public void updateAnalysis(ArrayList<Record> currentRecord) {
 
+
+    /**
+     * Calls all the methods that populate the 4 different tables that the controller has access to
+     * @param currentRecord Array list of records that are displayed in main table
+     */
+
+    public void updateAnalysis(ArrayList<Record> currentRecord) {
         populateTopCrimesTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 4)));
         populateLowCrimesTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 4)));
         populateTopBlocksTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 2)));
@@ -105,6 +113,7 @@ public class AnalysisTabController {
         this.displayedRecords = currentRecord;
 
     }
+
 
 
     /**
@@ -164,8 +173,8 @@ public class AnalysisTabController {
 
         Collections.sort(blocksFrequencyPair, new FrequencyComparatorDescending());
         // Set up table columns
-        topBlockCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("type"));
-        topBlockFrequencyCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("frequency"));
+        topBlockCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        topBlockFrequencyCol.setCellValueFactory(new PropertyValueFactory<>("frequency"));
 
         // Set up table
         topBlockTable.getItems().clear();
@@ -201,9 +210,11 @@ public class AnalysisTabController {
     }
 
 
-    private void setupContextMenu() {
+    /**
+     * Sets up context menu and its associated events for topBlockTable and bottomBlockTable
+     */
 
-        // Create menus
+    private void setupTableContextMenu(TableView<TypeFrequencyPair> blockTable) {
         ContextMenu tableContextMenu = new ContextMenu();
 
         // Create menu items
@@ -213,7 +224,7 @@ public class AnalysisTabController {
         // Add click event handlers to the menu items
         showOnMap.setOnAction(actionEvent -> {
             try {
-                String block = topBlockTable.getSelectionModel().getSelectedItem().getType();
+                String block = blockTable.getSelectionModel().getSelectedItem().getType();
                 showOnMap(block);
             } catch (NullPointerException | IOException e) {
                 PopupWindow.displayPopup("Error", "Error displaying the map, please try again.\n" +
@@ -223,7 +234,7 @@ public class AnalysisTabController {
 
         showDetails.setOnAction(actionEvent -> {
             try {
-                String block = topBlockTable.getSelectionModel().getSelectedItem().getType();
+                String block = blockTable.getSelectionModel().getSelectedItem().getType();
                 showBlockCrimeDetails(block);
 
             } catch (NullPointerException | IOException e) {
@@ -232,14 +243,19 @@ public class AnalysisTabController {
             }
         });
 
-
-
-
         // Add menu items to the relevant menus
         tableContextMenu.getItems().addAll(showOnMap, showDetails);
 
-        topBlockTable.setContextMenu(tableContextMenu);
+        blockTable.setContextMenu(tableContextMenu);
     }
+
+
+
+    /**
+     * Shows crime location of a given block in a map. To achieve this the method calls a pop up map window
+     * @param block a string parameter that usually represents the block
+     * @throws IOException
+     */
 
     public void showOnMap(String block) throws IOException {
 
@@ -284,10 +300,14 @@ public class AnalysisTabController {
             popupMap.showAndWait();
         }
 
-
-
-
     }
+
+    /**
+     *  Shows list of crime types together with their frequency that have occurred in the block parameter that is
+     *  passed to the method. To display out put the method calls a pop up window.
+     * @param block a string parameter that usually represents the block
+     * @throws IOException
+     */
 
     public void showBlockCrimeDetails(String block) throws IOException {
         ArrayList<Record> records = new ArrayList<>();
@@ -318,9 +338,5 @@ public class AnalysisTabController {
 
 
     }
-
-
-
-
 
 }

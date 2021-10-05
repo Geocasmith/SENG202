@@ -24,6 +24,11 @@ public class CrimeDetailsController {
 
     private DataAnalyser dataAnalyser = new DataAnalyser();
 
+    /**
+     * Calls a method to populate crimes table.
+     * @param currentRecord ArrayList<Record> type object that usually represents the list of displayed records
+     */
+
     public void updateBlockDetails(ArrayList<Record> currentRecord) {
 
 
@@ -35,6 +40,11 @@ public class CrimeDetailsController {
 
     }
 
+    /**
+     * Populates crime table with the passed crimeFrequency pair objects
+     * @param crimeFrequencyPair usually represents an object that represents crime type and its frequency encapsulated
+     *                           as crimeFrequency pair object
+     */
 
     public void populateCrimesTable(ArrayList<TypeFrequencyPair> crimeFrequencyPair) {
         // Sort descending
@@ -42,9 +52,8 @@ public class CrimeDetailsController {
         //Table column set up
         crimeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         crimeFrequency.setCellValueFactory(new PropertyValueFactory<>("frequency"));
-        //table set up
+        //Table set up
         crimeTable.getItems().clear();
-
 
         //Populate table
         for (int i = 0; i < crimeFrequencyPair.size(); i++) {

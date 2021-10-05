@@ -702,6 +702,8 @@ public class MainController {
                 ArrayList<Object> csvRows = DataManipulator.getRowsfromCsv(filepath);
                 dataValidation = (ArrayList<ArrayList<List<String>>>) csvRows.get(0);
                 csvSuccess = (Boolean) csvRows.get(1);
+
+
             } catch (Exception e) {
                 PopupWindow.displayPopup("Error", "An unknown error occurred when importing CSV.\n" +
                         "Please try again");
@@ -743,10 +745,11 @@ public class MainController {
                     ArrayList<Record> records = db.getAll();
                     db.disconnectDatabase();
                     tableTabController.setTableRecords(records);
-
-                    filterSetup();
                     dataAnalyser.updateRecords(records);
+
                     updateGraphOptions();
+                    filterSetup();
+
 
                 } catch (Exception e) {
                     PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
