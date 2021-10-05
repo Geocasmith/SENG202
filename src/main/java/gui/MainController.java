@@ -16,6 +16,7 @@ import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.IndexedCheckModel;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -713,7 +714,7 @@ public class MainController {
         Runnable runnable =
                 () -> {
                     try {
-                        startProgressBar();
+                        startProgressGIF();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -726,44 +727,42 @@ public class MainController {
     public void stopLoadingBar(Thread thread){
         thread.stop();
     }
+
+
     /**
-     * Initialises progress bar
+     * Creates loading bar
      * @throws InterruptedException
      */
-    public void startProgressBar() throws InterruptedException {
+    public void startProgressGIF() throws InterruptedException {
         //Initialises frame, panel and bar
         JFrame frame = new JFrame();
         JPanel panel = new JPanel();
-        JProgressBar progress = new JProgressBar(0, 100);
-        JLabel text = new JLabel("Loading");
+        JPanel outerPanel = new JPanel();
+        panel.setBorder(new EmptyBorder(50, 50, 50, 50));
+        panel.setLayout(new FlowLayout());
+        outerPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 
-        //Customises progress bar
-        progress.setValue(0);
-        progress.setIndeterminate(true);
 
-        //Adds
+        //Sets up GIF & Loading Text
+        JLabel text = new JLabel("        Loading...");
+        Icon icon = new ImageIcon("./Files/loading.gif");
+        JLabel gif = new JLabel(icon);
+
+        //Adds components to each other
         panel.add(text);
-        panel.add(progress);
-        frame.add(panel);
+        panel.add(gif);
+        outerPanel.add(panel);
+        frame.add(outerPanel);
 
-        //Customises frame
+        //Removes exit buttons from frame
         frame.setUndecorated(true);
         frame.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
-        frame.setSize(200, 50);
+
+        BoxLayout boxLayout = new BoxLayout(panel, BoxLayout.PAGE_AXIS);
+        panel.setLayout(boxLayout);
+        frame.pack();
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
-
-
-        int count = 0;
-        while (true) {
-            progress.setValue(count);
-            count += 1;
-            TimeUnit.MILLISECONDS.sleep(500);
-            if (count == 100) {
-                count = 0;
-
-            }
-        }
     }
     /**
      * Opens the file explorer for the user to select a save location and then passes
@@ -771,7 +770,7 @@ public class MainController {
      * which is accessed every time the database is connected to
      */
     public void changeDatabase() throws IOException, SQLException {
-        //Thread t = startLoadingBar();
+        Thread t = startLoadingBar();
         String filepath;
 
         filepath = getPathToFile("Database", "db");
