@@ -37,6 +37,9 @@ public class AnalysisTabController {
     private final DataAnalyser dataAnalyser = new DataAnalyser();
     private static final double tableHeightMultiplier = 1.03; // Makes the table slightly taller than 10 rows to get rid of the scroll bar
     private int mapOpenedCounter = 0;
+    private ArrayList<TypeFrequencyPair> crimeFrequencyPair = new ArrayList<>();
+    private ArrayList<TypeFrequencyPair> blocksFrequencyPair = new ArrayList<>();
+    private CrimesPieChart crimesChart = new CrimesPieChart();
 
 
 
@@ -47,6 +50,7 @@ public class AnalysisTabController {
      */
     @FXML
     private void initialize() {
+
 
         updateTableHeight(topCrimeTable);
         updateTableHeight(bottomCrimeTable);
@@ -106,10 +110,14 @@ public class AnalysisTabController {
      */
 
     public void updateAnalysis(ArrayList<Record> currentRecord) {
-        populateTopCrimesTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 4)));
-        populateLowCrimesTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 4)));
-        populateTopBlocksTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 2)));
-        populateLowBlocksTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 2)));
+
+        crimeFrequencyPair = dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 4));
+        blocksFrequencyPair = dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 2));
+
+        populateTopCrimesTable();
+        populateLowCrimesTable();
+        populateTopBlocksTable();
+        populateLowBlocksTable();
         this.displayedRecords = currentRecord;
 
     }
@@ -118,9 +126,9 @@ public class AnalysisTabController {
 
     /**
      * Populates the top crime table with list of TypeFrequency objects that is passed to it
-     * @param crimeFrequencyPair usually a list of TypeFrequency pair object
+     *
      */
-    public void populateTopCrimesTable(ArrayList<TypeFrequencyPair> crimeFrequencyPair) {
+    public void populateTopCrimesTable() {
         // Sort descending
         Collections.sort(crimeFrequencyPair, new FrequencyComparatorDescending());
         //Table column set up
@@ -140,11 +148,10 @@ public class AnalysisTabController {
     }
 
     /**
-     * Populates the bottom crime table with list of TypeFrequency objects that is passed to it
-     * @param crimeFrequencyPair usually a list of TypeFrequency pair object
+     * Populates the bottom crime table with list of TypeFrequency objects the class owns
      */
 
-    public void populateLowCrimesTable(ArrayList<TypeFrequencyPair> crimeFrequencyPair) {
+    public void populateLowCrimesTable() {
 
         Collections.sort(crimeFrequencyPair, new FrequencyComparatorAscending());
 
@@ -166,10 +173,8 @@ public class AnalysisTabController {
 
     /**
      * Populates the top block table with list of TypeFrequency objects that is passed to it
-     * @param blocksFrequencyPair usually a list of TypeFrequency pair object containing blocks and their
-     *                            frequency
      */
-    public void populateTopBlocksTable(ArrayList<TypeFrequencyPair> blocksFrequencyPair) {
+    public void populateTopBlocksTable() {
 
         Collections.sort(blocksFrequencyPair, new FrequencyComparatorDescending());
         // Set up table columns
@@ -188,10 +193,8 @@ public class AnalysisTabController {
 
     /**
      * Populates the bottom block table with list of TypeFrequency objects that is passed to it
-     * @param blocksFrequencyPair usually a list of TypeFrequency pair object containing blocks and their
-     *                            frequency
      */
-    public void populateLowBlocksTable(ArrayList<TypeFrequencyPair> blocksFrequencyPair) {
+    public void populateLowBlocksTable() {
 
 
         Collections.sort(blocksFrequencyPair, new FrequencyComparatorAscending());
@@ -328,12 +331,75 @@ public class AnalysisTabController {
 
         if (records.size() != 0) {
             crimeDetailsController.updateBlockDetails(records);
-            popupCrimeDetails.setTitle("Crime Details in " + records.get(0).getBlock());
+            popupCrimeDetails.setTitle("Insight - Crime Details in " + records.get(0).getBlock());
+            CrimesPieChart pieChart = new CrimesPieChart();
             popupCrimeDetails.showAndWait();
 
         }
         else {
             PopupWindow.displayPopup("No Crime to show", "There is no crime to show");
+        }
+
+
+    }
+
+    public void showCrimeTypePieChart() {
+
+        String windowTitle = "Top crime types";
+        Collections.sort(crimeFrequencyPair, new FrequencyComparatorDescending());
+        if (crimeFrequencyPair.size() > 10) {
+            String pieChartTitle = "Top 10 crime Types from filtered records";
+            crimesChart.drawChart( pieChartTitle, windowTitle , (new ArrayList<> (crimeFrequencyPair.subList(0, 10))));
+        }
+        else {
+            String pieChartTitle = "Top " + crimeFrequencyPair.size() + " crime types from filtered records";
+            crimesChart.drawChart( pieChartTitle, windowTitle , crimeFrequencyPair);
+        }
+
+
+    }
+
+    public void showBlockCrimePieChart() {
+        String windowTitle = "Top blocks for crime occurrences";
+        Collections.sort(blocksFrequencyPair, new FrequencyComparatorDescending());
+        if (blocksFrequencyPair.size() > 10) {
+            String pieChartTitle = "Top 10 blocks from filtered records for highest crime types";
+            crimesChart.drawChart( pieChartTitle, windowTitle , (new ArrayList<> (blocksFrequencyPair.subList(0, 10))));
+        }
+        else {
+            String pieChartTitle = "Top " + blocksFrequencyPair.size() + " blocks from filtered records for highest crime types";
+            crimesChart.drawChart( pieChartTitle, windowTitle , blocksFrequencyPair);
+        }
+
+
+    }
+
+    public void showBottomBlockCrimePieChart() {
+        String windowTitle = "Bottom blocks for crime occurrences";
+        Collections.sort(blocksFrequencyPair, new FrequencyComparatorAscending());
+        if (blocksFrequencyPair.size() > 10) {
+            String pieChartTitle = "Bottom 10 blocks from filtered records for highest crime types";
+            crimesChart.drawChart( pieChartTitle, windowTitle , (new ArrayList<> (blocksFrequencyPair.subList(0, 10))));
+        }
+        else {
+            String pieChartTitle = "Bottom " + blocksFrequencyPair.size() + " blocks from filtered records for lowest crime types";
+            crimesChart.drawChart( pieChartTitle, windowTitle , blocksFrequencyPair);
+        }
+
+
+    }
+
+    public void showBottomCrimeTypePieChart() {
+
+        String windowTitle = "Bottom crime types";
+        Collections.sort(crimeFrequencyPair, new FrequencyComparatorAscending());
+        if (crimeFrequencyPair.size() > 10) {
+            String pieChartTitle = "Bottom 10 crime Types from filtered records";
+            crimesChart.drawChart( pieChartTitle, windowTitle , (new ArrayList<> (crimeFrequencyPair.subList(0, 10))));
+        }
+        else {
+            String pieChartTitle = "Bottom " + crimeFrequencyPair.size() + " crime types from filtered records";
+            crimesChart.drawChart( pieChartTitle, windowTitle , crimeFrequencyPair);
         }
 
 

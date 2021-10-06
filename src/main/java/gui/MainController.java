@@ -207,7 +207,6 @@ public class MainController {
     @FXML
     private void refreshMarkers() {
         boolean connected = BrowserTabController.checkConnection();
-
         if (!connected) {
             PopupWindow.displayPopup("Error", "You must be connected to the internet to use the map.");
             mainTabPane.getSelectionModel().select(tableTabPane);
@@ -216,6 +215,7 @@ public class MainController {
             if (displayedRecords.size() < 500) {
                 mapTabController.updateMarkers(displayedRecords);
             } else {
+
                 mapTabController.updateMarkers(new ArrayList<>(displayedRecords.subList(0, 499)));
             }
 
@@ -528,12 +528,12 @@ public class MainController {
                     d.disconnectDatabase();
                     // Set table to records
                     tableTabController.setTableRecords(records);
-                    refreshMarkers();
+
                     dataAnalyser.updateRecords(records);
                     graphTypeComboBox.getSelectionModel().select(0);
-                    updateGraphOptions();
                     updateAnalysis();
-
+                    updateGraphOptions();
+                    refreshMarkers();
                     return null ;
                 }
             };
@@ -602,9 +602,12 @@ public class MainController {
                 tableTabController.setTableRecords(db.getAll());
                 db.disconnectDatabase();
                 filterErrorLabel.setVisible(false);
-                refreshMarkers();
-                updateGraphOptions();
                 updateAnalysis();
+                updateGraphOptions();
+                refreshMarkers();
+
+
+
                 return null ;
             }
         };
@@ -612,6 +615,7 @@ public class MainController {
         task.setOnSucceeded(e -> primaryStage.getScene().getRoot().setCursor(Cursor.DEFAULT));
         task.setOnFailed(e -> primaryStage.getScene().getRoot().setCursor(Cursor.DEFAULT));
         new Thread(task).start();
+
     }
 
     /**
@@ -948,9 +952,7 @@ public class MainController {
     /**
      * Passes the analysis update request to the analysis tab controller
      */
-    private void updateAnalysis() {
-        analysisTabController.updateAnalysis(tableTabController.getDisplayedRecords());
-    }
+    private void updateAnalysis() { analysisTabController.updateAnalysis(tableTabController.getDisplayedRecords()); }
 
     /**
      * Keeps track of the number of times the analysis tab has been clicked on/off of, and updates the tables if the tab
