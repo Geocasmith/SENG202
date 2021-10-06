@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.chart.PieChart;
 
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 public class CrimesPieChart {
 
     public void drawChart(String pieChartTitle, String titleLabel, ArrayList<TypeFrequencyPair> pairData) {
-        //Preparing ObservbleList object
+        //Preparing ObservableList object
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         for (TypeFrequencyPair data : pairData) {
             pieChartData.add(new PieChart.Data(data.getType(), data.getFrequency()));
@@ -23,6 +24,9 @@ public class CrimesPieChart {
 
 
         Stage stage = new Stage();
+
+        // Make only this window able to be interacted with
+        stage.initModality(Modality.APPLICATION_MODAL);
 
         //Creating a Pie chart
         PieChart pieChart = new PieChart(pieChartData);

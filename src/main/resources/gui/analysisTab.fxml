@@ -77,7 +77,7 @@
                         <Insets left="1.0" top="1.0" />
                     </padding>
                 </TableView>
-                <Label prefHeight="35.0" prefWidth="351.0" text="Top crime types by crime frequency" underline="true" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                <Label prefHeight="35.0" prefWidth="355.0" text="Top crime types by crime frequency" underline="true" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                     <effect>
                         <Blend />
                     </effect>
@@ -85,10 +85,10 @@
                         <Insets bottom="5.0" />
                     </padding>
                <graphic>
-                  <Button mnemonicParsing="false" onAction="#showCrimeTypePieChart" prefHeight="25.0" prefWidth="92.0" text="Visulaize" />
+                  <Button mnemonicParsing="false" onAction="#showCrimeTypePieChart" prefHeight="25.0" prefWidth="92.0" text="Visualise" />
                </graphic>
                 </Label>
-                <Label prefHeight="35.0" prefWidth="324.0" text="Top blocks by crime frequency" textAlignment="LEFT" underline="true" GridPane.columnIndex="3" GridPane.halignment="CENTER">
+                <Label prefHeight="35.0" prefWidth="355.0" text="Top blocks by crime frequency" textAlignment="LEFT" underline="true" GridPane.columnIndex="3" GridPane.halignment="CENTER">
                     <effect>
                         <Blend />
                     </effect>
@@ -96,10 +96,10 @@
                         <Insets bottom="5.0" />
                     </padding>
                <graphic>
-                  <Button mnemonicParsing="false" onAction="#showBlockCrimePieChart" text="Visualize" />
+                  <Button mnemonicParsing="false" onAction="#showBlockCrimePieChart" prefHeight="25.0" prefWidth="92.0" text="Visualise" />
                </graphic>
                 </Label>
-                <Label prefHeight="32.0" prefWidth="369.0" text="Bottom crime types by crime frequency" underline="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                <Label prefHeight="35.0" prefWidth="355.0" text="Bottom crime types by crime frequency" underline="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                     <effect>
                         <Blend />
                     </effect>
@@ -107,10 +107,10 @@
                         <Insets bottom="5.0" />
                     </padding>
                <graphic>
-                  <Button mnemonicParsing="false" onAction="#showBottomCrimeTypePieChart" prefHeight="25.0" prefWidth="92.0" text="Visulaize" />
+                  <Button mnemonicParsing="false" onAction="#showBottomCrimeTypePieChart" prefHeight="25.0" prefWidth="92.0" text="Visualise" />
                </graphic>
                 </Label>
-                <Label prefHeight="37.0" prefWidth="351.0" text="Bottom blocks by crime frequency" textAlignment="CENTER" underline="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                <Label prefHeight="35.0" prefWidth="355.0" text="Bottom blocks by crime frequency" textAlignment="CENTER" underline="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                     <effect>
                         <Blend />
                     </effect>
@@ -118,7 +118,7 @@
                         <Insets bottom="5.0" />
                     </padding>
                <graphic>
-                  <Button mnemonicParsing="false" onAction="#showBottomBlockCrimePieChart" prefHeight="25.0" prefWidth="92.0" text="Visulaize" />
+                  <Button mnemonicParsing="false" onAction="#showBottomBlockCrimePieChart" prefHeight="25.0" prefWidth="92.0" text="Visualise" />
                </graphic>
                 </Label>
             </children>

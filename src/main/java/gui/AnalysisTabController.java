@@ -348,7 +348,7 @@ public class AnalysisTabController {
         String windowTitle = "Top crime types";
         Collections.sort(crimeFrequencyPair, new FrequencyComparatorDescending());
         if (crimeFrequencyPair.size() > 10) {
-            String pieChartTitle = "Top 10 crime Types from filtered records";
+            String pieChartTitle = "Top 10 crime types from filtered records";
             crimesChart.drawChart( pieChartTitle, windowTitle , (new ArrayList<> (crimeFrequencyPair.subList(0, 10))));
         }
         else {
@@ -394,7 +394,7 @@ public class AnalysisTabController {
         String windowTitle = "Bottom crime types";
         Collections.sort(crimeFrequencyPair, new FrequencyComparatorAscending());
         if (crimeFrequencyPair.size() > 10) {
-            String pieChartTitle = "Bottom 10 crime Types from filtered records";
+            String pieChartTitle = "Bottom 10 crime types from filtered records";
             crimesChart.drawChart( pieChartTitle, windowTitle , (new ArrayList<> (crimeFrequencyPair.subList(0, 10))));
         }
         else {
