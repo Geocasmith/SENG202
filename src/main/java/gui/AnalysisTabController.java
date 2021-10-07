@@ -342,6 +342,10 @@ public class AnalysisTabController {
 
 
     }
+    /**
+     * This method is triggered by a button click event from Analysis tab. It calls drawChart method of crimeChart object
+     * to display a pie chart of bottom top crimes against their frequency
+     */
 
     public void showCrimeTypePieChart() {
 
@@ -359,6 +363,11 @@ public class AnalysisTabController {
 
     }
 
+    /**
+     * This method is triggered by a button click event from Analysis tab. It calls drawChart method of crimeChart object
+     * to display a pie chart of top 10 blocks against the frequency of crime in that block
+     */
+
     public void showBlockCrimePieChart() {
         String windowTitle = "Top blocks for crime occurrences";
         Collections.sort(blocksFrequencyPair, new FrequencyComparatorDescending());
@@ -374,6 +383,11 @@ public class AnalysisTabController {
 
     }
 
+    /**
+     * This method is triggered by a button click event from Analysis tab. It calls drawChart method of crimeChart object
+     * to display a pie chart of bottom 10 blocks against the frequency of crime in that block
+     */
+
     public void showBottomBlockCrimePieChart() {
         String windowTitle = "Bottom blocks for crime occurrences";
         Collections.sort(blocksFrequencyPair, new FrequencyComparatorAscending());
@@ -388,6 +402,11 @@ public class AnalysisTabController {
 
 
     }
+
+    /**
+     * This method is triggered by a button click event from Analysis tab. It calls drawChart method of crimeChart object
+     * to display a pie chart of bottom top crimes against their frequency
+     */
 
     public void showBottomCrimeTypePieChart() {
 

@@ -7,6 +7,13 @@ import javafx.scene.chart.*;
 import javafx.scene.layout.BorderPane;
 import java.util.ArrayList;
 
+/**
+ * Represents GraphTabController object that controls graphTab fxml
+ * Holds variables and methods used in manipulation of graph tab object
+ * @Author
+ * Date
+ */
+
 public class GraphTabController {
     private GraphCreator graphCreator = new GraphCreator();
 

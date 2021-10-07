@@ -10,6 +10,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
 
 public class MapTabController {
@@ -60,8 +61,8 @@ public class MapTabController {
         String newLocationMarker;
         JsonArray recordArray;
         boolean infoWindow = true;
-
         for (Record record : records) {
+
             recordArray = record.getJsonArray();
             newLocationMarker = "document.plotPoint(" + recordArray + ", " + infoWindow + ", " + displayed + ")";
             runScript(newLocationMarker);

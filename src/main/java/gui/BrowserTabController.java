@@ -13,6 +13,11 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Objects;
 
+/**
+ * Represents BrowserTabController object,
+ * Holds attribute variables and associated methods used in manipulation of BrowserTab controller object
+ */
+
 public class BrowserTabController {
     @FXML
     private WebView browserWebView;
