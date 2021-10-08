@@ -35,7 +35,7 @@ public class TableTabController {
 
 
     @FXML
-    private void initialize() {
+    public void initialize() {
         setupTable();
         setupContextMenu();
 
@@ -370,6 +370,12 @@ public class TableTabController {
         }
     }
 
+    /**
+     * Creates a popup showing the differences between the two given crimes
+     * @param crime1 The first record object
+     * @param crime2 The second record object
+     * @throws IOException
+     */
     public void analysisPopup(Record crime1, Record crime2) throws IOException {
         Stage popupEdit = new Stage();
         popupEdit.initModality(Modality.APPLICATION_MODAL);

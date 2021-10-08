@@ -1,7 +1,7 @@
 package backend;
 
 import com.opencsv.exceptions.CsvValidationException;
-import org.junit.Before;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -22,7 +22,7 @@ class InputValidatorTest {
     @Test
     void hasValidCrimeDescriptions() throws CsvValidationException, IOException {
         List<String> crimeDesc = new ArrayList<String>(Arrays.asList("2095", "NARCOTICS", "ATTEMPT POSSESSION NARCOTICS", "18"));
-        assertTrue(InputValidator.hasValidCrimeDescriptions(crimeDesc));
+        Assertions.assertTrue(InputValidator.hasValidCrimeDescriptions(crimeDesc));
         crimeDesc = new ArrayList<String>(Arrays.asList("2095", "NARCOTICS", "HOME INVASION", "18"));
         assertFalse(InputValidator.hasValidCrimeDescriptions(crimeDesc));
         crimeDesc = new ArrayList<String>(Arrays.asList("0880", "THEFT", "PURSE-SNATCHING", "06"));

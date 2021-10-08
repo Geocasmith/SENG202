@@ -1,16 +1,5 @@
 package backend;
 
-import com.opencsv.exceptions.CsvValidationException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-
 class dataBaseValidTest {
     //    @BeforeEach
 //    public void init() throws SQLException, CsvValidationException, IOException, ParseException {

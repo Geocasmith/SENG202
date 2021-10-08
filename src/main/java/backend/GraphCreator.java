@@ -6,6 +6,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+ *
+ */
 public class GraphCreator {
     private static final DateTimeFormatter minuteHourFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a", Locale.ENGLISH);
     private static final DateTimeFormatter dayWeekFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.ENGLISH);
@@ -18,8 +21,8 @@ public class GraphCreator {
     private static final int oneHourInSeconds = 3600;
     private static final int oneDayInSeconds = 86400;
     private static final int oneWeekInSeconds = 604800;
-    private static final int oneMonthInSeconds = 2629746;
-    private static final int oneYearInSeconds = 31556952;
+    private static final int oneMonthInSeconds = 2678400;
+    private static final int oneYearInSeconds = 31622400;
 
     /**
      * Rounds the given LocalDateTime down to the given duration
@@ -28,26 +31,33 @@ public class GraphCreator {
      * @return A LocalDateTime object that has been rounded to the given duration
      */
     private LocalDateTime roundDateTime(LocalDateTime timeToRound, String requiredDuration) {
-        if (requiredDuration.equals("Minutes")) {
-            timeToRound = timeToRound.withSecond(0);
-        } else if (requiredDuration.equals("Hours")) {
-            timeToRound = timeToRound.withMinute(0).withSecond(0);
-        } else if (requiredDuration.equals("Days")) {
-            timeToRound = timeToRound.withHour(0);
-        } else if (requiredDuration.equals("Weeks")) {
-            if (timeToRound.getDayOfMonth() <= 7) {
+        switch (requiredDuration) {
+            case "Minutes":
+                timeToRound = timeToRound.withSecond(0);
+                break;
+            case "Hours":
+                timeToRound = timeToRound.withMinute(0).withSecond(0);
+                break;
+            case "Days":
+                timeToRound = timeToRound.withHour(0);
+                break;
+            case "Weeks":
+                if (timeToRound.getDayOfMonth() <= 7) {
+                    timeToRound = timeToRound.withDayOfMonth(1);
+                } else if (timeToRound.getDayOfMonth() <= 14) {
+                    timeToRound = timeToRound.withDayOfMonth(7);
+                } else if (timeToRound.getDayOfMonth() <= 21) {
+                    timeToRound = timeToRound.withDayOfMonth(14);
+                } else {
+                    timeToRound = timeToRound.withDayOfMonth(21);
+                }
+                break;
+            case "Months":
                 timeToRound = timeToRound.withDayOfMonth(1);
-            } else if (timeToRound.getDayOfMonth() <= 14) {
-                timeToRound = timeToRound.withDayOfMonth(7);
-            } else if (timeToRound.getDayOfMonth() <= 21) {
-                timeToRound = timeToRound.withDayOfMonth(14);
-            } else {
-                timeToRound = timeToRound.withDayOfMonth(21);
-            }
-        } else if (requiredDuration.equals("Months")) {
-            timeToRound = timeToRound.withDayOfMonth(1);
-        } else if (requiredDuration.equals("Years")) {
-            timeToRound = timeToRound.withMonth(1);
+                break;
+            case "Years":
+                timeToRound = timeToRound.withMonth(1);
+                break;
         }
         return timeToRound;
     }
@@ -59,30 +69,30 @@ public class GraphCreator {
      * @return An ArrayList of Objects containing a String of the required duration, a DateTime formatter and a Duration
      *         object of the required time period
      */
-    private ArrayList<Object> calculateFormatForGraph(ArrayList<LocalDateTime> times) {
+    public ArrayList<Object> calculateFormatForGraph(ArrayList<LocalDateTime> times) {
         Duration width = dataAnalyser.calculateTimeDifference(times.get(0), times.get(times.size() - 1));
 
         Duration periodInSeconds;
         DateTimeFormatter formatter;
         String requiredDuration;
-        if (width.getSeconds() < 3 * oneHourInSeconds) {
+        if (width.getSeconds() <= 3 * oneHourInSeconds) {
             requiredDuration = "Minutes";
             formatter = minuteHourFormatter;
             periodInSeconds = Duration.ofSeconds(oneMinuteInSeconds);
-        }
-        else if (width.getSeconds() < 3 * oneDayInSeconds) {
+        } else if (width.getSeconds() <= 3 * oneDayInSeconds) {
             requiredDuration = "Hours";
             formatter = minuteHourFormatter;
             periodInSeconds = Duration.ofSeconds(oneHourInSeconds);
-        } else if (width.getSeconds() < oneMonthInSeconds) {
+        } else if (width.getSeconds() <= oneMonthInSeconds) {
             requiredDuration = "Days";
             formatter = dayWeekFormatter;
             periodInSeconds = Duration.ofSeconds(oneDayInSeconds);
-        } else if (width.getSeconds() < oneYearInSeconds) {
+        } else if (width.getSeconds() <= oneYearInSeconds) {
             requiredDuration = "Weeks";
             formatter = dayWeekFormatter;
             periodInSeconds = Duration.ofSeconds(oneWeekInSeconds);
-        } else if (width.getSeconds() < 3 * oneYearInSeconds) {
+        } else if (width.getSeconds() <= 3 * oneYearInSeconds) {
+
             requiredDuration = "Months";
             formatter = monthFormatter;
             periodInSeconds = Duration.ofSeconds(oneMonthInSeconds);

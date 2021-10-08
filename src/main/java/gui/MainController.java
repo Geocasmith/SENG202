@@ -683,9 +683,6 @@ public class MainController {
         }
     }
 
-
-
-
     /**
      * Opens a file explorer for the user to select csv file to import then loads it
      */
