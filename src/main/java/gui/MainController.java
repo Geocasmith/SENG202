@@ -525,7 +525,10 @@ public class MainController {
             // Creates and performs a back ground task
             Task<Void> task = new Task<Void>() {
                 @Override
-                public Void call() throws SQLException {
+                public Void call() throws SQLException, InterruptedException {
+                    //Starts loading bar
+                    JFrame loadingBar = startProgressGIF();
+
                     filterErrorLabel.setVisible(false);
                     Database d = new Database();
                     ArrayList<Record> records = d.getFilter(finalCaseNumber, finalStartDate, finalEndDate, crimeTypes, locationDescriptions,
@@ -536,6 +539,11 @@ public class MainController {
 
                     dataAnalyser.updateRecords(records);
                     graphTypeComboBox.getSelectionModel().select(0);
+
+                    //Remove loading bar
+                    loadingBar.dispose();
+
+                    //Update views
                     updateAnalysis();
                     updateGraphOptions();
                     refreshMarkers();
@@ -602,11 +610,19 @@ public class MainController {
         // Starts a new back ground task
         Task<Void> task = new Task<Void>() {
             @Override
-            public Void call() throws SQLException {
+            public Void call() throws SQLException, InterruptedException {
+
+                //Starts loading bar
+                JFrame loadingBar = startProgressGIF();
+
                 Database db = new Database();
                 tableTabController.setTableRecords(db.getAll());
                 db.disconnectDatabase();
                 filterErrorLabel.setVisible(false);
+
+                //Remove loading bar
+                loadingBar.dispose();
+
                 updateAnalysis();
                 updateGraphOptions();
                 refreshMarkers();
@@ -686,7 +702,7 @@ public class MainController {
     /**
      * Opens a file explorer for the user to select csv file to import then loads it
      */
-    public void importCsv() throws SQLException, IOException {
+    public void importCsv() throws SQLException, IOException, InterruptedException {
 
         String filepath = getPathToFile("CSV", "csv");
 
@@ -726,6 +742,9 @@ public class MainController {
                 replace = PopupWindow.displayTwoButtonPopup("Replace data?", "Do you want to replace the current data or append to it?", "Replace", "Append", true);
             }
 
+            //Starts loading bar
+            JFrame loadingBar = startProgressGIF();
+
             if (newDB != null && newDB) {
                 newDBSuccess = newDatabase();
                 replace = false;
@@ -761,6 +780,7 @@ public class MainController {
                     PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
                 }
             }
+            loadingBar.dispose();
         }
     }
 
@@ -776,33 +796,10 @@ public class MainController {
     }
 
     /**
-     * Creates a thread with a loading bar in it
-     * @return
-     */
-    public Thread startLoadingBar() {
-        Runnable runnable =
-                () -> {
-                    try {
-                        startProgressGIF();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                };
-
-        Thread thread = new Thread(runnable);
-        thread.start();
-        return thread;
-    }
-    public void stopLoadingBar(Thread thread){
-        thread.stop();
-    }
-
-
-    /**
      * Creates loading bar
      * @throws InterruptedException
      */
-    public void startProgressGIF() throws InterruptedException {
+    public JFrame startProgressGIF() throws InterruptedException {
         //Initialises frame, panel and bar
         JFrame frame = new JFrame();
         JPanel panel = new JPanel();
@@ -832,6 +829,7 @@ public class MainController {
         frame.pack();
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
+        return frame;
     }
     /**
      * Opens the file explorer for the user to select a save location and then passes
@@ -839,7 +837,7 @@ public class MainController {
      * which is accessed every time the database is connected to
      */
     public void changeDatabase() throws IOException, SQLException, InterruptedException {
-        Thread t = startLoadingBar();
+
         String filepath;
 
 
@@ -855,14 +853,24 @@ public class MainController {
                 return;
             }
 
+            String previousPath = d.getDatabasePath();
             d.setDatabasePath(filepath);
-            if (d.checkValidDB()) {
+            if (!d.checkValidDB()) {
                 PopupWindow.displayPopup("Error", "Database format invalid");
+
+                //reverts back to previous path
+                d.setDatabasePath(previousPath);
             }
             d.disconnectDatabase();
 
+            //Starts loading bar
+            JFrame f = startProgressGIF();
+
             //Refresh GUI
             tableTabController.refreshTableData();
+
+            //stops loading bar
+            f.dispose();
         }
 
     }
