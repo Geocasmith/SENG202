@@ -43,7 +43,7 @@ public class TableTabController {
      * Initialises the table. Calls setupTable() and setupContextMenu(), and creates a key listener for the delete
      * or backspace keys when the table is focussed that will delete the selected rows.
      */
-    private void initialize() {
+    public void initialize() {
         setupTable();
         setupContextMenu();
 
