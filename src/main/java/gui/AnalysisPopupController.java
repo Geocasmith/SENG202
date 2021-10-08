@@ -72,7 +72,7 @@ public class AnalysisPopupController {
      * @param script the javascript code to run in string form
      */
     private void runScript(String script) {
-        if (mapRequestCount == 0) {
+        if (mapRequestCount < 5) {
             mapRequestCount++;
             mapWebEngine.getLoadWorker().stateProperty().addListener(
                     (ov, oldState, newState) -> {
