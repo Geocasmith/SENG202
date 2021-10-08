@@ -18,7 +18,7 @@ import java.util.Objects;
 
 public class DataManipulator {
     private ArrayList<Record> currentData;
-    DataManipulator(ArrayList<Record> currentData) {
+    public DataManipulator(ArrayList<Record> currentData) {
     this.currentData = currentData;
 }
 

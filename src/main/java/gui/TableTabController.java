@@ -379,9 +379,10 @@ public class TableTabController {
     }
 
     /**
-     * TODO - GETTING AN ERROR SO I CAN'T WRITE THIS ONE OUT!
-     * @param crime1
-     * @param crime2
+     * Creates a popup showing the differences between the two given crimes
+     * @param crime1 The first record object
+     * @param crime2 The second record object
+     * @throws IOException
      */
     public void analysisPopup(Record crime1, Record crime2) throws IOException {
         Stage popupEdit = new Stage();
