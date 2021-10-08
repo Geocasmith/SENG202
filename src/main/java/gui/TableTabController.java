@@ -11,7 +11,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
@@ -22,6 +21,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The controller for the table view tab. This controller handles setting up the table, filling it with record objects,
+ * adding/editing/deleting records (with the EditRecordWindowController class), creating the right-click menu for the
+ * table, and listening for delete/backspace keypresses while the table is in focus.
+ */
 public class TableTabController {
     @FXML
     private TableView<Record> mainTableView;
@@ -35,6 +39,10 @@ public class TableTabController {
 
 
     @FXML
+    /**
+     * Initialises the table. Calls setupTable() and setupContextMenu(), and creates a key listener for the delete
+     * or backspace keys when the table is focussed that will delete the selected rows.
+     */
     private void initialize() {
         setupTable();
         setupContextMenu();
@@ -62,7 +70,7 @@ public class TableTabController {
 
     /**
      * Creates a context menu for the table view, contains an edit and delete option, along with an analysis submenu
-     * with time and distance options
+     * with time and distance options.
      */
     private void setupContextMenu() {
 
@@ -370,6 +378,11 @@ public class TableTabController {
         }
     }
 
+    /**
+     * TODO - GETTING AN ERROR SO I CAN'T WRITE THIS ONE OUT!
+     * @param crime1
+     * @param crime2
+     */
     public void analysisPopup(Record crime1, Record crime2) throws IOException {
         Stage popupEdit = new Stage();
         popupEdit.initModality(Modality.APPLICATION_MODAL);
