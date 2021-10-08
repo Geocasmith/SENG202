@@ -129,7 +129,7 @@ public class MapTabController {
      * @param script the javascript to be run.
      */
     public void runScript(String script) {
-        if (mapRequestCount == 0) {
+        if (mapRequestCount < 5) {
             mapRequestCount++;
             webEngine.getLoadWorker().stateProperty().addListener(
                     (ov, oldState, newState) -> {
