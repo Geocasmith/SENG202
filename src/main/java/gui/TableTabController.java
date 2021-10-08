@@ -47,6 +47,13 @@ public class TableTabController {
         setupTable();
         setupContextMenu();
 
+        // set the message for when there is no data in the table
+        mainTableView.setPlaceholder(new Label("There is no data to display in the table.\n" +
+                "This could be because there are no records that match the currently applied filters, or there is " +
+                "no data loaded into the app.\n" +
+                "To re-set the current filters, click 'Clear Filter' in the Filters tab on the left of the screen.\n" +
+                "To load data into the app, click the 'File' button in the top left of the screen, and then 'Import CSV', or 'Select Database'."));
+
         // sets up a delete action for when the delete or backspace keys are pressed while
         mainTableView.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
