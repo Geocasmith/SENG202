@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.skin.TableHeaderRow;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
@@ -55,22 +56,19 @@ public class TableTabController {
                 "To load data into the app, click the 'File' button in the top left of the screen, and then 'Import CSV', or 'Select Database'."));
 
         // sets up a delete action for when the delete or backspace keys are pressed while
-        mainTableView.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                switch (keyEvent.getCode()){
-                    case DELETE: // do the same thing
-                    case BACK_SPACE:
-                        try {
-                            deleteSelectedRows();
-                        } catch (SQLException e) {
-                            PopupWindow.displayPopup("Error", e.getMessage());
-                            e.printStackTrace();
-                        }
-                        break;
-                    default:
-                        break;
-                }
+        mainTableView.setOnKeyPressed(keyEvent -> {
+            switch (keyEvent.getCode()){
+                case DELETE: // do the same thing
+                case BACK_SPACE:
+                    try {
+                        deleteSelectedRows();
+                    } catch (SQLException e) {
+                        PopupWindow.displayPopup("Error", e.getMessage());
+                        e.printStackTrace();
+                    }
+                    break;
+                default:
+                    break;
             }
         });
     }

@@ -68,11 +68,12 @@ public class AnalysisPopupController {
     }
 
     /**
-     * Takes a string of javascript code and checks that the webengine has loaded correctly, then runs the code
-     * @param script the javascript code to run in string form
+     * If this is one of the first 2 times the controller is running a script, then wait until the webengine has fully loaded
+     * the javascript then run the given script, otherwise, run it straight away
+     * @param script the javascript to be run.
      */
     private void runScript(String script) {
-        if (mapRequestCount < 5) {
+        if (mapRequestCount < 2) {
             mapRequestCount++;
             mapWebEngine.getLoadWorker().stateProperty().addListener(
                     (ov, oldState, newState) -> {

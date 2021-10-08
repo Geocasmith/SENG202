@@ -3,6 +3,7 @@ package gui;
 import backend.Record;
 import backend.*;
 import com.opencsv.exceptions.CsvValidationException;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -129,21 +130,43 @@ public class MainController {
      * maincontroller
      */
     @FXML
-    private void initialize() throws SQLException, IOException, CsvValidationException {
-        filterSetup();
-        graphSetup();
+    private void initialize() {
+        // Avoid throwing IllegalStateException by running from a non-JavaFX thread.
+        Platform.runLater(
+                () -> {
+                    try {
+                        //Starts loading bar
+                        JFrame loadingBar = null;
+                        try {
+                            loadingBar = startProgressGIF();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        filterSetup();
+                        graphSetup();
 
-        // set sidebarAccordian to not affect geometry when hidden
-        sidebarAccordion.managedProperty().bind(sidebarAccordion.visibleProperty());
+                        // set sidebarAccordion to not affect geometry when hidden
+                        sidebarAccordion.managedProperty().bind(sidebarAccordion.visibleProperty());
 
-        tableTabController.setParentController(this);
-        Database db = new Database();
-        ArrayList<Record> allRecords = db.getAll();
-        db.disconnectDatabase();
-        tableTabController.setTableRecords(allRecords);
-        dataAnalyser = new DataAnalyser(allRecords);
-        analysisSetUp();
-        updateGraphOptions();
+                        tableTabController.setParentController(this);
+                        Database db = new Database();
+                        ArrayList<Record> allRecords = null;
+                        allRecords = db.getAll();
+                        tableTabController.setTableRecords(allRecords);
+                        dataAnalyser = new DataAnalyser(allRecords);
+
+                        loadingBar.dispose();
+                        analysisSetUp();
+                        updateGraphOptions();
+                        db.disconnectDatabase();
+                    } catch (SQLException | CsvValidationException | IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+        );
+
     }
 
     /**
@@ -522,38 +545,49 @@ public class MainController {
             // Sets the primary stage cursor busy
             primaryStage.getScene().getRoot().setCursor(Cursor.WAIT);
 
-            // Creates and performs a back ground task
-            Task<Void> task = new Task<Void>() {
-                @Override
-                public Void call() throws SQLException, InterruptedException {
-                    //Starts loading bar
-                    JFrame loadingBar = startProgressGIF();
+            // Avoid throwing IllegalStateException by running from a non-JavaFX thread.
+            Platform.runLater(
+                    () -> {
+                        //Starts loading bar
+                        JFrame loadingBar = null;
+                        try {
+                            loadingBar = startProgressGIF();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
 
-                    filterErrorLabel.setVisible(false);
-                    Database d = new Database();
-                    ArrayList<Record> records = d.getFilter(finalCaseNumber, finalStartDate, finalEndDate, crimeTypes, locationDescriptions,
-                            finalWards, finalBeats, finalLat, finalLon, finalRadius, finalArrest, finalDomestic);
-                    d.disconnectDatabase();
-                    // Set table to records
-                    tableTabController.setTableRecords(records);
+                        filterErrorLabel.setVisible(false);
+                        Database d = new Database();
+                        ArrayList<Record> records = null;
+                        try {
+                            records = d.getFilter(finalCaseNumber, finalStartDate, finalEndDate, crimeTypes, locationDescriptions,
+                                    finalWards, finalBeats, finalLat, finalLon, finalRadius, finalArrest, finalDomestic);
+                            d.disconnectDatabase();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
 
-                    dataAnalyser.updateRecords(records);
-                    graphTypeComboBox.getSelectionModel().select(0);
+                        // Set table to records
+                        tableTabController.setTableRecords(records);
 
-                    //Remove loading bar
-                    loadingBar.dispose();
+                        dataAnalyser.updateRecords(records);
+                        graphTypeComboBox.getSelectionModel().select(0);
 
-                    //Update views
-                    updateAnalysis();
-                    updateGraphOptions();
-                    refreshMarkers();
-                    return null ;
-                }
-            };
-            // Sets cursor back to active whether or not the task has been completed successfully
-            task.setOnSucceeded(e -> primaryStage.getScene().getRoot().setCursor(Cursor.DEFAULT));
-            task.setOnFailed(e -> primaryStage.getScene().getRoot().setCursor(Cursor.DEFAULT));
-            new Thread(task).start();
+                        //Remove loading bar
+                        loadingBar.dispose();
+
+                        //Update views
+                        updateAnalysis();
+                        refreshMarkers();
+                        try {
+                            updateGraphOptions();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+            );
+            // Return the primary stage cursor to normal
+            primaryStage.getScene().getRoot().setCursor(Cursor.DEFAULT);
 
         } else {
             filterErrorLabel.setVisible(true);
@@ -607,35 +641,46 @@ public class MainController {
 
         primaryStage.getScene().getRoot().setCursor(Cursor.WAIT);
 
-        // Starts a new back ground task
-        Task<Void> task = new Task<Void>() {
-            @Override
-            public Void call() throws SQLException, InterruptedException {
+        // Avoid throwing IllegalStateException by running from a non-JavaFX thread.
+        Platform.runLater(
+                () -> {
+                    //Starts loading bar
+                    JFrame loadingBar = null;
+                    try {
+                        loadingBar = startProgressGIF();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
-                //Starts loading bar
-                JFrame loadingBar = startProgressGIF();
+                    Database db = new Database();
+                    ArrayList<Record> records = null;
+                    try {
+                        records = db.getAll();
+                        db.disconnectDatabase();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    tableTabController.setTableRecords(records);
+                    dataAnalyser.updateRecords(records);
+                    filterErrorLabel.setVisible(false);
 
-                Database db = new Database();
-                tableTabController.setTableRecords(db.getAll());
-                db.disconnectDatabase();
-                filterErrorLabel.setVisible(false);
+                    //Remove loading bar
+                    loadingBar.dispose();
 
-                //Remove loading bar
-                loadingBar.dispose();
+                    updateAnalysis();
+                    refreshMarkers();
+                    try {
+                        updateGraphOptions();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+        );
 
-                updateAnalysis();
-                updateGraphOptions();
-                refreshMarkers();
+        // Return the primary stage cursor to normal
+        primaryStage.getScene().getRoot().setCursor(Cursor.DEFAULT);
 
 
-
-                return null ;
-            }
-        };
-        // Sets cursor back to active whether or not the task has been completed successfully
-        task.setOnSucceeded(e -> primaryStage.getScene().getRoot().setCursor(Cursor.DEFAULT));
-        task.setOnFailed(e -> primaryStage.getScene().getRoot().setCursor(Cursor.DEFAULT));
-        new Thread(task).start();
 
     }
 

@@ -124,12 +124,12 @@ public class MapTabController {
     }
 
     /**
-     * If this is the first time the controller is running a script, then wait until the webengine has fully loaded
+     * If this is one of the first 2 times the controller is running a script, then wait until the webengine has fully loaded
      * the javascript then run the given script, otherwise, run it straight away
      * @param script the javascript to be run.
      */
     public void runScript(String script) {
-        if (mapRequestCount < 5) {
+        if (mapRequestCount < 2) {
             mapRequestCount++;
             webEngine.getLoadWorker().stateProperty().addListener(
                     (ov, oldState, newState) -> {
