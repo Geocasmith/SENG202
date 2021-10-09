@@ -87,7 +87,7 @@ DataAnalyser {
         } else if (timeDifference.getSeconds() < Duration.ofDays(2).getSeconds()) {
             timeDifferenceInt = (int) (timeDifference.getSeconds() / Duration.ofHours(1).getSeconds());
             timeUnit = "hours";
-        } else if (timeDifference.getSeconds() < Duration.ofDays(30).getSeconds()) {
+        } else if (timeDifference.getSeconds() < Duration.ofDays(60).getSeconds()) {
             timeDifferenceInt = (int) (timeDifference.getSeconds() / Duration.ofDays(1).getSeconds());
             timeUnit = "days";
         } else {

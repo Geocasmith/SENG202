@@ -11,7 +11,7 @@ import java.time.Duration;
 import java.util.List;
 
 public class DataAnalyserTest {
-    Record testRecord1, testRecord2, testRecord3;
+    Record testRecord1, testRecord2, testRecord3, testRecord4, testRecord5;
     ArrayList<String> data;
     DataAnalyser dataAnalyser = new DataAnalyser();
 
@@ -23,6 +23,10 @@ public class DataAnalyserTest {
         testRecord2 = new Record(data);
         data = new ArrayList<>(Arrays.asList("JE1639090", "11/23/2021 03:25:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "N", "N", "334", "7", "6", "", "", "", ""));
         testRecord3 = new Record(data);
+        data = new ArrayList<>(Arrays.asList("JE1639090", "11/23/2020 05:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "N", "N", "334", "7", "6", "", "", "", ""));
+        testRecord4 = new Record(data);
+        data = new ArrayList<>(Arrays.asList("JE1639090", "11/26/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "N", "N", "334", "7", "6", "", "", "", ""));
+        testRecord5 = new Record(data);
     }
 
     @Test
@@ -52,10 +56,24 @@ public class DataAnalyserTest {
     }
 
     @Test
+    public void getTimeDifferenceStringTest() {
+        assertEquals("20 minutes", dataAnalyser.getTimeDifferenceString(testRecord1, testRecord2));
+        assertEquals("2 hours", dataAnalyser.getTimeDifferenceString(testRecord1, testRecord4));
+        assertEquals("3 days", dataAnalyser.getTimeDifferenceString(testRecord1, testRecord5));
+        assertEquals("12 months", dataAnalyser.getTimeDifferenceString(testRecord2, testRecord3));
+    }
+
+    @Test
     public void calculateLocationDifferenceMetersTest() {
         assertEquals(16135, dataAnalyser.calculateLocationDifferenceMeters(testRecord1, testRecord2));
         assertEquals(0, dataAnalyser.calculateLocationDifferenceMeters(testRecord2, testRecord2));
         assertEquals(-1, dataAnalyser.calculateLocationDifferenceMeters(testRecord2, testRecord3));
+    }
+
+    @Test
+    public void getLocationDifferenceStringTest() {
+        assertEquals("0 meters", dataAnalyser.getLocationDifferenceString(testRecord1, testRecord1));
+        assertEquals("16 kilometers", dataAnalyser.getLocationDifferenceString(testRecord1, testRecord2));
     }
 
     @Test
