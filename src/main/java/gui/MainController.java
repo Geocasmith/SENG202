@@ -619,10 +619,10 @@ public class MainController {
     }
 
     /**
-     * Sets all filter parameters back to default
+     * Sets all filter parameters back to default, and then retrieves all data again, updating the analysis,
+     * map markers, graph options, and the data loaded into the data analyser.
      */
     public void clearFilters() throws SQLException, InterruptedException {
-
         filterStartDate.setValue(null);
         filterEndDate.setValue(null);
         crimeTypeComboBox.getCheckModel().clearChecks();
