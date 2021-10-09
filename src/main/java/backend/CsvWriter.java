@@ -10,7 +10,7 @@ import static java.lang.String.valueOf;
 
 /**
  * CSV Writer class for writing CSV files
- * @author
+ * @author Sofonias Tekele Tesfaye
  * Date 09/10/2021
  */
 public class CsvWriter {

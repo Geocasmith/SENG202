@@ -17,6 +17,9 @@ import java.io.IOException;
 import java.util.*;
 
 /**
+ * Represents AnalysisTab controller object
+ * Holds methods to control analysis tab
+ * @author Sofonias Tekele Tesfaye
  * @author Bede Skinner-Vennell (Integration to main program)
  * Date 09/10/2021
  */

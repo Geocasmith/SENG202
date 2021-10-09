@@ -9,6 +9,12 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * This class contains tests for InputValidator class
+ * @author Sofonias Tekele Tesfaye
+ * @author
+ */
+
 class InputValidatorTest {
 
     private ArrayList<String> primaryDescriptionList = new ArrayList<String>(Arrays.asList("WEAPONS VIOLATION", "LIQUOR LAW VIOLATION",

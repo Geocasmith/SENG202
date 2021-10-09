@@ -6,7 +6,8 @@ import java.util.*;
 
 /**
  * This class contains methods for analysing crime data, including lists of the currently shown wards, beats and types
- * @author Bede Skinner-Vennell
+ * @author Bede Skinner-Vennell,
+ * @author Sofonias Tekele Tesfaye (Crime type and blocks frequency counter)
  * Date 09/10/2021
  */
 public class

@@ -12,7 +12,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * @author
+ * Represents CrimeDetailsController Object
+ * This class holds methods to create and populate crime details table view
+ * @author Sofonias Tekele Tesfaye
  * Date 09/10/2021
  */
 public class CrimeDetailsController {

@@ -28,6 +28,7 @@ import java.util.*;
 /**
  * This class creates a popup to edit or add a record
  * @author Bede Skinner-Vennell (Mapping)
+ * @author Sofonias Tekele Tesfaye (Auto suggest text boxes)
  * Date 09/10/2021
  */
 public class EditRecordWindowController {

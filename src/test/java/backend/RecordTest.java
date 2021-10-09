@@ -7,6 +7,11 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class contains tests for Record class
+ * @author
+ */
+
 public class RecordTest {
     Record testRec1, testRec2;
 

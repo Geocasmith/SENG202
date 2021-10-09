@@ -6,6 +6,11 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Tests for Data Manipulator class
+ * @author Sofonias Tekele Tesfaye
+ */
+
 public class DataManipulatorTest {
     Record testRecord1;
     ArrayList<String> data;

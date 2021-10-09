@@ -1,5 +1,7 @@
 package backend;
 
+import gui.PopupWindow;
+
 import java.sql.*;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -51,7 +53,9 @@ public class Database {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:"+ databasePath);
             createTable();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+
+        }
     }
 
     /**
@@ -241,7 +245,7 @@ public class Database {
                 "INSERT OR IGNORE INTO CRIMES (ID, DATE, ADDRESS,IUCR,PRIMARYDESCRIPTION,SECONDARYDESCRIPTION,LOCATIONDESCRIPTION,ARREST,DOMESTIC,BEAT,WARD,FBICD,XCOORDINATE,YCOORDINATE,LATITUDE,LONGITUDE,UNIXTIME) " +
                         "VALUES (?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
 
-        //Inserts the values in the List of strings into the preparedstatement
+        //Inserts the values in the List of strings into the prepared statement
         for (List column : inputs) {
 
             //Sets the ? values in the statement to their corresponding values.
@@ -500,15 +504,15 @@ public class Database {
 
     /**
      * Returns an arraylist of records from the database which matches the values parsed in from the filter in MainController
-     * @param caseNumber
-     * @param startDate
-     * @param endDate
-     * @param crimeTypes
-     * @param locDes
-     * @param ward
-     * @param beat
-     * @param lat
-     * @param lon
+     * @param caseNumber String data type that represents crime case number
+     * @param startDate Date data type that represents start date
+     * @param endDate   Data data type that represents end date
+     * @param crimeTypes String data type that represents crime type
+     * @param locDes String data type that represents Location description
+     * @param ward int data type representing ward
+     * @param beat int data type representing ward
+     * @param lat Float data type representing latitude coordinate of a location
+     * @param lon Float data type representing longitude coordinate of a location
      * @param radius
      * @param arrest
      * @param domestic

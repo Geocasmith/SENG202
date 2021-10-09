@@ -12,7 +12,9 @@ import javafx.scene.chart.PieChart;
 import java.util.ArrayList;
 
 /**
- * @author
+ * Represents CrimesPieChart object
+ * This class contains methods to create and display crimes in pie charts
+ * @author Sofonias Tekele Tesfaye
  * Date 09/10/2021
  */
 public class CrimesPieChart {

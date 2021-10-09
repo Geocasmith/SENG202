@@ -7,6 +7,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+/**
+ * This class contains tests for Database class
+ * @author
+ */
+
 class DatabaseTest {
 
     @Test

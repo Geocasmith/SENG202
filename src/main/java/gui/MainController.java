@@ -640,7 +640,7 @@ public class MainController {
 
         // Sets primary stage cursor busy
 
-        primaryStage.getScene().getRoot().setCursor(Cursor.WAIT);
+
 
         // Avoid throwing IllegalStateException by running from a non-JavaFX thread.
         Platform.runLater(
@@ -649,7 +649,7 @@ public class MainController {
                     JFrame loadingBar = null;
                     try {
                         loadingBar = startProgressGIF();
-                    } catch (InterruptedException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
@@ -678,8 +678,7 @@ public class MainController {
                 }
         );
 
-        // Return the primary stage cursor to normal
-        primaryStage.getScene().getRoot().setCursor(Cursor.DEFAULT);
+
 
 
 
@@ -748,7 +747,7 @@ public class MainController {
     /**
      * Opens a file explorer for the user to select csv file to import then loads it
      */
-    public void importCsv() throws SQLException, IOException, InterruptedException {
+    public void importCsv() throws Exception {
 
         String filepath = getPathToFile("CSV", "csv");
 
@@ -809,24 +808,28 @@ public class MainController {
                     }
                     d.disconnectDatabase();
 
-                    if (dataValidation.get(1).size() != 0) {
-                        displayInvalid(dataValidation.get(1));
-                    }
+
+
                     Database db = new Database();
                     ArrayList<Record> records = db.getAll();
                     db.disconnectDatabase();
                     tableTabController.setTableRecords(records);
+                    updateAnalysis();
                     dataAnalyser.updateRecords(records);
 
                     updateGraphOptions();
                     filterSetup();
+                    loadingBar.dispose();
+                    if (dataValidation.get(1).size() != 0) {
+                        displayInvalid(dataValidation.get(1));
+                    }
 
 
                 } catch (Exception e) {
                     PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
                 }
             }
-            loadingBar.dispose();
+
         }
     }
 
@@ -882,7 +885,7 @@ public class MainController {
      * this to the database path method which will change the static variable path in database
      * which is accessed every time the database is connected to
      */
-    public void changeDatabase() throws IOException, SQLException, InterruptedException {
+    public void changeDatabase() throws Exception {
 
         String filepath;
 

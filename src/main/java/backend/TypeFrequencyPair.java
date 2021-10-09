@@ -2,7 +2,7 @@ package backend;
 
 /**
  * This class is used to encapsulate data that has type and frequency
- * @author
+ * @author Sofonias Tekele Tesfaye
  * Date 09/10/2021
  */
 

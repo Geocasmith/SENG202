@@ -3,7 +3,7 @@ package backend;
 import java.util.Comparator;
 /**
  * Comparator for TypeFrequencyPair objects
- * @author
+ * @author Sofonias Tekele Tesfaye
  * Date 09/10/2021
  */
 public class FrequencyComparatorDescending implements Comparator<TypeFrequencyPair> {
