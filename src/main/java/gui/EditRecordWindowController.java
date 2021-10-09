@@ -25,6 +25,11 @@ import org.controlsfx.control.textfield.TextFields;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * This class creates a popup to edit or add a record
+ * @author Bede Skinner-Vennell (Mapping)
+ * Date 09/10/2021
+ */
 public class EditRecordWindowController {
 
     @FXML private Button closeButton;

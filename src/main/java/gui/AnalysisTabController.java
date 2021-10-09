@@ -16,6 +16,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * @author Bede Skinner-Vennell (Integration to main program)
+ * Date 09/10/2021
+ */
 public class AnalysisTabController {
 
     @FXML private TableView<TypeFrequencyPair> topCrimeTable;
@@ -39,7 +43,7 @@ public class AnalysisTabController {
     private int mapOpenedCounter = 0;
     private ArrayList<TypeFrequencyPair> crimeFrequencyPair = new ArrayList<>();
     private ArrayList<TypeFrequencyPair> blocksFrequencyPair = new ArrayList<>();
-    private CrimesPieChart crimesChart = new CrimesPieChart();
+    private final CrimesPieChart crimesChart = new CrimesPieChart();
 
 
 
@@ -50,8 +54,6 @@ public class AnalysisTabController {
      */
     @FXML
     private void initialize() {
-
-
         updateTableHeight(topCrimeTable);
         updateTableHeight(bottomCrimeTable);
         updateTableHeight(bottomBlockTable);
@@ -74,7 +76,6 @@ public class AnalysisTabController {
      * Triggers an event in case of a double click on topBlockTable or bottomBlockTable.
      * @param blockTable TableView usually representing topBlockTable or bottomBlockTable
      */
-
     private void rowEventListener(TableView<TypeFrequencyPair> blockTable) {
         blockTable.setRowFactory(tv -> {
             TableRow<TypeFrequencyPair> row = new TableRow<>();
@@ -89,7 +90,6 @@ public class AnalysisTabController {
         });
     }
 
-
     /**
      * Auto adjusts the height of the given table to be slightly over the height of 10 rows, as that's the max
      * allowed in each table
@@ -102,13 +102,10 @@ public class AnalysisTabController {
         table.maxHeightProperty().bind(table.prefHeightProperty());
     }
 
-
-
     /**
      * Calls all the methods that populate the 4 different tables that the controller has access to
      * @param currentRecord Array list of records that are displayed in main table
      */
-
     public void updateAnalysis(ArrayList<Record> currentRecord) {
 
         crimeFrequencyPair = dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 4));
@@ -119,10 +116,7 @@ public class AnalysisTabController {
         populateTopBlocksTable();
         populateLowBlocksTable();
         this.displayedRecords = currentRecord;
-
     }
-
-
 
     /**
      * Populates the top crime table with list of TypeFrequency objects that is passed to it
@@ -142,15 +136,11 @@ public class AnalysisTabController {
         for (int i = 0; i < displayLimit; i++) {
             topCrimeTable.getItems().add(crimeFrequencyPair.get(i));
         }
-
-
-
     }
 
     /**
      * Populates the bottom crime table with list of TypeFrequency objects the class owns
      */
-
     public void populateLowCrimesTable() {
 
         Collections.sort(crimeFrequencyPair, new FrequencyComparatorAscending());
@@ -216,7 +206,6 @@ public class AnalysisTabController {
     /**
      * Sets up context menu and its associated events for topBlockTable and bottomBlockTable
      */
-
     private void setupTableContextMenu(TableView<TypeFrequencyPair> blockTable) {
         ContextMenu tableContextMenu = new ContextMenu();
 
@@ -259,7 +248,6 @@ public class AnalysisTabController {
      * @param block a string parameter that usually represents the block
      * @throws IOException
      */
-
     public void showOnMap(String block) throws IOException {
 
         boolean connected = BrowserTabController.checkConnection();
@@ -299,10 +287,8 @@ public class AnalysisTabController {
                         }
                     });
 
-
             popupMap.showAndWait();
         }
-
     }
 
     /**
@@ -311,7 +297,6 @@ public class AnalysisTabController {
      * @param block a string parameter that usually represents the block
      * @throws IOException
      */
-
     public void showBlockCrimeDetails(String block) throws IOException {
         ArrayList<Record> records = new ArrayList<>();
 
@@ -339,14 +324,12 @@ public class AnalysisTabController {
         else {
             PopupWindow.displayPopup("No Crime to show", "There is no crime to show");
         }
-
-
     }
+
     /**
      * This method is triggered by a button click event from Analysis tab. It calls drawChart method of crimeChart object
      * to display a pie chart of bottom top crimes against their frequency
      */
-
     public void showCrimeTypePieChart() {
 
         String windowTitle = "Top crime types";
@@ -367,7 +350,6 @@ public class AnalysisTabController {
      * This method is triggered by a button click event from Analysis tab. It calls drawChart method of crimeChart object
      * to display a pie chart of top 10 blocks against the frequency of crime in that block
      */
-
     public void showBlockCrimePieChart() {
         String windowTitle = "Top blocks for crime occurrences";
         Collections.sort(blocksFrequencyPair, new FrequencyComparatorDescending());
@@ -379,15 +361,12 @@ public class AnalysisTabController {
             String pieChartTitle = "Top " + blocksFrequencyPair.size() + " blocks from filtered records for highest crime types";
             crimesChart.drawChart( pieChartTitle, windowTitle , blocksFrequencyPair);
         }
-
-
     }
 
     /**
      * This method is triggered by a button click event from Analysis tab. It calls drawChart method of crimeChart object
      * to display a pie chart of bottom 10 blocks against the frequency of crime in that block
      */
-
     public void showBottomBlockCrimePieChart() {
         String windowTitle = "Bottom blocks for crime occurrences";
         Collections.sort(blocksFrequencyPair, new FrequencyComparatorAscending());
@@ -399,15 +378,12 @@ public class AnalysisTabController {
             String pieChartTitle = "Bottom " + blocksFrequencyPair.size() + " blocks from filtered records for lowest crime types";
             crimesChart.drawChart( pieChartTitle, windowTitle , blocksFrequencyPair);
         }
-
-
     }
 
     /**
      * This method is triggered by a button click event from Analysis tab. It calls drawChart method of crimeChart object
      * to display a pie chart of bottom top crimes against their frequency
      */
-
     public void showBottomCrimeTypePieChart() {
 
         String windowTitle = "Bottom crime types";
@@ -420,8 +396,6 @@ public class AnalysisTabController {
             String pieChartTitle = "Bottom " + crimeFrequencyPair.size() + " crime types from filtered records";
             crimesChart.drawChart( pieChartTitle, windowTitle , crimeFrequencyPair);
         }
-
-
     }
 
 }

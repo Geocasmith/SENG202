@@ -7,7 +7,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
- *
+ * This class ontains methods for creating graphs that automatically scale to time periods and group data points that
+ * are from the same time period
+ * @author Bede Skinner-Vennell
+ * Date 09/10/2021
  */
 public class GraphCreator {
     private static final DateTimeFormatter minuteHourFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a", Locale.ENGLISH);

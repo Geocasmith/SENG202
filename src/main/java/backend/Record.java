@@ -13,6 +13,8 @@ import java.util.*;
  * Record is constructed using a list of Strings.
  * A Record object can be converted into one comma separated String or a list of Strings
  * using the provided methods.
+ * @author Bede Skinner-Vennell
+ * Date 09/10/2021
  */
 public class Record {
     private String caseNumber;

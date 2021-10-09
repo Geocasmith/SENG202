@@ -10,17 +10,17 @@ import java.util.ArrayList;
 /**
  * Represents GraphTabController object that controls graphTab fxml
  * Holds variables and methods used in manipulation of graph tab object
- * @Author
- * Date
+ * @author Bede Skinner-Vennell
+ * Date 09/10/2021
  */
 
 public class GraphTabController {
-    private GraphCreator graphCreator = new GraphCreator();
+    private final GraphCreator graphCreator = new GraphCreator();
 
-    private CategoryAxis xAxis = new CategoryAxis();
-    private NumberAxis yAxis = new NumberAxis();
+    private final CategoryAxis xAxis = new CategoryAxis();
+    private final NumberAxis yAxis = new NumberAxis();
 
-    private LineChart lineChart = new LineChart(xAxis, yAxis);
+    private final LineChart lineChart = new LineChart(xAxis, yAxis);
 
     @FXML
     private BorderPane graphBorderPane;

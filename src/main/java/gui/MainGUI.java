@@ -2,22 +2,23 @@ package gui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * This class creates the application stage and starts the application
+ * @author
+ * Date 09/10/2021
+ */
 public class MainGUI extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
-        Parent root = (Parent)loader.load();
+        Parent root = loader.load();
         primaryStage.setTitle("Insight");
         primaryStage.setScene(new Scene(root));
         primaryStage.setMinHeight(840);

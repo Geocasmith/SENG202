@@ -12,6 +12,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class contains a method to read data from a CSV File
+ * @author
+ * Date 09/10/2021
+ */
 public class CsvReader {
 
     public static ArrayList<List<String>> read(String path) throws CsvValidationException, IOException {
@@ -28,7 +33,7 @@ public class CsvReader {
             }
             return csvValues;
         } catch (CsvException | IOException e) {
-            //PopupWindow.displayPopup("Error", e.getMessage());
+            PopupWindow.displayPopup("Error", "There was an error reading the given CSV. Please try again.");
         }
 
         return null;

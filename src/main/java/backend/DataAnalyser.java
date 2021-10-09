@@ -1,10 +1,14 @@
 package backend;
-import gui.PopupWindow;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * This class contains methods for analysing crime data, including lists of the currently shown wards, beats and types
+ * @author Bede Skinner-Vennell
+ * Date 09/10/2021
+ */
 public class
 DataAnalyser {
 

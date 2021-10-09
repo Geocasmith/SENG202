@@ -11,6 +11,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * @author
+ * Date 09/10/2021
+ */
 public class CrimeDetailsController {
 
     @FXML

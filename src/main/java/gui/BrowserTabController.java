@@ -16,6 +16,8 @@ import java.util.Objects;
 /**
  * Represents BrowserTabController object,
  * Holds attribute variables and associated methods used in manipulation of BrowserTab controller object
+ * @author Bede Skinner-Vennell
+ * Date 09/10/2021
  */
 
 public class BrowserTabController {

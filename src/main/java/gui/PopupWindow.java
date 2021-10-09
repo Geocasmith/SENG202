@@ -9,6 +9,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+
+/**
+ * This class contains methods to create and show several types of popup windows
+ * @author Bede Skinner-Vennell
+ * Date 09/10/2021
+ */
 public class PopupWindow {
 
     /**

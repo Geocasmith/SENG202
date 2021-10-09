@@ -14,6 +14,8 @@ import java.util.Objects;
 /**
  * DataManipulator class owns Record, Database, writer and reader classes
  * It includes methods for adding, editing and removing, records
+ * @author
+ * Date 09/10/2021
  */
 
 public class DataManipulator {

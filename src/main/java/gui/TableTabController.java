@@ -4,15 +4,12 @@ import backend.DataAnalyser;
 import backend.Database;
 import backend.Record;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.skin.TableHeaderRow;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -26,6 +23,8 @@ import java.util.List;
  * The controller for the table view tab. This controller handles setting up the table, filling it with record objects,
  * adding/editing/deleting records (with the EditRecordWindowController class), creating the right-click menu for the
  * table, and listening for delete/backspace keypresses while the table is in focus.
+ * @author Bede Skinner-Vennell (Double clicking on row and context menu)
+ * Date 09/10/2021
  */
 public class TableTabController {
     @FXML
@@ -39,11 +38,11 @@ public class TableTabController {
     private final DataAnalyser dataAnalyser = new DataAnalyser();
 
 
-    @FXML
     /**
      * Initialises the table. Calls setupTable() and setupContextMenu(), and creates a key listener for the delete
      * or backspace keys when the table is focussed that will delete the selected rows.
      */
+    @FXML
     public void initialize() {
         setupTable();
         setupContextMenu();

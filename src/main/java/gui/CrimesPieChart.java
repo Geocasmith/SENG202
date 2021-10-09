@@ -11,6 +11,10 @@ import javafx.scene.chart.PieChart;
 
 import java.util.ArrayList;
 
+/**
+ * @author
+ * Date 09/10/2021
+ */
 public class CrimesPieChart {
 
     public void drawChart(String pieChartTitle, String titleLabel, ArrayList<TypeFrequencyPair> pairData) {

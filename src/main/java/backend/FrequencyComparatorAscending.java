@@ -4,6 +4,8 @@ import java.util.Comparator;
 
 /**
  * Comparator for TypeFrequencyPair objects
+ * @author
+ * Date 09/10/2021
  */
 
 public class FrequencyComparatorAscending implements Comparator<TypeFrequencyPair> {

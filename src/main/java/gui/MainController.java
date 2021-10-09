@@ -38,7 +38,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Represents an object for main.fxml controller class
- * @Author
+ * @author Bede Skinner-Vennell
+ * Date 09/10/2021
  */
 
 

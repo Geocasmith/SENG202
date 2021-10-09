@@ -10,9 +10,13 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Objects;
 
+/**
+ * This class contains methods to control the map on functions of the program, primarily in the map tab
+ * @author Bede Skinner-Vennell
+ * Date 09/10/2021
+ */
 public class MapTabController {
     @FXML
     private WebView webView;

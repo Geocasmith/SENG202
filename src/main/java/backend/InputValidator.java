@@ -8,6 +8,8 @@ import java.util.*;
 
 /**
  * This class holds static methods for validating Record objects and their fields.
+ * @author
+ * Date 09/10/2021
  */
 public class InputValidator {
 

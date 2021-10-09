@@ -2,6 +2,8 @@ package backend;
 
 /**
  * This class is used to encapsulate data that has type and frequency
+ * @author
+ * Date 09/10/2021
  */
 
 public class TypeFrequencyPair {

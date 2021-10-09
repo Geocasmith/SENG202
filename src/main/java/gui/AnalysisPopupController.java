@@ -20,11 +20,11 @@ public class AnalysisPopupController {
     @FXML
     private WebView mapWebView;
     private WebEngine mapWebEngine;
-    private DataAnalyser dataAnalyser = new DataAnalyser();
+    private final DataAnalyser dataAnalyser = new DataAnalyser();
     private int mapRequestCount = 0;
 
     /**
-     * Initialises the webengine and loads the google maps page
+     * Initialises the webengine and loads the Google Maps page
      */
     @FXML
     private void initialize() {

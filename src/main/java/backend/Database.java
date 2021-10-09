@@ -11,10 +11,9 @@ import java.text.SimpleDateFormat;
 
 import static java.lang.String.valueOf;
 
-/***
- * TODO: FOR GETTING RECORD OBJECT, MAKE SURE IT WORKS WITH NULL
- * Search does not work with LATITUDE (returns empty list)
- * Import from csv right into db
+/**
+ * @author
+ * Date 09/10/2021
  */
 public class Database {
     private static Connection connection;
