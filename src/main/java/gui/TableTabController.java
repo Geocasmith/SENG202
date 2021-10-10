@@ -3,7 +3,6 @@ package gui;
 import backend.DataAnalyser;
 import backend.Database;
 import backend.Record;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
