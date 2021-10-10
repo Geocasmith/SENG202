@@ -27,6 +27,7 @@ import java.util.*;
 
 /**
  * This class creates a popup to edit or add a record
+ * @author Jonathan Tomlinson
  * @author Bede Skinner-Vennell (Mapping)
  * @author Sofonias Tekele Tesfaye (Auto suggest text boxes)
  * Date 09/10/2021
@@ -84,6 +85,7 @@ public class EditRecordWindowController {
     @FXML private void initialize() throws IOException, CsvValidationException {
         buttonPane.setPadding(new Insets(0, 0, 15, 10)); // scenebuilder wasn't making this work so it goes here
 
+        // adds textfields to a list so they can be iterated over
         textFields.addAll(Arrays.asList(caseNumberField, dateField, blockField, iucrField, primaryDescriptionField,
                 secondaryDescriptionField, locationDescriptionField, arrestCheckBox, domesticCheckBox, wardField,
                 beatField, fbicdField, xCoordinateField, yCoordinateField, latitudeField, longitudeField));

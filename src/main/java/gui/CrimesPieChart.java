@@ -19,6 +19,12 @@ import java.util.ArrayList;
  */
 public class CrimesPieChart {
 
+    /**
+     * TODO
+     * @param pieChartTitle
+     * @param titleLabel
+     * @param pairData
+     */
     public void drawChart(String pieChartTitle, String titleLabel, ArrayList<TypeFrequencyPair> pairData) {
         //Preparing ObservableList object
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();

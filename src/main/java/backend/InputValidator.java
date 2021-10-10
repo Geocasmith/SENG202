@@ -9,6 +9,7 @@ import java.util.*;
 /**
  * This class holds static methods for validating Record objects and their fields.
  * @author Sofonias Tekele Tesfaye
+ * @author Jonathan Tomlinson (recordEntryFeedbackLong method)
  * Date 09/10/2021
  */
 public class InputValidator {
@@ -262,7 +263,7 @@ public class InputValidator {
    /**
     * Prints valid list of crime descriptions
     */
-   public static void printCrimeDescriptions() throws CsvValidationException, IOException { //TODO this isn't used
+   public static void printCrimeDescriptions() throws CsvValidationException, IOException { //TODO this isn't used?
       crimeDescription = initializeCrimeDescriptions();
 
       for (List<String> row : crimeDescription)

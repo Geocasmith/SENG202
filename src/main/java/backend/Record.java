@@ -14,6 +14,7 @@ import java.util.*;
  * A Record object can be converted into one comma separated String or a list of Strings
  * using the provided methods.
  * @author Bede Skinner-Vennell
+ * @author Jonathan Tomlinson (toString, toList, boolean parsing and display)
  * Date 09/10/2021
  */
 public class Record {
