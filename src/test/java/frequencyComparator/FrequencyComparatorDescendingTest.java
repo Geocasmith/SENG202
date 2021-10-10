@@ -1,24 +1,18 @@
-package unitTests;
+package frequencyComparator;
 
-import frequencyComparator.FrequencyComparatorAscending;
-import frequencyComparator.TypeFrequencyPair;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Tests FrequencyComparatorAscending class
- * @author Sofonias Tekele Tesfaye
- */
-
-class FrequencyComparatorAscendingTest {
+class FrequencyComparatorDescendingTest {
 
     @Test
     void compare() {
+
         TypeFrequencyPair testPair = new TypeFrequencyPair();
-        ArrayList<TypeFrequencyPair>  testList = new ArrayList<>();
+        ArrayList<TypeFrequencyPair> testList = new ArrayList<>();
         ArrayList<TypeFrequencyPair>  comparisonList = new ArrayList<>();
         int frequency = 100;
 
@@ -26,7 +20,7 @@ class FrequencyComparatorAscendingTest {
         for (int i= 0; i <=4; i++) {
             testPair.setType("Theft");
             testPair.setFrequency(frequency);
-            testList.add(testPair);
+            comparisonList.add(testPair);
             frequency -= 20;
 
         }
@@ -36,19 +30,14 @@ class FrequencyComparatorAscendingTest {
         for (int i= 0; i <=4; i++) {
             testPair.setType("Theft");
             testPair.setFrequency(frequency);
-            comparisonList.add(testPair);
+            testList.add(testPair);
             frequency += 20;
 
         }
         //Sort testList in ascending order of frequency
-        testList.sort(new FrequencyComparatorAscending());
+        testList.sort(new FrequencyComparatorDescending());
 
-      assertEquals(testList.get(0).getFrequency(), comparisonList.get(0).getFrequency());
-      assertEquals(testList.get(4).getFrequency(), comparisonList.get(4).getFrequency());
-
-
-
-
-
+        assertEquals(testList.get(0).getFrequency(), comparisonList.get(0).getFrequency());
+        assertEquals(testList.get(4).getFrequency(), comparisonList.get(4).getFrequency());
     }
 }

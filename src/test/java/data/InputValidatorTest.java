@@ -1,6 +1,5 @@
-package unitTests;
+package data;
 
-import data.InputValidator;
 import com.opencsv.exceptions.CsvValidationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

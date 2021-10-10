@@ -33,7 +33,7 @@ public class GraphCreator {
      * @param requiredDuration A string containing the time duration the timeToRound needs to be rounded down to
      * @return A LocalDateTime object that has been rounded to the given duration
      */
-    private LocalDateTime roundDateTime(LocalDateTime timeToRound, String requiredDuration) {
+    protected LocalDateTime roundDateTime(LocalDateTime timeToRound, String requiredDuration) {
         switch (requiredDuration) {
             case "Minutes":
                 timeToRound = timeToRound.withSecond(0);
@@ -72,7 +72,7 @@ public class GraphCreator {
      * @return An ArrayList of Objects containing a String of the required duration, a DateTime formatter and a Duration
      *         object of the required time period
      */
-    public List<Object> calculateFormatForGraph(List<LocalDateTime> times) {
+    protected List<Object> calculateFormatForGraph(List<LocalDateTime> times) {
         Duration width = dataAnalyser.calculateTimeDifference(times.get(0), times.get(times.size() - 1));
 
         Duration periodInSeconds;

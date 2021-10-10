@@ -1,8 +1,5 @@
-package unitTests;
+package data;
 
-import data.DataAnalyser;
-import data.CrimeDatabase;
-import data.Record;
 import frequencyComparator.TypeFrequencyPair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

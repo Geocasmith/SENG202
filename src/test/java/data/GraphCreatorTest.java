@@ -1,7 +1,6 @@
-package unitTests;
+package data;
 
-import data.GraphCreator;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,6 +14,9 @@ public class GraphCreatorTest {
     private final GraphCreator graphCreator = new GraphCreator();
 
     @Test
+    /*
+      Tests that the correct time unit is returned to create the graph
+     */
     public void calculateFormatForGraphTest() {
         LocalDateTime baseTime = LocalDateTime.now();
         LocalDateTime plusThreeHours = baseTime.plusHours(3);
@@ -56,8 +58,29 @@ public class GraphCreatorTest {
         calculations = graphCreator.calculateFormatForGraph(new ArrayList<>(Arrays.asList(baseTime, plusFiveYears)));
         requiredDuration = (String) calculations.get(0);
         assertEquals("Years", requiredDuration);
+    }
 
+    @Test
+    public void roundDateTimeTest() {
+        LocalDateTime baseTime = LocalDateTime.now().withMonth(1).withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0);
+        LocalDateTime plusThirtySeconds = baseTime.plusSeconds(30);
+        LocalDateTime plusThirtyMinutes = baseTime.plusMinutes(30);
+        LocalDateTime plusTwelveHours = baseTime.plusHours(12);
+        LocalDateTime plusTwoDays = baseTime.plusDays(2);
+        LocalDateTime plusTenDays = baseTime.plusDays(10);
+        LocalDateTime plusTwentyDays = baseTime.plusDays(20);
+        LocalDateTime plusThirtyDays = baseTime.plusDays(30);
+        LocalDateTime plusFiveMonths = baseTime.plusMonths(5);
 
+        assertEquals(baseTime, graphCreator.roundDateTime(plusThirtySeconds, "Minutes"));
+        assertEquals(baseTime, graphCreator.roundDateTime(plusThirtyMinutes, "Hours"));
+        assertEquals(baseTime, graphCreator.roundDateTime(plusTwelveHours, "Days"));
+        assertEquals(baseTime, graphCreator.roundDateTime(plusTwoDays, "Weeks"));
+        assertEquals(baseTime.plusDays(6), graphCreator.roundDateTime(plusTenDays, "Weeks"));
+        assertEquals(baseTime.plusDays(13), graphCreator.roundDateTime(plusTwentyDays, "Weeks"));
+        assertEquals(baseTime.plusDays(20), graphCreator.roundDateTime(plusThirtyDays, "Weeks"));
+        assertEquals(baseTime, graphCreator.roundDateTime(plusTenDays, "Months"));
+        assertEquals(baseTime, graphCreator.roundDateTime(plusFiveMonths, "Years"));
 
     }
 }

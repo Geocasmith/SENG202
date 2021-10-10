@@ -1,7 +1,7 @@
-package unitTests;
+package data;
 import static org.junit.jupiter.api.Assertions.*;
 
-import data.Record;
+import com.google.gson.JsonArray;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -92,5 +92,31 @@ public class RecordTest {
         assertEquals(desiredList1, testRec1.toList());
         List<String> desiredList2 = Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "N", "Y", "334", "7", "6", "1183633", "1851786", "41.748486365", "-87.602675062");
         assertEquals(desiredList2, testRec2.toList());
+    }
+
+    @Test
+    /*
+     * Checks that the correct json array is created when asked for
+     */
+    public void getJsonArrayTest() {
+        List<String> desiredList1 = Arrays.asList(null,null,"JE163990","11/23/2020 03:05:00 PM","THEFT","$500 AND UNDER","APARTMENT");
+        JsonArray desiredArray1 = new JsonArray();
+        for (String s : desiredList1) {
+            desiredArray1.add(s);
+        }
+        assertEquals(desiredArray1, testRec1.getJsonArray());
+
+        List<Object> desiredList2 = Arrays.asList("41.748486365","-87.602675062","JE163990","11/23/2020 03:05:00 PM","THEFT","$500 AND UNDER","APARTMENT");
+        JsonArray desiredArray2 = new JsonArray();
+
+        for (int i = 0; i < desiredList2.size(); i++) {
+            if (i < 2) {
+                desiredArray2.add(Double.parseDouble((String) desiredList2.get(i)));
+            } else {
+                desiredArray2.add((String) desiredList2.get(i));
+            }
+
+        }
+        assertEquals(desiredArray2, testRec2.getJsonArray());
     }
 }
