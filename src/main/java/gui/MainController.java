@@ -845,7 +845,7 @@ public class MainController {
     }
 
     /**
-     * Creates loading bar
+     * Creates loading bar TODO make this clearer
      * @throws InterruptedException
      */
     public JFrame startProgressGIF() throws InterruptedException {
@@ -916,7 +916,7 @@ public class MainController {
             JFrame f = startProgressGIF();
 
             //Refresh GUI
-            tableTabController.refreshTableData();
+            applyFilters();
 
             //stops loading bar
             f.dispose();
@@ -968,7 +968,7 @@ public class MainController {
      */
     public Boolean containsInjection(String injection) {
         if (injection.matches(".*[%\'\"\\-=<>;\\(\\)].*")) {
-            PopupWindow.displayPopup("Input Error", "Invalid characters in input (SQL Injection Protection)");
+            PopupWindow.displayPopup("Input Error", "Invalid characters in input (SQL Injection Protection).");
 
             return true;
         }

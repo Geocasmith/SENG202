@@ -23,6 +23,7 @@ import java.util.List;
  * The controller for the table view tab. This controller handles setting up the table, filling it with record objects,
  * adding/editing/deleting records (with the EditRecordWindowController class), creating the right-click menu for the
  * table, and listening for delete/backspace keypresses while the table is in focus.
+ * @author Jonathan Tomlinson
  * @author Bede Skinner-Vennell (Double clicking on row and context menu)
  * Date 09/10/2021
  */
@@ -161,11 +162,11 @@ public class TableTabController {
     }
 
     /**
-     * Returns a READ ONLY (!!!) list of records the user has selected in the table view.
+     * Returns a list of the records that the user has selected in the table view.
      *
-     * @return an observable list of records that cannot be edited
+     * @return list of currently selected records
      */
-    private ObservableList<Record> getSelectedRows() {
+    private List<Record> getSelectedRows() {
         return mainTableView.getSelectionModel().getSelectedItems();
     }
 
@@ -295,7 +296,7 @@ public class TableTabController {
      *
      * @param records An ArrayList of record objects to be displayed in the table
      */
-    public void addRecordsToTable(ArrayList<Record> records) {
+    public void addRecordsToTable(List<Record> records) {
         for (Record rec : records) {
             mainTableView.getItems().add(rec);
         }
@@ -317,7 +318,7 @@ public class TableTabController {
      *
      * @param records An ArrayList of record objects to be displayed in the table
      */
-    public void setTableRecords(ArrayList<Record> records) {
+    public void setTableRecords(List<Record> records) {
         mainTableView.getItems().clear();
         addRecordsToTable(records);
     }
@@ -334,7 +335,7 @@ public class TableTabController {
      * Returns the raw ObservableList object of the main table view.
      * @return the raw ObservableList object of the main table view.
      */
-    public ObservableList<Record> getRawDisplayedRecords() {
+    public List<Record> getRawDisplayedRecords() {
         return mainTableView.getItems();
     }
 
@@ -345,14 +346,6 @@ public class TableTabController {
      */
     public void setParentController(MainController mainController) {
         this.parentController = mainController;
-    }
-
-    /**
-     * Heavy-handed method of refreshing the table's data - reloads everything from the database with filters applied.
-     * This is required to view new or changed records, but not to see records deleted.
-     */
-    public void refreshTableData() throws SQLException, IOException, InterruptedException {
-        parentController.applyFilters();
     }
 
     /**
@@ -373,9 +366,7 @@ public class TableTabController {
                 } catch (IOException e) {
                     PopupWindow.displayPopup("Error", "An unknown error occurred, please try again");
                 }
-
             }
-
         } else {
             PopupWindow.displayPopup("Error", "You must have exactly two records selected to use this feature.\n" +
                     "Hold CTRL or SHIFT to select multiple records.");
@@ -383,7 +374,7 @@ public class TableTabController {
     }
 
     /**
-     * Creates a popup showing the differences between the two given crimes
+     * Creates a popup showing the differences between the two given crimes TODO this isn't clear enough
      * @param crime1 The first record object
      * @param crime2 The second record object
      * @throws IOException
