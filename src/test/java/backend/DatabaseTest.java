@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class contains tests for Database class
@@ -18,7 +19,7 @@ class DatabaseTest {
     void extractCol() throws SQLException {
         Database db = new Database();
         db.connectDatabase();
-        ArrayList<Object> extractedCol;
+        List<Object> extractedCol;
         extractedCol = db.extractCol("ADDRESS");
         for (int i = 0; i < extractedCol.size(); i++) {
             continue;

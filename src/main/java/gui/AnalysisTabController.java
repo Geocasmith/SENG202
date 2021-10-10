@@ -40,12 +40,12 @@ public class AnalysisTabController {
     @FXML private TableColumn<TypeFrequencyPair, String> bottomBlockCol;
     @FXML private TableColumn<TypeFrequencyPair, String> bottomBlockFrequencyCol;
     private int displayLimit = 10;
-    private ArrayList<Record> displayedRecords;
+    private List<Record> displayedRecords;
     private final DataAnalyser dataAnalyser = new DataAnalyser();
     private static final double tableHeightMultiplier = 1.03; // Makes the table slightly taller than 10 rows to get rid of the scroll bar
     private int mapOpenedCounter = 0;
-    private ArrayList<TypeFrequencyPair> crimeFrequencyPair = new ArrayList<>();
-    private ArrayList<TypeFrequencyPair> blocksFrequencyPair = new ArrayList<>();
+    private List<TypeFrequencyPair> crimeFrequencyPair = new ArrayList<>();
+    private List<TypeFrequencyPair> blocksFrequencyPair = new ArrayList<>();
     private final CrimesPieChart crimesChart = new CrimesPieChart();
 
 
@@ -109,7 +109,7 @@ public class AnalysisTabController {
      * Calls all the methods that populate the 4 different tables that the controller has access to
      * @param currentRecord Array list of records that are displayed in main table
      */
-    public void updateAnalysis(ArrayList<Record> currentRecord) {
+    public void updateAnalysis(List<Record> currentRecord) {
 
         crimeFrequencyPair = dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 4));
         blocksFrequencyPair = dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 2));

@@ -72,7 +72,7 @@ public class GraphCreator {
      * @return An ArrayList of Objects containing a String of the required duration, a DateTime formatter and a Duration
      *         object of the required time period
      */
-    public ArrayList<Object> calculateFormatForGraph(ArrayList<LocalDateTime> times) {
+    public ArrayList<Object> calculateFormatForGraph(List<LocalDateTime> times) {
         Duration width = dataAnalyser.calculateTimeDifference(times.get(0), times.get(times.size() - 1));
 
         Duration periodInSeconds;
@@ -147,7 +147,7 @@ public class GraphCreator {
      *         the date and time in string form and the Integer is the number of crimes that occurred in the calculated
      *         timeframe
      */
-    public ArrayList<Object> createCrimesOverTimeGraph(ArrayList<Record> data){
+    public ArrayList<Object> createCrimesOverTimeGraph(List<Record> data){
 
         XYChart.Series series = new XYChart.Series<>();
 
@@ -182,7 +182,7 @@ public class GraphCreator {
      *         the String is the date and time in string form and the Integer is the number of crimes that occurred in
      *         the calculated timeframe
      */
-    public ArrayList<Object> createCrimesPerWardOverTimeGraph(ArrayList<Record> data, ArrayList<Integer> crimeWards) {
+    public ArrayList<Object> createCrimesPerWardOverTimeGraph(List<Record> data, List<Integer> crimeWards) {
 
         ArrayList<XYChart.Series> seriesList = new ArrayList<>();
         ArrayList<ArrayList<LocalDateTime>> timesList = new ArrayList<>();
@@ -238,7 +238,7 @@ public class GraphCreator {
      *         the String is the date and time in string form and the Integer is the number of crimes that occurred in
      *         the calculated timeframe
      */
-    public ArrayList<Object> createCrimesPerTypeOverTimeGraph(ArrayList<Record> data, ArrayList<String> crimeTypes) {
+    public ArrayList<Object> createCrimesPerTypeOverTimeGraph(List<Record> data, List<String> crimeTypes) {
 
         ArrayList<XYChart.Series> seriesList = new ArrayList<>();
         ArrayList<ArrayList<LocalDateTime>> timesList = new ArrayList<>();
@@ -294,7 +294,7 @@ public class GraphCreator {
      *         the String is the date and time in string form and the Integer is the number of crimes that occurred in
      *         the calculated timeframe
      */
-    public ArrayList<Object> createCrimesPerBeatOverTimeGraph(ArrayList<Record> data, ArrayList<Integer> crimeBeats) {
+    public ArrayList<Object> createCrimesPerBeatOverTimeGraph(List<Record> data, List<Integer> crimeBeats) {
 
         ArrayList<XYChart.Series> seriesList = new ArrayList<>();
         ArrayList<ArrayList<LocalDateTime>> timesList = new ArrayList<>();

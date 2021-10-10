@@ -89,9 +89,9 @@ public class DataManipulator {
      * @param col int usually an interger value representing the column number
      * @return extractedCol Array list of objects taken out from a column in the database
      */
-    public static ArrayList<Object> extractCol(ArrayList<Record> currentData, int col)
+    public static List<Object> extractCol(List<Record> currentData, int col)
     {
-        ArrayList<Object> extractedCol = new ArrayList<>();
+        List<Object> extractedCol = new ArrayList<>();
         switch (col) {
             case 0:
                 for (Record record : currentData) {
@@ -202,8 +202,8 @@ public class DataManipulator {
      * @return dataToGraph Array<ArrayList<Object>> type that contain list of extracted column values
      */
 
-    public ArrayList<ArrayList<Object>> dataBaseDataToGraph(String col1, String col2) throws SQLException {
-        ArrayList<ArrayList<Object> > dataToGraph = new ArrayList<ArrayList<Object>>();
+    public List<List<Object>> dataBaseDataToGraph(String col1, String col2) throws SQLException {
+        List<List<Object> > dataToGraph = new ArrayList<>();
         Database db = new Database();
         db.connectDatabase();
         dataToGraph.add(db.extractCol(col1));
@@ -240,12 +240,12 @@ public class DataManipulator {
      * @throws CsvValidationException
      */
 
-    public static ArrayList<Object> getRowsfromCsv(String filepath) throws IOException,  CsvValidationException {
+    public static List<Object> getRowsfromCsv(String filepath) throws IOException,  CsvValidationException {
         try {
-            ArrayList<ArrayList<List<String>>> result = new ArrayList<>();
-            ArrayList<List<String>> csvValues;
-            ArrayList<List<String>> validRows = new ArrayList<>();
-            ArrayList<List<String>> invalidRows = new ArrayList<>();
+            List<List<List<String>>> result = new ArrayList<>();
+            List<List<String>> csvValues;
+            List<List<String>> validRows = new ArrayList<>();
+            List<List<String>> invalidRows = new ArrayList<>();
             csvValues = CsvReader.read(filepath);
 
             // Loop through all values read

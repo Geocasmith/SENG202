@@ -31,7 +31,7 @@ public class InputValidator {
     * and FBICD)
     */
    public static Set<List<String>> initializeCrimeDescriptions() throws CsvValidationException, IOException {
-      ArrayList<List<String>> readData;
+      List<List<String>> readData;
       readData = CsvReader.read(crimeDescriptionsLocation);
       return new HashSet<>(readData);
 
@@ -131,7 +131,7 @@ public class InputValidator {
     *         message ONLY IF there was an error - field is not included (i.e. not a blank field) if data is valid. The
     *         message corresponds to the first invalid field.
     */
-   public static ArrayList<String> recordEntryFeedbackLong(List<String> record, boolean notImport) throws CsvValidationException, IOException {
+   public static List<String> recordEntryFeedbackLong(List<String> record, boolean notImport) throws CsvValidationException, IOException {
       // will have 1 = good, 0 = bad for all rows and then a 1 or 0 at the end along with the first error message
       ArrayList<String> result = new ArrayList<>(Arrays.asList("1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1"));
       ArrayList<String> dataFieldFeedBack = new ArrayList<>();

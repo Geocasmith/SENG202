@@ -22,7 +22,7 @@ public class ButtonTest extends Application {
 
         primaryStage.show();
 
-        button.setOnAction(new EventHandler<ActionEvent>() {
+        button.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent event) {
                 // Set the cursor to the wait cursor.

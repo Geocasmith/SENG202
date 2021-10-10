@@ -327,7 +327,7 @@ public class TableTabController {
      * Returns an arraylist of all the record objects in the table.
      * @return an ArrayList of all record objects in the table.
      */
-    public ArrayList<Record> getDisplayedRecords() {
+    public List<Record> getDisplayedRecords() {
         return new ArrayList<>(mainTableView.getItems());
     }
 

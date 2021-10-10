@@ -26,7 +26,7 @@ public class CsvReader {
      * @throws CsvValidationException
      * @throws IOException
      */
-    public static ArrayList<List<String>> read(String path) throws CsvValidationException, IOException {
+    public static List<List<String>> read(String path) throws CsvValidationException, IOException {
         try {
             ArrayList<List<String>> csvValues = new ArrayList<>();
             FileReader fr = new FileReader(path);

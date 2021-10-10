@@ -171,7 +171,7 @@ DataAnalyser {
      * @param column represents the data column
      * @return List of TypeFrequency pair objects
      */
-    public ArrayList<TypeFrequencyPair> getTypeFrequencyDescending(ArrayList<Object> column) {
+    public List<TypeFrequencyPair> getTypeFrequencyDescending(List<Object> column) {
 
         ArrayList<TypeFrequencyPair> res = new ArrayList<>();
         long frequency;

@@ -3,13 +3,13 @@ package gui;
 import backend.*;
 import backend.Record;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Represents CrimeDetailsController Object
@@ -52,7 +52,7 @@ public class CrimeDetailsController {
      *                           as crimeFrequency pair object
      */
 
-    public void populateCrimesTable(ArrayList<TypeFrequencyPair> crimeFrequencyPair) {
+    public void populateCrimesTable(List<TypeFrequencyPair> crimeFrequencyPair) {
         // Sort descending
         Collections.sort(crimeFrequencyPair, new FrequencyComparatorDescending());
         //Table column set up

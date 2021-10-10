@@ -21,7 +21,7 @@ class CsvWriterTest {
     @Test
     public void writeTest() throws IOException, CsvValidationException {
         CsvReader reader = new CsvReader();
-        ArrayList<List<String>> readData;
+        List<List<String>> readData;
         readData = reader.read("./Files/seng202_2021_crimes_one_year_prior_to_present_5k.csv");
         ArrayList<Record> recordsList = new ArrayList<>();
         for (int i = 0; i < readData.size(); i++) {

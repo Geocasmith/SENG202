@@ -5,14 +5,12 @@ import backend.*;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
@@ -23,8 +21,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.nio.file.FileAlreadyExistsException;
 import java.sql.SQLException;
 import java.time.Instant;
@@ -33,7 +29,6 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -45,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MainController {
 
-    @FXML
+    @FXML // these controllers are assigned and used despite what IntelliJ says (see what happens if you delete them)
     private MapTabController mapTabController;
     @FXML
     private TableTabController tableTabController;
@@ -240,7 +235,7 @@ public class MainController {
             PopupWindow.displayPopup("Error", "You must be connected to the internet to use the map.");
             mainTabPane.getSelectionModel().select(tableTabPane);
         } else {
-            ArrayList<Record> displayedRecords = tableTabController.getDisplayedRecords();
+            List<Record> displayedRecords = tableTabController.getDisplayedRecords();
             if (displayedRecords.size() < 500) {
                 mapTabController.updateMarkers(displayedRecords);
             } else {
@@ -349,7 +344,7 @@ public class MainController {
      * type/ward/beat options. If so, it creates a list of the checked options and then creates the requested graph
      */
     public void generateGraph() {
-        ArrayList<Record> currentRecords = tableTabController.getDisplayedRecords();
+        List<Record> currentRecords = tableTabController.getDisplayedRecords();
         if (currentRecords.size() == 0) {
             PopupWindow.displayPopup("Error", "You must have data in the table to create a graph.\n" +
                     "Try clearing the filter or importing some data.");
@@ -677,11 +672,6 @@ public class MainController {
                     }
                 }
         );
-
-
-
-
-
     }
 
     /**
@@ -766,7 +756,7 @@ public class MainController {
             ArrayList<ArrayList<List<String>>> dataValidation = new ArrayList<>();
 
             try {
-                ArrayList<Object> csvRows = DataManipulator.getRowsfromCsv(filepath);
+                List<Object> csvRows = DataManipulator.getRowsfromCsv(filepath);
                 dataValidation = (ArrayList<ArrayList<List<String>>>) csvRows.get(0);
                 csvSuccess = (Boolean) csvRows.get(1);
 
@@ -838,7 +828,7 @@ public class MainController {
      *
      * @param invalid //TODO
      */
-    public void displayInvalid(ArrayList<List<String>> invalid) {
+    public void displayInvalid(List<List<String>> invalid) {
         String invalidRows = invalid.size() + " rows could not be imported because their format is invalid";
         PopupWindow.displayPopup("Invalid Rows", invalidRows);
 

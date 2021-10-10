@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.layout.BorderPane;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents GraphTabController object that controls graphTab fxml
@@ -42,7 +43,7 @@ public class GraphTabController {
      * @param currentRecords A list of the records currently displayed in the table
      * @param crimeTypes A list of crime types the user wants to graph
      */
-    public void createCrimesPerTypeOverTimeGraph(ArrayList<Record> currentRecords, ArrayList<String> crimeTypes) {
+    public void createCrimesPerTypeOverTimeGraph(List<Record> currentRecords, List<String> crimeTypes) {
         ArrayList<Record> filteredRecords = new ArrayList<>();
         for (Record record : currentRecords) {
             if (crimeTypes.contains(record.getPrimaryDescription())) {
@@ -73,7 +74,7 @@ public class GraphTabController {
      * @param currentRecords A list of the records currently displayed in the table
      * @param crimeBeats A list of the crime beats the user wants to graph
      */
-    public void createCrimesPerBeatOverTimeGraph(ArrayList<Record> currentRecords, ArrayList<Integer> crimeBeats) {
+    public void createCrimesPerBeatOverTimeGraph(List<Record> currentRecords, List<Integer> crimeBeats) {
         ArrayList<Record> filteredRecords = new ArrayList<>();
         for (Record record : currentRecords) {
             if (crimeBeats.contains(record.getBeat())) {
@@ -104,7 +105,7 @@ public class GraphTabController {
      * @param currentRecords A list of the records currently displayed in the table
      * @param crimeWards A list of the crime wards the user wants to graph
      */
-    public void createCrimesPerWardOverTimeGraph(ArrayList<Record> currentRecords, ArrayList<Integer> crimeWards) {
+    public void createCrimesPerWardOverTimeGraph(List<Record> currentRecords, List<Integer> crimeWards) {
         ArrayList<Record> filteredRecords = new ArrayList<>();
         for (Record record : currentRecords) {
             if (crimeWards.contains(record.getWard())) {
@@ -135,7 +136,7 @@ public class GraphTabController {
      * the title and axis labels, removes the legend, clears the old data and displays the new data
      * @param currentRecords A list of the records currently displayed in the table
      */
-    public void createCrimesOverTimeGraph(ArrayList<Record> currentRecords) {
+    public void createCrimesOverTimeGraph(List<Record> currentRecords) {
         ArrayList<Object> returnedInfo = graphCreator.createCrimesOverTimeGraph(currentRecords);
 
         XYChart.Series series = (XYChart.Series) returnedInfo.get(1);

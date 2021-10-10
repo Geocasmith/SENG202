@@ -80,10 +80,10 @@ public class DataAnalyserTest {
     void getTypeFrequencyTest() throws SQLException {
         Database db = new Database();
         DataAnalyser dataAnalyser = new DataAnalyser(db.getAll());
-        ArrayList<TypeFrequencyPair> res;
-        ArrayList<Object> testColumn = new ArrayList<>(Arrays.asList("WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION", "NARCOTICS",
+        List<TypeFrequencyPair> res;
+        List<Object> testColumn = new ArrayList<>(Arrays.asList("WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION", "NARCOTICS",
                 "CRIMINAL SEXUAL ASSAULT", "PUBLIC INDECENCY", "NARCOTICS", "NARCOTICS", "NARCOTICS"));
-        res= dataAnalyser.getTypeFrequencyDescending(testColumn);
+        res = dataAnalyser.getTypeFrequencyDescending(testColumn);
         assertEquals(3, res.get(0).getFrequency());
 
     }
@@ -92,10 +92,10 @@ public class DataAnalyserTest {
     void getTypeFrequencyTest2() throws SQLException {
         Database db = new Database();
         DataAnalyser dataAnalyser = new DataAnalyser(db.getAll());
-        ArrayList<TypeFrequencyPair> res;
-        ArrayList<Object> testColumn = new ArrayList<>(Arrays.asList("WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION",
+        List<TypeFrequencyPair> res;
+        List<Object> testColumn = new ArrayList<>(Arrays.asList("WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION",
                 "WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION"));
-        res= dataAnalyser.getTypeFrequencyDescending(testColumn);
+        res = dataAnalyser.getTypeFrequencyDescending(testColumn);
         assertEquals(9, res.get(0).getFrequency());
 
     }
@@ -104,9 +104,9 @@ public class DataAnalyserTest {
     void getTypeFrequencyTest3() throws SQLException {
         Database db = new Database();
         DataAnalyser dataAnalyser = new DataAnalyser(db.getAll());
-        ArrayList<TypeFrequencyPair> res;
-        ArrayList<Object> testColumn = new ArrayList<>(List.of("Theft"));
-        res= dataAnalyser.getTypeFrequencyDescending(testColumn);
+        List<TypeFrequencyPair> res;
+        List<Object> testColumn = new ArrayList<>(List.of("Theft"));
+        res = dataAnalyser.getTypeFrequencyDescending(testColumn);
 
         assertEquals(1, res.get(0).getFrequency());
     }

@@ -9,7 +9,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -58,10 +58,10 @@ public class MapTabController {
     /**
      * Plots each of the records on the map, and gives them an infoWindow with their case number, date, and their
      * primary, secondary and location descriptions
-     * @param records An ArrayList of crime records to be plotted
+     * @param records A List of crime records to be plotted
      * @param displayed A boolean, true if the markers should be displayed, false if they shouldn't
      */
-    public void plotMarkers(ArrayList<Record> records, boolean displayed) {
+    public void plotMarkers(List<Record> records, boolean displayed) {
         String newLocationMarker;
         JsonArray recordArray;
         boolean infoWindow = true;
@@ -75,9 +75,9 @@ public class MapTabController {
 
     /**
      * Takes a list of records and creates markers for them that are hidden, then turns on the heatmap
-     * @param records An ArrayList of crime records to be displayed on the heatmap
+     * @param records A List of crime records to be displayed on the heatmap
      */
-    public void plotHeatmap(ArrayList<Record> records) {
+    public void plotHeatmap(List<Record> records) {
         plotMarkers(records, false);
         enableHeatmap();
     }
@@ -100,9 +100,9 @@ public class MapTabController {
     /**
      * Clears existing data on the map, then plots the given crime records on a heatmap or with markers, depending
      * on which radio button is selected
-     * @param records An ArrayList of crime records to be plotted
+     * @param records A List of crime records to be plotted
      */
-    public void updateMarkers(ArrayList<Record> records) {
+    public void updateMarkers(List<Record> records) {
         clearMap();
 
         if (markersRadioButton.isSelected()) {

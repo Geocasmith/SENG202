@@ -4,12 +4,12 @@ import backend.TypeFrequencyPair;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.scene.chart.PieChart;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents CrimesPieChart object
@@ -25,7 +25,7 @@ public class CrimesPieChart {
      * @param titleLabel
      * @param pairData
      */
-    public void drawChart(String pieChartTitle, String titleLabel, ArrayList<TypeFrequencyPair> pairData) {
+    public void drawChart(String pieChartTitle, String titleLabel, List<TypeFrequencyPair> pairData) {
         //Preparing ObservableList object
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         for (TypeFrequencyPair data : pairData) {

@@ -150,7 +150,7 @@ public class Database {
      * @param inputs an Arraylist of Lists of Strings that is passed into it from the CSV Reader
      * @throws SQLException
      */
-    public void insertRows(ArrayList<List<String>> inputs) throws SQLException, ParseException {
+    public void insertRows(List<List<String>> inputs) throws SQLException, ParseException {
 
         //Stops from executing SQL if the input list is empty
         if(inputs==null){
@@ -234,7 +234,7 @@ public class Database {
      * @param inputs an Arraylist of Lists of Strings that is passed into it from the CSV Reader
      * @throws SQLException
      */
-    public void replaceRows(ArrayList<List<String>> inputs) throws SQLException, ParseException {
+    public void replaceRows(List<List<String>> inputs) throws SQLException, ParseException {
 
         //Creates the statement to be run
         connection.setAutoCommit(false);
@@ -377,7 +377,7 @@ public class Database {
      * @throws SQLException
      */
 
-    public static ArrayList<Object> extractCol(String columnName) throws SQLException {
+    public static List<Object> extractCol(String columnName) throws SQLException {
         connection.setAutoCommit(false);
         PreparedStatement s1 = connection.prepareStatement("select " + columnName + " from CRIMES");
         ResultSet rs = s1.executeQuery();
