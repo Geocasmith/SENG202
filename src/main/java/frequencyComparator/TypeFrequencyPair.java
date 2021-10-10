@@ -13,6 +13,11 @@ public class TypeFrequencyPair {
     public TypeFrequencyPair() {
     }
 
+    /**
+     * Constructor method to create a TypeFrequencyPair with given type and frequency
+     * @param type The required type of the object
+     * @param frequency The required frequency of the object
+     */
     public TypeFrequencyPair(String type, int frequency) {
         this.type = type;
         this.frequency = frequency;
@@ -21,6 +26,7 @@ public class TypeFrequencyPair {
     public long getFrequency() {
         return frequency;
     }
+
     public String getType() {
         return type;
     }

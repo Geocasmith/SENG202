@@ -11,6 +11,13 @@ import javafx.scene.web.WebView;
 
 import java.util.Objects;
 
+/**
+ * This class is for displaying the differences between two crimes, it's called from the TableTabController and displays
+ * a popup containing two records' case numbers, followed by the difference in location and time between them, then by
+ * a map with both records displayed as markers with a line between them. The markers have info windows that contain
+ * more information about the crimes
+ * @author Bede Skinner-Vennell
+ */
 public class AnalysisPopupController {
 
     @FXML

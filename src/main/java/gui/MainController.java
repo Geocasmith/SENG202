@@ -115,7 +115,7 @@ public class MainController {
     /**
      * Gets and sets primary stage from the main gui
      * This is to be used in controlling cursor and potentially other properties of the main scene
-     * @param primaryStage
+     * @param primaryStage the stage to show the window on
      */
 
     public void setMyPrimaryStage(Stage primaryStage) {
