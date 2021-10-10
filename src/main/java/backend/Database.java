@@ -40,7 +40,13 @@ public class Database {
     public void setDatabasePath(String databasePath) {
         this.databasePath = databasePath;
     }
+
+    /**
+     * Gets the path to the current database
+     * @return String object containing the path to the current database
+     */
     public String getDatabasePath() { return this.databasePath; }
+
     /**
      * Gets connection to the database and then calls the create table function. Used when creating a database object
      * and when the database path is changed

@@ -870,6 +870,7 @@ public class MainController {
         frame.setLocationRelativeTo(null);
         return frame;
     }
+
     /**
      * Opens the file explorer for the user to select a save location and then passes
      * this to the database path method which will change the static variable path in database

@@ -159,8 +159,8 @@ public class EditRecordWindowController {
             yCoordinateField.setText(String.valueOf(record.getYcoord()));
             latitudeField.setText(String.valueOf(record.getLatitude()));
             longitudeField.setText(String.valueOf(record.getLongitude()));
-            arrestCheckBox.setSelected(record.getArrest() == Record.TRUE);
-            domesticCheckBox.setSelected(record.getDomestic() == Record.TRUE);
+            arrestCheckBox.setSelected(Objects.equals(record.getArrest(), Record.TRUE));
+            domesticCheckBox.setSelected(Objects.equals(record.getDomestic(), Record.TRUE));
 
             caseNumberField.setDisable(true); // disables editing, focus, and click for casenum
 

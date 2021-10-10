@@ -88,7 +88,6 @@ public class BrowserTabController {
         String query = webBrowserSearchField.getText();
         if (!query.equals("")) {
             String webpage = "http://google.com/search?q=";
-            query.replace(" ", "+");
 
             if (govWebsitesRadioButton.isSelected()) {
                 query += "+site:.gov";

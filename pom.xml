@@ -85,6 +85,22 @@
       <version>11.1.0</version>
     </dependency>
 
+
+    <dependency>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-java</artifactId>
+      <version>6.6.1</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-junit-platform-engine</artifactId>
+      <version>6.6.1</version>
+      <scope>test</scope>
+    </dependency>
+
+
   </dependencies>
 
   <!-- Java version setup -->
@@ -105,6 +121,15 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.0.0-M5</version>
+        <configuration>
+          <properties>
+            <configurationParameters>
+              cucumber.snippet-type=camelcase
+              cucumber.publish.quiet=true
+              cucumber.plugin=pretty, html:target/cucumber.html
+            </configurationParameters>
+          </properties>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.openjfx</groupId>
