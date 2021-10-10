@@ -62,7 +62,7 @@ public class DataManipulator {
 
     /**
      * Takes column number and extracts corresponding column values from currentData object
-     * @param col int usually an interger value representing the column number
+     * @param col int an integer value representing the column number
      * @return extractedCol Array list of objects taken out from a column in the database
      */
     public static List<Object> extractCol(List<Record> currentData, int col)

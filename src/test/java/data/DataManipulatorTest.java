@@ -3,6 +3,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -21,8 +22,7 @@ public class DataManipulatorTest {
     ArrayList<Object> dataCol2 = new ArrayList<>();;
 
     @Test
-    public void addLineTest()
-    {
+    public void addLineTest() {
         data = new ArrayList<>(Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "N", "N", "334", "7", "6", "", "", "", ""));
         testRecord1 = new Record(data);
         recordsList.add(testRecord1);
@@ -32,7 +32,6 @@ public class DataManipulatorTest {
         testRecord1 = new Record(data);
         assertTrue(dataManipulatorInstance.addLine(2,testRecord1));
     }
-
 
     @Test
     public void getDataToGraphTest()
@@ -60,11 +59,35 @@ public class DataManipulatorTest {
         dataManipulatorInstance = new DataManipulator(recordsList);
         assertFalse(dataManipulatorInstance.hasUniqueCaseNumber(1, testRecord1));
         assertTrue(dataManipulatorInstance.hasUniqueCaseNumber(0, testRecord1));
-
-
     }
 
+    @Test
+    void extractColTest() {
+        data = new ArrayList<>(Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "N", "N", "334", "7", "6", "", "", "", ""));
+        testRecord1 = new Record(data);
+        recordsList.add(testRecord1);
+        data = new ArrayList<>(Arrays.asList("JD442622","11/26/2020 04:45:00 PM","020XX S MICHIGAN AVE","0620","BURGLARY","UNLAWFUL ENTRY","APARTMENT","N","N","132","3","05","1177528","1890620","41.855190551","-87.623871195"));
+        testRecord1 = new Record(data);
+        recordsList.add(testRecord1);
 
+        assertEquals(Arrays.asList("JE163990", "JD442622"), DataManipulator.extractCol(recordsList, 0));
+        assertEquals(Arrays.asList("11/23/2020 03:05:00 PM", "11/26/2020 04:45:00 PM"), DataManipulator.extractCol(recordsList, 1));
+        assertEquals(Arrays.asList("073XX S SOUTH SHORE DR", "020XX S MICHIGAN AVE"), DataManipulator.extractCol(recordsList, 2));
+        assertEquals(Arrays.asList("820", "0620"), DataManipulator.extractCol(recordsList, 3));
+        assertEquals(Arrays.asList("THEFT", "BURGLARY"), DataManipulator.extractCol(recordsList, 4));
+        assertEquals(Arrays.asList("$500 AND UNDER", "UNLAWFUL ENTRY"), DataManipulator.extractCol(recordsList, 5));
+        assertEquals(Arrays.asList("APARTMENT", "APARTMENT"), DataManipulator.extractCol(recordsList, 6));
+        assertEquals(Arrays.asList("N", "N"), DataManipulator.extractCol(recordsList, 7));
+        assertEquals(Arrays.asList("N", "N"), DataManipulator.extractCol(recordsList, 8));
+        assertEquals(Arrays.asList(334, 132), DataManipulator.extractCol(recordsList, 9));
+        assertEquals(Arrays.asList(7, 3), DataManipulator.extractCol(recordsList, 10));
+        assertEquals(Arrays.asList("6", "05"), DataManipulator.extractCol(recordsList, 11));
+        assertEquals(Arrays.asList(-1, 1177528), DataManipulator.extractCol(recordsList, 12));
+        assertEquals(Arrays.asList(-1, 1890620), DataManipulator.extractCol(recordsList, 13));
+        assertEquals(Arrays.asList(null, 41.855190551), DataManipulator.extractCol(recordsList, 14));
+        assertEquals(Arrays.asList(null, -87.623871195), DataManipulator.extractCol(recordsList, 15));
+        assertEquals(Arrays.asList(null, "(41.855190551, -87.623871195)"), DataManipulator.extractCol(recordsList, 16));
+    }
 
     @Test
     void addLine() {
