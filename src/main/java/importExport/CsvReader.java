@@ -30,13 +30,14 @@ public class CsvReader {
         try {
             ArrayList<List<String>> csvValues = new ArrayList<>();
             FileReader fr = new FileReader(path);
-            CSVReader csvR = new CSVReader(fr);
+            try (CSVReader csvR = new CSVReader(fr)) {
 
-            String[] nextRecord;
-            csvR.readNext();
-            while ((nextRecord = csvR.readNext()) != null) {
-                List<String> next = Arrays.asList(nextRecord);
-                csvValues.add(next);
+                String[] nextRecord;
+                csvR.readNext();
+                while ((nextRecord = csvR.readNext()) != null) {
+                    List<String> next = Arrays.asList(nextRecord);
+                    csvValues.add(next);
+                }
             }
             return csvValues;
         } catch (CsvException | IOException e) {

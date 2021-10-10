@@ -77,14 +77,12 @@ public class PopupWindow {
         }
 
         Button button1 = new Button(button1Text);
-        //HBox.setMargin(button1, new Insets(15));
         button1.setOnAction(e -> {
             popupWindow.close();
             returnValue[0] = true;
         });
 
         Button button2 = new Button(button2Text);
-        //HBox.setMargin(button2, new Insets(15));
         button2.setOnAction(e -> {
             popupWindow.close();
             returnValue[0] = false;

@@ -21,8 +21,8 @@ import java.util.Objects;
  */
 
 public class DataManipulator {
-    private ArrayList<Record> currentData;
-    public DataManipulator(ArrayList<Record> currentData) {
+    private final List<Record> currentData;
+    public DataManipulator(List<Record> currentData) {
     this.currentData = currentData;
 }
 
@@ -35,10 +35,8 @@ public class DataManipulator {
     public boolean hasUniqueCaseNumber(int line, Record data)
     {
         for (int i = 0; i < currentData.size(); i++) {
-            if (Objects.equals(currentData.get(i).getCaseNumber(), data.getCaseNumber())) {
-                if (i != line) {
-                    return false;
-                }
+            if (Objects.equals(currentData.get(i).getCaseNumber(), data.getCaseNumber()) && i != line) {
+                return false;
             }
         }
         return true;
@@ -50,7 +48,7 @@ public class DataManipulator {
      * @param data usually list of record objects
      * @return true if data is edited or false otherwise
      */
-    public boolean editLine(int line, Record data) throws IOException {
+    public boolean editLine(int line, Record data) {
         try {
             if (hasUniqueCaseNumber(line, data)) {
                 currentData.set(line, data);
@@ -190,9 +188,9 @@ public class DataManipulator {
      * Gets all record objects from the database
      * @return list of Record objects extracted from the database
      */
-    public static ArrayList<Record> getAllRecords() throws SQLException {
+    public static List<Record> getAllRecords() throws SQLException {
         CrimeDatabase db = new CrimeDatabase();
-        ArrayList<Record> currentRecords = db.getAll();
+        List<Record> currentRecords = db.getAll();
         db.disconnectDatabase();
         return currentRecords;
     }

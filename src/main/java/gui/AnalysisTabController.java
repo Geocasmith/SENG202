@@ -44,11 +44,11 @@ public class AnalysisTabController {
     @FXML private TableColumn<TypeFrequencyPair, String> bottomBlockCol;
     @FXML private TableColumn<TypeFrequencyPair, String> bottomBlockFrequencyCol;
     private int displayLimit = 10;
-    private static final int crimeTypeColumn = 4;
-    private static final int blockColumn = 2;
+    private static final int CRIMETYPECOLUMN = 4;
+    private static final int BLOCKCOLUMN = 2;
     private List<Record> displayedRecords;
     private final DataAnalyser dataAnalyser = new DataAnalyser();
-    private static final double tableHeightMultiplier = 1.03; // Makes the table slightly taller than 10 rows to get rid of the scroll bar
+    private static final double TABLEHEIGHTMULTIPLIER = 1.03; // Makes the table slightly taller than 10 rows to get rid of the scroll bar
     private int mapOpenedCounter = 0;
     private List<TypeFrequencyPair> crimeFrequencyPair = new ArrayList<>();
     private List<TypeFrequencyPair> blocksFrequencyPair = new ArrayList<>();
@@ -106,7 +106,7 @@ public class AnalysisTabController {
      */
     private void updateTableHeight(TableView<TypeFrequencyPair> table) {
         table.setFixedCellSize(25);
-        table.prefHeightProperty().bind(table.fixedCellSizeProperty().multiply(displayLimit + 1).multiply(tableHeightMultiplier));
+        table.prefHeightProperty().bind(table.fixedCellSizeProperty().multiply(displayLimit + 1).multiply(TABLEHEIGHTMULTIPLIER));
         table.minHeightProperty().bind(table.prefHeightProperty());
         table.maxHeightProperty().bind(table.prefHeightProperty());
     }
@@ -117,8 +117,8 @@ public class AnalysisTabController {
      */
     public void updateAnalysis(List<Record> currentRecord) {
 
-        crimeFrequencyPair = dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, crimeTypeColumn));
-        blocksFrequencyPair = dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, blockColumn));
+        crimeFrequencyPair = dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, CRIMETYPECOLUMN));
+        blocksFrequencyPair = dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, BLOCKCOLUMN));
 
         populateTopCrimesTable();
         populateLowCrimesTable();
@@ -155,8 +155,8 @@ public class AnalysisTabController {
         crimeFrequencyPair.sort(new FrequencyComparatorAscending());
 
         // Table column setup
-        bottomCrimeCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("type"));
-        bottomCrimeFrequencyCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("frequency"));
+        bottomCrimeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        bottomCrimeFrequencyCol.setCellValueFactory(new PropertyValueFactory<>("frequency"));
         //table set up
         bottomCrimeTable.getItems().clear();
         displayLimit = Math.min(crimeFrequencyPair.size(), 10);
@@ -198,8 +198,8 @@ public class AnalysisTabController {
 
         blocksFrequencyPair.sort(new FrequencyComparatorAscending());
         // Set up table columns
-        bottomBlockCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("type"));
-        bottomBlockFrequencyCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("frequency"));
+        bottomBlockCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        bottomBlockFrequencyCol.setCellValueFactory(new PropertyValueFactory<>("frequency"));
 
         // Set up table
         bottomBlockTable.getItems().clear();
@@ -323,10 +323,9 @@ public class AnalysisTabController {
 
         CrimeDetailsController crimeDetailsController = loader.getController();
 
-        if (records.size() != 0) {
+        if (!records.isEmpty()) {
             crimeDetailsController.updateBlockDetails(records);
             popupCrimeDetails.setTitle("Insight - Crime Details in " + records.get(0).getBlock());
-            CrimesPieChart pieChart = new CrimesPieChart();
             popupCrimeDetails.showAndWait();
 
         }

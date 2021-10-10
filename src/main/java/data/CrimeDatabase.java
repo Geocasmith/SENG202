@@ -18,8 +18,8 @@ import static java.lang.String.valueOf;
 public class CrimeDatabase {
     private static Connection connection;
     private static String databasePath = "./Files/crimeRecords.db"; //default path
-    private DataAnalyser dataAnalyser = new DataAnalyser();
-    private static List<String> columns = Arrays.asList("IUCR TEXT", "PRIMARYDESCRIPTION TEXT", "SECONDARYDESCRIPTION TEXT",
+    private final DataAnalyser dataAnalyser = new DataAnalyser();
+    private static final List<String> COLUMNS = Arrays.asList("IUCR TEXT", "PRIMARYDESCRIPTION TEXT", "SECONDARYDESCRIPTION TEXT",
             "LOCATIONDESCRIPTION TEXT", "ARREST TEXT", "DOMESTIC TEXT", "BEAT INTEGER", "WARD INTEGER", "FBICD TEXT",
             "XCOORDINATE INTEGER", "YCOORDINATE INTEGER", "LATITUDE REAL", "LONGITUDE REAL", "UNIXTIME REAL");
 
@@ -38,14 +38,14 @@ public class CrimeDatabase {
      * @param databasePath a path to a database file
      */
     public void setDatabasePath(String databasePath) {
-        this.databasePath = databasePath;
+        CrimeDatabase.databasePath = databasePath;
     }
 
     /**
      * Gets the path to the current database
      * @return String object containing the path to the current database
      */
-    public String getDatabasePath() { return this.databasePath; }
+    public String getDatabasePath() { return databasePath; }
 
     /**
      * Gets connection to the database and then calls the create table function. Used when creating a database object
@@ -57,9 +57,7 @@ public class CrimeDatabase {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:"+ databasePath);
             createTable();
-        } catch (Exception e) {
-
-        }
+        } catch (Exception ignored) {}
     }
 
     /**
@@ -80,24 +78,7 @@ public class CrimeDatabase {
         state.execute("DELETE FROM "+tableName);
         createTable();
     }
-    /**
-     * Drops the table CRIMES
-     * @param tableName
-     * @throws SQLException
-     */
-    public void dropTable(String tableName) throws SQLException {
-        Statement dropTable = connection.createStatement();
-        dropTable.execute("DROP TABLE CRIMES");
-    }
-    /**
-     * Executes a custom SQL input query
-     * @param SQLQuery
-     * @throws SQLException
-     */
-    public void executeQuery(String SQLQuery) throws SQLException {
-        Statement customSQL = connection.createStatement();
-        customSQL.execute(SQLQuery);
-    }
+
     /**
      * Creates the main table in the database which stores the records and adds the columns listed in the columns field to it
      * @throws SQLException
@@ -111,10 +92,10 @@ public class CrimeDatabase {
                 "ADDRESS TEXT)");
 
         //Goes through the columns field and adds the columns to the list to the database
-        for (int i = 0; i < columns.size(); i++) {
+        for (String column : COLUMNS) {
             Statement createColumns = connection.createStatement();
             createColumns.execute("ALTER TABLE CRIMES\n" +
-                    "ADD COLUMN " + columns.get(i) + ";");
+                    "ADD COLUMN " + column + ";");
         }
     }
 
@@ -140,14 +121,11 @@ public class CrimeDatabase {
 
         //Goes through column names in the resultset and appends them to the string actualColumnFormat
         while (rs.next()) {
-            actualColumnFormat+=rs.getString("name");
+            actualColumnFormat += rs.getString("name");
         }
 
         //Matches the expected and actual column names to see if table valid
-        if(validColumnFormat.equals(actualColumnFormat)){
-            return true;
-        }
-        return false;
+        return validColumnFormat.equals(actualColumnFormat);
     }
 
     /**
@@ -325,14 +303,11 @@ public class CrimeDatabase {
      */
     public void manualAdd(Record rec) throws SQLException, ParseException {
 
-        //Converts record to list
-        List<String> recList = rec.toList();
-
-        //Adds it to an arraylist so it can be passed to insertRows(ArrayList<List<String>>) method
+        //Adds record to an arraylist in string format, so it can be passed to insertRows method
         ArrayList<List<String>> input = new ArrayList<>();
         input.add(rec.toList());
 
-        //Calls insertRows method on the arraylist to add the row to the database
+        //Adds the row to the database
         insertRows(input);
     }
 
@@ -369,7 +344,7 @@ public class CrimeDatabase {
      */
     public void manualDelete(String caseNum) throws SQLException {
         connection.setAutoCommit(false);
-        PreparedStatement s1 = connection.prepareStatement("delete from CRIMES where ID = " + " \'" + caseNum + "\'");
+        PreparedStatement s1 = connection.prepareStatement("delete from CRIMES where ID = " + " '" + caseNum + "'");
         s1.executeUpdate();
         connection.commit();
     }
@@ -399,9 +374,9 @@ public class CrimeDatabase {
      * @return an Arraylist of Record Objects
      * @throws SQLException
      */
-    public ArrayList<Record> searchDB(String column, String searchValue) throws SQLException {
+    public List<Record> searchDB(String column, String searchValue) throws SQLException {
         connection.setAutoCommit(false);
-        PreparedStatement s1 = connection.prepareStatement("select * from CRIMES where " + column + " = " + " \'" + searchValue + "\'");
+        PreparedStatement s1 = connection.prepareStatement("select * from CRIMES where " + column + " = " + " '" + searchValue + "'");
         ResultSet rs = s1.executeQuery();
         return getRecord(rs);
     }
@@ -414,9 +389,9 @@ public class CrimeDatabase {
      * @return an Arraylist of Record Objects
      * @throws SQLException
      */
-    public ArrayList<Record> searchDB(String column, int searchValue) throws SQLException {
+    public List<Record> searchDB(String column, int searchValue) throws SQLException {
         connection.setAutoCommit(false);
-        PreparedStatement s1 = connection.prepareStatement("select * from CRIMES where " + column + " = " + " \'" + searchValue + "\'");
+        PreparedStatement s1 = connection.prepareStatement("select * from CRIMES where " + column + " = " + " '" + searchValue + "'");
         ResultSet rs = s1.executeQuery();
         return getRecord(rs);
     }
@@ -429,9 +404,9 @@ public class CrimeDatabase {
      * @return an Arraylist of Record Objects
      * @throws SQLException
      */
-    public ArrayList<Record> searchDB(String column, double searchValue) throws SQLException {
+    public List<Record> searchDB(String column, double searchValue) throws SQLException {
         connection.setAutoCommit(false);
-        PreparedStatement s1 = connection.prepareStatement("select * from CRIMES where " + column + " = " + " \'" + searchValue + "\'");
+        PreparedStatement s1 = connection.prepareStatement("select * from CRIMES where " + column + " = " + " '" + searchValue + "'");
         ResultSet rs = s1.executeQuery();
         return getRecord(rs);
     }
@@ -442,7 +417,7 @@ public class CrimeDatabase {
      * @return arraylist of all the records in the database
      * @throws SQLException
      */
-    public static ArrayList<Record> getAll() throws SQLException {
+    public static List<Record> getAll() throws SQLException {
         connection.setAutoCommit(false);
         PreparedStatement s1 = connection.prepareStatement("SELECT * FROM CRIMES;");
         ResultSet rs = s1.executeQuery();
@@ -458,7 +433,7 @@ public class CrimeDatabase {
      * @throws SQLException
      * @throws ParseException
      */
-    public ArrayList<Record> getDateRange(String startDate, String endDate) throws SQLException, ParseException {
+    public List<Record> getDateRange(String startDate, String endDate) throws SQLException, ParseException {
         long startUnix = unixTimeConvert(startDate);
         long endUnix = unixTimeConvert(endDate);
         connection.setAutoCommit(false);
@@ -474,8 +449,8 @@ public class CrimeDatabase {
      * @return Arraylist of Records
      * @throws SQLException
      */
-    public static ArrayList<Record> getRecord(ResultSet rs) throws SQLException {
-        ArrayList<Record> records = new ArrayList<Record>();
+    public static List<Record> getRecord(ResultSet rs) throws SQLException {
+        ArrayList<Record> records = new ArrayList<>();
 
         while (rs.next()) {
 
@@ -523,7 +498,7 @@ public class CrimeDatabase {
      * @return an arraylist of records
      * @throws SQLException
      */
-    public ArrayList<Record> getFilter(String caseNumber, Date startDate, Date endDate,ArrayList<String> crimeTypes,ArrayList<String> locDes,String ward,String beat,String lat,String lon,int radius,String arrest,String domestic) throws SQLException {
+    public List<Record> getFilter(String caseNumber, Date startDate, Date endDate,List<String> crimeTypes,List<String> locDes,String ward,String beat,String lat,String lon,int radius,String arrest,String domestic) throws SQLException {
         connection.setAutoCommit(false);
         String SQLString = "SELECT * FROM CRIMES where true ";
 
@@ -532,9 +507,9 @@ public class CrimeDatabase {
             for (int i = 0; i < crimeTypes.size(); i++){
                 //Does not add the OR for the first one. Adds the IUCR values from the filter to the SQL statement
                 if(i==0){
-                    SQLString+="AND (PRIMARYDESCRIPTION='"+crimeTypes.get(i)+"' ";
+                    SQLString +="AND (PRIMARYDESCRIPTION='"+crimeTypes.get(i)+"' ";
                 } else{
-                    SQLString+="OR PRIMARYDESCRIPTION='"+crimeTypes.get(i)+"' ";
+                    SQLString +="OR PRIMARYDESCRIPTION='"+crimeTypes.get(i)+"' ";
                 }
 
             }
@@ -547,9 +522,9 @@ public class CrimeDatabase {
             for (int i = 0; i < locDes.size(); i++){
                 //Does not add the OR for the first one. Adds the LOCATIONDESCRIPTION values from the filter to the SQL statement
                 if(i==0){
-                    SQLString+="AND (LOCATIONDESCRIPTION='"+locDes.get(i)+"' ";
+                    SQLString +="AND (LOCATIONDESCRIPTION='"+locDes.get(i)+"' ";
                 }else{
-                    SQLString+="OR LOCATIONDESCRIPTION='"+locDes.get(i)+"' ";
+                    SQLString +="OR LOCATIONDESCRIPTION='"+locDes.get(i)+"' ";
                 }
             }
             //Appends parenthesis to group the SQL WHERE statements
@@ -583,8 +558,8 @@ public class CrimeDatabase {
         }
         PreparedStatement s1 = connection.prepareStatement(SQLString);
         ResultSet rs = s1.executeQuery();
-        ArrayList<Record> recordsFromDBQuery =  getRecord(rs);
-        ArrayList<Record> resultRecords = new ArrayList<>();
+        List<Record> recordsFromDBQuery =  getRecord(rs);
+        List<Record> resultRecords = new ArrayList<>();
 
         //Adds records if they are within the radius of the location passed in from the filter
         if (lat != null&&lon != null && radius != 0) {
@@ -644,7 +619,7 @@ public class CrimeDatabase {
      * @return a unix time
      * @throws ParseException
      */
-    public static long unixTimeConvert(Date d) throws ParseException {
+    public static long unixTimeConvert(Date d) {
         return d.getTime();
     }
 

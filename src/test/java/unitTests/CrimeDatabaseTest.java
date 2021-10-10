@@ -36,7 +36,7 @@ class CrimeDatabaseTest {
         d.connectDatabase();
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
-        ArrayList<Record>str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,null,null,null,null,0,null,null);
+        List<Record> str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,null,null,null,null,0,null,null);
         d.disconnectDatabase();
     }
 
@@ -46,7 +46,7 @@ class CrimeDatabaseTest {
         d.connectDatabase();
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
-        ArrayList<Record>str = d.getFilter(null, new SimpleDateFormat("MM/dd/yyyy h:mm:ss a").parse("07/05/2020 12:00:00 PM"),new SimpleDateFormat("MM/dd/yyyy h:mm:ss a").parse("07/18/2020 08:00:00 AM"),crimeTypes,locationDescriptions,null,null,null,null,0,null,null);
+        List<Record> str = d.getFilter(null, new SimpleDateFormat("MM/dd/yyyy h:mm:ss a").parse("07/05/2020 12:00:00 PM"),new SimpleDateFormat("MM/dd/yyyy h:mm:ss a").parse("07/18/2020 08:00:00 AM"),crimeTypes,locationDescriptions,null,null,null,null,0,null,null);
         d.disconnectDatabase();
     }
     @Test
@@ -55,7 +55,7 @@ class CrimeDatabaseTest {
         d.connectDatabase();
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
-        ArrayList<Record> str = d.getFilter(null, new SimpleDateFormat("MM/dd/yyyy h:mm:ss a").parse("07/05/2020 12:00:00 PM"),null,crimeTypes,locationDescriptions,null,null,null,null,0,null,null);
+        List<Record> str = d.getFilter(null, new SimpleDateFormat("MM/dd/yyyy h:mm:ss a").parse("07/05/2020 12:00:00 PM"),null,crimeTypes,locationDescriptions,null,null,null,null,0,null,null);
         d.disconnectDatabase();
     }
     @Test
@@ -64,14 +64,13 @@ class CrimeDatabaseTest {
         d.connectDatabase();
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
-        ArrayList<Record>str = d.getFilter(null, null,new SimpleDateFormat("MM/dd/yyyy h:mm:ss a").parse("07/17/2020 11:40:00 AM"),crimeTypes,locationDescriptions,null,null,null,null,0,null,null);
+        List<Record> str = d.getFilter(null, null,new SimpleDateFormat("MM/dd/yyyy h:mm:ss a").parse("07/17/2020 11:40:00 AM"),crimeTypes,locationDescriptions,null,null,null,null,0,null,null);
         d.disconnectDatabase();
     }
 
     /**
      * Tests one crime type being passed in
      * @throws SQLException
-     * @throws ParseException
      */
     @Test
     void filterCrimeType1() throws SQLException {
@@ -80,13 +79,12 @@ class CrimeDatabaseTest {
         ArrayList<String> crimeTypes = new ArrayList<String>();
         crimeTypes.add("THEFT");
         ArrayList<String> locationDescriptions = new ArrayList<String>();
-        ArrayList<Record>str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,null,null,null,null,0,null,null);
+        List<Record>str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,null,null,null,null,0,null,null);
         d.disconnectDatabase();
     }
     /**
      * Tests multiple crime types being passed in
      * @throws SQLException
-     * @throws ParseException
      */
     @Test
     void filterCrimeTypeMultiple() throws SQLException {
@@ -97,13 +95,12 @@ class CrimeDatabaseTest {
         crimeTypes.add("MOTOR VEHICLE THEFT");
         crimeTypes.add("CRIMINAL TRESPASS");
         ArrayList<String> locationDescriptions = new ArrayList<String>();
-        ArrayList<Record>str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,null,null,null,null,0,null,null);
+        List<Record>str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,null,null,null,null,0,null,null);
         d.disconnectDatabase();
     }
     /**
      * Tests one location description types being passed in
      * @throws SQLException
-     * @throws ParseException
      */
     @Test
     void filterLocationDescriptionMultiple() throws SQLException {
@@ -114,13 +111,12 @@ class CrimeDatabaseTest {
         locationDescriptions.add("NURSING / RETIREMENT HOME");
         locationDescriptions.add("OTHER (SPECIFY)");
         locationDescriptions.add("SCHOOL - PUBLIC BUILDING");
-        ArrayList<Record>str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,null,null,null,null,0,null,null);
+        List<Record>str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,null,null,null,null,0,null,null);
         d.disconnectDatabase();
     }
     /**
      * Tests valid ward input
      * @throws SQLException
-     * @throws ParseException
      */
     @Test
     void filterValidWard() throws SQLException {
@@ -129,13 +125,11 @@ class CrimeDatabaseTest {
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
         String ward = "25";
-        ArrayList<Record>str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,ward,null,null,null,0,null,null);
+        List<Record>str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,ward,null,null,null,0,null,null);
         d.disconnectDatabase();
     }
     /**
      * Tests invalid ward input. Throws SQLexception
-     * @throws SQLException
-     * @throws ParseException
      */
     @Test()
     void filterInvalidWard() {
@@ -145,7 +139,7 @@ class CrimeDatabaseTest {
             ArrayList<String> crimeTypes = new ArrayList<String>();
             ArrayList<String> locationDescriptions = new ArrayList<String>();
             String ward = "INVALID";
-            ArrayList<Record> str = d.getFilter(null, null, null, crimeTypes, locationDescriptions, ward, null, null, null, 0,null, null);
+            List<Record> str = d.getFilter(null, null, null, crimeTypes, locationDescriptions, ward, null, null, null, 0,null, null);
             d.disconnectDatabase();
         } catch (SQLException e){
             System.out.println(e);
@@ -154,7 +148,6 @@ class CrimeDatabaseTest {
     /**
      * Tests valid ward input
      * @throws SQLException
-     * @throws ParseException
      */
     @Test
     void filterValidBeat() throws SQLException {
@@ -163,7 +156,7 @@ class CrimeDatabaseTest {
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
         String beat = "124";
-        ArrayList<Record>str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,null,beat,null,null,0,null,null);
+        List<Record>str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,null,beat,null,null,0,null,null);
 
         for (Record r:str){
             assert beat.equals(Integer.toString(r.getBeat()));
@@ -171,9 +164,7 @@ class CrimeDatabaseTest {
         d.disconnectDatabase();
     }
     /**
-     * Tests invalid beat input. Throws SQLexception
-     * @throws SQLException
-     * @throws ParseException
+     * Tests invalid beat input.
      */
     @Test()
     void filterInvalidBeat() {
@@ -183,7 +174,7 @@ class CrimeDatabaseTest {
             ArrayList<String> crimeTypes = new ArrayList<String>();
             ArrayList<String> locationDescriptions = new ArrayList<String>();
             String beat = "INVALID";
-            ArrayList<Record> str = d.getFilter(null, null, null, crimeTypes, locationDescriptions, null, beat, null, null, 0,null, null);
+            List<Record> str = d.getFilter(null, null, null, crimeTypes, locationDescriptions, null, beat, null, null, 0,null, null);
             d.disconnectDatabase();
         } catch (SQLException e){
             System.out.println(e);
@@ -192,7 +183,6 @@ class CrimeDatabaseTest {
     /**
      * Tests valid arrest input
      * @throws SQLException
-     * @throws ParseException
      */
     @Test
     void filterArrestY() throws SQLException {
@@ -201,14 +191,13 @@ class CrimeDatabaseTest {
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
         String arrest = "Y";
-        ArrayList<Record>str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,null,null,null,null,0,arrest,null);
+        List<Record>str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,null,null,null,null,0,arrest,null);
         d.disconnectDatabase();
     }
 
     /**
      * Tests valid arrest input N
      * @throws SQLException
-     * @throws ParseException
      */
     @Test
     void filterArrestN() throws SQLException {
@@ -217,14 +206,13 @@ class CrimeDatabaseTest {
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
         String arrest = "N";
-        ArrayList<Record>str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,null,null,null,null,0,arrest,null);
+        List<Record>str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,null,null,null,null,0,arrest,null);
         d.disconnectDatabase();
     }
 
     /**
      * Tests valid domestic input Y
      * @throws SQLException
-     * @throws ParseException
      */
     @Test
     void filterDomesticY() throws SQLException {
@@ -233,14 +221,13 @@ class CrimeDatabaseTest {
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
         String domestic = "Y";
-        ArrayList<Record>str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,null,null,null,null,0,null,domestic);
+        List<Record>str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,null,null,null,null,0,null,domestic);
         d.disconnectDatabase();
     }
 
     /**
      * Tests valid domestic input N
      * @throws SQLException
-     * @throws ParseException
      */
     @Test
     void filterDomesticN() throws SQLException {
@@ -249,14 +236,13 @@ class CrimeDatabaseTest {
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
         String domestic = "N";
-        ArrayList<Record>str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,null,null,null,null,0,null,domestic);
+        List<Record>str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,null,null,null,null,0,null,domestic);
         d.disconnectDatabase();
     }
 
     /**
      * Tests radius
      * @throws SQLException
-     * @throws ParseException
      */
     @Test
     void filterRadius() throws SQLException {
@@ -264,7 +250,7 @@ class CrimeDatabaseTest {
         d.connectDatabase();
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
-        ArrayList<Record> str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,null,null,"41.7057609558105","-87.5328750610352",100,null,null);
+        List<Record> str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,null,null,"41.7057609558105","-87.5328750610352",100,null,null);
         d.disconnectDatabase();
     }
 }

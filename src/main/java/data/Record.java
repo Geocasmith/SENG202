@@ -34,17 +34,17 @@ public class Record {
     private int ycoord;
     private Double latitude;
     private Double longitude;
-    public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a", Locale.ENGLISH);
+    public static final DateTimeFormatter DATETIMEFORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a", Locale.ENGLISH);
     /**
      * List of strings that will be counted as "true" when parsing arrest and domestic fields.
      * Strings in lower case; use a case-insensitive check.
      */ // these are here to make it more forgiving for users to enter data if they are not used to Y/N
-    public static final List<String> trueStrings = Arrays.asList("y", "true", "yes", "1");
+    protected static final List<String> TRUESTRINGS = Arrays.asList("y", "true", "yes", "1");
     /**
      * List of strings that will be counted as "false" when parsing arrest and domestic fields.
      * Strings in lower case; use a case-insensitive check.
      */
-    public static final List<String> falseStrings = Arrays.asList("n", "false", "no", "0");
+    protected static final List<String> FALSESTRINGS = Arrays.asList("n", "false", "no", "0");
     public static final String TRUE = "Y"; // for output display of arrest and domestic fields
     public static final String FALSE = "N";
 
@@ -55,7 +55,7 @@ public class Record {
      */
     public Record(List<String> data) {
         caseNumber = data.get(0);
-        date = LocalDateTime.parse(data.get(1).toUpperCase(), formatter);
+        date = LocalDateTime.parse(data.get(1).toUpperCase(), DATETIMEFORMATTER);
         block = data.get(2);
         iucr = data.get(3);
         primaryDescription = data.get(4);
@@ -98,7 +98,7 @@ public class Record {
      * @return the date in string form
      */
     public String getDate() {
-        return date.format(formatter);
+        return date.format(DATETIMEFORMATTER);
     }
 
     public LocalDateTime getDateAsObject() {
@@ -253,10 +253,10 @@ public class Record {
      * @return corresponding boolean value
      */
     private static String readBooleanString(String input) {
-        if (Record.trueStrings.contains(input.toLowerCase())) {
+        if (Record.TRUESTRINGS.contains(input.toLowerCase())) {
             return Record.TRUE;
         }
-        else if (Record.falseStrings.contains(input.toLowerCase())) {
+        else if (Record.FALSESTRINGS.contains(input.toLowerCase())) {
             return Record.FALSE;
         }
         else {
@@ -270,7 +270,7 @@ public class Record {
      */
     public String toString() {
         return String.format("%s, %s, %s, %s, %s, %s, %s, %s, %s, %d, %d, %s, %d, %s, %s, %s",
-                this.caseNumber, this.date.format(formatter), this.block, this.iucr, this.primaryDescription,
+                this.caseNumber, this.date.format(DATETIMEFORMATTER), this.block, this.iucr, this.primaryDescription,
                 this.secondaryDescription, this.locationDescription, this.arrest,
                 this.domestic, this.beat, this.ward, this.fbicd, this.xcoord, this.ycoord,
                 this.latitude, this.longitude);
@@ -291,7 +291,7 @@ public class Record {
                             "Secondary Description: %s, Location Description: %s, Arrest: %s, Domestic: %s, " +
                             "Beat: %d, Ward: %d, FBICD: %s, X Coordinate: %d, Y Coordinate: %s, Latitude: %s, " +
                             "Longitude: %s",
-                    this.caseNumber, this.date.format(formatter), this.block, this.iucr, this.primaryDescription,
+                    this.caseNumber, this.date.format(DATETIMEFORMATTER), this.block, this.iucr, this.primaryDescription,
                     this.secondaryDescription, this.locationDescription, this.arrest, this.domestic, this.beat,
                     this.ward, this.fbicd, this.xcoord, this.ycoord, this.latitude, this.longitude);
         } else {

@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -23,7 +24,7 @@ public class GraphCreatorTest {
         LocalDateTime plusThreeYears = baseTime.plusYears(3);
         LocalDateTime plusFiveYears = baseTime.plusYears(5);
 
-        ArrayList<Object> calculations;
+        List<Object> calculations;
         String requiredDuration;
 
         // Test Minutes

@@ -15,9 +15,9 @@ import java.util.*;
 public class
 DataAnalyser {
 
-    ArrayList<Integer> crimeWards = new ArrayList<>();
-    ArrayList<String> crimeTypes = new ArrayList<>();
-    ArrayList<Integer> crimeBeats = new ArrayList<>();
+    List<Integer> crimeWards = new ArrayList<>();
+    List<String> crimeTypes = new ArrayList<>();
+    List<Integer> crimeBeats = new ArrayList<>();
 
     public DataAnalyser() {}
 
@@ -25,7 +25,7 @@ DataAnalyser {
      * Calls the updateRecords method to initialise the lists of crime types, wards and beats
      * @param records a list of all the crime records currently shown in the table
      */
-    public DataAnalyser(ArrayList<Record> records) {
+    public DataAnalyser(List<Record> records) {
         updateRecords(records);
     }
 
@@ -33,7 +33,7 @@ DataAnalyser {
      * Adds all the crime types, wards and beats to the relevant arraylists and then sorts them
      * @param records a list of all the crime records currently shown in the table
      */
-    public void updateRecords(ArrayList<Record> records) {
+    public void updateRecords(List<Record> records) {
         crimeTypes.clear();
         crimeWards.clear();
         crimeBeats.clear();
@@ -194,15 +194,15 @@ DataAnalyser {
 
 
 
-    public ArrayList<String> getCrimeTypes() {
+    public List<String> getCrimeTypes() {
         return crimeTypes;
     }
 
-    public ArrayList<Integer> getCrimeBeats() {
+    public List<Integer> getCrimeBeats() {
         return crimeBeats;
     }
 
-    public ArrayList<Integer> getCrimeWards() {
+    public List<Integer> getCrimeWards() {
         return crimeWards;
     }
 

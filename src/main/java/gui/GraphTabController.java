@@ -50,8 +50,8 @@ public class GraphTabController {
                 filteredRecords.add(record);
             }
         }
-        ArrayList<Object> returnedInfo = graphCreator.createCrimesPerTypeOverTimeGraph(filteredRecords, crimeTypes);
-        ArrayList<XYChart.Series> seriesList = (ArrayList<XYChart.Series>) returnedInfo.get(1);
+        List<Object> returnedInfo = graphCreator.createCrimesPerTypeOverTimeGraph(filteredRecords, crimeTypes);
+        List<XYChart.Series> seriesList = (List<XYChart.Series>) returnedInfo.get(1);
         String label = (String) returnedInfo.get(0);
 
         lineChart.setTitle("Number of Crimes Per Type Over Time");
@@ -81,8 +81,8 @@ public class GraphTabController {
                 filteredRecords.add(record);
             }
         }
-        ArrayList<Object> returnedInfo = graphCreator.createCrimesPerBeatOverTimeGraph(filteredRecords, crimeBeats);
-        ArrayList<XYChart.Series> seriesList = (ArrayList<XYChart.Series>) returnedInfo.get(1);
+        List<Object> returnedInfo = graphCreator.createCrimesPerBeatOverTimeGraph(filteredRecords, crimeBeats);
+        List<XYChart.Series> seriesList = (List<XYChart.Series>) returnedInfo.get(1);
         String label = (String) returnedInfo.get(0);
 
         lineChart.setTitle("Number of Crimes Per Beat Over Time");
@@ -112,8 +112,8 @@ public class GraphTabController {
                 filteredRecords.add(record);
             }
         }
-        ArrayList<Object> returnedInfo = graphCreator.createCrimesPerWardOverTimeGraph(filteredRecords, crimeWards);
-        ArrayList<XYChart.Series> seriesList = (ArrayList<XYChart.Series>) returnedInfo.get(1);
+        List<Object> returnedInfo = graphCreator.createCrimesPerWardOverTimeGraph(filteredRecords, crimeWards);
+        List<XYChart.Series> seriesList = (List<XYChart.Series>) returnedInfo.get(1);
         String label = (String) returnedInfo.get(0);
 
         lineChart.setTitle("Number of Crimes Per Ward Over Time");
@@ -137,7 +137,7 @@ public class GraphTabController {
      * @param currentRecords A list of the records currently displayed in the table
      */
     public void createCrimesOverTimeGraph(List<Record> currentRecords) {
-        ArrayList<Object> returnedInfo = graphCreator.createCrimesOverTimeGraph(currentRecords);
+        List<Object> returnedInfo = graphCreator.createCrimesOverTimeGraph(currentRecords);
 
         XYChart.Series series = (XYChart.Series) returnedInfo.get(1);
         String label = (String) returnedInfo.get(0);

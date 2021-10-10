@@ -72,10 +72,7 @@ public class EditRecordWindowController {
 
     private TableTabController parentController; // gives access to table methods, and thus main controller methods
 
-    private static final List<String> textFieldNames = Arrays.asList("Case number", "Date", "Block", "IUCR",
-            "Primary description", "Secondary description", "Location description", "Arrest", "Domestic", "Ward",
-            "Beat", "FBICD", "X-Coordinate", "Y-Coordinate", "Latitude", "Longitude");
-    private List<Node> textFields = new ArrayList<>(); // only to be used for iterating over during validation
+    private final List<Node> textFields = new ArrayList<>(); // only to be used for iterating over during validation
     private Record editingRecord; // the record currently being edited
 
     /**
@@ -92,14 +89,13 @@ public class EditRecordWindowController {
 
         // Binds primary description text field to set of primary descriptions
         TextFields.bindAutoCompletion(primaryDescriptionField,InputValidator.getSetOfPrimaryDescriptions());
-        AutoCompletionBinding auto = TextFields.bindAutoCompletion(secondaryDescriptionField, "");
 
         // Binds Secondary description text field to set of available set secondary descriptions
         secondaryDescriptionField.setOnMouseClicked(mouseEvent -> {
             try {
                 Set<String> des;
                 des = InputValidator.getSetOfSecondaryDescriptions(primaryDescriptionField.getText());
-                AutoCompletionBinding auto1 = TextFields.bindAutoCompletion(secondaryDescriptionField, des);
+                AutoCompletionBinding<String> auto1 = TextFields.bindAutoCompletion(secondaryDescriptionField, des);
 
                 secondaryDescriptionField.textProperty().addListener((observable, oldValue, newValue) -> {
                     try {

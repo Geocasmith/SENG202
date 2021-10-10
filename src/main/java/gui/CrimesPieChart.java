@@ -62,7 +62,6 @@ public class CrimesPieChart {
         pieChart.applyCss();
 
         //Creating a Group object
-        //Group root = new Group(pieChart);
         BorderPane root = new BorderPane();
         root.setCenter(pieChart);
 
