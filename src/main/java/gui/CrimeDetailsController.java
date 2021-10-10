@@ -27,24 +27,15 @@ public class CrimeDetailsController {
     @FXML private TableColumn<TypeFrequencyPair, String> crimeCol;
     @FXML private TableColumn<TypeFrequencyPair, String> crimeFrequency;
 
-    private static final double tableHeightMultiplier = 1.03; // Makes the table slightly taller than 10 rows to get rid of the scroll bar
-    private int displayLimit = 10;
-
-    private DataAnalyser dataAnalyser = new DataAnalyser();
+    private final DataAnalyser dataAnalyser = new DataAnalyser();
 
     /**
      * Calls a method to populate crimes table.
      * @param currentRecord ArrayList<Record> type object that usually represents the list of displayed records
      */
 
-    public void updateBlockDetails(ArrayList<Record> currentRecord) {
-
-
+    public void updateBlockDetails(List<Record> currentRecord) {
         populateCrimesTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 4)));
-//        crimeTable.setFixedCellSize(25);
-//        crimeTable.prefHeightProperty().bind(crimeTable.fixedCellSizeProperty().multiply(displayLimit + 1).multiply(tableHeightMultiplier));
-//        crimeTable.minHeightProperty().bind(crimeTable.prefHeightProperty());
-//        crimeTable.maxHeightProperty().bind(crimeTable.prefHeightProperty());
 
     }
 
@@ -53,7 +44,6 @@ public class CrimeDetailsController {
      * @param crimeFrequencyPair usually represents an object that represents crime type and its frequency encapsulated
      *                           as crimeFrequency pair object
      */
-
     public void populateCrimesTable(List<TypeFrequencyPair> crimeFrequencyPair) {
         // Sort descending
         crimeFrequencyPair.sort(new FrequencyComparatorDescending());
@@ -64,8 +54,8 @@ public class CrimeDetailsController {
         crimeTable.getItems().clear();
 
         //Populate table
-        for (int i = 0; i < crimeFrequencyPair.size(); i++) {
-            crimeTable.getItems().add(crimeFrequencyPair.get(i));
+        for (TypeFrequencyPair typeFrequencyPair : crimeFrequencyPair) {
+            crimeTable.getItems().add(typeFrequencyPair);
         }
     }
 }

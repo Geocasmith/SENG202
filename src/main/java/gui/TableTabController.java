@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -57,18 +58,13 @@ public class TableTabController {
 
         // sets up a delete action for when the delete or backspace keys are pressed while
         mainTableView.setOnKeyPressed(keyEvent -> {
-            switch (keyEvent.getCode()){
-                case DELETE: // do the same thing
-                case BACK_SPACE:
-                    try {
-                        deleteSelectedRows();
-                    } catch (SQLException e) {
-                        PopupWindow.displayPopup("Error", e.getMessage());
-                        e.printStackTrace();
-                    }
-                    break;
-                default:
-                    break;
+            if (keyEvent.getCode() == KeyCode.DELETE || keyEvent.getCode() == KeyCode.BACK_SPACE) { // do the same thing
+                try {
+                    deleteSelectedRows();
+                } catch (SQLException e) {
+                    PopupWindow.displayPopup("Error", e.getMessage());
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -91,7 +87,7 @@ public class TableTabController {
         editMenuItem.setOnAction(actionEvent -> {
             try {
                 editRow();
-            } catch (IOException | SQLException e) {
+            } catch (IOException e) {
                 PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
             }
         });
@@ -250,7 +246,7 @@ public class TableTabController {
      * If only one row is selected, then call setupEditRow, else show an error message.
      */
     @FXML
-    private void editRow() throws IOException, SQLException {
+    private void editRow() throws IOException {
         if (getNumSelectedRows() == 1) {
             setupEditRow(getSelectedRows().get(0));
         } else {

@@ -1,7 +1,6 @@
 package data;
 
 import com.opencsv.exceptions.CsvValidationException;
-import data.Record;
 import importExport.CsvReader;
 
 import java.io.IOException;
@@ -119,8 +118,8 @@ public class InputValidator {
     */
    public static boolean hasValidBooleanData(String domestic)
    {
-      return (Record.trueStrings.contains(domestic.toLowerCase()) ||
-              Record.falseStrings.contains(domestic.toLowerCase()) ||
+      return (Record.TRUESTRINGS.contains(domestic.toLowerCase()) ||
+              Record.FALSESTRINGS.contains(domestic.toLowerCase()) ||
               domestic.equals("null"));
    }
 
@@ -245,7 +244,7 @@ public class InputValidator {
          dataFieldFeedBack.add(errMsg);
       }
       result.add(isValid);
-      if (dataFieldFeedBack.size() > 0) {
+      if (!dataFieldFeedBack.isEmpty()) {
          result.add(dataFieldFeedBack.get(0));
       }
 
@@ -270,16 +269,14 @@ public class InputValidator {
     * @return boolean value whether the case number is valid
     */
    public static boolean hasValidCaseNumber(String caseNumber) {
-      if ( caseNumber.length() == 8 ) {
-         if (Character.isAlphabetic(caseNumber.charAt(0)) && Character.isAlphabetic(caseNumber.charAt(1))) {
-            int count = 0;
-            for (int i = 2; i <= 7; i ++) {
-               if (Character.isDigit(caseNumber.charAt(i))) {
-                  count++;
-               }
+      if ( caseNumber.length() == 8 && Character.isAlphabetic(caseNumber.charAt(0)) && Character.isAlphabetic(caseNumber.charAt(1))) {
+         int count = 0;
+         for (int i = 2; i <= 7; i ++) {
+            if (Character.isDigit(caseNumber.charAt(i))) {
+               count++;
             }
-            return count == 6;
          }
+         return count == 6;
       }
       return false;
    }
@@ -291,7 +288,7 @@ public class InputValidator {
     */
    public static boolean hasValidDateAndTimeFormat(String dateAndTime) {
       try {
-         LocalDateTime.parse(dateAndTime.toUpperCase(), Record.formatter);
+         LocalDateTime.parse(dateAndTime.toUpperCase(), Record.DATETIMEFORMATTER);
          return true;
       } catch (Exception e) {
          return false;

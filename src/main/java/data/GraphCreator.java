@@ -1,7 +1,5 @@
 package data;
 
-import data.DataAnalyser;
-import data.Record;
 import javafx.scene.chart.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -22,12 +20,12 @@ public class GraphCreator {
 
     private static final DataAnalyser dataAnalyser = new DataAnalyser();
 
-    private static final int oneMinuteInSeconds = 60;
-    private static final int oneHourInSeconds = 3600;
-    private static final int oneDayInSeconds = 86400;
-    private static final int oneWeekInSeconds = 604800;
-    private static final int oneMonthInSeconds = 2678400;
-    private static final int oneYearInSeconds = 31622400;
+    private static final int ONEMINUTEINSECONDS = 60;
+    private static final int ONEHOURINSECONDS = 3600;
+    private static final int ONEDAYINSECONDS = 86400;
+    private static final int ONEWEEKINSECONDS = 604800;
+    private static final int ONEMONTHINSECONDS = 2678400;
+    private static final int ONEYEARINSECONDS = 31622400;
 
     /**
      * Rounds the given LocalDateTime down to the given duration
@@ -74,37 +72,37 @@ public class GraphCreator {
      * @return An ArrayList of Objects containing a String of the required duration, a DateTime formatter and a Duration
      *         object of the required time period
      */
-    public ArrayList<Object> calculateFormatForGraph(List<LocalDateTime> times) {
+    public List<Object> calculateFormatForGraph(List<LocalDateTime> times) {
         Duration width = dataAnalyser.calculateTimeDifference(times.get(0), times.get(times.size() - 1));
 
         Duration periodInSeconds;
         DateTimeFormatter formatter;
         String requiredDuration;
-        if (width.getSeconds() <= 3 * oneHourInSeconds) {
+        if (width.getSeconds() <= 3 * ONEHOURINSECONDS) {
             requiredDuration = "Minutes";
             formatter = minuteHourFormatter;
-            periodInSeconds = Duration.ofSeconds(oneMinuteInSeconds);
-        } else if (width.getSeconds() <= 3 * oneDayInSeconds) {
+            periodInSeconds = Duration.ofSeconds(ONEMINUTEINSECONDS);
+        } else if (width.getSeconds() <= 3 * ONEDAYINSECONDS) {
             requiredDuration = "Hours";
             formatter = minuteHourFormatter;
-            periodInSeconds = Duration.ofSeconds(oneHourInSeconds);
-        } else if (width.getSeconds() <= oneMonthInSeconds) {
+            periodInSeconds = Duration.ofSeconds(ONEHOURINSECONDS);
+        } else if (width.getSeconds() <= ONEMONTHINSECONDS) {
             requiredDuration = "Days";
             formatter = dayWeekFormatter;
-            periodInSeconds = Duration.ofSeconds(oneDayInSeconds);
-        } else if (width.getSeconds() <= oneYearInSeconds) {
+            periodInSeconds = Duration.ofSeconds(ONEDAYINSECONDS);
+        } else if (width.getSeconds() <= ONEYEARINSECONDS) {
             requiredDuration = "Weeks";
             formatter = dayWeekFormatter;
-            periodInSeconds = Duration.ofSeconds(oneWeekInSeconds);
-        } else if (width.getSeconds() <= 3 * oneYearInSeconds) {
+            periodInSeconds = Duration.ofSeconds(ONEWEEKINSECONDS);
+        } else if (width.getSeconds() <= 3 * ONEYEARINSECONDS) {
 
             requiredDuration = "Months";
             formatter = monthFormatter;
-            periodInSeconds = Duration.ofSeconds(oneMonthInSeconds);
+            periodInSeconds = Duration.ofSeconds(ONEMONTHINSECONDS);
         } else {
             requiredDuration = "Years";
             formatter = yearFormatter;
-            periodInSeconds = Duration.ofSeconds(oneYearInSeconds);
+            periodInSeconds = Duration.ofSeconds(ONEYEARINSECONDS);
         }
         return new ArrayList<>(Arrays.asList(requiredDuration, formatter, periodInSeconds));
     }
@@ -149,7 +147,7 @@ public class GraphCreator {
      *         the date and time in string form and the Integer is the number of crimes that occurred in the calculated
      *         timeframe
      */
-    public ArrayList<Object> createCrimesOverTimeGraph(List<Record> data){
+    public List<Object> createCrimesOverTimeGraph(List<Record> data){
 
         XYChart.Series series = new XYChart.Series<>();
 
@@ -160,7 +158,7 @@ public class GraphCreator {
         }
         Collections.sort(times);
 
-        ArrayList<Object> calculations = calculateFormatForGraph(times);
+        List<Object> calculations = calculateFormatForGraph(times);
 
         Duration periodInSeconds = (Duration) calculations.get(2);
         DateTimeFormatter formatter = (DateTimeFormatter) calculations.get(1);
@@ -184,7 +182,7 @@ public class GraphCreator {
      *         the String is the date and time in string form and the Integer is the number of crimes that occurred in
      *         the calculated timeframe
      */
-    public ArrayList<Object> createCrimesPerWardOverTimeGraph(List<Record> data, List<Integer> crimeWards) {
+    public List<Object> createCrimesPerWardOverTimeGraph(List<Record> data, List<Integer> crimeWards) {
 
         ArrayList<XYChart.Series> seriesList = new ArrayList<>();
         ArrayList<ArrayList<LocalDateTime>> timesList = new ArrayList<>();
@@ -213,7 +211,7 @@ public class GraphCreator {
             Collections.sort(times);
         }
 
-        ArrayList<Object> calculations = calculateFormatForGraph(overallTime);
+        List<Object> calculations = calculateFormatForGraph(overallTime);
 
         Duration periodInSeconds = (Duration) calculations.get(2);
         DateTimeFormatter formatter = (DateTimeFormatter) calculations.get(1);
@@ -240,7 +238,7 @@ public class GraphCreator {
      *         the String is the date and time in string form and the Integer is the number of crimes that occurred in
      *         the calculated timeframe
      */
-    public ArrayList<Object> createCrimesPerTypeOverTimeGraph(List<Record> data, List<String> crimeTypes) {
+    public List<Object> createCrimesPerTypeOverTimeGraph(List<Record> data, List<String> crimeTypes) {
 
         ArrayList<XYChart.Series> seriesList = new ArrayList<>();
         ArrayList<ArrayList<LocalDateTime>> timesList = new ArrayList<>();
@@ -269,7 +267,7 @@ public class GraphCreator {
             Collections.sort(times);
         }
 
-        ArrayList<Object> calculations = calculateFormatForGraph(overallTime);
+        List<Object> calculations = calculateFormatForGraph(overallTime);
 
         Duration periodInSeconds = (Duration) calculations.get(2);
         DateTimeFormatter formatter = (DateTimeFormatter) calculations.get(1);
@@ -296,7 +294,7 @@ public class GraphCreator {
      *         the String is the date and time in string form and the Integer is the number of crimes that occurred in
      *         the calculated timeframe
      */
-    public ArrayList<Object> createCrimesPerBeatOverTimeGraph(List<Record> data, List<Integer> crimeBeats) {
+    public List<Object> createCrimesPerBeatOverTimeGraph(List<Record> data, List<Integer> crimeBeats) {
 
         ArrayList<XYChart.Series> seriesList = new ArrayList<>();
         ArrayList<ArrayList<LocalDateTime>> timesList = new ArrayList<>();
@@ -325,8 +323,8 @@ public class GraphCreator {
             Collections.sort(times);
         }
         String requiredDuration = null;
-        if (overallTime.size() > 0) {
-            ArrayList<Object> calculations = calculateFormatForGraph(overallTime);
+        if (!overallTime.isEmpty()) {
+            List<Object> calculations = calculateFormatForGraph(overallTime);
             Duration periodInSeconds = (Duration) calculations.get(2);
             DateTimeFormatter formatter = (DateTimeFormatter) calculations.get(1);
             requiredDuration = (String) calculations.get(0);

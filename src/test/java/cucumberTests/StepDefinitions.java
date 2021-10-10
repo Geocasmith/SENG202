@@ -30,7 +30,7 @@ public class StepDefinitions {
 
     List<TypeFrequencyPair> crimeFrequencyPairList;
     List<TypeFrequencyPair> blocksFrequencyPairList;
-    ArrayList<Record> records;
+    List<Record> records;
     Record record1;
     Record record2;
     private static final int crimeTypeColumn = 4;

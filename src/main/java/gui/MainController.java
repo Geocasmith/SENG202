@@ -109,7 +109,7 @@ public class MainController {
     private int analysisTabCount = 0;
     private int browserTabCount = 0;
 
-    public MainController() throws SQLException {
+    public MainController() {
     }
 
     /**
@@ -134,11 +134,7 @@ public class MainController {
                     try {
                         //Starts loading bar
                         JFrame loadingBar = null;
-                        try {
-                            loadingBar = startProgressGIF();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                        loadingBar = startProgressGIF();
                         filterSetup();
                         graphSetup();
 
@@ -147,7 +143,7 @@ public class MainController {
 
                         tableTabController.setParentController(this);
                         CrimeDatabase db = new CrimeDatabase();
-                        ArrayList<Record> allRecords = null;
+                        List<Record> allRecords = null;
                         allRecords = db.getAll();
                         tableTabController.setTableRecords(allRecords);
                         dataAnalyser = new DataAnalyser(allRecords);
@@ -271,8 +267,8 @@ public class MainController {
         } else if (graphTypeComboBox.getValue().equals("Crimes Per Ward")) {
 
 
-            ArrayList<Integer> crimeWards = dataAnalyser.getCrimeWards();
-            if (crimeWards.size() == 0) {
+            List<Integer> crimeWards = dataAnalyser.getCrimeWards();
+            if (crimeWards.isEmpty()) {
                 PopupWindow.displayPopup("Error", "You must have data in the table to create a graph.\n" +
                         "Try clearing the filter or importing some data.");
                 graphTypeComboBox.getSelectionModel().select(0);
@@ -287,8 +283,8 @@ public class MainController {
 
         } else if (graphTypeComboBox.getValue().equals("Crimes Per Beat")) {
 
-            ArrayList<Integer> crimeBeats = dataAnalyser.getCrimeBeats();
-            if (crimeBeats.size() == 0) {
+            List<Integer> crimeBeats = dataAnalyser.getCrimeBeats();
+            if (crimeBeats.isEmpty()) {
                 PopupWindow.displayPopup("Error", "You must have data in the table to create a graph.\n" +
                         "Try clearing the filter or importing some data.");
                 graphTypeComboBox.getSelectionModel().select(0);
@@ -302,8 +298,8 @@ public class MainController {
             }
 
         } else if (graphTypeComboBox.getValue().equals("Crimes Per Type")) {
-            ArrayList<String> crimeTypes = dataAnalyser.getCrimeTypes();
-            if (crimeTypes.size() == 0) {
+            List<String> crimeTypes = dataAnalyser.getCrimeTypes();
+            if (crimeTypes.isEmpty()) {
                 PopupWindow.displayPopup("Error", "You must have data in the table to create a graph.\n" +
                         "Try clearing the filter or importing some data.");
                 graphTypeComboBox.getSelectionModel().select(0);
@@ -346,7 +342,7 @@ public class MainController {
      */
     public void generateGraph() {
         List<Record> currentRecords = tableTabController.getDisplayedRecords();
-        if (currentRecords.size() == 0) {
+        if (currentRecords.isEmpty()) {
             PopupWindow.displayPopup("Error", "You must have data in the table to create a graph.\n" +
                     "Try clearing the filter or importing some data.");
         } else if (graphTypeComboBox.getValue().equals("All Crimes")) {
@@ -356,7 +352,7 @@ public class MainController {
             if (graphFilterComboBox.getCheckModel().getCheckedItems().size() > 5) {
                 PopupWindow.displayPopup("Error", "You must select 5 or less options to graph");
 
-            } else if (graphFilterComboBox.getCheckModel().getCheckedItems().size() < 1) {
+            } else if (graphFilterComboBox.getCheckModel().getCheckedItems().isEmpty()) {
                 PopupWindow.displayPopup("Error", "You must select at least one option to graph");
 
             } else {
@@ -445,12 +441,11 @@ public class MainController {
             endDate = Date.from(instant.minus(1, ChronoUnit.SECONDS));
         }
 
-        if ((startDate != null) && (endDate != null)) {
-            if (startDate.after(endDate)) {
-                filterErrorLabel.setText("Filter end date must come before start date");
-                filterErrorLabel.setVisible(true);
-                validFilter = false;
-            }
+        if ((startDate != null) && (endDate != null) && startDate.after(endDate)) {
+            filterErrorLabel.setText("Filter end date must come before start date");
+            filterErrorLabel.setVisible(true);
+            validFilter = false;
+
         }
 
         // Get names of all checked items in crime type CheckComboBox
@@ -547,15 +542,11 @@ public class MainController {
                     () -> {
                         //Starts loading bar
                         JFrame loadingBar = null;
-                        try {
-                            loadingBar = startProgressGIF();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                        loadingBar = startProgressGIF();
 
                         filterErrorLabel.setVisible(false);
                         CrimeDatabase d = new CrimeDatabase();
-                        ArrayList<Record> records = null;
+                        List<Record> records = null;
                         try {
                             records = d.getFilter(finalCaseNumber, finalStartDate, finalEndDate, crimeTypes, locationDescriptions,
                                     finalWards, finalBeats, finalLat, finalLon, finalRadius, finalArrest, finalDomestic);
@@ -650,7 +641,7 @@ public class MainController {
                     }
 
                     CrimeDatabase db = new CrimeDatabase();
-                    ArrayList<Record> records = null;
+                    List<Record> records = null;
                     try {
                         records = db.getAll();
                         db.disconnectDatabase();
@@ -738,7 +729,7 @@ public class MainController {
     /**
      * Opens a file explorer for the user to select csv file to import then loads it
      */
-    public void importCsv() throws Exception {
+    public void importCsv() throws InterruptedException, SQLException, IOException {
 
         String filepath = getPathToFile("CSV", "importExport");
 
@@ -802,7 +793,7 @@ public class MainController {
 
 
                     CrimeDatabase db = new CrimeDatabase();
-                    ArrayList<Record> records = db.getAll();
+                    List<Record> records = db.getAll();
                     db.disconnectDatabase();
                     tableTabController.setTableRecords(records);
                     updateAnalysis();
@@ -811,7 +802,7 @@ public class MainController {
                     updateGraphOptions();
                     filterSetup();
                     loadingBar.dispose();
-                    if (dataValidation.get(1).size() != 0) {
+                    if (!dataValidation.get(1).isEmpty()) {
                         displayInvalid(dataValidation.get(1));
                     }
 
@@ -839,7 +830,7 @@ public class MainController {
      * Creates loading bar TODO make this clearer
      * @throws InterruptedException
      */
-    public JFrame startProgressGIF() throws InterruptedException {
+    public JFrame startProgressGIF() {
         //Initialises frame, panel and bar
         JFrame frame = new JFrame();
         JPanel panel = new JPanel();
@@ -877,7 +868,7 @@ public class MainController {
      * this to the database path method which will change the static variable path in database
      * which is accessed every time the database is connected to
      */
-    public void changeDatabase() throws Exception {
+    public void changeDatabase() throws SQLException {
 
         String filepath;
 
@@ -924,7 +915,7 @@ public class MainController {
     public Boolean newDatabase() throws NullPointerException, SQLException, IOException {
         String filepath = getFileSavePath("Database", "db");
 
-        if (!(filepath == null)) {
+        if ((filepath != null)) {
             try {
                 filepath = addExtension(filepath, ".db");
                 File file = new File(filepath);
@@ -959,7 +950,7 @@ public class MainController {
      * @return if injection characters are used.
      */
     public Boolean containsInjection(String injection) {
-        if (injection.matches(".*[%\'\"\\-=<>;\\(\\)].*")) {
+        if (injection.matches(".*[%'\"\\-=<>;()].*")) {
             PopupWindow.displayPopup("Input Error", "Invalid characters in input (SQL Injection Protection).");
 
             return true;
