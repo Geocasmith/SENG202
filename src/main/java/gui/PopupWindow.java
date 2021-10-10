@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -76,12 +77,14 @@ public class PopupWindow {
         }
 
         Button button1 = new Button(button1Text);
+        //HBox.setMargin(button1, new Insets(15));
         button1.setOnAction(e -> {
             popupWindow.close();
             returnValue[0] = true;
         });
 
         Button button2 = new Button(button2Text);
+        //HBox.setMargin(button2, new Insets(15));
         button2.setOnAction(e -> {
             popupWindow.close();
             returnValue[0] = false;
@@ -89,7 +92,11 @@ public class PopupWindow {
 
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(20));
-        layout.getChildren().addAll(label, button1, button2);
+        HBox buttonBox = new HBox(); // arrange buttons side-by-side
+        buttonBox.setSpacing(15);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.getChildren().addAll(button1, button2);
+        layout.getChildren().addAll(label, buttonBox);
         layout.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(layout);
