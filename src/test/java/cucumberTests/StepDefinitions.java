@@ -38,7 +38,7 @@ public class StepDefinitions {
 
     @Given("I am connected to a database")
     public void iAmConnectedToADatabase() throws SQLException {
-        db.setDatabasePath("src/test/resources/twoRecordTestDatabase.db");
+        db.setDatabasePath("src/test/resources/databaseFiles/twoRecordTestDatabase.db");
         db.connectDatabase();
     }
 
@@ -122,7 +122,7 @@ public class StepDefinitions {
 
     @Given("I have a list of records")
     public void iHaveAListOfRecords() throws SQLException {
-        db.setDatabasePath("src/test/resources/200kRecordTestDatabase.db");
+        db.setDatabasePath("src/test/resources/databaseFiles/200kRecordTestDatabase.db");
         db.connectDatabase();
         records = db.getAll();
         db.disconnectDatabase();
@@ -164,7 +164,7 @@ public class StepDefinitions {
 
     @Given("I am connected to a database that contains records")
     public void iAmConnectedToADatabaseThatContainsRecords() throws SQLException {
-        db.setDatabasePath("src/test/resources/200kRecordTestDatabase.db");
+        db.setDatabasePath("src/test/resources/databaseFiles/200kRecordTestDatabase.db");
         db.connectDatabase();
     }
 

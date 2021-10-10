@@ -89,7 +89,7 @@ public class DataAnalyserTest {
                 "CRIMINAL SEXUAL ASSAULT", "PUBLIC INDECENCY", "NARCOTICS", "NARCOTICS", "NARCOTICS"));
         res = dataAnalyser.getTypeFrequencyDescending(testColumn);
         assertEquals(3, res.get(0).getFrequency());
-
+        db.disconnectDatabase();
     }
 
     @Test
@@ -101,7 +101,7 @@ public class DataAnalyserTest {
                 "WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION"));
         res = dataAnalyser.getTypeFrequencyDescending(testColumn);
         assertEquals(9, res.get(0).getFrequency());
-
+        db.disconnectDatabase();
     }
 
     @Test
@@ -113,5 +113,6 @@ public class DataAnalyserTest {
         res = dataAnalyser.getTypeFrequencyDescending(testColumn);
 
         assertEquals(1, res.get(0).getFrequency());
+        db.disconnectDatabase();
     }
 }
