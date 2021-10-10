@@ -19,6 +19,13 @@ import java.util.List;
  */
 public class CsvReader {
 
+    /**
+     * TODO
+     * @param path
+     * @return
+     * @throws CsvValidationException
+     * @throws IOException
+     */
     public static ArrayList<List<String>> read(String path) throws CsvValidationException, IOException {
         try {
             ArrayList<List<String>> csvValues = new ArrayList<>();

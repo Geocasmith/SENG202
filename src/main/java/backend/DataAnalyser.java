@@ -129,6 +129,15 @@ DataAnalyser {
         return (int) Math.round(result * 1000.0);
     }
 
+    /**
+     * Returns the distance between the latitude and longitude of two records.
+     * Calls calculateLocationDifferenceMeters() with the latitude and longitude of the two provided records, and
+     * returns the result.
+     * @param record1 the first crime record
+     * @param record2 the second crime record
+     * @return an integer distance between the two crimes in meters, or -1 if either
+     *         of the records are missing location data
+     */
     public int calculateLocationDifferenceMeters(Record record1, Record record2) {
         if (record1.getLocation() == null || record2.getLocation() == null) {
             return -1;
@@ -136,6 +145,13 @@ DataAnalyser {
         return calculateLocationDifferenceMeters(record1.getLatitude(), record1.getLongitude(), record2.getLatitude(), record2.getLongitude());
     }
 
+    /**
+     * Calculates the distance between two records and returns that distance as a string.
+     * At less than 3000 metres, the distance is in metres; above 3000 metres, it is returned in kilometres.
+     * @param record1 the first crime record
+     * @param record2 the second crime record
+     * @return a string distance between the two records in metres (< 3000 m) or kilometres (>= 3000 m)
+     */
     public String getLocationDifferenceString(Record record1, Record record2) {
         int locationDifference = calculateLocationDifferenceMeters(record1, record2);
         String locationUnit;

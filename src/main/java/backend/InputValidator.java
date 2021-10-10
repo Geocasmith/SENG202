@@ -70,7 +70,6 @@ public class InputValidator {
          }
          return false;
       }
-
    }
 
    /**
@@ -259,8 +258,6 @@ public class InputValidator {
    public static boolean isValidRecord(List<String> record, boolean notImport) throws IOException, CsvValidationException {
       return Objects.equals(recordEntryFeedbackLong(record, notImport).get(16), "1");
    }
-
-
 
    /**
     * Prints valid list of crime descriptions
