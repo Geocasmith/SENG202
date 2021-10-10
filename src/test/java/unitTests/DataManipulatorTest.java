@@ -53,4 +53,41 @@ public class DataManipulatorTest {
         dataToGraphTest.add(dataCol1);
         dataToGraphTest.add(dataCol2);
     }
+
+    @Test
+    void hasUniqueCaseNumber() {
+        data = new ArrayList<>(Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "N", "N", "334", "7", "6", "", "", "", ""));
+        testRecord1 = new Record(data);
+        recordsList.add(testRecord1);
+        dataManipulatorInstance = new DataManipulator(recordsList);
+        assertFalse(dataManipulatorInstance.hasUniqueCaseNumber(1, testRecord1));
+        assertTrue(dataManipulatorInstance.hasUniqueCaseNumber(0, testRecord1));
+
+
+    }
+
+
+
+    @Test
+    void addLine() {
+    }
+
+    @Test
+    void deleteLine() {
+    }
+
+    @Test
+    void getAllRecords() {
+    }
+
+
+
+    @Test
+    void saveToCsv() {
+    }
+
+    @Test
+    void getRowsfromCsv() {
+
+    }
 }

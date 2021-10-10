@@ -42,24 +42,6 @@ public class DataManipulator {
         return true;
     }
 
-    /**
-     *
-     * @param line usually an interger value representing the line number
-     * @param data usually list of record objects
-     * @return true if data is edited or false otherwise
-     */
-    public boolean editLine(int line, Record data) {
-        try {
-            if (hasUniqueCaseNumber(line, data)) {
-                currentData.set(line, data);
-                return true;
-             }
-        }
-        catch(Exception e) {
-            PopupWindow.displayPopup("Error", e.getMessage());
-        }
-        return false;
-    }
 
     /**
      * Adds a record into CurrentData object
@@ -76,13 +58,7 @@ public class DataManipulator {
         return false;
     }
 
-    /**
-     * Removes a record from list of records in currentData object
-     * @param line usually an integer value indicating the line number
-     */
-    public void deleteLine(int line) {
-        currentData.remove(line);
-    }
+
 
     /**
      * Takes column number and extracts corresponding column values from currentData object
