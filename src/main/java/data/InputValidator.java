@@ -128,6 +128,8 @@ public class InputValidator {
     * message if applicable.
     * @param record a list of strings representing a Record object. This can be generated with the toList() method
     *               of the Record class.
+    * @param notImport true if the record is not being imported (e.g. if it is being edited or added). Used to avoid
+    *                  rejecting many records when data is imported.
     * @return a list consisting of 16 values (1 = valid, 0 = invalid) corresponding to each field of a Record object
     *         in the order produced by toList(), with an additional 1/0 field for overall validity, and an error
     *         message ONLY IF there was an error - field is not included (i.e. not a blank field) if data is valid. The
