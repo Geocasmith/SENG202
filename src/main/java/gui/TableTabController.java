@@ -370,23 +370,25 @@ public class TableTabController {
     }
 
     /**
-     * Creates a popup showing the differences between the two given crimes TODO this isn't clear enough
+     * Displays a popup containing two records' case numbers, followed by the difference in location and time between them, then by
+     * a map with both records displayed as markers with a line between them. The markers have info windows that contain
+     * more information about the crimes
      * @param crime1 The first record object
      * @param crime2 The second record object
      * @throws IOException
      */
     public void analysisPopup(Record crime1, Record crime2) throws IOException {
-        Stage popupEdit = new Stage();
-        popupEdit.initModality(Modality.APPLICATION_MODAL);
+        Stage analysisPopup = new Stage();
+        analysisPopup.initModality(Modality.APPLICATION_MODAL);
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("analysisPopup.fxml")
         );
-        popupEdit.setScene(new Scene(loader.load()));
+        analysisPopup.setScene(new Scene(loader.load()));
         AnalysisPopupController controller = loader.getController();
         controller.initData(crime1, crime2);
-        popupEdit.setTitle("Analyse Crimes");
+        analysisPopup.setTitle("Analyse Crimes");
 
-        popupEdit.setResizable(false);
-        popupEdit.showAndWait();
+        analysisPopup.setResizable(false);
+        analysisPopup.showAndWait();
     }
 }
