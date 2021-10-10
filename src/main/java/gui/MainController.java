@@ -716,7 +716,7 @@ public class MainController {
      */
     public void exportCsv() throws IOException, NullPointerException {
         try {
-            String filepath = addExtension(getFileSavePath("CSV", "importExport"), ".csv");
+            String filepath = addExtension(getFileSavePath("CSV", "csv"), ".csv");
             CsvWriter.write(filepath, tableTabController.getDisplayedRecords());
         } catch (NullPointerException e) {
             // the user closed the file chooser
@@ -731,7 +731,7 @@ public class MainController {
      */
     public void importCsv() throws InterruptedException, SQLException, IOException {
 
-        String filepath = getPathToFile("CSV", "importExport");
+        String filepath = getPathToFile("CSV", "csv");
 
         if (filepath != null) {
             //If user imports incorrect filetype it will do nothing and display a pop-up
