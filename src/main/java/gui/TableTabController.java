@@ -85,7 +85,7 @@ public class TableTabController {
         // Create menu items
         MenuItem editMenuItem = new MenuItem("Edit");
         MenuItem deleteMenuItem = new MenuItem("Delete");
-        MenuItem analyseMenuItem = new MenuItem("Analyse");
+        MenuItem analyseMenuItem = new MenuItem("Compare Two Records");
 
         // Add click event handlers to the menu items
         editMenuItem.setOnAction(actionEvent -> {
