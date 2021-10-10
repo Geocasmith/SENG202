@@ -64,11 +64,9 @@ public class CrimeDatabase {
      * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public void disconnectDatabase() throws SQLException {
-        try {
-            connection.close();
-        } finally {
 
-        }
+            connection.close();
+
     }
 
     /**
@@ -81,7 +79,7 @@ public class CrimeDatabase {
         statement.execute("DELETE FROM "+tableName);
 
         statement.close();
-        createTable();
+
     }
 
     /**
@@ -92,7 +90,7 @@ public class CrimeDatabase {
 
         //Formats and executes SQL to create the original table
         Statement statement = connection.createStatement();
-        statement.execute("CREATE TABLE CRIMES " + "(ID TEXT PRIMARY KEY NOT NULL," +
+        statement.execute("CREATE TABLE CRIMES  " + "(ID TEXT PRIMARY KEY NOT NULL," +
                 "DATE TEXT, " +
                 "ADDRESS TEXT)");
 
@@ -163,7 +161,6 @@ public class CrimeDatabase {
 
         //Goes through each list of strings and inserts the values into the prepared statement to their respective places
         for (List column : inputs) {
-            //Sets the ID
             statement.setString(1, (String) column.get(0)); //Sets the id
             statement.setString(2, (String) column.get(1)); //Sets the date
             statement.setLong(17,  unixTimeConvert((String) column.get(1))); //Sets the unixtime
@@ -250,74 +247,85 @@ public class CrimeDatabase {
 
         //Creates the statement to be run
         connection.setAutoCommit(false);
-        PreparedStatement s = connection.prepareStatement("DELETE FROM CRIMES");
-        PreparedStatement s1 = connection.prepareStatement(
+        PreparedStatement deleteStatement = connection.prepareStatement("DELETE FROM CRIMES");
+        PreparedStatement insertStatement = connection.prepareStatement(
                 "INSERT OR IGNORE INTO CRIMES (ID, DATE, ADDRESS,IUCR,PRIMARYDESCRIPTION,SECONDARYDESCRIPTION,LOCATIONDESCRIPTION,ARREST,DOMESTIC,BEAT,WARD,FBICD,XCOORDINATE,YCOORDINATE,LATITUDE,LONGITUDE,UNIXTIME) " +
                         "VALUES (?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
 
         //Inserts the values in the List of strings into the prepared statement
         for (List column : inputs) {
+            insertStatement.setString(1, (String) column.get(0)); //Sets the id
+            insertStatement.setString(2, (String) column.get(1)); //Sets the date
+            insertStatement.setLong(17,  unixTimeConvert((String) column.get(1))); //Sets the unixtime
+            insertStatement.setString(3, (String) column.get(2)); //Sets the address
+            insertStatement.setString(4, (String) column.get(3)); //Sets the iucr
+            insertStatement.setString(5, (String) column.get(4)); //Sets the primary description
+            insertStatement.setString(6, (String) column.get(5)); //Sets the secondary description
+            insertStatement.setString(7, (String) column.get(6)); //Sets the location description
+            insertStatement.setString(8, (String) column.get(7)); //Sets the arrest
+            insertStatement.setString(9, (String) column.get(8)); //Sets the domestic
 
-            //Sets the ? values in the statement to their corresponding values.
-            s1.setString(1, (String) column.get(0));
 
-            //Date and unix time
-            s1.setString(2, (String) column.get(1));
-            s1.setLong(17,  unixTimeConvert((String) column.get(1)));
-
-            s1.setString(3, (String) column.get(2));
-            s1.setString(4, (String) column.get(3));
-            s1.setString(5, (String) column.get(4));
-            s1.setString(6, (String) column.get(5));
-            s1.setString(7, (String) column.get(6));
-            s1.setString(8, (String) column.get(7));
-            s1.setString(9, (String) column.get(8));
-            String c9 = (String) column.get(9);
+            //Sets beat to null if empty, otherwise parses the integer
+            String c9 = (String) column.get(9); //Sets the beat
             if (c9.equals("")) {
-                s1.setString(10, "NULL"); //if Value is empty in list
+                insertStatement.setString(10, "NULL");
             } else {
-                s1.setInt(10, Integer.parseInt(c9));
-            }
-            String c10 = (String) column.get(10);
-            if (c10.equals("")) {
-                s1.setString(10, "NULL");
-            } else {
-                s1.setInt(11, Integer.parseInt(c10));
+                insertStatement.setInt(10, Integer.parseInt(c9));
             }
 
-            s1.setString(12, (String) column.get(11));
+            //Sets ward to null if empty, otherwise parses the integer
+            String c10 = (String) column.get(10);//Sets the beat
+            if (c10.equals("")) {
+                insertStatement.setString(11, "NULL");
+            } else {
+                insertStatement.setInt(11, Integer.parseInt(c10));
+            }
+
+            //Sets the FBICD
+            insertStatement.setString(12, (String) column.get(11));
+
+            //Sets xcoordinate to null if empty, otherwise parses the integer
             String c12 = (String) column.get(12);
             if (c12.equals("")) {
-                s1.setString(10, "NULL");
+                insertStatement.setString(10, "NULL");
             } else {
-                s1.setInt(13, Integer.parseInt(c12));
+                insertStatement.setInt(13, Integer.parseInt(c12));
             }
+
+            //Sets xcoordinate to null if empty, otherwise parses the integer
             String c13 = (String) column.get(13);
             if (c13.equals("")) {
-                s1.setString(10, "NULL");
+                insertStatement.setString(10, "NULL");
             } else {
-                s1.setInt(14, Integer.parseInt(c13));
+                insertStatement.setInt(14, Integer.parseInt(c13));
             }
+
+            //Sets latitude to null if empty, otherwise parses the float
             String c14 = (String) column.get(14);
-            if (c14.equals("")) {
-                s1.setString(10, "NULL");
+            if (c14.equals("") || c14.equals("null")) {
+                insertStatement.setString(10, "NULL");
             } else {
-                s1.setFloat(15, Float.parseFloat(c14));
+                insertStatement.setFloat(15, Float.parseFloat(c14));
             }
+
+            //Sets longitude to null if empty, otherwise parses the float
             String c15 = (String) column.get(15);
-            if (c15.equals("")) {
-                s1.setString(10, "NULL");
+            if (c15.equals("") || c15.equals("null")) {
+                insertStatement.setString(10, "NULL");
             } else {
-                s1.setFloat(16, Float.parseFloat(c15));
+                insertStatement.setFloat(16, Float.parseFloat(c15));
             }
 
             //Batching reduces importing times
-            s1.addBatch();
+            insertStatement.addBatch();
         }
         //Executes the table deletion then executes prepared statement to import the new rows
-        s.execute();
-        s1.executeBatch();
+        deleteStatement.execute();
+        insertStatement.executeBatch();
         connection.commit();
+        deleteStatement.close();
+        insertStatement.close();
 
     }
 
@@ -372,9 +380,10 @@ public class CrimeDatabase {
      */
     public void manualDelete(String caseNum) throws SQLException {
         connection.setAutoCommit(false);
-        PreparedStatement s1 = connection.prepareStatement("delete from CRIMES where ID = " + " '" + caseNum + "'");
-        s1.executeUpdate();
+        PreparedStatement statement = connection.prepareStatement("delete from CRIMES where ID = " + " '" + caseNum + "'");
+        statement.executeUpdate();
         connection.commit();
+        statement.close();
     }
 
 
@@ -388,9 +397,13 @@ public class CrimeDatabase {
 
     public static List<Object> extractCol(String columnName) throws SQLException {
         connection.setAutoCommit(false);
-        PreparedStatement s1 = connection.prepareStatement("select " + columnName + " from CRIMES");
-        ResultSet rs = s1.executeQuery();
-        return readColumnValues(rs, columnName);
+        PreparedStatement statement = connection.prepareStatement("select " + columnName + " from CRIMES");
+        ResultSet rs = statement.executeQuery();
+        List<Object> results = readColumnValues(rs, columnName);
+
+        rs.close();
+        statement.close();
+        return results;
     }
 
 
@@ -404,40 +417,15 @@ public class CrimeDatabase {
      */
     public List<Record> searchDB(String column, String searchValue) throws SQLException {
         connection.setAutoCommit(false);
-        PreparedStatement s1 = connection.prepareStatement("select * from CRIMES where " + column + " = " + " '" + searchValue + "'");
-        ResultSet rs = s1.executeQuery();
-        return getRecord(rs);
+        PreparedStatement statement = connection.prepareStatement("select * from CRIMES where " + column + " = " + " '" + searchValue + "'");
+        ResultSet rs = statement.executeQuery();
+
+        List<Record> results = getRecord(rs);
+        rs.close();
+        statement.close();
+        return results;
     }
 
-    /**
-     * Returns record objects from the database whose column matches the search value. Searches for integers
-     *
-     * @param column      String and has to match: BEAT,WARD,XCOORDINATE,YCOORDINATE
-     * @param searchValue the value you are searching for
-     * @return an Arraylist of Record Objects
-     * @throws SQLException If an exception occurs when executing the SQL statement
-     */
-    public List<Record> searchDB(String column, int searchValue) throws SQLException {
-        connection.setAutoCommit(false);
-        PreparedStatement s1 = connection.prepareStatement("select * from CRIMES where " + column + " = " + " '" + searchValue + "'");
-        ResultSet rs = s1.executeQuery();
-        return getRecord(rs);
-    }
-
-    /**
-     * Returns record objects from the database whose column matches the search value. Searches for doubles
-     *
-     * @param column      String and has to match: LATITUDE,LONGITUDE
-     * @param searchValue the value you are searching for
-     * @return an Arraylist of Record Objects
-     * @throws SQLException If an exception occurs when executing the SQL statement
-     */
-    public List<Record> searchDB(String column, double searchValue) throws SQLException {
-        connection.setAutoCommit(false);
-        PreparedStatement s1 = connection.prepareStatement("select * from CRIMES where " + column + " = " + " '" + searchValue + "'");
-        ResultSet rs = s1.executeQuery();
-        return getRecord(rs);
-    }
 
     /**
      * Returns whole database of record objects to pass to the tableviewer
@@ -447,9 +435,13 @@ public class CrimeDatabase {
      */
     public static List<Record> getAll() throws SQLException {
         connection.setAutoCommit(false);
-        PreparedStatement s1 = connection.prepareStatement("SELECT * FROM CRIMES;");
-        ResultSet rs = s1.executeQuery();
-        return getRecord(rs);
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM CRIMES;");
+        ResultSet rs = statement.executeQuery();
+
+        List<Record> results = getRecord(rs);
+        rs.close();
+        statement.close();
+        return results;
     }
 
 
@@ -465,9 +457,13 @@ public class CrimeDatabase {
         long startUnix = unixTimeConvert(startDate);
         long endUnix = unixTimeConvert(endDate);
         connection.setAutoCommit(false);
-        PreparedStatement s1 = connection.prepareStatement("SELECT * FROM CRIMES WHERE UNIXTIME BETWEEN "+startUnix+" and "+ endUnix+";");
-        ResultSet rs = s1.executeQuery();
-        return getRecord(rs);
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM CRIMES WHERE UNIXTIME BETWEEN "+startUnix+" and "+ endUnix+";");
+        ResultSet rs = statement.executeQuery();
+
+        List<Record> results = getRecord(rs);
+        rs.close();
+        statement.close();
+        return results;
     }
 
     /**
@@ -584,8 +580,8 @@ public class CrimeDatabase {
         if(caseNumber!=null) {
             SQLString += "AND (ID LIKE '%" + caseNumber + "%')";
         }
-        PreparedStatement s1 = connection.prepareStatement(SQLString);
-        ResultSet rs = s1.executeQuery();
+        PreparedStatement statement = connection.prepareStatement(SQLString);
+        ResultSet rs = statement.executeQuery();
         List<Record> recordsFromDBQuery =  getRecord(rs);
         List<Record> resultRecords = new ArrayList<>();
 
@@ -603,6 +599,11 @@ public class CrimeDatabase {
         } else {
             resultRecords = recordsFromDBQuery;
         }
+
+        //close connections
+        statement.close();
+        rs.close();
+
         return resultRecords;
     }
 
@@ -651,6 +652,22 @@ public class CrimeDatabase {
         return d.getTime();
     }
 
+    /**
+     * Returns the number of rows in the database
+     * @return String of the number of rows
+     */
+    public String getNumRows(){
+        try (PreparedStatement stmt = connection.prepareStatement("SELECT count(*) AS ROWS FROM CRIMES;")) {
+            try (ResultSet rs = stmt.executeQuery()) {
+
+                String numRows = rs.getString("ROWS");
+                return numRows;
+            }
+        } catch (SQLException throwables) {
+
+        }
+        return "";
+    }
 
 }
 

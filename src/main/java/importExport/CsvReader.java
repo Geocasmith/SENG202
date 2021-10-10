@@ -41,7 +41,7 @@ public class CsvReader {
             }
             return csvValues;
         } catch (CsvException | IOException e) {
-            PopupWindow.displayPopup("Error", "There was an error reading the given CSV. Please try again.");
+            //PopupWindow.displayPopup("Error", "There was an error reading the given CSV. Please try again.");
         }
 
         return null;

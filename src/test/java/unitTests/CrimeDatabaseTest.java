@@ -1,15 +1,22 @@
 package unitTests;
 
+import com.opencsv.exceptions.CsvValidationException;
 import data.CrimeDatabase;
 import data.Record;
+import importExport.CsvReader;
 import org.junit.jupiter.api.Test;
 
 import javax.annotation.concurrent.NotThreadSafe;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This class contains tests for Database class
@@ -18,6 +25,178 @@ import java.util.List;
 @NotThreadSafe
 class CrimeDatabaseTest {
 
+    @Test
+    /**
+     * Creates new table and checks if it is valid
+     */
+    void createTable() throws SQLException, IOException, CsvValidationException, ParseException {
+        CrimeDatabase db = new CrimeDatabase();
+        File file = new File("src/test/Files/createTableTest.db");
+        file.createNewFile();
+        db.setDatabasePath("src/test/Files/createTableTest.db");
+
+        try{
+            db.deleteTable("CRIMES");
+            db.createTable();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+
+        assert(db.checkValidDB());
+    }
+    @Test
+    void deleteTable() throws SQLException, IOException, CsvValidationException, ParseException {
+        CrimeDatabase db = new CrimeDatabase();
+        File file = new File("src/test/Files/deleteTableTest.db");
+        file.createNewFile();
+        db.setDatabasePath("src/test/Files/deleteTableTest.db");
+
+        db.insertRows(CsvReader.read("./test/Files/smallTest.csv"));
+
+        db.deleteTable("CRIMES");
+        assertEquals("0",db.getNumRows());
+    }
+
+    @Test
+    void insertRows() throws SQLException, IOException, CsvValidationException, ParseException {
+        //Initialises empty table
+        CrimeDatabase db = new CrimeDatabase();
+        File file = new File("src/test/Files/test.db");
+        file.createNewFile();
+        db.setDatabasePath("src/test/Files/test.db");
+        db.deleteTable("CRIMES");
+
+        //Inserts rows from csv
+        db.insertRows(CsvReader.read("src/test/Files/tenRowsTest.csv"));
+
+        //Checks if number of rows correct
+        assertEquals("9",db.getNumRows());
+        //checks if last row exists
+        assertEquals("JE266604",db.searchDB("ID","JE266604").get(0).getCaseNumber());
+    }
+    @Test
+    void replaceRows() throws SQLException, IOException, CsvValidationException, ParseException {
+        //Initialises empty table
+        CrimeDatabase db = new CrimeDatabase();
+        File file = new File("src/test/Files/test.db");
+        file.createNewFile();
+        db.setDatabasePath("src/test/Files/test.db");
+        db.deleteTable("CRIMES");
+
+        //Inserts 5000 rows
+        db.insertRows(CsvReader.read("src/test/Files/smallTest.csv"));
+
+        //Checks if the rows were imported correctly
+        assertEquals("4997",db.getNumRows());
+
+        //Replaces with 10 rows
+        db.replaceRows(CsvReader.read("src/test/Files/tenRowsTest.csv"));
+
+        //checks if last row exists
+        assertEquals("JE266604",db.searchDB("ID","JE266604").get(0).getCaseNumber());
+        //Checks if number of rows correct
+        assertEquals("9",db.getNumRows());
+    }
+    @Test
+    void manualAdd() throws SQLException, IOException, ParseException {
+        //Initialises empty table
+        CrimeDatabase db = new CrimeDatabase();
+        File file = new File("src/test/Files/manualTest.db");
+        file.createNewFile();
+        db.setDatabasePath("src/test/Files/manualTest.db");
+        db.deleteTable("CRIMES");
+
+        //Creates new record
+        ArrayList<String> data = new ArrayList<>(Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "N", "N", "334", "7", "6", "1183633", "1851786", "41.748486365", "-87.602675062"));
+        Record testRecord1 = new Record(data);
+
+        //Adds record to table
+        db.manualAdd(testRecord1);
+
+        //Checks if row exists in table
+        assertEquals("JE163990",db.searchDB("ID","JE163990").get(0).getCaseNumber());
+    }
+    @Test
+    void manualUpdate() throws SQLException, IOException, ParseException {
+        //Initialises empty table
+        CrimeDatabase db = new CrimeDatabase();
+        File file = new File("src/test/Files/manualTest.db");
+        file.createNewFile();
+        db.setDatabasePath("src/test/Files/manualTest.db");
+        db.deleteTable("CRIMES");
+
+        //Creates new record
+        ArrayList<String> data = new ArrayList<>(Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "N", "N", "334", "7", "6", "1183633", "1851786", "41.748486365", "-87.602675062"));
+        Record testRecord1 = new Record(data);
+
+        //Adds record to table
+        db.manualAdd(testRecord1);
+
+        //Create new record
+        ArrayList<String> data2 = new ArrayList<>(Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "999", "THEFT", "$500 AND UNDER", "APARTMENT", "N", "N", "334", "7", "6", "1183633", "1851786", "41.748486365", "-87.602675062"));
+        Record testRecord2 = new Record(data2);
+
+        //Updates record (changes IUCR to 999)
+        db.manualUpdate(testRecord2);
+        //Checks if row exists in table
+        assertEquals("999",db.searchDB("ID","JE163990").get(0).getIucr());
+    }
+
+    @Test
+    void manualDelete() throws SQLException, IOException, ParseException {
+        //Initialises empty table
+        CrimeDatabase db = new CrimeDatabase();
+        File file = new File("src/test/Files/manualDeleteTest.db");
+        file.createNewFile();
+        db.setDatabasePath("src/test/Files/manualDeleteTest.db");
+        db.deleteTable("CRIMES");
+
+        //Creates and new record
+        ArrayList<String> data = new ArrayList<>(Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "N", "N", "334", "7", "6", "1183633", "1851786", "41.748486365", "-87.602675062"));
+        Record testRecord1 = new Record(data);
+        db.manualAdd(testRecord1);
+
+        //Delete record
+        db.manualDelete("JE163990");
+
+        //Checks if row deleted (no rows exist)
+        assertEquals("0",db.getNumRows());
+    }
+    @Test
+    void searchDB() throws SQLException, IOException, ParseException {
+        //Initialises empty table
+        CrimeDatabase db = new CrimeDatabase();
+        File file = new File("src/test/Files/searchDBTest.db");
+        file.createNewFile();
+        db.setDatabasePath("src/test/Files/searchDBTest.db");
+        db.deleteTable("CRIMES");
+
+        //Creates and new record
+        ArrayList<String> data = new ArrayList<>(Arrays.asList("JE163990", "11/23/2020 03:05:00 PM", "073XX S SOUTH SHORE DR", "820", "THEFT", "$500 AND UNDER", "APARTMENT", "N", "N", "334", "7", "6", "1183633", "1851786", "41.748486365", "-87.602675062"));
+        Record testRecord1 = new Record(data);
+        db.manualAdd(testRecord1);
+
+        //Tests manual search for Strings (sees if the searched record is correct)
+        Record r = db.searchDB("ID","JE163990").get(0);
+        assertEquals("JE163990",r.getCaseNumber());
+    }
+//    @Test
+//    void getAll() throws SQLException, IOException, ParseException, CsvValidationException {
+//        //Initialises empty table
+//        CrimeDatabase db = new CrimeDatabase();
+//        File file = new File("src/test/Files/getAllTest.db");
+//        file.createNewFile();
+//        db.setDatabasePath("src/test/Files/getAllTest.db");
+//        db.deleteTable("CRIMES");
+//
+//        //Inserts rows from csv
+//        db.insertRows(CsvReader.read("src/test/Files/tenRowsTest.csv"));
+//
+//        //Gets all rows
+//        List<Record> records = db.getAll();
+//        assertEquals(records.size(),Integer.parseInt(db.getNumRows()));
+//    }
     @Test
     void extractCol() throws SQLException {
         CrimeDatabase db = new CrimeDatabase();
