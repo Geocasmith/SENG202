@@ -54,7 +54,7 @@ public class CrimeDetailsController {
 
     public void populateCrimesTable(List<TypeFrequencyPair> crimeFrequencyPair) {
         // Sort descending
-        Collections.sort(crimeFrequencyPair, new FrequencyComparatorDescending());
+        crimeFrequencyPair.sort(new FrequencyComparatorDescending());
         //Table column set up
         crimeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         crimeFrequency.setCellValueFactory(new PropertyValueFactory<>("frequency"));

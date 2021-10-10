@@ -40,6 +40,8 @@ public class AnalysisTabController {
     @FXML private TableColumn<TypeFrequencyPair, String> bottomBlockCol;
     @FXML private TableColumn<TypeFrequencyPair, String> bottomBlockFrequencyCol;
     private int displayLimit = 10;
+    private static final int crimeTypeColumn = 4;
+    private static final int blockColumn = 2;
     private List<Record> displayedRecords;
     private final DataAnalyser dataAnalyser = new DataAnalyser();
     private static final double tableHeightMultiplier = 1.03; // Makes the table slightly taller than 10 rows to get rid of the scroll bar
@@ -111,8 +113,8 @@ public class AnalysisTabController {
      */
     public void updateAnalysis(List<Record> currentRecord) {
 
-        crimeFrequencyPair = dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 4));
-        blocksFrequencyPair = dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 2));
+        crimeFrequencyPair = dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, crimeTypeColumn));
+        blocksFrequencyPair = dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, blockColumn));
 
         populateTopCrimesTable();
         populateLowCrimesTable();
@@ -127,7 +129,7 @@ public class AnalysisTabController {
      */
     public void populateTopCrimesTable() {
         // Sort descending
-        Collections.sort(crimeFrequencyPair, new FrequencyComparatorDescending());
+        crimeFrequencyPair.sort(new FrequencyComparatorDescending());
         //Table column set up
         topCrimeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         topCrimeFrequencyCol.setCellValueFactory(new PropertyValueFactory<>("frequency"));
@@ -146,7 +148,7 @@ public class AnalysisTabController {
      */
     public void populateLowCrimesTable() {
 
-        Collections.sort(crimeFrequencyPair, new FrequencyComparatorAscending());
+        crimeFrequencyPair.sort(new FrequencyComparatorAscending());
 
         // Table column setup
         bottomCrimeCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("type"));
@@ -169,7 +171,7 @@ public class AnalysisTabController {
      */
     public void populateTopBlocksTable() {
 
-        Collections.sort(blocksFrequencyPair, new FrequencyComparatorDescending());
+        blocksFrequencyPair.sort(new FrequencyComparatorDescending());
         // Set up table columns
         topBlockCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         topBlockFrequencyCol.setCellValueFactory(new PropertyValueFactory<>("frequency"));
@@ -190,7 +192,7 @@ public class AnalysisTabController {
     public void populateLowBlocksTable() {
 
 
-        Collections.sort(blocksFrequencyPair, new FrequencyComparatorAscending());
+        blocksFrequencyPair.sort(new FrequencyComparatorAscending());
         // Set up table columns
         bottomBlockCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("type"));
         bottomBlockFrequencyCol.setCellValueFactory(new PropertyValueFactory<TypeFrequencyPair, String>("frequency"));
@@ -336,7 +338,7 @@ public class AnalysisTabController {
     public void showCrimeTypePieChart() {
 
         String windowTitle = "Top crime types";
-        Collections.sort(crimeFrequencyPair, new FrequencyComparatorDescending());
+        crimeFrequencyPair.sort(new FrequencyComparatorDescending());
         if (crimeFrequencyPair.size() > 10) {
             String pieChartTitle = "Top 10 crime types from filtered records";
             crimesChart.drawChart( pieChartTitle, windowTitle , (new ArrayList<> (crimeFrequencyPair.subList(0, 10))));
@@ -355,7 +357,7 @@ public class AnalysisTabController {
      */
     public void showBlockCrimePieChart() {
         String windowTitle = "Top blocks for crime occurrences";
-        Collections.sort(blocksFrequencyPair, new FrequencyComparatorDescending());
+        blocksFrequencyPair.sort(new FrequencyComparatorDescending());
         if (blocksFrequencyPair.size() > 10) {
             String pieChartTitle = "Top 10 blocks from filtered records for highest crime types";
             crimesChart.drawChart( pieChartTitle, windowTitle , (new ArrayList<> (blocksFrequencyPair.subList(0, 10))));
@@ -372,7 +374,7 @@ public class AnalysisTabController {
      */
     public void showBottomBlockCrimePieChart() {
         String windowTitle = "Bottom blocks for crime occurrences";
-        Collections.sort(blocksFrequencyPair, new FrequencyComparatorAscending());
+        blocksFrequencyPair.sort(new FrequencyComparatorAscending());
         if (blocksFrequencyPair.size() > 10) {
             String pieChartTitle = "Bottom 10 blocks from filtered records for highest crime types";
             crimesChart.drawChart( pieChartTitle, windowTitle , (new ArrayList<> (blocksFrequencyPair.subList(0, 10))));
@@ -390,7 +392,7 @@ public class AnalysisTabController {
     public void showBottomCrimeTypePieChart() {
 
         String windowTitle = "Bottom crime types";
-        Collections.sort(crimeFrequencyPair, new FrequencyComparatorAscending());
+        crimeFrequencyPair.sort(new FrequencyComparatorAscending());
         if (crimeFrequencyPair.size() > 10) {
             String pieChartTitle = "Bottom 10 crime types from filtered records";
             crimesChart.drawChart( pieChartTitle, windowTitle , (new ArrayList<> (crimeFrequencyPair.subList(0, 10))));

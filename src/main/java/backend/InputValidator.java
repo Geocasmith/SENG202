@@ -33,6 +33,7 @@ public class InputValidator {
    public static Set<List<String>> initializeCrimeDescriptions() throws CsvValidationException, IOException {
       List<List<String>> readData;
       readData = CsvReader.read(crimeDescriptionsLocation);
+      assert readData != null;
       return new HashSet<>(readData);
 
    }
@@ -261,19 +262,6 @@ public class InputValidator {
    }
 
    /**
-    * Prints valid list of crime descriptions
-    */
-   public static void printCrimeDescriptions() throws CsvValidationException, IOException { //TODO this isn't used?
-      crimeDescription = initializeCrimeDescriptions();
-
-      for (List<String> row : crimeDescription)
-      {
-         System.out.println(row.get(0) + ", " + row.get(1) + ", " + row.get(2) + ", " + row.get(3));
-      }
-   }
-
-
-   /**
     * Checks if case number has a valid length (eight), the first two starting characters are letters
     * and the rest of the characters are digits (no special characters are allowed).
     * @param caseNumber the case number to validate
@@ -293,8 +281,7 @@ public class InputValidator {
       }
       return false;
    }
-
-
+   
    /**
     * Checks whether the provided string is a valid date/time based on the format defined in the Record class.
     * @param dateAndTime a candidate date and time String
@@ -331,9 +318,7 @@ public class InputValidator {
       for (List<String> descriptions : crimeDescription) {
          primaryDes.add(descriptions.get(1));
       }
-      List<String> primaryDesList = new ArrayList<>();
-      primaryDesList.addAll(primaryDes);
-      return primaryDesList;
+      return new ArrayList<>(primaryDes);
    }
 
 
