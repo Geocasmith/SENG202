@@ -19,11 +19,11 @@ public class CrimeDatabase {
     private static Connection connection;
     private static String databasePath = "./Files/crimeRecords.db"; //default path
     private final DataAnalyser dataAnalyser = new DataAnalyser();
-    private static final List<String> COLUMNS = Arrays.asList("IUCR TEXT", "PRIMARYDESCRIPTION TEXT", "SECONDARYDESCRIPTION TEXT",
-            "LOCATIONDESCRIPTION TEXT", "ARREST TEXT", "DOMESTIC TEXT", "BEAT INTEGER", "WARD INTEGER", "FBICD TEXT",
-            "XCOORDINATE INTEGER", "YCOORDINATE INTEGER", "LATITUDE REAL", "LONGITUDE REAL", "UNIXTIME REAL");
 
 
+    /**
+     * Creates new database object and establishes a connection to the database file
+     */
     public CrimeDatabase() {
         try {
             connectDatabase();
@@ -48,9 +48,8 @@ public class CrimeDatabase {
     public String getDatabasePath() { return databasePath; }
 
     /**
-     * Gets connection to the database and then calls the create table function. Used when creating a database object
-     * and when the database path is changed
-     * @throws SQLException
+     * Gets connection to the database (or creates new database if none exists at the specified path) and then calls the create table function.
+     * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public void connectDatabase() throws SQLException {
         try {
@@ -62,43 +61,53 @@ public class CrimeDatabase {
 
     /**
      * Closes the database connection. This is used to prevent database locked errors from open connections
-     * @throws SQLException
+     * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public void disconnectDatabase() throws SQLException {
-        connection.close();
+        try {
+            connection.close();
+        } finally {
+
+        }
     }
 
     /**
-     * Deletes every row in the given table in the database
+     * Removes all rows but keeps database structure
      * @param tableName the name of the table for the records to be deleted from
-     * @throws SQLException
+     * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public void deleteTable(String tableName) throws SQLException {
-        Statement state = connection.createStatement();
-        state.execute("DELETE FROM "+tableName);
+        Statement statement = connection.createStatement();
+        statement.execute("DELETE FROM "+tableName);
+
+        statement.close();
         createTable();
     }
 
     /**
      * Creates the main table in the database which stores the records and adds the columns listed in the columns field to it
-     * @throws SQLException
+     * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public void createTable() throws SQLException {
 
         //Formats and executes SQL to create the original table
-        Statement createTable = connection.createStatement();
-        createTable.execute("CREATE TABLE CRIMES " + "(ID TEXT PRIMARY KEY NOT NULL," +
+        Statement statement = connection.createStatement();
+        statement.execute("CREATE TABLE CRIMES " + "(ID TEXT PRIMARY KEY NOT NULL," +
                 "DATE TEXT, " +
                 "ADDRESS TEXT)");
 
-        //Goes through the columns field and adds the columns to the list to the database
+        statement.close();
+        //Goes through the columns list and adds the columns to the database
+        List<String> COLUMNS = Arrays.asList("IUCR TEXT", "PRIMARYDESCRIPTION TEXT", "SECONDARYDESCRIPTION TEXT",
+                "LOCATIONDESCRIPTION TEXT", "ARREST TEXT", "DOMESTIC TEXT", "BEAT INTEGER", "WARD INTEGER", "FBICD TEXT",
+                "XCOORDINATE INTEGER", "YCOORDINATE INTEGER", "LATITUDE REAL", "LONGITUDE REAL", "UNIXTIME REAL");
         for (String column : COLUMNS) {
-            Statement createColumns = connection.createStatement();
-            createColumns.execute("ALTER TABLE CRIMES\n" +
+            Statement statement1 = connection.createStatement();
+            statement1.execute("ALTER TABLE CRIMES\n" +
                     "ADD COLUMN " + column + ";");
+            statement1.close();
         }
     }
-
 
 
     /**
@@ -106,7 +115,7 @@ public class CrimeDatabase {
      * a string actualColumnFormat. This string is the column names appended to each other in order from left to right. If the column names
      * and the order are correct it will match the validColumnFormat string. If they do not match the database is invalid.
      * Will return invalid if the table name is incorrect
-     * @throws SQLException
+     * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public Boolean checkValidDB() throws SQLException {
 
@@ -116,23 +125,27 @@ public class CrimeDatabase {
 
         //SQL Query returns column names of the DB. Will be empty if table name incorrect
         connection.setAutoCommit(false);
-        PreparedStatement s1 = connection.prepareStatement("PRAGMA table_info('CRIMES');");
-        ResultSet rs = s1.executeQuery();
+        PreparedStatement statement = connection.prepareStatement("PRAGMA table_info('CRIMES');");
+        ResultSet columns = statement.executeQuery();
 
         //Goes through column names in the resultset and appends them to the string actualColumnFormat
-        while (rs.next()) {
-            actualColumnFormat += rs.getString("name");
+        while (columns.next()) {
+            actualColumnFormat += columns.getString("name");
         }
+
+        //close connections
+        columns.close();
+        statement.close();
 
         //Matches the expected and actual column names to see if table valid
         return validColumnFormat.equals(actualColumnFormat);
     }
 
     /**
-     * Gets an arrayList of string Lists and adds them to the database. Any empty values are entered as NULL type
+     * Gets an arrayList of string Lists and adds them to the database
      *
-     * @param inputs an Arraylist of Lists of Strings that is passed into it from the CSV Reader
-     * @throws SQLException
+     * @param inputs an Arraylist of Lists of Strings of crime data
+     * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public void insertRows(List<List<String>> inputs) throws SQLException, ParseException {
 
@@ -141,82 +154,97 @@ public class CrimeDatabase {
             return;
         }
 
-        //Creates the statement to be run
+        //Creates the prepared statement
         connection.setAutoCommit(false);
-        PreparedStatement s1 = connection.prepareStatement(
+        PreparedStatement statement = connection.prepareStatement(
                 "INSERT OR IGNORE INTO CRIMES (ID, DATE, ADDRESS,IUCR,PRIMARYDESCRIPTION,SECONDARYDESCRIPTION,LOCATIONDESCRIPTION,ARREST,DOMESTIC,BEAT,WARD,FBICD,XCOORDINATE,YCOORDINATE,LATITUDE,LONGITUDE,UNIXTIME) " +
                         "VALUES (?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
 
-        //Inserts the values in the List of strings into the preparedstatement
+
+        //Goes through each list of strings and inserts the values into the prepared statement to their respective places
         for (List column : inputs) {
-            //Sets the ? values in the statement to their corresponding values.
-            s1.setString(1, (String) column.get(0));
+            //Sets the ID
+            statement.setString(1, (String) column.get(0)); //Sets the id
+            statement.setString(2, (String) column.get(1)); //Sets the date
+            statement.setLong(17,  unixTimeConvert((String) column.get(1))); //Sets the unixtime
+            statement.setString(3, (String) column.get(2)); //Sets the address
+            statement.setString(4, (String) column.get(3)); //Sets the iucr
+            statement.setString(5, (String) column.get(4)); //Sets the primary description
+            statement.setString(6, (String) column.get(5)); //Sets the secondary description
+            statement.setString(7, (String) column.get(6)); //Sets the location description
+            statement.setString(8, (String) column.get(7)); //Sets the arrest
+            statement.setString(9, (String) column.get(8)); //Sets the domestic
 
-            //Date and unix time
-            s1.setString(2, (String) column.get(1));
-            s1.setLong(17,  unixTimeConvert((String) column.get(1)));
 
-            s1.setString(3, (String) column.get(2));
-            s1.setString(4, (String) column.get(3));
-            s1.setString(5, (String) column.get(4));
-            s1.setString(6, (String) column.get(5));
-            s1.setString(7, (String) column.get(6));
-            s1.setString(8, (String) column.get(7));
-            s1.setString(9, (String) column.get(8));
-            String c9 = (String) column.get(9);
+            //Sets beat to null if empty, otherwise parses the integer
+            String c9 = (String) column.get(9); //Sets the beat
             if (c9.equals("")) {
-                s1.setString(10, "NULL"); //if Value is empty in list
+                statement.setString(10, "NULL");
             } else {
-                s1.setInt(10, Integer.parseInt(c9));
-            }
-            String c10 = (String) column.get(10);
-            if (c10.equals("")) {
-                s1.setString(10, "NULL");
-            } else {
-                s1.setInt(11, Integer.parseInt(c10));
+                statement.setInt(10, Integer.parseInt(c9));
             }
 
-            s1.setString(12, (String) column.get(11));
+            //Sets ward to null if empty, otherwise parses the integer
+            String c10 = (String) column.get(10);//Sets the beat
+            if (c10.equals("")) {
+                statement.setString(11, "NULL");
+            } else {
+                statement.setInt(11, Integer.parseInt(c10));
+            }
+
+            //Sets the FBICD
+            statement.setString(12, (String) column.get(11));
+
+            //Sets xcoordinate to null if empty, otherwise parses the integer
             String c12 = (String) column.get(12);
             if (c12.equals("")) {
-                s1.setString(10, "NULL");
+                statement.setString(10, "NULL");
             } else {
-                s1.setInt(13, Integer.parseInt(c12));
-            }
-            String c13 = (String) column.get(13);
-            if (c13.equals("")) {
-                s1.setString(10, "NULL");
-            } else {
-                s1.setInt(14, Integer.parseInt(c13));
-            }
-            String c14 = (String) column.get(14);
-            if (c14.equals("") || c14.equals("null")) {
-                s1.setString(10, "NULL");
-            } else {
-                s1.setFloat(15, Float.parseFloat(c14));
-            }
-            String c15 = (String) column.get(15);
-            if (c15.equals("") || c15.equals("null")) {
-                s1.setString(10, "NULL");
-            } else {
-                s1.setFloat(16, Float.parseFloat(c15));
+                statement.setInt(13, Integer.parseInt(c12));
             }
 
-            //Batching reduces importing times
-            s1.addBatch();
+            //Sets xcoordinate to null if empty, otherwise parses the integer
+            String c13 = (String) column.get(13);
+            if (c13.equals("")) {
+                statement.setString(10, "NULL");
+            } else {
+                statement.setInt(14, Integer.parseInt(c13));
+            }
+
+            //Sets latitude to null if empty, otherwise parses the float
+            String c14 = (String) column.get(14);
+            if (c14.equals("") || c14.equals("null")) {
+                statement.setString(10, "NULL");
+            } else {
+                statement.setFloat(15, Float.parseFloat(c14));
+            }
+
+            //Sets longitude to null if empty, otherwise parses the float
+            String c15 = (String) column.get(15);
+            if (c15.equals("") || c15.equals("null")) {
+                statement.setString(10, "NULL");
+            } else {
+                statement.setFloat(16, Float.parseFloat(c15));
+            }
+
+            //Adds statement to batch
+            statement.addBatch();
         }
 
         //Executes the batched prepared statement
-        s1.executeBatch();
+        statement.executeBatch();
         connection.commit();
+        statement.close();
 
     }
+
+
 
     /**
      * Deletes current table, then gets an arrayList of string Lists and adds them to the database. Any empty values are entered as NULL type
      *
      * @param inputs an Arraylist of Lists of Strings that is passed into it from the CSV Reader
-     * @throws SQLException
+     * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public void replaceRows(List<List<String>> inputs) throws SQLException, ParseException {
 
@@ -299,7 +327,7 @@ public class CrimeDatabase {
      *      * made insertRows() method and reuse that code
      *
      * @param rec Record class object to be added to the database
-     * @throws SQLException if a database error occurs
+     * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public void manualAdd(Record rec) throws SQLException, ParseException {
 
@@ -318,7 +346,7 @@ public class CrimeDatabase {
      * made insertRows() method and reuse that code
      *
      * @param rec Record class object to be updated in the database
-     * @throws SQLException
+     * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public void manualUpdate(Record rec) throws SQLException, ParseException {
 
@@ -340,7 +368,7 @@ public class CrimeDatabase {
      * Removes the row which matches the case number in the parameter
      *
      * @param caseNum pass in the case number for the row that will be deleted
-     * @throws SQLException
+     * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public void manualDelete(String caseNum) throws SQLException {
         connection.setAutoCommit(false);
@@ -355,7 +383,7 @@ public class CrimeDatabase {
      *
      * @param columnName String object representing the column name that is to be returned
      * @return ColumnValues ArrayList<Object> type generated from reading column values
-     * @throws SQLException
+     * @throws SQLException If an exception occurs when executing the SQL statement
      */
 
     public static List<Object> extractCol(String columnName) throws SQLException {
@@ -372,7 +400,7 @@ public class CrimeDatabase {
      * @param column      String of the database column to query and has to match: ID, DATE, ADDRESS,IUCR, PRIMARYDESCRIPTION, SECONDARYDESCRIPTION,LOCATIONDESCRIPTION,ARREST, DOMESTIC
      * @param searchValue the value you are searching for
      * @return an Arraylist of Record Objects
-     * @throws SQLException
+     * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public List<Record> searchDB(String column, String searchValue) throws SQLException {
         connection.setAutoCommit(false);
@@ -387,7 +415,7 @@ public class CrimeDatabase {
      * @param column      String and has to match: BEAT,WARD,XCOORDINATE,YCOORDINATE
      * @param searchValue the value you are searching for
      * @return an Arraylist of Record Objects
-     * @throws SQLException
+     * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public List<Record> searchDB(String column, int searchValue) throws SQLException {
         connection.setAutoCommit(false);
@@ -402,7 +430,7 @@ public class CrimeDatabase {
      * @param column      String and has to match: LATITUDE,LONGITUDE
      * @param searchValue the value you are searching for
      * @return an Arraylist of Record Objects
-     * @throws SQLException
+     * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public List<Record> searchDB(String column, double searchValue) throws SQLException {
         connection.setAutoCommit(false);
@@ -415,7 +443,7 @@ public class CrimeDatabase {
      * Returns whole database of record objects to pass to the tableviewer
      *
      * @return arraylist of all the records in the database
-     * @throws SQLException
+     * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public static List<Record> getAll() throws SQLException {
         connection.setAutoCommit(false);
@@ -430,8 +458,8 @@ public class CrimeDatabase {
      * @param startDate date to start the query on
      * @param endDate date to end the query on
      * @return arraylist of records
-     * @throws SQLException
-     * @throws ParseException
+     * @throws SQLException If an exception occurs when executing the SQL statement
+     * @throws ParseException If an exception occurs when converting the string to a unix time
      */
     public List<Record> getDateRange(String startDate, String endDate) throws SQLException, ParseException {
         long startUnix = unixTimeConvert(startDate);
@@ -447,7 +475,7 @@ public class CrimeDatabase {
      *
      * @param rs Resultset passed in from other methods
      * @return Arraylist of Records
-     * @throws SQLException
+     * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public static List<Record> getRecord(ResultSet rs) throws SQLException {
         ArrayList<Record> records = new ArrayList<>();
@@ -496,7 +524,7 @@ public class CrimeDatabase {
      * @param arrest
      * @param domestic
      * @return an arraylist of records
-     * @throws SQLException
+     * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public List<Record> getFilter(String caseNumber, Date startDate, Date endDate,List<String> crimeTypes,List<String> locDes,String ward,String beat,String lat,String lon,int radius,String arrest,String domestic) throws SQLException {
         connection.setAutoCommit(false);
@@ -584,7 +612,7 @@ public class CrimeDatabase {
      * @param rs     ResultSet object passed from other methods
      * @param column String object passed from other methods
      * @return colValues ArrayList<Object> generated from reading ResultSet object
-     * @throws SQLException
+     * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public static ArrayList<Object> readColumnValues(ResultSet rs, String column) throws SQLException {
         ArrayList<Object> colValues = new ArrayList<>();
@@ -606,7 +634,7 @@ public class CrimeDatabase {
      * date data types so it needs the dates stored in unix time to calculate date ranges
      * @param date a string of the date (the same format as the dates in the database)
      * @return
-     * @throws ParseException
+     * @throws ParseException If an exception occurs when converting the string to a unix time
      */
     public static long unixTimeConvert(String date) throws ParseException {
         Date d = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a").parse(date);
@@ -617,7 +645,7 @@ public class CrimeDatabase {
      * The method converts a date object to a unix time
      * @param d input date
      * @return a unix time
-     * @throws ParseException
+     * @throws ParseException If an exception occurs when converting the string to a unix time
      */
     public static long unixTimeConvert(Date d) {
         return d.getTime();
