@@ -1,6 +1,6 @@
 package unitTests;
 
-import backend.GraphCreator;
+import data.GraphCreator;
 import org.junit.Test;
 
 import java.time.LocalDateTime;

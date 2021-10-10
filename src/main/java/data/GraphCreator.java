@@ -1,5 +1,7 @@
-package backend;
+package data;
 
+import data.DataAnalyser;
+import data.Record;
 import javafx.scene.chart.*;
 import java.time.Duration;
 import java.time.LocalDateTime;

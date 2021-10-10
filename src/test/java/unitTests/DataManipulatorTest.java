@@ -1,8 +1,8 @@
 package unitTests;
 import static org.junit.jupiter.api.Assertions.*;
 
-import backend.DataManipulator;
-import backend.Record;
+import data.DataManipulator;
+import data.Record;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

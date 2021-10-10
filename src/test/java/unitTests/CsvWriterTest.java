@@ -1,8 +1,8 @@
 package unitTests;
 
-import backend.CsvReader;
-import backend.CsvWriter;
-import backend.Record;
+import importExport.CsvReader;
+import importExport.CsvWriter;
+import data.Record;
 import com.opencsv.exceptions.CsvValidationException;
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package backend;
+package frequencyComparator;
 
 import java.util.Comparator;
 /**

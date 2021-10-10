@@ -2,8 +2,12 @@
 package gui;
 
 
-import backend.*;
-import backend.Record;
+import data.DataAnalyser;
+import data.DataManipulator;
+import frequencyComparator.FrequencyComparatorAscending;
+import frequencyComparator.FrequencyComparatorDescending;
+import data.Record;
+import frequencyComparator.TypeFrequencyPair;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

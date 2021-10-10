@@ -1,6 +1,8 @@
-package backend;
+package data;
 
 import com.opencsv.exceptions.CsvValidationException;
+import data.Record;
+import importExport.CsvReader;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -17,12 +19,12 @@ public class InputValidator {
    private static Set<List<String>> crimeDescription;
 
    // these are declared here rather than in the method for ease of access
-   private static final int longitudeUpperBound = 180;
-   private static final int longitudeLowerBound = -180;
-   private static final int latitudeUpperBound = 90;
-   private static final int latitudeLowerBound = -90;
+   private static final int LONGITUDEUPPERBOUND = 180;
+   private static final int LONGITUDELOWERBOUND = -180;
+   private static final int LATITUDEUPPERBOUND = 90;
+   private static final int LATITUDELOWERBOUND = -90;
 
-   private static final String crimeDescriptionsLocation = "Files/Crime_Descriptions_Data_Source.csv";
+   private static final String CRIMEDESCRIPTIONSDATASOURCECSV = "Files/Crime_Descriptions_Data_Source.csv";
 
    /**
     * Initializes set of valid crime descriptions (Primary, Secondary and IUCR information from
@@ -32,7 +34,7 @@ public class InputValidator {
     */
    public static Set<List<String>> initializeCrimeDescriptions() throws CsvValidationException, IOException {
       List<List<String>> readData;
-      readData = CsvReader.read(crimeDescriptionsLocation);
+      readData = CsvReader.read(CRIMEDESCRIPTIONSDATASOURCECSV);
       assert readData != null;
       return new HashSet<>(readData);
 
@@ -229,14 +231,14 @@ public class InputValidator {
          dataFieldFeedBack.add(errMsg);
       }
 
-      if (!hasGpsCoordinate(record.get(14), latitudeLowerBound, latitudeUpperBound)) {
+      if (!hasGpsCoordinate(record.get(14), LATITUDELOWERBOUND, LATITUDEUPPERBOUND)) {
          result.set(14, "0");
          isValid = "0";
          errMsg ="Invalid latitude value. Latitude should be between 90 and -90 or empty.";
          dataFieldFeedBack.add(errMsg);
       }
 
-      if (!hasGpsCoordinate(record.get(15), longitudeLowerBound, longitudeUpperBound)) {
+      if (!hasGpsCoordinate(record.get(15), LONGITUDELOWERBOUND, LONGITUDEUPPERBOUND)) {
          result.set(15, "0");
          isValid = "0";
          errMsg = "Invalid longitude value. Longitude should be between 180 and -180 or empty.";

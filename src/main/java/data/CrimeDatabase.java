@@ -1,4 +1,4 @@
-package backend;
+package data;
 
 import java.sql.*;
 import java.text.ParseException;
@@ -15,7 +15,7 @@ import static java.lang.String.valueOf;
  * @author
  * Date 09/10/2021
  */
-public class Database {
+public class CrimeDatabase {
     private static Connection connection;
     private static String databasePath = "./Files/crimeRecords.db"; //default path
     private DataAnalyser dataAnalyser = new DataAnalyser();
@@ -24,7 +24,7 @@ public class Database {
             "XCOORDINATE INTEGER", "YCOORDINATE INTEGER", "LATITUDE REAL", "LONGITUDE REAL", "UNIXTIME REAL");
 
 
-    public Database() {
+    public CrimeDatabase() {
         try {
             connectDatabase();
         } catch (SQLException e) {

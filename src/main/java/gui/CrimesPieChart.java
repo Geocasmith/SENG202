@@ -1,6 +1,6 @@
 package gui;
 
-import backend.TypeFrequencyPair;
+import frequencyComparator.TypeFrequencyPair;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;

@@ -1,7 +1,7 @@
 package unitTests;
 import static org.junit.jupiter.api.Assertions.*;
 
-import backend.Record;
+import data.Record;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package backend;
+package frequencyComparator;
 
 /**
  * This class is used to encapsulate data that has type and frequency

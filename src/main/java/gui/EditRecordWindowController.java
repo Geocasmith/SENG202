@@ -1,8 +1,8 @@
 package gui;
 
-import backend.Database;
-import backend.InputValidator;
-import backend.Record;
+import data.CrimeDatabase;
+import data.InputValidator;
+import data.Record;
 import com.google.gson.JsonArray;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.concurrent.Worker;
@@ -297,7 +297,7 @@ public class EditRecordWindowController {
             List<String> feedback = validateRecord(data);
 
             if (Objects.equals(feedback.get(16), "1")) { // 16 is where the overall valid status is stored
-                Database d = new Database();
+                CrimeDatabase d = new CrimeDatabase();
 
                 if (edit) {
                     d.manualUpdate(new Record(data));

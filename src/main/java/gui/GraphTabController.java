@@ -1,7 +1,7 @@
 package gui;
 
-import backend.GraphCreator;
-import backend.Record;
+import data.GraphCreator;
+import data.Record;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.layout.BorderPane;

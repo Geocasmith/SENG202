@@ -1,5 +1,6 @@
-package backend;
+package importExport;
 
+import data.Record;
 import com.opencsv.CSVWriter;
 
 import java.io.FileWriter;

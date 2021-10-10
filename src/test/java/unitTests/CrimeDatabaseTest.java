@@ -1,7 +1,7 @@
 package unitTests;
 
-import backend.Database;
-import backend.Record;
+import data.CrimeDatabase;
+import data.Record;
 import org.junit.jupiter.api.Test;
 
 import javax.annotation.concurrent.NotThreadSafe;
@@ -16,11 +16,11 @@ import java.util.List;
  * @author
  */
 @NotThreadSafe
-class DatabaseTest {
+class CrimeDatabaseTest {
 
     @Test
     void extractCol() throws SQLException {
-        Database db = new Database();
+        CrimeDatabase db = new CrimeDatabase();
         db.connectDatabase();
         List<Object> extractedCol;
         extractedCol = db.extractCol("ADDRESS");
@@ -32,7 +32,7 @@ class DatabaseTest {
     }
     @Test
     void filterEmpty() throws SQLException {
-        Database d = new Database();
+        CrimeDatabase d = new CrimeDatabase();
         d.connectDatabase();
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
@@ -42,7 +42,7 @@ class DatabaseTest {
 
     @Test
     void filterTwoDates() throws SQLException, ParseException {
-        Database d = new Database();
+        CrimeDatabase d = new CrimeDatabase();
         d.connectDatabase();
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
@@ -51,7 +51,7 @@ class DatabaseTest {
     }
     @Test
     void filterStartDate() throws SQLException, ParseException {
-        Database d = new Database();
+        CrimeDatabase d = new CrimeDatabase();
         d.connectDatabase();
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
@@ -60,7 +60,7 @@ class DatabaseTest {
     }
     @Test
     void filterEndDate() throws SQLException, ParseException {
-        Database d = new Database();
+        CrimeDatabase d = new CrimeDatabase();
         d.connectDatabase();
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
@@ -75,7 +75,7 @@ class DatabaseTest {
      */
     @Test
     void filterCrimeType1() throws SQLException {
-        Database d = new Database();
+        CrimeDatabase d = new CrimeDatabase();
         d.connectDatabase();
         ArrayList<String> crimeTypes = new ArrayList<String>();
         crimeTypes.add("THEFT");
@@ -90,7 +90,7 @@ class DatabaseTest {
      */
     @Test
     void filterCrimeTypeMultiple() throws SQLException {
-        Database d = new Database();
+        CrimeDatabase d = new CrimeDatabase();
         d.connectDatabase();
         ArrayList<String> crimeTypes = new ArrayList<String>();
         crimeTypes.add("THEFT");
@@ -107,7 +107,7 @@ class DatabaseTest {
      */
     @Test
     void filterLocationDescriptionMultiple() throws SQLException {
-        Database d = new Database();
+        CrimeDatabase d = new CrimeDatabase();
         d.connectDatabase();
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
@@ -124,7 +124,7 @@ class DatabaseTest {
      */
     @Test
     void filterValidWard() throws SQLException {
-        Database d = new Database();
+        CrimeDatabase d = new CrimeDatabase();
         d.connectDatabase();
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
@@ -140,7 +140,7 @@ class DatabaseTest {
     @Test()
     void filterInvalidWard() {
         try {
-            Database d = new Database();
+            CrimeDatabase d = new CrimeDatabase();
             d.connectDatabase();
             ArrayList<String> crimeTypes = new ArrayList<String>();
             ArrayList<String> locationDescriptions = new ArrayList<String>();
@@ -158,7 +158,7 @@ class DatabaseTest {
      */
     @Test
     void filterValidBeat() throws SQLException {
-        Database d = new Database();
+        CrimeDatabase d = new CrimeDatabase();
         d.connectDatabase();
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
@@ -178,7 +178,7 @@ class DatabaseTest {
     @Test()
     void filterInvalidBeat() {
         try {
-            Database d = new Database();
+            CrimeDatabase d = new CrimeDatabase();
             d.connectDatabase();
             ArrayList<String> crimeTypes = new ArrayList<String>();
             ArrayList<String> locationDescriptions = new ArrayList<String>();
@@ -196,7 +196,7 @@ class DatabaseTest {
      */
     @Test
     void filterArrestY() throws SQLException {
-        Database d = new Database();
+        CrimeDatabase d = new CrimeDatabase();
         d.connectDatabase();
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
@@ -212,7 +212,7 @@ class DatabaseTest {
      */
     @Test
     void filterArrestN() throws SQLException {
-        Database d = new Database();
+        CrimeDatabase d = new CrimeDatabase();
         d.connectDatabase();
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
@@ -228,7 +228,7 @@ class DatabaseTest {
      */
     @Test
     void filterDomesticY() throws SQLException {
-        Database d = new Database();
+        CrimeDatabase d = new CrimeDatabase();
         d.connectDatabase();
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
@@ -244,7 +244,7 @@ class DatabaseTest {
      */
     @Test
     void filterDomesticN() throws SQLException {
-        Database d = new Database();
+        CrimeDatabase d = new CrimeDatabase();
         d.connectDatabase();
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
@@ -260,7 +260,7 @@ class DatabaseTest {
      */
     @Test
     void filterRadius() throws SQLException {
-        Database d = new Database();
+        CrimeDatabase d = new CrimeDatabase();
         d.connectDatabase();
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();

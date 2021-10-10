@@ -1,14 +1,16 @@
 package gui;
 
-import backend.*;
-import backend.Record;
+import data.DataAnalyser;
+import data.DataManipulator;
+import frequencyComparator.FrequencyComparatorDescending;
+import data.Record;
+import frequencyComparator.TypeFrequencyPair;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**

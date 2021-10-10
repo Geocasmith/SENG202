@@ -1,8 +1,8 @@
 package gui;
 
-import backend.DataAnalyser;
-import backend.Database;
-import backend.Record;
+import data.DataAnalyser;
+import data.CrimeDatabase;
+import data.Record;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -232,7 +232,7 @@ public class TableTabController {
         } else if (PopupWindow.displayTwoButtonPopup("Confirm Action", "You are about to delete " +
                 num + " rows. This action cannot be undone.\nAre you sure you want" +
                 " to do this?", "Yes", "No")) {
-            Database d = new Database();
+            CrimeDatabase d = new CrimeDatabase();
             List<Record> selectedRows = getSelectedRows();
             for (Record rec : selectedRows) {
                 d.manualDelete(rec.getCaseNumber());

@@ -1,7 +1,11 @@
 package cucumberTests;
 
-import backend.*;
-import backend.Record;
+import data.CrimeDatabase;
+import data.DataAnalyser;
+import data.DataManipulator;
+import frequencyComparator.FrequencyComparatorDescending;
+import data.Record;
+import frequencyComparator.TypeFrequencyPair;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -12,14 +16,13 @@ import java.text.ParseException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
 public class StepDefinitions {
 
-    Database db = new Database();
+    CrimeDatabase db = new CrimeDatabase();
     DataAnalyser dataAnalyser = new DataAnalyser();
     Duration analysisTimeResult;
     int analysisDistanceResult;

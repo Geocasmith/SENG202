@@ -1,7 +1,9 @@
-package backend;
+package data;
 
 import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvValidationException;
+import importExport.CsvReader;
+import importExport.CsvWriter;
 import gui.PopupWindow;
 
 import java.io.IOException;
@@ -189,7 +191,7 @@ public class DataManipulator {
      * @return list of Record objects extracted from the database
      */
     public static ArrayList<Record> getAllRecords() throws SQLException {
-        Database db = new Database();
+        CrimeDatabase db = new CrimeDatabase();
         ArrayList<Record> currentRecords = db.getAll();
         db.disconnectDatabase();
         return currentRecords;
@@ -204,7 +206,7 @@ public class DataManipulator {
 
     public List<List<Object>> dataBaseDataToGraph(String col1, String col2) throws SQLException {
         List<List<Object> > dataToGraph = new ArrayList<>();
-        Database db = new Database();
+        CrimeDatabase db = new CrimeDatabase();
         db.connectDatabase();
         dataToGraph.add(db.extractCol(col1));
         dataToGraph.add(db.extractCol(col2));

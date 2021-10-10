@@ -1,4 +1,4 @@
-package backend;
+package data;
 
 import com.google.gson.JsonArray;
 

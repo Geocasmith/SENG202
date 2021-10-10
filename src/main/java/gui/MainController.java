@@ -1,8 +1,9 @@
 package gui;
 
-import backend.Record;
-import backend.*;
+import data.*;
 import com.opencsv.exceptions.CsvValidationException;
+import data.Record;
+import importExport.CsvWriter;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -145,7 +146,7 @@ public class MainController {
                         sidebarAccordion.managedProperty().bind(sidebarAccordion.visibleProperty());
 
                         tableTabController.setParentController(this);
-                        Database db = new Database();
+                        CrimeDatabase db = new CrimeDatabase();
                         ArrayList<Record> allRecords = null;
                         allRecords = db.getAll();
                         tableTabController.setTableRecords(allRecords);
@@ -183,7 +184,7 @@ public class MainController {
         domesticComboBox.getItems().addAll("", "Y", "N");
         domesticComboBox.getSelectionModel().select("");
 
-        Database d = new Database();
+        CrimeDatabase d = new CrimeDatabase();
         d.connectDatabase();
         ArrayList<String> locationDescriptions = (ArrayList<String>) (ArrayList<?>) (d.extractCol("LOCATIONDESCRIPTION"));
         d.disconnectDatabase();
@@ -553,7 +554,7 @@ public class MainController {
                         }
 
                         filterErrorLabel.setVisible(false);
-                        Database d = new Database();
+                        CrimeDatabase d = new CrimeDatabase();
                         ArrayList<Record> records = null;
                         try {
                             records = d.getFilter(finalCaseNumber, finalStartDate, finalEndDate, crimeTypes, locationDescriptions,
@@ -648,7 +649,7 @@ public class MainController {
                         e.printStackTrace();
                     }
 
-                    Database db = new Database();
+                    CrimeDatabase db = new CrimeDatabase();
                     ArrayList<Record> records = null;
                     try {
                         records = db.getAll();
@@ -724,7 +725,7 @@ public class MainController {
      */
     public void exportCsv() throws IOException, NullPointerException {
         try {
-            String filepath = addExtension(getFileSavePath("CSV", "csv"), ".csv");
+            String filepath = addExtension(getFileSavePath("CSV", "importExport"), ".csv");
             CsvWriter.write(filepath, tableTabController.getDisplayedRecords());
         } catch (NullPointerException e) {
             // the user closed the file chooser
@@ -739,7 +740,7 @@ public class MainController {
      */
     public void importCsv() throws Exception {
 
-        String filepath = getPathToFile("CSV", "csv");
+        String filepath = getPathToFile("CSV", "importExport");
 
         if (filepath != null) {
             //If user imports incorrect filetype it will do nothing and display a pop-up
@@ -787,7 +788,7 @@ public class MainController {
 
             if (replace != null && newDBSuccess) {
                 try {
-                    Database d = new Database();
+                    CrimeDatabase d = new CrimeDatabase();
                     d.connectDatabase();
 
                     if (!replace) {
@@ -800,7 +801,7 @@ public class MainController {
 
 
 
-                    Database db = new Database();
+                    CrimeDatabase db = new CrimeDatabase();
                     ArrayList<Record> records = db.getAll();
                     db.disconnectDatabase();
                     tableTabController.setTableRecords(records);
@@ -884,7 +885,7 @@ public class MainController {
         filepath = getPathToFile("Database", "db");
         if (filepath != null) {
             //Changes the database to the selected path
-            Database d = new Database();
+            CrimeDatabase d = new CrimeDatabase();
 
             //If user imports incorrect filetype it will do nothing and display a pop-up
             if (matchFileType(filepath, ".db")) {
@@ -930,12 +931,12 @@ public class MainController {
 
                 if (file.createNewFile()) {
                     // Set new database path
-                    Database d = new Database();
+                    CrimeDatabase d = new CrimeDatabase();
                     d.setDatabasePath(filepath);
                     d.disconnectDatabase();
 
                     //Refresh GUI
-                    Database db = new Database();
+                    CrimeDatabase db = new CrimeDatabase();
                     tableTabController.setTableRecords(db.getAll());
                     db.disconnectDatabase();
 

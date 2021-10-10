@@ -1,7 +1,7 @@
 package gui;
 
-import backend.DataAnalyser;
-import backend.Record;
+import data.DataAnalyser;
+import data.Record;
 import com.google.gson.JsonArray;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;

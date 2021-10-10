@@ -1,6 +1,6 @@
 package gui;
 
-import backend.Record;
+import data.Record;
 import com.google.gson.JsonArray;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;

@@ -1,9 +1,9 @@
 package unitTests;
 
-import backend.DataAnalyser;
-import backend.Database;
-import backend.Record;
-import backend.TypeFrequencyPair;
+import data.DataAnalyser;
+import data.CrimeDatabase;
+import data.Record;
+import frequencyComparator.TypeFrequencyPair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -82,7 +82,7 @@ public class DataAnalyserTest {
 
     @Test
     void getTypeFrequencyTest() throws SQLException {
-        Database db = new Database();
+        CrimeDatabase db = new CrimeDatabase();
         DataAnalyser dataAnalyser = new DataAnalyser(db.getAll());
         List<TypeFrequencyPair> res;
         List<Object> testColumn = new ArrayList<>(Arrays.asList("WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION", "NARCOTICS",
@@ -94,7 +94,7 @@ public class DataAnalyserTest {
 
     @Test
     void getTypeFrequencyTest2() throws SQLException {
-        Database db = new Database();
+        CrimeDatabase db = new CrimeDatabase();
         DataAnalyser dataAnalyser = new DataAnalyser(db.getAll());
         List<TypeFrequencyPair> res;
         List<Object> testColumn = new ArrayList<>(Arrays.asList("WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION", "WEAPONS VIOLATION",
@@ -106,7 +106,7 @@ public class DataAnalyserTest {
 
     @Test
     void getTypeFrequencyTest3() throws SQLException {
-        Database db = new Database();
+        CrimeDatabase db = new CrimeDatabase();
         DataAnalyser dataAnalyser = new DataAnalyser(db.getAll());
         List<TypeFrequencyPair> res;
         List<Object> testColumn = new ArrayList<>(List.of("Theft"));

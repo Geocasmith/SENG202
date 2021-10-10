@@ -1,4 +1,6 @@
-package backend;
+package data;
+
+import frequencyComparator.TypeFrequencyPair;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
