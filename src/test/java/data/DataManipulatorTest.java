@@ -1,11 +1,16 @@
 package data;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.opencsv.exceptions.CsvValidationException;
+import importExport.CsvReader;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Tests for Data Manipulator class
@@ -89,26 +94,30 @@ public class DataManipulatorTest {
         assertEquals(Arrays.asList(null, "(41.855190551, -87.623871195)"), DataManipulator.extractCol(recordsList, 16));
     }
 
-    @Test
-    void addLine() {
-    }
 
     @Test
-    void deleteLine() {
-    }
+    void getAllRecords() throws SQLException, IOException, CsvValidationException, ParseException {
+        CrimeDatabase db = new CrimeDatabase();
+        db.connectDatabase();
+        db.insertRows(CsvReader.read("src/test/resources/csvFiles/tenRowsTest.csv"));
+        assertEquals(db.getAll().get(4).getBlock(), DataManipulator.getAllRecords().get(4).getBlock());
 
-    @Test
-    void getAllRecords() {
+
+
     }
 
 
 
     @Test
     void saveToCsv() {
+
+
     }
 
     @Test
-    void getRowsfromCsv() {
-
+    void getRowsfromCsv() throws IOException, CsvValidationException {
+        List<Object> rows = new ArrayList<>();
+        rows = DataManipulator.getRowsfromCsv("src/test/resources/csvFiles/tenRowsTest.csv");
+        assertTrue((Boolean) rows.get(1));
     }
 }
