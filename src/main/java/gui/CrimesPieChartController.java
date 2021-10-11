@@ -20,10 +20,10 @@ import java.util.List;
 public class CrimesPieChartController {
 
     /**
-     * TODO
-     * @param pieChartTitle
-     * @param titleLabel
-     * @param pairData
+     * Cretaes a pie chart
+     * @param pieChartTitle String representing the title of the pie chart
+     * @param titleLabel    String representing the label of the pie chart
+     * @param pairData      List<TypeFrequencyPair> of data
      */
     public void drawChart(String pieChartTitle, String titleLabel, List<TypeFrequencyPair> pairData) {
         //Preparing ObservableList object
