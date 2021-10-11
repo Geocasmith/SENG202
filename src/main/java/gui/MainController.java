@@ -698,7 +698,6 @@ public class MainController {
         if (selectedFile != null) {
             filepath = selectedFile.getAbsolutePath();
         }
-
         return filepath;
     }
 
@@ -815,7 +814,6 @@ public class MainController {
     public void displayInvalid(List<List<String>> invalid) {
         String invalidRows = invalid.size() + " rows could not be imported because their format is invalid";
         PopupWindow.displayPopup("Invalid Rows", invalidRows);
-
     }
 
     /**

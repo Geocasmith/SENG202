@@ -107,6 +107,10 @@ public class BrowserTabController {
         }
     }
 
+    /**
+     * Checks that the program has an internet connection
+     * @return a boolean, true if the program has an internet connection, false otherwise
+     */
     public static boolean checkConnection() {
         boolean connected;
         try {

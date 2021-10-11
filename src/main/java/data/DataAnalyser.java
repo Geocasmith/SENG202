@@ -167,7 +167,6 @@ DataAnalyser {
         return locationDifference + " " + locationUnit;
     }
 
-
     /**
      * Takes a data column and returns list of data column items together with their appearance frequency
      * @param column represents the data column

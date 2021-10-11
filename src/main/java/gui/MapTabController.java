@@ -14,6 +14,7 @@ import java.util.Objects;
 
 /**
  * This class contains methods to control the map on functions of the program, primarily in the map tab
+ * It can display markers or a heatmap, and can control the density of the heatmap.
  * @author Bede Skinner-Vennell
  * Date 09/10/2021
  */
