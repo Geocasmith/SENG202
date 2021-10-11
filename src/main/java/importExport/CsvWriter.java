@@ -16,7 +16,7 @@ import static java.lang.String.valueOf;
  */
 public class CsvWriter {
     /**
-     * TODO
+     * Writes the list of records to a CSV file
      * @param fileName Name of the CSV file to be written
      * @param data data to be recorded into the CSV file
      */
