@@ -99,7 +99,7 @@ public class DataManipulatorTest {
     void getAllRecords() throws SQLException, IOException, CsvValidationException, ParseException {
         CrimeDatabase db = new CrimeDatabase();
         db.connectDatabase();
-        db.insertRows(CsvReader.read("src/test/resources/csvFiles/tenRowsTest.csv"));
+        db.insertRows(CsvReader.readTest("src/test/resources/csvFiles/tenRowsTest.csv"));
 
         assertEquals(db.getAll().get(4).getBlock(), DataManipulator.getAllRecords().get(4).getBlock());
         db.disconnectDatabase();

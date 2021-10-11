@@ -46,7 +46,7 @@ class CrimeDatabaseTest {
         file.createNewFile();
         db.setDatabasePath("src/test/resources/databaseFiles/deleteTableTest.db");
 
-        db.insertRows(CsvReader.read("./test/resources/csvFiles/smallTest.csv"));
+        db.insertRows(CsvReader.readTest("./test/resources/csvFiles/smallTest.csv"));
 
         db.deleteTable("CRIMES");
         assertEquals("0",db.getNumRows());
@@ -63,7 +63,7 @@ class CrimeDatabaseTest {
         db.deleteTable("CRIMES");
 
         //Inserts rows from csv
-        db.insertRows(CsvReader.read("src/test/resources/csvFiles/tenRowsTest.csv"));
+        db.insertRows(CsvReader.readTest("src/test/resources/csvFiles/tenRowsTest.csv"));
 
         //Checks if number of rows correct
         assertEquals("9",db.getNumRows());
@@ -81,13 +81,13 @@ class CrimeDatabaseTest {
         db.deleteTable("CRIMES");
 
         //Inserts 5000 rows
-        db.insertRows(CsvReader.read("src/test/resources/csvFiles/smallTest.csv"));
+        db.insertRows(CsvReader.readTest("src/test/resources/csvFiles/smallTest.csv"));
 
         //Checks if the rows were imported correctly
         assertEquals("4997",db.getNumRows());
 
         //Replaces with 10 rows
-        db.replaceRows(CsvReader.read("src/test/resources/csvFiles/tenRowsTest.csv"));
+        db.replaceRows(CsvReader.readTest("src/test/resources/csvFiles/tenRowsTest.csv"));
 
         //checks if last row exists
         assertEquals("JE266604",db.searchDB("ID","JE266604").get(0).getCaseNumber());
