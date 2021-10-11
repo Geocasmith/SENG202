@@ -35,6 +35,8 @@ import java.util.List;
 /**
  * Represents an object for main.fxml controller class
  * @author Bede Skinner-Vennell
+ * @author Daniel Pallesen
+ * @author George Carr-Smith
  * Date 09/10/2021
  */
 
@@ -737,6 +739,7 @@ public class MainController {
             Boolean csvSuccess = false;
             ArrayList<ArrayList<List<String>>> dataValidation = new ArrayList<>();
 
+            //Pop up windows prompting the user to select a new or existing database and to replace or append the data
             try {
                 List<Object> csvRows = DataManipulator.getRowsfromCsv(filepath);
                 dataValidation = (ArrayList<ArrayList<List<String>>>) csvRows.get(0);
@@ -781,7 +784,7 @@ public class MainController {
                     d.disconnectDatabase();
 
 
-
+                    //Updates the GUI table from the database
                     CrimeDatabase db = new CrimeDatabase();
                     List<Record> records = db.getAll();
                     db.disconnectDatabase();
@@ -807,8 +810,7 @@ public class MainController {
 
     /**
      * Creates a pop-up window which displays the number of invalid rows
-     *
-     * @param invalid //TODO
+     * @param invalid List of Lists of Strings representing the rows of the imported data which were invalid
      */
     public void displayInvalid(List<List<String>> invalid) {
         String invalidRows = invalid.size() + " rows could not be imported because their format is invalid";
@@ -817,7 +819,7 @@ public class MainController {
     }
 
     /**
-     * Creates loading bar TODO make this clearer
+     * Creates a Swing loading bar
      * @throws InterruptedException
      */
     public JFrame startProgressGIF() {
