@@ -606,15 +606,6 @@ public class CrimeDatabase {
         return d.getTime();
     }
 
-    /**
-     * The method converts a date object to a unix time
-     * @param d input date
-     * @return the date converted to unix time
-     * @throws ParseException If an exception occurs when converting the string to a unix time
-     */
-    public static long unixTimeConvert(Date d) {
-        return d.getTime();
-    }
 
     /**
      * Returns the number of rows in the database (used for testing)
