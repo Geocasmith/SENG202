@@ -11,8 +11,9 @@ import java.util.List;
 import static java.lang.String.valueOf;
 
 /**
- * TODO
- * @author
+ * This class contains methods for connecting the program to the SQLite database to extract data from or input data to the database
+ * @author George Carr-Smith
+ * @author Sofonias Tekele Tesfaye
  * Date 09/10/2021
  */
 public class CrimeDatabase {
@@ -33,9 +34,9 @@ public class CrimeDatabase {
     }
 
     /**
-     * Sets the static field databasePath to the given path so when the database in the new path
+     * Sets the static field databasePath to the given path
      * will be accessed when creating a database connection
-     * @param databasePath a path to a database file
+     * @param databasePath String representing the path to a database file
      */
     public void setDatabasePath(String databasePath) {
         CrimeDatabase.databasePath = databasePath;
@@ -43,7 +44,7 @@ public class CrimeDatabase {
 
     /**
      * Gets the path to the current database
-     * @return String object containing the path to the current database
+     * @return String representing the path to the current database
      */
     public String getDatabasePath() { return databasePath; }
 
@@ -60,7 +61,7 @@ public class CrimeDatabase {
     }
 
     /**
-     * Closes the database connection. This is used to prevent database locked errors from open connections
+     * Closes the database connection
      * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public void disconnectDatabase() throws SQLException {
@@ -68,8 +69,8 @@ public class CrimeDatabase {
     }
 
     /**
-     * Removes all rows but keeps database structure
-     * @param tableName the name of the table for the records to be deleted from
+     * Removes all rows and keeps the database structure
+     * @param tableName     The name of the table for the records to be deleted from
      * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public void deleteTable(String tableName) throws SQLException {
@@ -79,7 +80,7 @@ public class CrimeDatabase {
     }
 
     /**
-     * Creates the main table in the database which stores the records and adds the columns listed in the columns field to it
+     * Creates the main table in the database and its columns
      * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public void createTable() throws SQLException {
@@ -108,7 +109,7 @@ public class CrimeDatabase {
      * Uses SQL Pragma to get the column names from the current database. It then goes through the returned column names and combines them into
      * a string actualColumnFormat. This string is the column names appended to each other in order from left to right. If the column names
      * and the order are correct it will match the validColumnFormat string. If they do not match the database is invalid.
-     * Will return invalid if the table name is incorrect
+     * @return              Boolean representing if the database is valid
      * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public Boolean checkValidDB() throws SQLException {
@@ -136,9 +137,8 @@ public class CrimeDatabase {
     }
 
     /**
-     * Gets an arrayList of string Lists and adds them to the database
-     *
-     * @param inputs an Arraylist of Lists of Strings of crime data
+     * Goes through the list of lists and inserts each list of crime data strings as a row in the database
+     * @param inputs        List of Lists of Strings of crime data
      * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public void insertRows(List<List<String>> inputs) throws SQLException, ParseException {
@@ -234,9 +234,8 @@ public class CrimeDatabase {
 
 
     /**
-     * Deletes current table, then gets an arrayList of string Lists and adds them to the database. Any empty values are entered as NULL type
-     *
-     * @param inputs an Arraylist of Lists of Strings that is passed into it from the CSV Reader
+     * Deletes all rows in the table, then goes through the list of lists and inserts each list of crime data strings as a row in the database
+     * @param inputs        List of Lists of Strings that is passed into it from the CSV Reader
      * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public void replaceRows(List<List<String>> inputs) throws SQLException, ParseException {
@@ -327,9 +326,7 @@ public class CrimeDatabase {
 
 
     /**
-     * Adds the record in the parameter to the database. It adds it to an arraylist of lists of strings so it can be parsed into the previously
-     *      * made insertRows() method and reuse that code
-     *
+     * Adds a single record to the database
      * @param rec Record class object to be added to the database
      * @throws SQLException If an exception occurs when executing the SQL statement
      */
@@ -344,12 +341,8 @@ public class CrimeDatabase {
     }
 
     /**
-     * Pass in a record class and it will delete the previous row of it in the database and
-     * add the new record class to simulate updating the row in the database.
-     * It adds it to an arraylist of lists of strings so it can be parsed into the previously
-     * made insertRows() method and reuse that code
-     *
-     * @param rec Record class object to be updated in the database
+     * Updates a single record in the database
+     * @param rec           Record class object to be updated in the database
      * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public void manualUpdate(Record rec) throws SQLException, ParseException {
@@ -369,9 +362,8 @@ public class CrimeDatabase {
     }
 
     /**
-     * Removes the row which matches the case number in the parameter
-     *
-     * @param caseNum pass in the case number for the row that will be deleted
+     * Removes the record from the database which matches the case number in the parameter
+     * @param caseNum       String representing the case number of the record to remove
      * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public void manualDelete(String caseNum) throws SQLException {
@@ -384,10 +376,9 @@ public class CrimeDatabase {
 
 
     /**
-     * Extracts and returns valued of a column from Crime database table
-     *
-     * @param columnName String object representing the column name that is to be returned
-     * @return ColumnValues ArrayList<Object> type generated from reading column values
+     * Extracts and returns values of a column from the database
+     * @param columnName    String representing the column name that is to be returned
+     * @return results      ArrayList<Object> type generated from reading column values
      * @throws SQLException If an exception occurs when executing the SQL statement
      */
 
@@ -407,8 +398,8 @@ public class CrimeDatabase {
      * Returns record objects from the database whose column matches the search value. Searches for strings
      *
      * @param column      String of the database column to query and has to match: ID, DATE, ADDRESS,IUCR, PRIMARYDESCRIPTION, SECONDARYDESCRIPTION,LOCATIONDESCRIPTION,ARREST, DOMESTIC
-     * @param searchValue the value you are searching for
-     * @return an Arraylist of Record Objects
+     * @param searchValue String representing the value to search
+     * @return results    List of Record Objects which match the search
      * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public List<Record> searchDB(String column, String searchValue) throws SQLException {
@@ -424,9 +415,8 @@ public class CrimeDatabase {
 
 
     /**
-     * Returns whole database of record objects to pass to the tableviewer
-     *
-     * @return arraylist of all the records in the database
+     * Returns whole database of record objects
+     * @return              List of all the records in the database
      * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public static List<Record> getAll() throws SQLException {
@@ -442,80 +432,20 @@ public class CrimeDatabase {
 
 
     /**
-     * Returns an arraylist of records between the two dates
-     * @param startDate date to start the query on
-     * @param endDate date to end the query on
-     * @return arraylist of records
-     * @throws SQLException If an exception occurs when executing the SQL statement
-     * @throws ParseException If an exception occurs when converting the string to a unix time
-     */
-    public List<Record> getDateRange(String startDate, String endDate) throws SQLException, ParseException {
-        long startUnix = unixTimeConvert(startDate);
-        long endUnix = unixTimeConvert(endDate);
-        connection.setAutoCommit(false);
-        PreparedStatement statement = connection.prepareStatement("SELECT * FROM CRIMES WHERE UNIXTIME BETWEEN "+startUnix+" and "+ endUnix+";");
-        ResultSet rs = statement.executeQuery();
-
-        List<Record> results = getRecord(rs);
-        rs.close();
-        statement.close();
-        return results;
-    }
-
-    /**
-     * Generates an arraylist of records from a given resultset. If given a radius it will return records in the area
-     *
-     * @param rs Resultset passed in from other methods
-     * @return Arraylist of Records
-     * @throws SQLException If an exception occurs when executing the SQL statement
-     */
-    public static List<Record> getRecord(ResultSet rs) throws SQLException {
-        ArrayList<Record> records = new ArrayList<>();
-
-        while (rs.next()) {
-
-            //Gets the values from the resultset
-            String id = rs.getString("ID");
-            String date = rs.getString("DATE");
-            String address = rs.getString("ADDRESS");
-            String iucr = rs.getString("IUCR");
-            String primary = rs.getString("PRIMARYDESCRIPTION");
-            String secondary = rs.getString("SECONDARYDESCRIPTION");
-            String locationDescription = rs.getString("LOCATIONDESCRIPTION");
-            String arrest = rs.getString("ARREST");
-            String domestic = rs.getString("DOMESTIC");
-            String beat = Integer.toString(rs.getInt("BEAT"));
-            String ward = Integer.toString(rs.getInt("WARD"));
-            String fbicd = rs.getString("FBICD");
-            String xcoor = Integer.toString(rs.getInt("XCOORDINATE"));
-            String ycoor = Integer.toString(rs.getInt("YCOORDINATE"));
-            String lat = Double.toString(rs.getDouble("LATITUDE"));
-            String lon = Double.toString(rs.getDouble("LONGITUDE"));
-
-            //Passes the given values into creating a new Record class. Adds the record class to the arraylist
-            ArrayList<String> add = new ArrayList<String>(Arrays.asList(id, date, address, iucr, primary, secondary, locationDescription,
-                    arrest, domestic, beat, ward, fbicd, xcoor, ycoor, lat, lon));
-            Record r = new Record(add);
-            records.add(r);
-        }
-        return records;
-    }
-
-    /**
      * Returns an arraylist of records from the database which matches the values parsed in from the filter in MainController
-     * @param caseNumber String data type that represents crime case number
-     * @param startDate Date data type that represents start date
-     * @param endDate   Data data type that represents end date
-     * @param crimeTypes String data type that represents crime type
-     * @param locDes String data type that represents Location description
-     * @param ward int data type representing ward
-     * @param beat int data type representing ward
-     * @param lat Float data type representing latitude coordinate of a location
-     * @param lon Float data type representing longitude coordinate of a location
-     * @param radius
-     * @param arrest
-     * @param domestic
-     * @return an arraylist of records
+     * @param caseNumber    String data type that represents crime case number
+     * @param startDate     Date data type that represents start date
+     * @param endDate       Data data type that represents end date
+     * @param crimeTypes    String data type that represents crime type
+     * @param locDes        String data type that represents Location description
+     * @param ward          Int data type representing ward
+     * @param beat          Int data type representing ward
+     * @param lat           Float data type representing latitude coordinate of a location
+     * @param lon           Float data type representing longitude coordinate of a location
+     * @param radius        Integer data type representing the radius to search around the latitude and longitude location
+     * @param arrest        String data type representing whether an arrest was made
+     * @param domestic      String data type representing if the crime was domestic
+     * @return              List of record objects
      * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public List<Record> getFilter(String caseNumber, Date startDate, Date endDate,List<String> crimeTypes,List<String> locDes,String ward,String beat,String lat,String lon,int radius,String arrest,String domestic) throws SQLException {
@@ -560,7 +490,7 @@ public class CrimeDatabase {
             SQLString+="AND (UNIXTIME <= "+endDate.getTime()+") ";
         }
 
-        //Appends string values to the SQl query if they are not null
+        //Appends string values to the SQl query if they are not null (if they are entered into the filter)
         if(ward!=null){
             SQLString+="AND (WARD="+ward+")";
         }
@@ -603,9 +533,13 @@ public class CrimeDatabase {
         return resultRecords;
     }
 
+
+    /**
+     * HELPER METHODS
+     */
+
     /**
      * Reads column values from the provided ResultSet object
-     *
      * @param rs     ResultSet object passed from other methods
      * @param column String object passed from other methods
      * @return colValues ArrayList<Object> generated from reading ResultSet object
@@ -623,14 +557,48 @@ public class CrimeDatabase {
     }
 
     /**
-     * HELPER METHODS
+     * Generates a List of records from a given resultset
+     * @param rs            Resultset passed in from other methods
+     * @return              List of Record objects
+     * @throws SQLException If an exception occurs when executing the SQL statement
      */
+    public static List<Record> getRecord(ResultSet rs) throws SQLException {
+        ArrayList<Record> records = new ArrayList<>();
+
+        while (rs.next()) {
+
+            //Gets the values from the resultset
+            String id = rs.getString("ID");
+            String date = rs.getString("DATE");
+            String address = rs.getString("ADDRESS");
+            String iucr = rs.getString("IUCR");
+            String primary = rs.getString("PRIMARYDESCRIPTION");
+            String secondary = rs.getString("SECONDARYDESCRIPTION");
+            String locationDescription = rs.getString("LOCATIONDESCRIPTION");
+            String arrest = rs.getString("ARREST");
+            String domestic = rs.getString("DOMESTIC");
+            String beat = Integer.toString(rs.getInt("BEAT"));
+            String ward = Integer.toString(rs.getInt("WARD"));
+            String fbicd = rs.getString("FBICD");
+            String xcoor = Integer.toString(rs.getInt("XCOORDINATE"));
+            String ycoor = Integer.toString(rs.getInt("YCOORDINATE"));
+            String lat = Double.toString(rs.getDouble("LATITUDE"));
+            String lon = Double.toString(rs.getDouble("LONGITUDE"));
+
+            //Passes the given values into creating a new Record class. Adds the record class to the arraylist
+            ArrayList<String> add = new ArrayList<String>(Arrays.asList(id, date, address, iucr, primary, secondary, locationDescription,
+                    arrest, domestic, beat, ward, fbicd, xcoor, ycoor, lat, lon));
+            Record r = new Record(add);
+            records.add(r);
+        }
+        return records;
+    }
 
     /**
      * Parse in the date format from the csv and will convert the value to a UNIX time value. Used for calculating date ranges as SQLlite does not have
      * date data types so it needs the dates stored in unix time to calculate date ranges
      * @param date a string of the date (the same format as the dates in the database)
-     * @return
+     * @return the date converted to unix time
      * @throws ParseException If an exception occurs when converting the string to a unix time
      */
     public static long unixTimeConvert(String date) throws ParseException {
@@ -641,7 +609,7 @@ public class CrimeDatabase {
     /**
      * The method converts a date object to a unix time
      * @param d input date
-     * @return a unix time
+     * @return the date converted to unix time
      * @throws ParseException If an exception occurs when converting the string to a unix time
      */
     public static long unixTimeConvert(Date d) {
@@ -649,7 +617,7 @@ public class CrimeDatabase {
     }
 
     /**
-     * Returns the number of rows in the database
+     * Returns the number of rows in the database (used for testing)
      * @return String of the number of rows
      */
     public String getNumRows(){
