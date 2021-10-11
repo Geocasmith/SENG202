@@ -72,7 +72,7 @@ class CrimeDatabaseTest {
         db.disconnectDatabase();
     }
     @Test
-    void replaceRows() throws SQLException, IOException, CsvValidationException, ParseException {
+    void replaceRowsGetAll() throws SQLException, IOException, CsvValidationException, ParseException {
         //Initialises empty table
         CrimeDatabase db = new CrimeDatabase();
         File file = new File("src/test/resources/databaseFiles/test.db");
@@ -93,6 +93,10 @@ class CrimeDatabaseTest {
         assertEquals("JE266604",db.searchDB("ID","JE266604").get(0).getCaseNumber());
         //Checks if number of rows correct
         assertEquals("9",db.getNumRows());
+
+        //Tests getall function
+        List<Record> records = db.getAll();
+        assertEquals(9,records.size());
         db.disconnectDatabase();
     }
     @Test
@@ -184,22 +188,7 @@ class CrimeDatabaseTest {
         assertEquals("JE163990",r.getCaseNumber());
         db.disconnectDatabase();
     }
-//    @Test
-//    void getAll() throws SQLException, IOException, ParseException, CsvValidationException {
-//        //Initialises empty table
-//        CrimeDatabase db = new CrimeDatabase();
-//        File file = new File("src/test/resources/getAllTest.db");
-//        file.createNewFile();
-//        db.setDatabasePath("src/test/resources/getAllTest.db");
-//        db.deleteTable("CRIMES");
-//
-//        //Inserts rows from csv
-//        db.insertRows(CsvReader.read("src/test/resources/csvFiles/tenRowsTest.csv"));
-//
-//        //Gets all rows
-//        List<Record> records = db.getAll();
-//        assertEquals(records.size(),Integer.parseInt(db.getNumRows()));
-//    }
+
     @Test
     void extractCol() throws SQLException {
         CrimeDatabase db = new CrimeDatabase();
