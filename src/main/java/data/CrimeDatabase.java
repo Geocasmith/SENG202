@@ -1,5 +1,7 @@
 package data;
 
+import gui.PopupWindow;
+
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -586,7 +588,7 @@ public class CrimeDatabase {
             String lon = Double.toString(rs.getDouble("LONGITUDE"));
 
             //Passes the given values into creating a new Record class. Adds the record class to the arraylist
-            ArrayList<String> add = new ArrayList<String>(Arrays.asList(id, date, address, iucr, primary, secondary, locationDescription,
+            ArrayList<String> add = new ArrayList<>(Arrays.asList(id, date, address, iucr, primary, secondary, locationDescription,
                     arrest, domestic, beat, ward, fbicd, xcoor, ycoor, lat, lon));
             Record r = new Record(add);
             records.add(r);
@@ -615,11 +617,11 @@ public class CrimeDatabase {
         try (PreparedStatement stmt = connection.prepareStatement("SELECT count(*) AS ROWS FROM CRIMES;")) {
             try (ResultSet rs = stmt.executeQuery()) {
 
-                String numRows = rs.getString("ROWS");
-                return numRows;
+                return rs.getString("ROWS");
             }
         } catch (SQLException throwables) {
-
+            PopupWindow.displayPopup("Error", "An error occurred.\nException details follow:\n" +
+                    throwables.getMessage());
         }
         return "";
     }

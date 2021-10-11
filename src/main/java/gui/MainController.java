@@ -135,7 +135,7 @@ public class MainController {
                 () -> {
                     try {
                         //Starts loading bar
-                        JFrame loadingBar = null;
+                        JFrame loadingBar;
                         loadingBar = startProgressGIF();
                         filterSetup();
                         graphSetup();
@@ -145,7 +145,7 @@ public class MainController {
 
                         tableTabController.setParentController(this);
                         CrimeDatabase db = new CrimeDatabase();
-                        List<Record> allRecords = null;
+                        List<Record> allRecords;
                         allRecords = db.getAll();
                         tableTabController.setTableRecords(allRecords);
                         dataAnalyser = new DataAnalyser(allRecords);
@@ -533,7 +533,7 @@ public class MainController {
             Platform.runLater(
                     () -> {
                         //Starts loading bar
-                        JFrame loadingBar = null;
+                        JFrame loadingBar;
                         loadingBar = startProgressGIF();
 
                         filterErrorLabel.setVisible(false);
@@ -818,7 +818,6 @@ public class MainController {
 
     /**
      * Creates a Swing loading bar
-     * @throws InterruptedException
      */
     public JFrame startProgressGIF() {
         //Initialises frame, panel and bar

@@ -65,11 +65,10 @@ public class MapTabController {
     public void plotMarkers(List<Record> records, boolean displayed) {
         String newLocationMarker;
         JsonArray recordArray;
-        boolean infoWindow = true;
         for (Record record : records) {
 
             recordArray = record.getJsonArray();
-            newLocationMarker = "document.plotPoint(" + recordArray + ", " + infoWindow + ", " + displayed + ")";
+            newLocationMarker = "document.plotPoint(" + recordArray + ", " + true + ", " + displayed + ")";
             runScript(newLocationMarker);
         }
     }

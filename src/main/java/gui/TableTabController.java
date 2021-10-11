@@ -380,7 +380,6 @@ public class TableTabController {
      * more information about the crimes
      * @param crime1 The first record object
      * @param crime2 The second record object
-     * @throws IOException
      */
     public void analysisPopup(Record crime1, Record crime2) throws IOException {
         Stage analysisPopup = new Stage();

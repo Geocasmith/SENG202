@@ -21,9 +21,9 @@ public class DataManipulatorTest {
     ArrayList<String> data;
     DataManipulator dataManipulatorInstance;
     ArrayList<Record> recordsList = new ArrayList<>();
-    ArrayList<ArrayList<Object> > dataToGraphTest = new ArrayList<ArrayList<Object>>();
+    ArrayList<ArrayList<Object> > dataToGraphTest = new ArrayList<>();
     ArrayList<Object> dataCol1 = new ArrayList<>();
-    ArrayList<Object> dataCol2 = new ArrayList<>();;
+    ArrayList<Object> dataCol2 = new ArrayList<>();
 
     @Test
     public void addLineTest() {
@@ -116,7 +116,7 @@ public class DataManipulatorTest {
 
     @Test
     void getRowsfromCsv() throws IOException, CsvValidationException {
-        List<Object> rows = new ArrayList<>();
+        List<Object> rows;
         rows = DataManipulator.getRowsfromCsv("src/test/resources/csvFiles/tenRowsTest.csv");
         assertTrue((Boolean) rows.get(1));
     }

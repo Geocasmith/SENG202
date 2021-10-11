@@ -37,7 +37,6 @@ public class EditRecordWindowController {
     @FXML private Button closeButton;
     @FXML private Button saveButton;
     @FXML private FlowPane buttonPane;
-    @FXML private FlowPane fieldPane;
     @FXML private Label titleLabel;
     @FXML private BorderPane mapBorderPane;
     @FXML private WebView webView;
@@ -218,10 +217,8 @@ public class EditRecordWindowController {
             recordArray.add(secondaryLocation);
             recordArray.add(locationDescription);
 
-            boolean displayMarker = true;
 
-
-            String script = "document.plotPoint(" + recordArray + ", " + displayInfoWindow + ", " + displayMarker + ")";
+            String script = "document.plotPoint(" + recordArray + ", " + displayInfoWindow + ", " + true + ")";
 
 
             mapBorderPane.setVisible(true);

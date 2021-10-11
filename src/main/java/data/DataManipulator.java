@@ -172,7 +172,6 @@ public class DataManipulator {
      * Saves the current data to CSV file
      * @param fileName String value specifying the name of the Csv file
      * @return boolean value (true if the file has been saved or false otherwise)
-     * @throws IOException
      */
     public boolean saveToCsv(String fileName) throws IOException {
         try
@@ -191,8 +190,6 @@ public class DataManipulator {
      * @param filepath contains the string representation of the file path
      * @return An ArrayList containing two objects, the first is a list containing a list of valid records and a list of
      *         invalid records, and the second is a boolean stating whether the file is valid
-     * @throws IOException
-     * @throws CsvValidationException
      */
     public static List<Object> getRowsfromCsv(String filepath) throws IOException,  CsvValidationException {
         try {

@@ -257,7 +257,6 @@ public class AnalysisTabController {
     /**
      * Shows crime location of a given block in a map. To achieve this the method calls a pop up map window
      * @param block a string parameter that usually represents the block
-     * @throws IOException
      */
     public void showOnMap(String block) throws IOException {
 
@@ -306,7 +305,6 @@ public class AnalysisTabController {
      *  Shows list of crime types together with their frequency that have occurred in the block parameter that is
      *  passed to the method. To display out put the method calls a pop up window.
      * @param block a string parameter that usually represents the block
-     * @throws IOException
      */
     public void showBlockCrimeDetails(String block) throws IOException {
         ArrayList<Record> records = new ArrayList<>();
