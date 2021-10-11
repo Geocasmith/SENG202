@@ -4,6 +4,7 @@ import com.opencsv.exceptions.CsvValidationException;
 import importExport.CsvReader;
 import org.junit.jupiter.api.Test;
 
+import javax.annotation.concurrent.NotThreadSafe;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -145,10 +146,11 @@ class CrimeDatabaseTest {
     void manualDelete() throws SQLException, IOException, ParseException {
         //Initialises empty table
         CrimeDatabase db = new CrimeDatabase();
-        db.connectDatabase();
+
         File file = new File("src/test/resources/databaseFiles/manualDeleteTest.db");
         file.createNewFile();
         db.setDatabasePath("src/test/resources/databaseFiles/manualDeleteTest.db");
+        db.connectDatabase();
         db.deleteTable("CRIMES");
 
         //Creates and new record

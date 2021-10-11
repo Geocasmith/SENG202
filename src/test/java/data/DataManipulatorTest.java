@@ -16,7 +16,6 @@ import java.util.List;
  * Tests for Data Manipulator class
  * @author Sofonias Tekele Tesfaye
  */
-
 public class DataManipulatorTest {
     Record testRecord1;
     ArrayList<String> data;
@@ -64,6 +63,7 @@ public class DataManipulatorTest {
         dataManipulatorInstance = new DataManipulator(recordsList);
         assertFalse(dataManipulatorInstance.hasUniqueCaseNumber(1, testRecord1));
         assertTrue(dataManipulatorInstance.hasUniqueCaseNumber(0, testRecord1));
+
     }
 
     @Test
@@ -100,9 +100,9 @@ public class DataManipulatorTest {
         CrimeDatabase db = new CrimeDatabase();
         db.connectDatabase();
         db.insertRows(CsvReader.read("src/test/resources/csvFiles/tenRowsTest.csv"));
+
         assertEquals(db.getAll().get(4).getBlock(), DataManipulator.getAllRecords().get(4).getBlock());
-
-
+        db.disconnectDatabase();
 
     }
 
