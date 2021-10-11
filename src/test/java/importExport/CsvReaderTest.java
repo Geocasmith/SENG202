@@ -11,8 +11,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Test class for CsvWriter
- * @author Sofonias Tekele Tesfaye
+ * Test class for CsvReader
+ * @author George Carr-Smith
  */
 class CsvReaderTest {
 
