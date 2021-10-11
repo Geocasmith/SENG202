@@ -52,7 +52,7 @@ public class AnalysisTabController {
     private int mapOpenedCounter = 0;
     private List<TypeFrequencyPair> crimeFrequencyPair = new ArrayList<>();
     private List<TypeFrequencyPair> blocksFrequencyPair = new ArrayList<>();
-    private final CrimesPieChart crimesChart = new CrimesPieChart();
+    private final CrimesPieChartController crimesChart = new CrimesPieChartController();
 
 
 

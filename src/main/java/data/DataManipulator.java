@@ -42,7 +42,6 @@ public class DataManipulator {
         return true;
     }
 
-
     /**
      * Adds a record into CurrentData object
      * @param line usually an integer value representing the line number
@@ -57,8 +56,6 @@ public class DataManipulator {
         }
         return false;
     }
-
-
 
     /**
      * Takes column number and extracts corresponding column values from currentData object
@@ -172,29 +169,11 @@ public class DataManipulator {
     }
 
     /**
-     * Calls extractCol Database class method to extract column values from Database Crime Table
-     * @param col1 represents column number of the first column to be extracted
-     * @param col2 represents column number of the second column to be extracted
-     * @return dataToGraph Array<ArrayList<Object>> type that contain list of extracted column values
-     */
-
-    public List<List<Object>> dataBaseDataToGraph(String col1, String col2) throws SQLException {
-        List<List<Object> > dataToGraph = new ArrayList<>();
-        CrimeDatabase db = new CrimeDatabase();
-        db.connectDatabase();
-        dataToGraph.add(db.extractCol(col1));
-        dataToGraph.add(db.extractCol(col2));
-        db.disconnectDatabase();
-        return dataToGraph;
-    }
-
-    /**
      * Saves the current data to CSV file
      * @param fileName String value specifying the name of the Csv file
      * @return boolean value (true if the file has been saved or false otherwise)
      * @throws IOException
      */
-
     public boolean saveToCsv(String fileName) throws IOException {
         try
         {
@@ -215,7 +194,6 @@ public class DataManipulator {
      * @throws IOException
      * @throws CsvValidationException
      */
-
     public static List<Object> getRowsfromCsv(String filepath) throws IOException,  CsvValidationException {
         try {
             List<List<List<String>>> result = new ArrayList<>();

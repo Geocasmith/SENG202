@@ -17,7 +17,7 @@ import java.util.List;
  * @author Sofonias Tekele Tesfaye
  * Date 09/10/2021
  */
-public class CrimesPieChart {
+public class CrimesPieChartController {
 
     /**
      * TODO
@@ -30,10 +30,7 @@ public class CrimesPieChart {
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         for (TypeFrequencyPair data : pairData) {
             pieChartData.add(new PieChart.Data(data.getType(), data.getFrequency()));
-
-
         }
-
 
         Stage stage = new Stage();
 

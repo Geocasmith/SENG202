@@ -192,8 +192,6 @@ DataAnalyser {
         return res;
     }
 
-
-
     public List<String> getCrimeTypes() {
         return crimeTypes;
     }

@@ -64,9 +64,7 @@ public class CrimeDatabase {
      * @throws SQLException If an exception occurs when executing the SQL statement
      */
     public void disconnectDatabase() throws SQLException {
-
             connection.close();
-
     }
 
     /**
@@ -77,9 +75,7 @@ public class CrimeDatabase {
     public void deleteTable(String tableName) throws SQLException {
         Statement statement = connection.createStatement();
         statement.execute("DELETE FROM "+tableName);
-
         statement.close();
-
     }
 
     /**
@@ -615,7 +611,7 @@ public class CrimeDatabase {
      * @return colValues ArrayList<Object> generated from reading ResultSet object
      * @throws SQLException If an exception occurs when executing the SQL statement
      */
-    public static ArrayList<Object> readColumnValues(ResultSet rs, String column) throws SQLException {
+    public static List<Object> readColumnValues(ResultSet rs, String column) throws SQLException {
         ArrayList<Object> colValues = new ArrayList<>();
 
         while (rs.next()) {

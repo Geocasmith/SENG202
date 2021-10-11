@@ -149,7 +149,7 @@ public class MainController {
                         dataAnalyser = new DataAnalyser(allRecords);
 
                         loadingBar.dispose();
-                        analysisSetUp();
+                        updateAnalysis();
                         updateGraphOptions();
                         db.disconnectDatabase();
                     } catch (SQLException | CsvValidationException | IOException e) {
@@ -214,13 +214,6 @@ public class MainController {
     }
 
     /**
-     * Updates the tables in the analysis tab
-     */
-    private void analysisSetUp() {
-        updateAnalysis();
-    }
-
-    /**
      * Checks that the user is connected to the internet, if not, then displays an error message and goes back to the
      * table tab, if they are, then it displays either the first 1000 records in the table, or all records in the table,
      * if there are less than 1000
@@ -239,11 +232,8 @@ public class MainController {
 
                 mapTabController.updateMarkers(new ArrayList<>(displayedRecords.subList(0, 499)));
             }
-
         }
-
     }
-
 
     /**
      * Clears the checks in the graph filter combo box, then checks what graphing option has been selected and
@@ -729,7 +719,7 @@ public class MainController {
     /**
      * Opens a file explorer for the user to select csv file to import then loads it
      */
-    public void importCsv() throws InterruptedException, SQLException, IOException {
+    public void importCsv() throws SQLException, IOException {
 
         String filepath = getPathToFile("CSV", "csv");
 

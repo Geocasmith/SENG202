@@ -22,9 +22,10 @@ public class CrimeDetailsController {
 
     @FXML
     private TableView<TypeFrequencyPair> crimeTable;
-
-    @FXML private TableColumn<TypeFrequencyPair, String> crimeCol;
-    @FXML private TableColumn<TypeFrequencyPair, String> crimeFrequency;
+    @FXML
+    private TableColumn<TypeFrequencyPair, String> crimeCol;
+    @FXML
+    private TableColumn<TypeFrequencyPair, String> crimeFrequency;
 
     private final DataAnalyser dataAnalyser = new DataAnalyser();
 
@@ -32,7 +33,6 @@ public class CrimeDetailsController {
      * Calls a method to populate crimes table.
      * @param currentRecord ArrayList<Record> type object that usually represents the list of displayed records
      */
-
     public void updateBlockDetails(List<Record> currentRecord) {
         populateCrimesTable(dataAnalyser.getTypeFrequencyDescending(DataManipulator.extractCol(currentRecord, 4)));
 

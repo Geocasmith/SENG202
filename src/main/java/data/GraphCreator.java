@@ -117,7 +117,7 @@ public class GraphCreator {
      * @param lowerBound The earliest time object in the data set
      * @param maxUpperBound The last time object in the data set
      */
-    private void sortCrimesByTimePeriod(ArrayList<LocalDateTime> times, Duration periodInSeconds, DateTimeFormatter formatter, XYChart.Series series, String requiredDuration, LocalDateTime lowerBound, LocalDateTime maxUpperBound) {
+    private void sortCrimesByTimePeriod(List<LocalDateTime> times, Duration periodInSeconds, DateTimeFormatter formatter, XYChart.Series series, String requiredDuration, LocalDateTime lowerBound, LocalDateTime maxUpperBound) {
         int i = 0;
         int count;
 
