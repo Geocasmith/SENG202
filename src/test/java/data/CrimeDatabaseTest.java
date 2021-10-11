@@ -40,6 +40,9 @@ class CrimeDatabaseTest {
         db.disconnectDatabase();
     }
     @Test
+    /**
+     * Creates and deletes a new table and tests if database is empty
+     */
     void deleteTable() throws SQLException, IOException, CsvValidationException, ParseException {
         CrimeDatabase db = new CrimeDatabase();
         File file = new File("src/test/resources/databaseFiles/deleteTableTest.db");
@@ -54,6 +57,9 @@ class CrimeDatabaseTest {
     }
 
     @Test
+    /**
+     * Tests if rows are inserted correctly
+     */
     void insertRows() throws SQLException, IOException, CsvValidationException, ParseException {
         //Initialises empty table
         CrimeDatabase db = new CrimeDatabase();
@@ -72,6 +78,9 @@ class CrimeDatabaseTest {
         db.disconnectDatabase();
     }
     @Test
+    /**
+     * Tests replacing rows and the getall function
+     */
     void replaceRowsGetAll() throws SQLException, IOException, CsvValidationException, ParseException {
         //Initialises empty table
         CrimeDatabase db = new CrimeDatabase();
@@ -94,12 +103,15 @@ class CrimeDatabaseTest {
         //Checks if number of rows correct
         assertEquals("9",db.getNumRows());
 
-        //Tests getall function
+        //Tests getall function to see if it gets all records
         List<Record> records = db.getAll();
         assertEquals(9,records.size());
         db.disconnectDatabase();
     }
     @Test
+    /**
+     * Tests if a record is manually added and shows up in the database
+     */
     void manualAdd() throws SQLException, IOException, ParseException {
         //Initialises empty table
         CrimeDatabase db = new CrimeDatabase();
@@ -120,6 +132,10 @@ class CrimeDatabaseTest {
         db.disconnectDatabase();
     }
     @Test
+    /**
+     * Tests if a record is updated and if the change is reflected in its row in
+     * the database
+     */
     void manualUpdate() throws SQLException, IOException, ParseException {
         //Initialises empty table
         CrimeDatabase db = new CrimeDatabase();
@@ -147,6 +163,9 @@ class CrimeDatabaseTest {
     }
 
     @Test
+    /**
+     * Tests manually deleting a record and it it removes it from the database
+     */
     void manualDelete() throws SQLException, IOException, ParseException {
         //Initialises empty table
         CrimeDatabase db = new CrimeDatabase();
@@ -170,6 +189,9 @@ class CrimeDatabaseTest {
         db.disconnectDatabase();
     }
     @Test
+    /**
+     * Tests searching a value in the database
+     */
     void searchDB() throws SQLException, IOException, ParseException {
         //Initialises empty table
         CrimeDatabase db = new CrimeDatabase();
@@ -190,6 +212,9 @@ class CrimeDatabaseTest {
     }
 
     @Test
+    /**
+     * Tests the extract col method
+     */
     void extractCol() throws SQLException {
         CrimeDatabase db = new CrimeDatabase();
         db.connectDatabase();
@@ -202,16 +227,25 @@ class CrimeDatabaseTest {
 
     }
     @Test
+    /**
+     * Tests empty filter
+     */
     void filterEmpty() throws SQLException {
         CrimeDatabase d = new CrimeDatabase();
         d.connectDatabase();
         ArrayList<String> crimeTypes = new ArrayList<String>();
         ArrayList<String> locationDescriptions = new ArrayList<String>();
         List<Record> str = d.getFilter(null, null,null,crimeTypes,locationDescriptions,null,null,null,null,0,null,null);
+
+        //Checks if nothing is returned
+        assertEquals(0,str.size());
         d.disconnectDatabase();
     }
 
     @Test
+    /**
+     * Tests filtering between two dates
+     */
     void filterTwoDates() throws SQLException, ParseException {
         CrimeDatabase d = new CrimeDatabase();
         d.connectDatabase();
@@ -221,6 +255,9 @@ class CrimeDatabaseTest {
         d.disconnectDatabase();
     }
     @Test
+    /**
+     * Tests filtering with just a start date
+     */
     void filterStartDate() throws SQLException, ParseException {
         CrimeDatabase d = new CrimeDatabase();
         d.connectDatabase();
@@ -230,6 +267,9 @@ class CrimeDatabaseTest {
         d.disconnectDatabase();
     }
     @Test
+    /**
+     * Tests filtering with just an end date
+     */
     void filterEndDate() throws SQLException, ParseException {
         CrimeDatabase d = new CrimeDatabase();
         d.connectDatabase();
