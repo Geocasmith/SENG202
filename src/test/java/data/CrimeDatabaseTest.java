@@ -4,7 +4,6 @@ import com.opencsv.exceptions.CsvValidationException;
 import importExport.CsvReader;
 import org.junit.jupiter.api.Test;
 
-import javax.annotation.concurrent.NotThreadSafe;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -19,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This class contains tests for Database class
- * @author
+ * @author George Carr-Smith
  */
 class CrimeDatabaseTest {
 
