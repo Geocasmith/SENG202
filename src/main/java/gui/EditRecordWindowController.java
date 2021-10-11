@@ -103,12 +103,13 @@ public class EditRecordWindowController {
                         fbicdField.setText(InputValidator.getFbicd(primaryDescriptionField.getText(), secondaryDescriptionField.getText()));
                         auto1.dispose();
                     }  catch (IOException | CsvValidationException e) {
-                        PopupWindow.displayPopup("Error", e.getMessage());
+                        PopupWindow.displayPopup("Error", "An error occurred. Exception details follow:\n" +
+                        e.getMessage());
                     }
                 });
             } catch (NullPointerException | IOException | CsvValidationException e) {
                 primaryDescriptionField.requestFocus();
-                PopupWindow.displayPopup("Error", "Enter valid Primary Description first");
+                PopupWindow.displayPopup("Error", "Enter valid Primary Description first.");
             }
         });
 
@@ -248,7 +249,7 @@ public class EditRecordWindowController {
         } else {
             if (!connected && windowOpenedCount == 0) {
                 windowOpenedCount++;
-                PopupWindow.displayPopup("Error", "You must be connected to the internet to use the map feature");
+                PopupWindow.displayPopup("Error", "You must be connected to the internet to use the map feature.");
             }
             mapBorderPane.setVisible(false);
         }

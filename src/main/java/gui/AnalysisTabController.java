@@ -55,9 +55,6 @@ public class AnalysisTabController {
     private final CrimesPieChartController crimesChart = new CrimesPieChartController();
 
 
-
-
-
     /**
      * Initialises FXML properties, sets the max height of the tables to slightly over 10 rows
      */
@@ -92,7 +89,10 @@ public class AnalysisTabController {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     TypeFrequencyPair rowData = row.getItem();
                     try { showBlockCrimeDetails(rowData.getType()); }
-                    catch (IOException e) { PopupWindow.displayPopup("Error", "Unknown error. Please try again.");}
+                    catch (IOException e) {
+                        PopupWindow.displayPopup("Error", "An error occurred. Exception details follow:\n" +
+                                e.getMessage());
+                    }
                 }
             });
             return row;
@@ -229,7 +229,8 @@ public class AnalysisTabController {
                 showOnMap(block);
             } catch (NullPointerException | IOException e) {
                 PopupWindow.displayPopup("Error", "Error displaying the map, please try again.\n" +
-                        "If this problem persists, try restarting Insight.");
+                        "If this problem persists, try restarting Insight.\nException details follow:\n" +
+                        e.getMessage());
             }
         });
 
@@ -240,7 +241,8 @@ public class AnalysisTabController {
 
             } catch (NullPointerException | IOException e) {
                 PopupWindow.displayPopup("Error", "Error displaying crime details, please try again.\n" +
-                        "If this problem persists, try restarting Insight.");
+                        "If this problem persists, try restarting Insight.\nException details follow:\n" +
+                        e.getMessage());
             }
         });
 

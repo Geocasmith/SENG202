@@ -26,8 +26,6 @@ public class MainGUI extends Application {
         primaryStage.show();
         MainController controller = loader.getController();
         controller.setMyPrimaryStage(primaryStage);
-
-
     }
 
     public static void main(String[] args) {

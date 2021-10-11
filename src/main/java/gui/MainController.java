@@ -870,7 +870,7 @@ public class MainController {
 
             //If user imports incorrect filetype it will do nothing and display a pop-up
             if (matchFileType(filepath, ".db")) {
-                PopupWindow.displayPopup("Error", "Selected file is not a database file");
+                PopupWindow.displayPopup("Error", "The selected file is not a database file.");
                 d.disconnectDatabase();
                 return;
             }
@@ -878,7 +878,7 @@ public class MainController {
             String previousPath = d.getDatabasePath();
             d.setDatabasePath(filepath);
             if (!d.checkValidDB()) {
-                PopupWindow.displayPopup("Error", "Database format invalid");
+                PopupWindow.displayPopup("Error", "Database format invalid. Please choose a valid database.");
 
                 //reverts back to previous path
                 d.setDatabasePath(previousPath);
@@ -924,10 +924,11 @@ public class MainController {
                     return true;
                 }
             } catch (FileAlreadyExistsException e) {
-                PopupWindow.displayPopup("Error", "File already exists");
+                PopupWindow.displayPopup("Error", "File already exists.");
             } catch (Exception e) {
                 // something else went wrong
-                PopupWindow.displayPopup("Error", "Unknown error");
+                PopupWindow.displayPopup("Error", "An error occurred.\nException details follow:\n" +
+                        e.getMessage());
             }
         }
         return false;
@@ -1007,7 +1008,7 @@ public class MainController {
 
             boolean connected = BrowserTabController.checkConnection();
             if (!connected) {
-                PopupWindow.displayPopup("Error", "You must be connected to the internet to use the browser");
+                PopupWindow.displayPopup("Error", "You must be connected to the internet to use the browser.");
                 mainTabPane.getSelectionModel().select(tableTabPane);
                 browserTabCount++; // To make sure the tab count is the correct number
             } else {

@@ -62,7 +62,8 @@ public class TableTabController {
                 try {
                     deleteSelectedRows();
                 } catch (SQLException e) {
-                    PopupWindow.displayPopup("Error", e.getMessage());
+                    PopupWindow.displayPopup("Error", "An error occurred.\nException details follow.\n" +
+                            e.getMessage());
                     e.printStackTrace();
                 }
             }
@@ -88,7 +89,8 @@ public class TableTabController {
             try {
                 editRow();
             } catch (IOException e) {
-                PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
+                PopupWindow.displayPopup("Error", "An error occurred.\nException details follow.\n" +
+                        e.getMessage());
             }
         });
 
@@ -96,7 +98,8 @@ public class TableTabController {
             try {
                 deleteSelectedRows();
             } catch (SQLException e) {
-                PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
+                PopupWindow.displayPopup("Error", "An error occurred.\nException details follow.\n" +
+                        e.getMessage());
             }
         });
 
@@ -203,7 +206,8 @@ public class TableTabController {
                     try {
                         setupEditRow(rowData);
                     } catch (IOException e) {
-                        PopupWindow.displayPopup("Error", "Unknown error. Please try again.");
+                        PopupWindow.displayPopup("Error", "An error occurred. Exception details follow:\n" +
+                                e.getMessage());
                     }
                 } else if (event.getClickCount() == 1 && (!row.isEmpty())) {
                     Record rowData = row.getItem();
@@ -355,12 +359,13 @@ public class TableTabController {
             int locationDifference = dataAnalyser.calculateLocationDifferenceMeters(crime1, crime2);
             if (locationDifference == -1) {
                 PopupWindow.displayPopup("Error", "One or more of the selected records is missing location data.\n" +
-                        "Try selecting a different record");
+                        "Try selecting a different record.");
             } else {
                 try {
                     analysisPopup(crime1, crime2);
                 } catch (IOException e) {
-                    PopupWindow.displayPopup("Error", "An unknown error occurred, please try again");
+                    PopupWindow.displayPopup("Error", "An error occurred. Exception details follow:\n" +
+                            e.getMessage());
                 }
             }
         } else {

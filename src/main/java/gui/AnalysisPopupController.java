@@ -52,7 +52,7 @@ public class AnalysisPopupController {
         infoLabel.setText("Time Difference: " + timeDifference + "\n" + "Location Difference: " + locationDifference);
         boolean connected = BrowserTabController.checkConnection();
         if (!connected) {
-            PopupWindow.displayPopup("Error", "You must be connected to the internet to use the map feature");
+            PopupWindow.displayPopup("Error", "You must be connected to the internet to use the map feature.");
             mapWebView.setVisible(false);
         } else {
             mapWebView.setVisible(true);
