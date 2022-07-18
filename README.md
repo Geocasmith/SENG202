@@ -88,6 +88,9 @@ Click the File menu in the top left to see the options for adding data
 The program comes with a sample crimes database and csv file in the Files folder.  
 These are called crimeRecords.db and crimeRecords.csv respectively
 
+## Design Document and User Manual
+The design document and user manual can be found in the base directory.
+
 ## Warnings 
 When the Java Swing elements are created by the program, a warning is outputted in the run terminal. The warning only occurs on Linux Mint and does not affect the program running. The warning is as follows: "(java:10179): Gdk-WARNING **: 17:15:57.883: XSetErrorHandler() called with a GDK error trap pushed. Don't do that."
 
